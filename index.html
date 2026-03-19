@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PFAS State Compliance Tracker — Andersen Windows &amp; Doors</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #F4F5F7;
+      color: #2D3748;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ---- Header ---- */
+    .page-header {
+      background: linear-gradient(135deg, #0D1B2E 0%, #1A3050 100%);
+      padding: 20px 32px 16px;
+    }
+    .page-header .brand {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #C4A55A;
+      margin: 0 0 4px;
+    }
+    .page-header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 4px;
+    }
+    .page-header .sub {
+      font-size: 12px;
+      color: #8BAAC8;
+      margin: 0;
+    }
+
+    /* ---- Layout ---- */
+    .page-body {
+      display: flex;
+      gap: 24px;
+      padding: 24px 32px;
+      align-items: flex-start;
+    }
+
+    /* ---- Map panel ---- */
+    .map-panel {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .map-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #718096;
+      margin: 0 0 12px;
+    }
+
+    /* CSS Grid cartogram */
+    .state-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 50px);
+      grid-template-rows: repeat(9, 50px);
+      gap: 4px;
+      width: fit-content;
+    }
+
+    .state-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+      user-select: none;
+      letter-spacing: 0.5px;
+    }
+    .state-cell:hover {
+      transform: scale(1.12);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 10;
+      filter: brightness(1.1);
+    }
+    .state-cell.active {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1A3050;
+      z-index: 20;
+    }
+    .status-none {
+      color: #4A5568;
+    }
+
+    /* Home state dot */
+    .home-dot {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #C4A55A;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    /* ---- Legend ---- */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      margin-top: 16px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .legend-label {
+      font-size: 12px;
+      color: #4A5568;
+    }
+
+    .home-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #718096;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .home-note-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #C4A55A;
+      flex-shrink: 0;
+    }
+
+    /* ---- Detail panel ---- */
+    .detail-panel {
+      flex: 0 0 300px;
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 200px;
+      transition: opacity 0.2s ease;
+      position: sticky;
+      top: 24px;
+    }
+
+    .detail-empty {
+      color: #A0AEC0;
+      font-style: italic;
+      font-size: 13px;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .detail-abbr {
+      font-size: 28px;
+      font-weight: 900;
+      color: #1A2B3C;
+      line-height: 1;
+      margin: 0 0 2px;
+    }
+    .detail-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2D3748;
+      margin: 0 0 8px;
+    }
+    .detail-status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .detail-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #A0AEC0;
+      margin: 14px 0 4px;
+    }
+    .detail-summary {
+      font-size: 13px;
+      color: #4A5568;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .detail-laws {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .detail-laws li {
+      font-size: 12px;
+      color: #4A5568;
+      padding: 2px 0;
+    }
+    .detail-laws li::before {
+      content: "§ ";
+      color: #A0AEC0;
+    }
+    .detail-dates {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .detail-dates li {
+      font-size: 12px;
+      color: #4A5568;
+      padding: 3px 0;
+      border-bottom: 1px solid #F7FAFC;
+      line-height: 1.5;
+    }
+    .andersen-note {
+      background: #FFFBEB;
+      border-left: 3px solid #D69E2E;
+      border-radius: 0 4px 4px 0;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #744210;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+    .andersen-note strong {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #975A16;
+      margin-bottom: 4px;
+    }
+
+    /* ---- Footer ---- */
+    .page-footer {
+      padding: 12px 32px;
+      border-top: 1px solid #E2E8F0;
+      font-size: 11px;
+      color: #A0AEC0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <p class="brand">Andersen Windows &amp; Doors</p>
+  <h1>PFAS State Compliance Tracker</h1>
+  <p class="sub">Interactive map of US state PFAS laws &amp; restrictions &nbsp;&middot;&nbsp; Last updated: 2026-03-18</p>
+</div>
+
+<div class="page-body">
+
+  <!-- Map -->
+  <div class="map-panel">
+    <p class="map-title">Click any state for details</p>
+    <div class="state-grid" id="stateGrid">
+<div class="state-cell status-comprehensive" style="grid-row:1;grid-column:12;background-color:#C53030;" data-abbr="ME" onclick="showDetail('ME')" title="Maine">ME</div>
+<div class="state-cell status-comprehensive" style="grid-row:2;grid-column:10;background-color:#C53030;" data-abbr="VT" onclick="showDetail('VT')" title="Vermont">VT</div>
+<div class="state-cell status-limited" style="grid-row:2;grid-column:11;background-color:#D69E2E;" data-abbr="NH" onclick="showDetail('NH')" title="New Hampshire">NH</div>
+<div class="state-cell status-comprehensive" style="grid-row:3;grid-column:1;background-color:#C53030;" data-abbr="WA" onclick="showDetail('WA')" title="Washington">WA</div>
+<div class="state-cell status-limited" style="grid-row:3;grid-column:2;background-color:#D69E2E;" data-abbr="MT" onclick="showDetail('MT')" title="Montana">MT</div>
+<div class="state-cell status-none" style="grid-row:3;grid-column:3;background-color:#CBD5E0;" data-abbr="ND" onclick="showDetail('ND')" title="North Dakota">ND</div>
+<div class="state-cell status-comprehensive" style="grid-row:3;grid-column:4;background-color:#C53030;" data-abbr="MN" onclick="showDetail('MN')" title="Minnesota"><span class="home-dot"></span>MN</div>
+<div class="state-cell status-limited" style="grid-row:3;grid-column:6;background-color:#D69E2E;" data-abbr="WI" onclick="showDetail('WI')" title="Wisconsin">WI</div>
+<div class="state-cell status-limited" style="grid-row:3;grid-column:7;background-color:#D69E2E;" data-abbr="MI" onclick="showDetail('MI')" title="Michigan">MI</div>
+<div class="state-cell status-comprehensive" style="grid-row:3;grid-column:9;background-color:#C53030;" data-abbr="NY" onclick="showDetail('NY')" title="New York">NY</div>
+<div class="state-cell status-limited" style="grid-row:3;grid-column:10;background-color:#D69E2E;" data-abbr="MA" onclick="showDetail('MA')" title="Massachusetts">MA</div>
+<div class="state-cell status-limited" style="grid-row:3;grid-column:11;background-color:#D69E2E;" data-abbr="RI" onclick="showDetail('RI')" title="Rhode Island">RI</div>
+<div class="state-cell status-comprehensive" style="grid-row:3;grid-column:12;background-color:#C53030;" data-abbr="CT" onclick="showDetail('CT')" title="Connecticut">CT</div>
+<div class="state-cell status-comprehensive" style="grid-row:4;grid-column:1;background-color:#C53030;" data-abbr="OR" onclick="showDetail('OR')" title="Oregon">OR</div>
+<div class="state-cell status-none" style="grid-row:4;grid-column:2;background-color:#CBD5E0;" data-abbr="ID" onclick="showDetail('ID')" title="Idaho">ID</div>
+<div class="state-cell status-none" style="grid-row:4;grid-column:3;background-color:#CBD5E0;" data-abbr="WY" onclick="showDetail('WY')" title="Wyoming">WY</div>
+<div class="state-cell status-none" style="grid-row:4;grid-column:4;background-color:#CBD5E0;" data-abbr="SD" onclick="showDetail('SD')" title="South Dakota">SD</div>
+<div class="state-cell status-none" style="grid-row:4;grid-column:5;background-color:#CBD5E0;" data-abbr="IA" onclick="showDetail('IA')" title="Iowa">IA</div>
+<div class="state-cell status-limited" style="grid-row:4;grid-column:6;background-color:#D69E2E;" data-abbr="IL" onclick="showDetail('IL')" title="Illinois">IL</div>
+<div class="state-cell status-none" style="grid-row:4;grid-column:7;background-color:#CBD5E0;" data-abbr="IN" onclick="showDetail('IN')" title="Indiana">IN</div>
+<div class="state-cell status-proposed" style="grid-row:4;grid-column:8;background-color:#3182CE;" data-abbr="OH" onclick="showDetail('OH')" title="Ohio">OH</div>
+<div class="state-cell status-proposed" style="grid-row:4;grid-column:9;background-color:#3182CE;" data-abbr="PA" onclick="showDetail('PA')" title="Pennsylvania">PA</div>
+<div class="state-cell status-limited" style="grid-row:4;grid-column:10;background-color:#D69E2E;" data-abbr="NJ" onclick="showDetail('NJ')" title="New Jersey">NJ</div>
+<div class="state-cell status-comprehensive" style="grid-row:5;grid-column:1;background-color:#C53030;" data-abbr="CA" onclick="showDetail('CA')" title="California">CA</div>
+<div class="state-cell status-proposed" style="grid-row:5;grid-column:2;background-color:#3182CE;" data-abbr="NV" onclick="showDetail('NV')" title="Nevada">NV</div>
+<div class="state-cell status-none" style="grid-row:5;grid-column:3;background-color:#CBD5E0;" data-abbr="UT" onclick="showDetail('UT')" title="Utah">UT</div>
+<div class="state-cell status-comprehensive" style="grid-row:5;grid-column:4;background-color:#C53030;" data-abbr="CO" onclick="showDetail('CO')" title="Colorado">CO</div>
+<div class="state-cell status-none" style="grid-row:5;grid-column:5;background-color:#CBD5E0;" data-abbr="NE" onclick="showDetail('NE')" title="Nebraska">NE</div>
+<div class="state-cell status-proposed" style="grid-row:5;grid-column:6;background-color:#3182CE;" data-abbr="MO" onclick="showDetail('MO')" title="Missouri">MO</div>
+<div class="state-cell status-none" style="grid-row:5;grid-column:7;background-color:#CBD5E0;" data-abbr="KY" onclick="showDetail('KY')" title="Kentucky">KY</div>
+<div class="state-cell status-none" style="grid-row:5;grid-column:8;background-color:#CBD5E0;" data-abbr="WV" onclick="showDetail('WV')" title="West Virginia">WV</div>
+<div class="state-cell status-proposed" style="grid-row:5;grid-column:9;background-color:#3182CE;" data-abbr="VA" onclick="showDetail('VA')" title="Virginia">VA</div>
+<div class="state-cell status-limited" style="grid-row:5;grid-column:10;background-color:#D69E2E;" data-abbr="MD" onclick="showDetail('MD')" title="Maryland">MD</div>
+<div class="state-cell status-limited" style="grid-row:5;grid-column:11;background-color:#D69E2E;" data-abbr="DE" onclick="showDetail('DE')" title="Delaware">DE</div>
+<div class="state-cell status-none" style="grid-row:6;grid-column:2;background-color:#CBD5E0;" data-abbr="AZ" onclick="showDetail('AZ')" title="Arizona">AZ</div>
+<div class="state-cell status-none" style="grid-row:6;grid-column:3;background-color:#CBD5E0;" data-abbr="NM" onclick="showDetail('NM')" title="New Mexico">NM</div>
+<div class="state-cell status-none" style="grid-row:6;grid-column:5;background-color:#CBD5E0;" data-abbr="KS" onclick="showDetail('KS')" title="Kansas">KS</div>
+<div class="state-cell status-none" style="grid-row:6;grid-column:6;background-color:#CBD5E0;" data-abbr="TN" onclick="showDetail('TN')" title="Tennessee">TN</div>
+<div class="state-cell status-proposed" style="grid-row:6;grid-column:7;background-color:#3182CE;" data-abbr="NC" onclick="showDetail('NC')" title="North Carolina">NC</div>
+<div class="state-cell status-none" style="grid-row:6;grid-column:8;background-color:#CBD5E0;" data-abbr="SC" onclick="showDetail('SC')" title="South Carolina">SC</div>
+<div class="state-cell status-none" style="grid-row:7;grid-column:4;background-color:#CBD5E0;" data-abbr="OK" onclick="showDetail('OK')" title="Oklahoma">OK</div>
+<div class="state-cell status-none" style="grid-row:7;grid-column:5;background-color:#CBD5E0;" data-abbr="AR" onclick="showDetail('AR')" title="Arkansas">AR</div>
+<div class="state-cell status-none" style="grid-row:7;grid-column:6;background-color:#CBD5E0;" data-abbr="MS" onclick="showDetail('MS')" title="Mississippi">MS</div>
+<div class="state-cell status-none" style="grid-row:7;grid-column:7;background-color:#CBD5E0;" data-abbr="GA" onclick="showDetail('GA')" title="Georgia">GA</div>
+<div class="state-cell status-none" style="grid-row:7;grid-column:8;background-color:#CBD5E0;" data-abbr="AL" onclick="showDetail('AL')" title="Alabama">AL</div>
+<div class="state-cell status-none" style="grid-row:8;grid-column:4;background-color:#CBD5E0;" data-abbr="TX" onclick="showDetail('TX')" title="Texas">TX</div>
+<div class="state-cell status-none" style="grid-row:8;grid-column:5;background-color:#CBD5E0;" data-abbr="LA" onclick="showDetail('LA')" title="Louisiana">LA</div>
+<div class="state-cell status-none" style="grid-row:8;grid-column:9;background-color:#CBD5E0;" data-abbr="FL" onclick="showDetail('FL')" title="Florida">FL</div>
+<div class="state-cell status-limited" style="grid-row:9;grid-column:1;background-color:#D69E2E;" data-abbr="AK" onclick="showDetail('AK')" title="Alaska">AK</div>
+<div class="state-cell status-limited" style="grid-row:9;grid-column:2;background-color:#D69E2E;" data-abbr="HI" onclick="showDetail('HI')" title="Hawaii">HI</div>
+    </div>
+
+    <div class="legend">
+<div class="legend-item"><span class="legend-swatch" style="background:#C53030;"></span><span class="legend-label">Comprehensive Law</span></div>
+<div class="legend-item"><span class="legend-swatch" style="background:#D69E2E;"></span><span class="legend-label">Limited / Partial Law</span></div>
+<div class="legend-item"><span class="legend-swatch" style="background:#3182CE;"></span><span class="legend-label">Proposed Legislation</span></div>
+<div class="legend-item"><span class="legend-swatch" style="background:#CBD5E0;"></span><span class="legend-label">No Significant Law</span></div>
+    </div>
+
+    <div class="home-note">
+      <span class="home-note-dot"></span>
+      <span>Gold dot = MN (Andersen's home state) — subject to Amara's Law</span>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-empty" id="detailEmpty">Select a state to see details</div>
+    <div id="detailContent" style="display:none;"></div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  Data current as of 2026-03-18. This tracker covers enacted and proposed state PFAS product laws;
+  it does not cover federal EPA rules. Verify compliance status with legal counsel before making compliance decisions.
+</div>
+
+<script>
+var STATE_DATA = {
+  "MN": {"name": "Minnesota", "status": "comprehensive", "laws": ["Amara's Law (SF 2898)"], "summary": "Most comprehensive state PFAS law. Covers products sold in MN.", "key_dates": ["Jan 1, 2025: PFAS-containing products registration required", "Jan 1, 2025: Ban on PFAS in cookware, food packaging, children's products", "Jan 1, 2032: Full ban on intentionally added PFAS in all products"], "andersen_note": "HOME STATE. Weatherstripping/seal fluoropolymer coatings subject to Amara\'s Law. Registration deadline passed — verify compliance status."},
+  "ME": {"name": "Maine", "status": "comprehensive", "laws": ["LD 1503"], "summary": "First state to pass comprehensive PFAS law. Requires disclosure of intentionally added PFAS by 2023, phase-out by 2030.", "key_dates": ["Jan 1, 2023: PFAS disclosure to state required", "Jan 1, 2030: Ban on sale of products with intentionally added PFAS"], "andersen_note": "Products sold in ME may require PFAS disclosure. Check weatherstripping and seal coatings."},
+  "WA": {"name": "Washington", "status": "comprehensive", "laws": ["HB 2658", "SB 5135", "HB 1694"], "summary": "Comprehensive PFAS phase-out across food packaging, firefighting foam, apparel, ski wax, and more.", "key_dates": ["Jan 1, 2023: Ban on PFAS in food packaging", "Jan 1, 2025: Ban on PFAS in cookware, carpets, ski wax", "Jan 1, 2026: Ban on PFAS in apparel"], "andersen_note": "Products sold in WA subject to multiple category bans. Review product lines sold in this market."},
+  "CA": {"name": "California", "status": "comprehensive", "laws": ["AB 1200", "AB 1817", "SB 1044", "AB 652"], "summary": "Multiple PFAS laws covering food packaging, cookware, apparel, juvenile products, and more.", "key_dates": ["Jan 1, 2023: PFAS disclosure on cookware required", "Jan 1, 2025: Ban on PFAS in cookware", "Jan 1, 2025: Ban on PFAS in apparel", "Jul 1, 2025: Ban on PFAS in juvenile products"], "andersen_note": "Large market with multiple PFAS product laws. Check all product lines sold in CA."},
+  "CO": {"name": "Colorado", "status": "comprehensive", "laws": ["HB 22-1345", "SB 23-016"], "summary": "Bans PFAS in food packaging, firefighting foam, ski wax, and personal care products.", "key_dates": ["Jan 1, 2024: Ban on PFAS in food packaging", "Jan 1, 2024: Ban on PFAS in ski wax", "Jan 1, 2025: Expanded product bans"], "andersen_note": "Products sold in CO subject to packaging and product bans."},
+  "VT": {"name": "Vermont", "status": "comprehensive", "laws": ["H.150", "Act 21"], "summary": "Bans PFAS in food contact materials, cookware, cosmetics, juvenile products, and more.", "key_dates": ["Jul 1, 2023: Ban on PFAS in food contact ware and cookware", "Jul 1, 2025: Expanded product category bans"], "andersen_note": "Small market but strong law. Review applicable product categories."},
+  "NY": {"name": "New York", "status": "comprehensive", "laws": ["A6295", "S9332", "Multiple bills"], "summary": "Multiple PFAS laws covering food packaging, carpets, cookware, apparel, and children\'s products.", "key_dates": ["Dec 31, 2022: Ban on PFAS in food packaging", "Jan 1, 2025: Ban on PFAS in cookware", "Dec 31, 2024: Ban on PFAS in carpets and rugs"], "andersen_note": "Major market with multiple active PFAS laws."},
+  "OR": {"name": "Oregon", "status": "comprehensive", "laws": ["HB 2771", "SB 21"], "summary": "Broad PFAS framework covering food packaging, cookware, apparel, juvenile products, and more.", "key_dates": ["Jan 1, 2023: PFAS reporting requirements begin", "Jan 1, 2025: Phase-out of PFAS in multiple product categories"], "andersen_note": "Review product lines sold in OR against phase-out schedule."},
+  "CT": {"name": "Connecticut", "status": "comprehensive", "laws": ["PA 21-191", "PA 23-97"], "summary": "Comprehensive PFAS restrictions across food packaging, cookware, apparel, and firefighting foam.", "key_dates": ["Dec 31, 2023: Ban on PFAS in food contact substances", "Dec 31, 2025: Expanded product bans"], "andersen_note": "Active PFAS law state. Monitor product compliance."},
+  "MA": {"name": "Massachusetts", "status": "limited", "laws": ["PFAS MCL Rules", "Firefighting foam restrictions"], "summary": "PFAS maximum contaminant levels in drinking water. Firefighting foam PFAS restrictions.", "key_dates": ["Oct 1, 2020: PFAS6 MCL of 20 ppt in drinking water", "2022: Firefighting foam PFAS restrictions enacted"], "andersen_note": "Primarily drinking water and firefighting foam focus. Monitor for expanded product legislation."},
+  "MI": {"name": "Michigan", "status": "limited", "laws": ["PA 20 of 2019", "PFAS MCL Rules"], "summary": "Nation\'s most stringent PFAS drinking water MCLs (7 PFAS compounds). Active remediation program.", "key_dates": ["Aug 2020: PFAS MCLs established for 7 compounds", "Ongoing: PFAS remediation and site investigation program"], "andersen_note": "Manufacturing state with strict PFAS water standards. Monitor discharge and facility compliance."},
+  "NJ": {"name": "New Jersey", "status": "limited", "laws": ["PFAS MCL Rules", "SRP PFAS Rules"], "summary": "Very low PFAS MCLs in drinking water. Firefighting foam restrictions. Expanding product laws.", "key_dates": ["2021: PFOA MCL of 14 ppt, PFOS MCL of 13 ppt established", "Ongoing: PFAS site remediation requirements"], "andersen_note": "Strict water standards. Watch for product legislation expansion."},
+  "MD": {"name": "Maryland", "status": "limited", "laws": ["SB 72", "HB 275"], "summary": "Bans PFAS in food packaging and firefighting foam. Limited product scope.", "key_dates": ["Jan 1, 2024: Ban on PFAS in food packaging", "2023: Firefighting foam restrictions"], "andersen_note": "Food packaging focus. Monitor for broader product legislation."},
+  "RI": {"name": "Rhode Island", "status": "limited", "laws": ["H5475", "Firefighting foam law"], "summary": "PFAS restrictions in food packaging and firefighting foam.", "key_dates": ["Jan 1, 2023: Ban on PFAS in food packaging", "2022: Firefighting foam PFAS restrictions"], "andersen_note": "Limited scope currently. Monitor legislative expansion."},
+  "IL": {"name": "Illinois", "status": "limited", "laws": ["SB 3718", "HB 3739"], "summary": "PFAS restrictions on firefighting foam and some reporting requirements.", "key_dates": ["2022: Firefighting foam PFAS restrictions", "Ongoing: PFAS monitoring and reporting programs"], "andersen_note": "Primarily firefighting foam focus. Watch for product expansion."},
+  "WI": {"name": "Wisconsin", "status": "limited", "laws": ["SB 107", "AB 426"], "summary": "Firefighting foam PFAS restrictions. Active PFAS monitoring in water.", "key_dates": ["2022: Ban on PFAS firefighting foam for training", "Ongoing: PFAS groundwater monitoring requirements"], "andersen_note": "Key manufacturing state. Firefighting foam restrictions active."},
+  "NH": {"name": "New Hampshire", "status": "limited", "laws": ["SB 309", "PFAS MCL Rules"], "summary": "PFAS MCLs in drinking water. Firefighting foam restrictions.", "key_dates": ["2020: PFAS MCLs established (12 ppt for PFOA)", "2021: Firefighting foam restrictions"], "andersen_note": "Drinking water and firefighting foam focus."},
+  "HI": {"name": "Hawaii", "status": "limited", "laws": ["SB 2608", "HB 2645"], "summary": "Firefighting foam PFAS restrictions and some product requirements.", "key_dates": ["Jan 1, 2026: Ban on PFAS in food packaging", "2023: Firefighting foam phase-out"], "andersen_note": "Remote market. Monitor food packaging law effective 2026."},
+  "DE": {"name": "Delaware", "status": "limited", "laws": ["HB 75"], "summary": "PFAS restrictions in food packaging.", "key_dates": ["Jan 1, 2024: Ban on PFAS in food packaging"], "andersen_note": "Food packaging focus only."},
+  "MT": {"name": "Montana", "status": "limited", "laws": ["SB 81"], "summary": "Firefighting foam PFAS restrictions.", "key_dates": ["2021: PFAS firefighting foam restrictions"], "andersen_note": "Limited scope."},
+  "AK": {"name": "Alaska", "status": "limited", "laws": ["HB 79"], "summary": "Firefighting foam PFAS restrictions.", "key_dates": ["2022: PFAS firefighting foam use restrictions"], "andersen_note": "Remote market. Limited scope."},
+  "VA": {"name": "Virginia", "status": "proposed", "laws": ["Multiple bills in progress"], "summary": "Active PFAS legislation proposed covering food packaging and products. PFAS monitoring program active.", "key_dates": ["2024-2025: Multiple PFAS bills under consideration"], "andersen_note": "Watch for legislation passage. Growing market."},
+  "NC": {"name": "North Carolina", "status": "proposed", "laws": ["Pending legislation"], "summary": "PFAS contamination hotspot (Cape Fear River). Active proposed legislation.", "key_dates": ["Ongoing: PFAS contamination remediation and proposed product bills"], "andersen_note": "High PFAS contamination awareness. Legislation likely."},
+  "PA": {"name": "Pennsylvania", "status": "proposed", "laws": ["HB 1249", "SB 1107 (proposed)"], "summary": "PFAS MCLs for drinking water under development. Product legislation proposed.", "key_dates": ["2024-2025: PFAS MCL rulemaking in progress"], "andersen_note": "Major manufacturing state. Watch for MCL finalization."},
+  "OH": {"name": "Ohio", "status": "proposed", "laws": ["Pending legislation"], "summary": "Limited enacted PFAS law. Some proposed product legislation.", "key_dates": ["2025: Proposed food packaging restrictions"], "andersen_note": "Manufacturing state. Monitor proposed legislation."},
+  "MO": {"name": "Missouri", "status": "proposed", "laws": ["Pending legislation"], "summary": "Limited PFAS activity. Some proposed firefighting foam restrictions.", "key_dates": ["2025: Proposed firefighting foam restrictions"], "andersen_note": "Limited exposure currently."},
+  "NV": {"name": "Nevada", "status": "proposed", "laws": ["SB 68 (proposed)"], "summary": "PFAS restrictions proposed for food packaging and firefighting foam.", "key_dates": ["2025: Proposed PFAS legislation"], "andersen_note": "Monitor legislative progress."},
+  "FL": {"name": "Florida", "status": "none", "laws": [], "summary": "No significant PFAS-specific state product laws enacted. Limited regulatory activity.", "key_dates": [], "andersen_note": "No current PFAS product compliance requirements."},
+  "TX": {"name": "Texas", "status": "none", "laws": [], "summary": "No significant PFAS-specific state laws. Some groundwater monitoring.", "key_dates": [], "andersen_note": "No current PFAS product compliance requirements."},
+  "GA": {"name": "Georgia", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "AL": {"name": "Alabama", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "MS": {"name": "Mississippi", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "LA": {"name": "Louisiana", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "AR": {"name": "Arkansas", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "TN": {"name": "Tennessee", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "KY": {"name": "Kentucky", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "WV": {"name": "West Virginia", "status": "none", "laws": [], "summary": "No significant PFAS state laws enacted. Some PFAS contamination issues.", "key_dates": [], "andersen_note": "No current requirements."},
+  "SC": {"name": "South Carolina", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "IN": {"name": "Indiana", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "IA": {"name": "Iowa", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "KS": {"name": "Kansas", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "NE": {"name": "Nebraska", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "SD": {"name": "South Dakota", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "ND": {"name": "North Dakota", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "WY": {"name": "Wyoming", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "UT": {"name": "Utah", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "ID": {"name": "Idaho", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "AZ": {"name": "Arizona", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "NM": {"name": "New Mexico", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "OK": {"name": "Oklahoma", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."}
+};
+
+var STATUS_COLORS = {
+  "comprehensive": "#C53030",
+  "limited":       "#D69E2E",
+  "proposed":      "#3182CE",
+  "none":          "#CBD5E0"
+};
+
+var STATUS_LABELS = {
+  "comprehensive": "Comprehensive Law",
+  "limited":       "Limited / Partial Law",
+  "proposed":      "Proposed Legislation",
+  "none":          "No Significant Law"
+};
+
+var activeAbbr = null;
+
+function showDetail(abbr) {
+  var state = STATE_DATA[abbr];
+  if (!state) return;
+
+  // Toggle active cell highlight
+  if (activeAbbr) {
+    var prev = document.querySelector('[data-abbr="' + activeAbbr + '"]');
+    if (prev) prev.classList.remove('active');
+  }
+  activeAbbr = abbr;
+  var cell = document.querySelector('[data-abbr="' + abbr + '"]');
+  if (cell) cell.classList.add('active');
+
+  var color = STATUS_COLORS[state.status] || '#CBD5E0';
+  var statusLabel = STATUS_LABELS[state.status] || state.status;
+
+  // Build laws list
+  var lawsHtml = '';
+  if (state.laws && state.laws.length > 0) {
+    lawsHtml = '<p class="detail-section-label">Enacted Laws</p><ul class="detail-laws">';
+    state.laws.forEach(function(l) {
+      lawsHtml += '<li>' + escapeHtml(l) + '</li>';
+    });
+    lawsHtml += '</ul>';
+  }
+
+  // Build dates list
+  var datesHtml = '';
+  if (state.key_dates && state.key_dates.length > 0) {
+    datesHtml = '<p class="detail-section-label">Key Dates</p><ul class="detail-dates">';
+    state.key_dates.forEach(function(d) {
+      datesHtml += '<li>' + escapeHtml(d) + '</li>';
+    });
+    datesHtml += '</ul>';
+  }
+
+  // Andersen note
+  var noteHtml = '';
+  if (state.andersen_note) {
+    noteHtml = '<p class="detail-section-label">Andersen Relevance</p>'
+      + '<div class="andersen-note"><strong>Compliance Note</strong>' + escapeHtml(state.andersen_note) + '</div>';
+  }
+
+  var html = '<div class="detail-abbr">' + abbr + '</div>'
+    + '<div class="detail-name">' + escapeHtml(state.name) + '</div>'
+    + '<span class="detail-status-badge" style="background:' + color + ';">' + escapeHtml(statusLabel) + '</span>'
+    + '<p class="detail-section-label">Summary</p>'
+    + '<p class="detail-summary">' + escapeHtml(state.summary) + '</p>'
+    + lawsHtml
+    + datesHtml
+    + noteHtml;
+
+  document.getElementById('detailEmpty').style.display = 'none';
+  var content = document.getElementById('detailContent');
+  content.style.display = 'block';
+  content.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Auto-select MN on load (home state)
+window.addEventListener('DOMContentLoaded', function() {
+  showDetail('MN');
+});
+</script>
+
+</body>
+</html>
