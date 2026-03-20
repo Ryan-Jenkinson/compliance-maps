@@ -273,7 +273,7 @@
 <div class="page-header">
   <p class="brand">Andersen Windows &amp; Doors</p>
   <h1>PFAS State Compliance Tracker</h1>
-  <p class="sub">Interactive map of US state PFAS laws &amp; restrictions &nbsp;&middot;&nbsp; Last updated: 2026-03-18 (MN updated: PRISM Jul 1 2026 deadline, portal v1.11)</p>
+  <p class="sub">Interactive map of US state PFAS laws &amp; restrictions &nbsp;&middot;&nbsp; Last updated: 2026-03-20 (NM updated: HB 212 comprehensive law Apr 2025, fluoropolymer exemption; MN: PRISM Jul 1 2026 deadline)</p>
 </div>
 
 <div class="page-body">
@@ -317,7 +317,7 @@
 <div class="state-cell status-limited" style="grid-row:5;grid-column:10;background-color:#D69E2E;" data-abbr="MD" onclick="showDetail('MD')" title="Maryland">MD</div>
 <div class="state-cell status-limited" style="grid-row:5;grid-column:11;background-color:#D69E2E;" data-abbr="DE" onclick="showDetail('DE')" title="Delaware">DE</div>
 <div class="state-cell status-none" style="grid-row:6;grid-column:2;background-color:#CBD5E0;" data-abbr="AZ" onclick="showDetail('AZ')" title="Arizona">AZ</div>
-<div class="state-cell status-none" style="grid-row:6;grid-column:3;background-color:#CBD5E0;" data-abbr="NM" onclick="showDetail('NM')" title="New Mexico">NM</div>
+<div class="state-cell status-comprehensive" style="grid-row:6;grid-column:3;background-color:#C53030;" data-abbr="NM" onclick="showDetail('NM')" title="New Mexico">NM</div>
 <div class="state-cell status-none" style="grid-row:6;grid-column:5;background-color:#CBD5E0;" data-abbr="KS" onclick="showDetail('KS')" title="Kansas">KS</div>
 <div class="state-cell status-none" style="grid-row:6;grid-column:6;background-color:#CBD5E0;" data-abbr="TN" onclick="showDetail('TN')" title="Tennessee">TN</div>
 <div class="state-cell status-proposed" style="grid-row:6;grid-column:7;background-color:#3182CE;" data-abbr="NC" onclick="showDetail('NC')" title="North Carolina">NC</div>
@@ -356,7 +356,7 @@
 </div>
 
 <div class="page-footer">
-  Data current as of 2026-03-18 (MN updated: PRISM Jul 1 2026 deadline, portal v1.11). This tracker covers enacted and proposed state PFAS product laws;
+  Data current as of 2026-03-20 (NM updated: HB 212 comprehensive law Apr 2025, fluoropolymer exemption; MN: PRISM Jul 1 2026 deadline). This tracker covers enacted and proposed state PFAS product laws;
   it does not cover federal EPA rules. Verify compliance status with legal counsel before making compliance decisions.
 </div>
 
@@ -410,7 +410,7 @@ var STATE_DATA = {
   "UT": {"name": "Utah", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
   "ID": {"name": "Idaho", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
   "AZ": {"name": "Arizona", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
-  "NM": {"name": "New Mexico", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."},
+  "NM": {"name": "New Mexico", "status": "comprehensive", "laws": ["HB 212 (PFAS Protection Act, signed Apr 8, 2025)"], "summary": "Third state to pass comprehensive PFAS law after Maine and Minnesota. HB 212 bans intentionally added PFAS across a broad range of consumer products in three phases. Manufacturer reporting to NMED begins Jan 1, 2027. NMED implementation rules expected July 2026. Notably includes a fluoropolymer exemption (unlike ME/MN).", "key_dates": ["Jul 2026: NMED implementation rules expected", "Jan 1, 2027: Phase 1 bans take effect \u2014 cookware, food packaging, dental floss, juvenile products, firefighting foam; manufacturer reporting to NMED begins", "Jan 1, 2028: Phase 2 bans \u2014 carpets, cleaning products, cosmetics, textiles, ski wax, upholstered furniture", "Jan 1, 2032: Phase 3 \u2014 virtually all non-exempt products banned"], "andersen_note": "EMERGING COMPLIANCE STATE. HB 212 signed Apr 8, 2025 — 3rd comprehensive state PFAS law. Key distinction: fluoropolymer exemption exists (unlike ME/MN), which may benefit Andersen\'s weatherstripping/seal coatings that use fluoropolymer PFAS. Phase 1 reporting starts Jan 2027 — track NMED rules due Jul 2026. Supply chain risk: NM law creates another registration/reporting obligation for Andersen\'s component manufacturers selling into NM."},
   "OK": {"name": "Oklahoma", "status": "none", "laws": [], "summary": "No significant PFAS state laws.", "key_dates": [], "andersen_note": "No current requirements."}
 };
 
