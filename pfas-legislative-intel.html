@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PFAS Legislative Intelligence — Preview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #F0F2F5;
+      color: #2D3748;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ---- Preview banner ---- */
+    .preview-banner {
+      background: linear-gradient(90deg, #7C2D12 0%, #92400E 100%);
+      color: #FFF3CD;
+      text-align: center;
+      padding: 8px 24px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .preview-banner strong {
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* ---- Header ---- */
+    .page-header {
+      background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #172554 100%);
+      padding: 24px 32px 20px;
+    }
+    .page-header .brand {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #A78BFA;
+      margin: 0 0 6px;
+    }
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 6px;
+    }
+    .page-header .sub {
+      font-size: 13px;
+      color: #93C5FD;
+      margin: 0 0 4px;
+    }
+    .page-header .intent-note {
+      font-size: 12px;
+      color: #94A3B8;
+      margin: 10px 0 0;
+      max-width: 720px;
+      line-height: 1.6;
+    }
+
+    /* ---- Stats bar ---- */
+    .stats-bar {
+      background: #1E293B;
+      border-bottom: 1px solid #334155;
+      padding: 10px 32px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #94A3B8;
+    }
+    .stat-chip strong {
+      color: #F1F5F9;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .stat-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ---- Layout ---- */
+    .page-body {
+      display: flex;
+      gap: 24px;
+      padding: 24px 32px;
+      align-items: flex-start;
+    }
+
+    /* ---- Map panel ---- */
+    .map-panel {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .map-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #718096;
+      margin: 0 0 12px;
+    }
+
+    .state-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 50px);
+      grid-template-rows: repeat(9, 50px);
+      gap: 4px;
+      width: fit-content;
+    }
+
+    .state-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+      user-select: none;
+      letter-spacing: 0.5px;
+    }
+    .state-cell:hover {
+      transform: scale(1.12);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 10;
+      filter: brightness(1.15);
+    }
+    .state-cell.active {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1E1B4B;
+      z-index: 20;
+    }
+    .stage-none {
+      color: #718096;
+    }
+    .stage-pre_discussion {
+      opacity: 0.85;
+    }
+
+    /* ---- Legend ---- */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 16px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .legend-label {
+      font-size: 12px;
+      color: #4A5568;
+    }
+
+    /* Confidence legend */
+    .confidence-legend {
+      margin-top: 10px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .confidence-legend .cl-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #A0AEC0;
+    }
+    .confidence-legend .cl-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #718096;
+    }
+    .confidence-legend .cl-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ---- Detail panel ---- */
+    .detail-panel {
+      flex: 0 0 340px;
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 280px;
+      position: sticky;
+      top: 24px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+    .detail-close { display: none; }
+    .detail-overlay { display: none; }
+
+    @media (max-width: 800px) {
+      .page-body { flex-direction: column; }
+      .detail-overlay {
+        display: block; visibility: hidden;
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.5); z-index: 999;
+        opacity: 0; transition: opacity 0.2s;
+      }
+      .detail-overlay.open { visibility: visible; opacity: 1; }
+      .detail-panel {
+        display: none !important;
+        position: fixed !important;
+        bottom: 0 !important; left: 0 !important; right: 0 !important;
+        top: auto !important; width: 100% !important;
+        max-height: 65vh; overflow-y: auto;
+        z-index: 1000; border-radius: 12px 12px 0 0 !important;
+        box-shadow: 0 -4px 24px rgba(0,0,0,0.2);
+        padding: 20px 20px 32px;
+      }
+      .detail-panel.open { display: block !important; }
+      .detail-close {
+        display: block; position: absolute;
+        top: 12px; right: 14px;
+        font-size: 22px; cursor: pointer;
+        color: #718096; background: none; border: none; padding: 4px; z-index: 1001;
+      }
+    }
+
+    .detail-empty {
+      color: #A0AEC0; font-style: italic; font-size: 13px;
+      text-align: center; padding: 40px 0;
+    }
+
+    .detail-abbr {
+      font-size: 28px; font-weight: 900; color: #1A2B3C;
+      line-height: 1; margin: 0 0 2px;
+    }
+    .detail-name {
+      font-size: 16px; font-weight: 700; color: #2D3748; margin: 0 0 8px;
+    }
+    .detail-badges {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .detail-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 4px;
+      font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      text-transform: uppercase; color: #fff;
+    }
+    .confidence-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 4px;
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; border: 1px solid;
+    }
+    .detail-section-label {
+      font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      text-transform: uppercase; color: #A0AEC0; margin: 14px 0 4px;
+    }
+    .detail-summary {
+      font-size: 13px; color: #4A5568; line-height: 1.6; margin: 0;
+    }
+    .detail-bills {
+      margin: 0; padding: 0; list-style: none;
+    }
+    .detail-bills li {
+      font-size: 12px; color: #4A5568; padding: 4px 0;
+      border-bottom: 1px solid #F7FAFC;
+    }
+    .detail-bills li::before {
+      content: "\00A7  "; color: #A0AEC0; font-weight: 700;
+    }
+    .scope-tag {
+      display: inline-block; background: #EBF8FF; color: #1E40AF;
+      padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600;
+      margin: 2px 2px 0 0;
+    }
+    .engagement-box {
+      background: #F0FFF4; border-left: 3px solid #059669;
+      border-radius: 0 4px 4px 0; padding: 10px 12px;
+      font-size: 12px; color: #065F46; line-height: 1.6; margin-top: 4px;
+    }
+    .engagement-box strong {
+      display: block; font-size: 10px; font-weight: 800;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: #047857; margin-bottom: 4px;
+    }
+    .evidence-list {
+      margin: 0; padding: 0; list-style: none;
+    }
+    .evidence-list li {
+      font-size: 11px; color: #718096; padding: 2px 0;
+    }
+    .evidence-list li::before {
+      content: "\2022  "; color: #A0AEC0;
+    }
+
+    /* ---- Footer ---- */
+    .page-footer {
+      padding: 14px 32px; border-top: 1px solid #E2E8F0;
+      font-size: 11px; color: #A0AEC0; line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="preview-banner">
+  <strong>Preview Only</strong> &mdash; Internal legal engagement tool. Not published. Data from deep scrape of 51 sources + AI analysis. Always verify against state legislature databases before engaging.
+</div>
+
+<div class="page-header">
+  <p class="brand">PFAS Legislative Intelligence</p>
+  <h1>State PFAS Activity &amp; Engagement Map</h1>
+  <p class="sub">29 states with detected PFAS activity &nbsp;&middot;&nbsp; From early advocacy signals through active legislation</p>
+  <p class="intent-note">
+    This map captures the full spectrum of PFAS legislative activity — not just introduced bills,
+    but also pre-discussion signals like advocacy campaigns, AG investigations, study commissions,
+    and rulemaking proceedings. States are color-coded by their most advanced stage of activity.
+    Corner dots indicate evidence confidence (green = high, amber = medium, gray = low).
+  </p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-chip"><span class="stat-dot" style="background:#6B7280;"></span><strong>20</strong> Early Signals / Pre-Discussion</div><div class="stat-chip"><span class="stat-dot" style="background:#DC2626;"></span><strong>1</strong> Rulemaking In Progress</div><div class="stat-chip"><span class="stat-dot" style="background:#2563EB;"></span><strong>1</strong> Bill Introduced</div><div class="stat-chip"><span class="stat-dot" style="background:#059669;"></span><strong>7</strong> Enacted — Watching Implementation</div>
+</div>
+
+<div class="page-body">
+
+  <div class="map-panel">
+    <p class="map-title">Click any state for details &amp; engagement guidance</p>
+    <div class="state-grid" id="stateGrid">
+<div class="state-cell stage-enacted_watching" style="grid-row:1;grid-column:12;background-color:#059669;" data-abbr="ME" onclick="showDetail('ME')" title="Maine"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>ME</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:2;grid-column:10;background-color:#6B7280;" data-abbr="VT" onclick="showDetail('VT')" title="Vermont"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>VT</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:2;grid-column:11;background-color:#6B7280;" data-abbr="NH" onclick="showDetail('NH')" title="New Hampshire"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>NH</div>
+<div class="state-cell stage-enacted_watching" style="grid-row:3;grid-column:1;background-color:#059669;" data-abbr="WA" onclick="showDetail('WA')" title="Washington"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>WA</div>
+<div class="state-cell stage-none" style="grid-row:3;grid-column:2;background-color:#CBD5E0;" data-abbr="MT" onclick="showDetail('MT')" title="Montana">MT</div>
+<div class="state-cell stage-none" style="grid-row:3;grid-column:3;background-color:#CBD5E0;" data-abbr="ND" onclick="showDetail('ND')" title="North Dakota">ND</div>
+<div class="state-cell stage-enacted_watching" style="grid-row:3;grid-column:4;background-color:#059669;" data-abbr="MN" onclick="showDetail('MN')" title="Minnesota"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>MN</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:3;grid-column:6;background-color:#6B7280;" data-abbr="WI" onclick="showDetail('WI')" title="Wisconsin"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>WI</div>
+<div class="state-cell stage-enacted_watching" style="grid-row:3;grid-column:7;background-color:#059669;" data-abbr="MI" onclick="showDetail('MI')" title="Michigan"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>MI</div>
+<div class="state-cell stage-enacted_watching" style="grid-row:3;grid-column:9;background-color:#059669;" data-abbr="NY" onclick="showDetail('NY')" title="New York"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>NY</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:3;grid-column:10;background-color:#6B7280;" data-abbr="MA" onclick="showDetail('MA')" title="Massachusetts"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>MA</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:3;grid-column:11;background-color:#6B7280;" data-abbr="RI" onclick="showDetail('RI')" title="Rhode Island"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>RI</div>
+<div class="state-cell stage-enacted_watching" style="grid-row:3;grid-column:12;background-color:#059669;" data-abbr="CT" onclick="showDetail('CT')" title="Connecticut"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>CT</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:4;grid-column:1;background-color:#6B7280;" data-abbr="OR" onclick="showDetail('OR')" title="Oregon"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>OR</div>
+<div class="state-cell stage-none" style="grid-row:4;grid-column:2;background-color:#CBD5E0;" data-abbr="ID" onclick="showDetail('ID')" title="Idaho">ID</div>
+<div class="state-cell stage-none" style="grid-row:4;grid-column:3;background-color:#CBD5E0;" data-abbr="WY" onclick="showDetail('WY')" title="Wyoming">WY</div>
+<div class="state-cell stage-none" style="grid-row:4;grid-column:4;background-color:#CBD5E0;" data-abbr="SD" onclick="showDetail('SD')" title="South Dakota">SD</div>
+<div class="state-cell stage-none" style="grid-row:4;grid-column:5;background-color:#CBD5E0;" data-abbr="IA" onclick="showDetail('IA')" title="Iowa">IA</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:4;grid-column:6;background-color:#6B7280;" data-abbr="IL" onclick="showDetail('IL')" title="Illinois"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>IL</div>
+<div class="state-cell stage-none" style="grid-row:4;grid-column:7;background-color:#CBD5E0;" data-abbr="IN" onclick="showDetail('IN')" title="Indiana">IN</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:4;grid-column:8;background-color:#6B7280;" data-abbr="OH" onclick="showDetail('OH')" title="Ohio"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>OH</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:4;grid-column:9;background-color:#6B7280;" data-abbr="PA" onclick="showDetail('PA')" title="Pennsylvania"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>PA</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:4;grid-column:10;background-color:#6B7280;" data-abbr="NJ" onclick="showDetail('NJ')" title="New Jersey"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>NJ</div>
+<div class="state-cell stage-enacted_watching" style="grid-row:5;grid-column:1;background-color:#059669;" data-abbr="CA" onclick="showDetail('CA')" title="California"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>CA</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:5;grid-column:2;background-color:#6B7280;" data-abbr="NV" onclick="showDetail('NV')" title="Nevada"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>NV</div>
+<div class="state-cell stage-none" style="grid-row:5;grid-column:3;background-color:#CBD5E0;" data-abbr="UT" onclick="showDetail('UT')" title="Utah">UT</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:5;grid-column:4;background-color:#6B7280;" data-abbr="CO" onclick="showDetail('CO')" title="Colorado"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>CO</div>
+<div class="state-cell stage-none" style="grid-row:5;grid-column:5;background-color:#CBD5E0;" data-abbr="NE" onclick="showDetail('NE')" title="Nebraska">NE</div>
+<div class="state-cell stage-none" style="grid-row:5;grid-column:6;background-color:#CBD5E0;" data-abbr="MO" onclick="showDetail('MO')" title="Missouri">MO</div>
+<div class="state-cell stage-none" style="grid-row:5;grid-column:7;background-color:#CBD5E0;" data-abbr="KY" onclick="showDetail('KY')" title="Kentucky">KY</div>
+<div class="state-cell stage-none" style="grid-row:5;grid-column:8;background-color:#CBD5E0;" data-abbr="WV" onclick="showDetail('WV')" title="West Virginia">WV</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:5;grid-column:9;background-color:#6B7280;" data-abbr="VA" onclick="showDetail('VA')" title="Virginia"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>VA</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:5;grid-column:10;background-color:#6B7280;" data-abbr="MD" onclick="showDetail('MD')" title="Maryland"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>MD</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:5;grid-column:11;background-color:#6B7280;" data-abbr="DE" onclick="showDetail('DE')" title="Delaware"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>DE</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:6;grid-column:2;background-color:#6B7280;" data-abbr="AZ" onclick="showDetail('AZ')" title="Arizona"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>AZ</div>
+<div class="state-cell stage-rulemaking" style="grid-row:6;grid-column:3;background-color:#DC2626;" data-abbr="NM" onclick="showDetail('NM')" title="New Mexico"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>NM</div>
+<div class="state-cell stage-none" style="grid-row:6;grid-column:5;background-color:#CBD5E0;" data-abbr="KS" onclick="showDetail('KS')" title="Kansas">KS</div>
+<div class="state-cell stage-none" style="grid-row:6;grid-column:6;background-color:#CBD5E0;" data-abbr="TN" onclick="showDetail('TN')" title="Tennessee">TN</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:6;grid-column:7;background-color:#6B7280;" data-abbr="NC" onclick="showDetail('NC')" title="North Carolina"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#D97706;border:1px solid rgba(255,255,255,0.6);"></span>NC</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:6;grid-column:8;background-color:#6B7280;" data-abbr="SC" onclick="showDetail('SC')" title="South Carolina"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>SC</div>
+<div class="state-cell stage-none" style="grid-row:7;grid-column:4;background-color:#CBD5E0;" data-abbr="OK" onclick="showDetail('OK')" title="Oklahoma">OK</div>
+<div class="state-cell stage-none" style="grid-row:7;grid-column:5;background-color:#CBD5E0;" data-abbr="AR" onclick="showDetail('AR')" title="Arkansas">AR</div>
+<div class="state-cell stage-none" style="grid-row:7;grid-column:6;background-color:#CBD5E0;" data-abbr="MS" onclick="showDetail('MS')" title="Mississippi">MS</div>
+<div class="state-cell stage-introduced" style="grid-row:7;grid-column:7;background-color:#2563EB;" data-abbr="GA" onclick="showDetail('GA')" title="Georgia"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#059669;border:1px solid rgba(255,255,255,0.6);"></span>GA</div>
+<div class="state-cell stage-none" style="grid-row:7;grid-column:8;background-color:#CBD5E0;" data-abbr="AL" onclick="showDetail('AL')" title="Alabama">AL</div>
+<div class="state-cell stage-none" style="grid-row:8;grid-column:4;background-color:#CBD5E0;" data-abbr="TX" onclick="showDetail('TX')" title="Texas">TX</div>
+<div class="state-cell stage-none" style="grid-row:8;grid-column:5;background-color:#CBD5E0;" data-abbr="LA" onclick="showDetail('LA')" title="Louisiana">LA</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:8;grid-column:9;background-color:#6B7280;" data-abbr="FL" onclick="showDetail('FL')" title="Florida"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>FL</div>
+<div class="state-cell stage-none" style="grid-row:9;grid-column:1;background-color:#CBD5E0;" data-abbr="AK" onclick="showDetail('AK')" title="Alaska">AK</div>
+<div class="state-cell stage-pre_discussion" style="grid-row:9;grid-column:2;background-color:#6B7280;" data-abbr="HI" onclick="showDetail('HI')" title="Hawaii"><span style="position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#9CA3AF;border:1px solid rgba(255,255,255,0.6);"></span>HI</div>
+    </div>
+
+    <div class="legend">
+<div class="legend-item"><span class="legend-swatch" style="background:#6B7280;"></span><span class="legend-label">Early Signals / Pre-Discussion</span></div>
+<div class="legend-item"><span class="legend-swatch" style="background:#DC2626;"></span><span class="legend-label">Rulemaking In Progress</span></div>
+<div class="legend-item"><span class="legend-swatch" style="background:#2563EB;"></span><span class="legend-label">Bill Introduced</span></div>
+<div class="legend-item"><span class="legend-swatch" style="background:#059669;"></span><span class="legend-label">Enacted — Watching Implementation</span></div>
+    </div>
+
+    <div class="confidence-legend">
+      <span class="cl-label">Confidence:</span>
+      <span class="cl-item"><span class="cl-dot" style="background:#059669;"></span> High (direct evidence)</span>
+      <span class="cl-item"><span class="cl-dot" style="background:#D97706;"></span> Medium (partial + inference)</span>
+      <span class="cl-item"><span class="cl-dot" style="background:#9CA3AF;"></span> Low (weak signals)</span>
+    </div>
+  </div>
+
+  <div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+  <div class="detail-panel" id="detailPanel">
+    <button class="detail-close" onclick="closeDetail()">&#x2715;</button>
+    <div class="detail-empty" id="detailEmpty">Select a state to see details</div>
+    <div id="detailContent" style="display:none;"></div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  Generated 2026-03-23 &middot; Pipeline: v2_deep_scrape &middot;
+  Sources: law firm blogs, advocacy orgs, legal news, state agencies, EWG, existing PFAS scrapers + AI analysis.
+  Legislative status changes frequently. Verify against official state legislature records before taking action.
+  This page is a preview and is not part of the published compliance dashboard.
+</div>
+
+<script>
+var STATE_DATA = {
+  "AL": {"name": "Alabama", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for spillover from neighboring states (GA, TN, FL) and federal developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "AK": {"name": "Alaska", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for AFFF-related activity given military presence.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "AZ": {"name": "Arizona", "stage": "pre_discussion", "bills": [], "summary": "Arizona has demonstrated prior PFAS legislative interest, primarily focused on AFFF contamination near military installations and drinking water quality. No confirmed bill in the current session, but the political environment and contamination concerns make future legislative activity plausible. The state sits downstream of federal PFAS drinking water rule pressure that may catalyze state action.", "scope": "drinking water | foam", "session": "2026", "engagement_note": "Monitor the current session closely for any bill introduction. Engage early with key legislative staff on environmental committees to establish the company as a responsible fluoropolymer user with legitimate industrial applications distinct from AFFF and drinking water contamination sources. No immediate deadline; maintain watchlist status.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "AR": {"name": "Arkansas", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments driven by federal EPA PFAS rules.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "CA": {"name": "California", "stage": "enacted_watching", "bills": ["SB 1044", "AB 1817", "AB 652", "AB 2247"], "summary": "California is among the most active PFAS regulatory states in the nation, having enacted multiple statutes restricting PFAS in textiles, children\'s products, cookware, and firefighting foam. The Department of Toxic Substances Control (DTSC) released a draft Product-Chemical Profile for floor maintenance products containing PFAS on February 25, 2026, with written comments due March 31, 2026, and a virtual workshop held March 19, 2026 — signaling expansion of the Safer Consumer Products program into new product categories. The AG\'s office has demonstrated aggressive enforcement posture through leadership of a 23-state coalition opposing the 3M settlement and keynote participation in plastics/chemical enforcement conferences. Further legislative and regulatory action broadening PFAS product restrictions is highly likely.", "scope": "product restrictions | multiple | reporting", "session": "2025-2026", "engagement_note": "URGENT — Comment deadline March 31, 2026 on DTSC\'s draft Product-Chemical Profile for floor maintenance products. While window/door coatings are not directly covered by this profile, the company should file comments establishing the distinction between fluoropolymer coatings used in durable industrial/architectural applications versus consumer products, and opposing overbroad definitions that could sweep in architectural coatings. Engage DTSC\'s Safer Consumer Products program directly. Monitor for new bills in the 2026 session that could expand product coverage. The AG\'s enforcement posture warrants tracking through outside counsel in Sacramento. The fluoropolymer exemption issue (paralleling New Mexico) should be proactively addressed in any California submissions.", "confidence": "high", "evidence_sources": ["Bergeson & Campbell - California Releases Draft Profile for Floor Maintenance Products Containing PFAS", "JD Supra PFAS - California Releases Draft Profile for Floor Maintenance Products Containing PFAS", "Legal News - bipartisan coalition (oag.ca.gov)", "Legal News - Coalition of 22 State AGs Oppose 3M's $12.5 Billion PFAS Settlement", "Legal News - Are Plastics the New PFAS? (regulatoryoversight.com)", "training_knowledge"]},
+  "CO": {"name": "Colorado", "stage": "pre_discussion", "bills": [], "summary": "Colorado has enacted PFAS legislation on firefighting foam and has active PFAS drinking water standards in place. Prior legislative sessions have seen discussion of product bans and manufacturer reporting requirements. Given Colorado\'s progressive regulatory posture and the national trend toward broader PFAS product restrictions, additional legislative activity is anticipated.", "scope": "foam | drinking water | product restrictions", "session": "2026", "engagement_note": "Engage early with the Colorado General Assembly\'s Environment and Natural Resources committees to establish a presence. Position the company as a responsible manufacturer using durable fluoropolymer coatings with performance attributes (weather resistance, longevity) that benefit Colorado consumers and builders. Monitor session end (typically May) for any late-introduced bills. Coordinate with Colorado building industry trade associations.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "CT": {"name": "Connecticut", "stage": "enacted_watching", "bills": [], "summary": "Connecticut has enacted a statute requiring manufacturers of certain consumer products containing intentionally added PFAS to provide prior notification to DEEP and label products beginning July 1, 2026. DEEP released draft reporting forms and labeling orders for public comment (deadline October 8, 2025). Covered product categories include apparel, carpets, cleaning products, cookware, and more — but not explicitly window/door products at this time. The AG has also demonstrated active enforcement interest through participation in multistate plastics/chemical enforcement coordination.", "scope": "product restrictions | reporting", "session": "2025-2026", "engagement_note": "The July 1, 2026 implementation deadline is imminent. Legal team must confirm whether any window/door coating products fall within Connecticut\'s defined product categories under the current statute. If not, monitor for expansion. The comment period on draft reporting forms closed October 2025, but engage DEEP directly on implementation guidance to ensure architectural/industrial fluoropolymer coatings are properly distinguished from consumer products. Track the AG\'s office for any enforcement signals. Coordinate with CT trade associations (e.g., Home Builders Association of Connecticut).", "confidence": "high", "evidence_sources": ["Bergeson & Campbell - Comments Due October 8, 2025, on Connecticut's Draft PFAS Reporting Form for Manufacturers and Draft Order Regarding Labeling", "Legal News - Are Plastics the New PFAS? (regulatoryoversight.com)"]},
+  "DE": {"name": "Delaware", "stage": "pre_discussion", "bills": [], "summary": "Delaware\'s AG filed suit in October 2023 against 14 chemical companies for PFAS contamination linked to AFFF, reflecting an aggressive enforcement posture. The state has enacted PFAS legislation on food packaging and firefighting foam. Further legislative expansion to consumer and industrial products is anticipated based on enforcement trajectory and national trends.", "scope": "foam | contamination | product restrictions", "session": "2026", "engagement_note": "Monitor the Delaware General Assembly for new PFAS product restriction bills. Given the AG\'s active litigation posture, engage through trade associations rather than direct company contact at this stage. Establish the distinction between fluoropolymer coating applications and the AFFF contamination that drives Delaware\'s current enforcement focus. No immediate deadline identified.", "confidence": "medium", "evidence_sources": ["Legal News - Delaware AG Files PFAS Suit Against Numerous Companies (regulatoryoversight.com)", "training_knowledge"]},
+  "FL": {"name": "Florida", "stage": "pre_discussion", "bills": [], "summary": "Florida has seen prior legislative proposals on PFAS in firefighting foam and drinking water, driven in part by significant military base contamination concerns. While Florida\'s current legislative environment is generally more industry-friendly, the severity of contamination issues and federal PFAS drinking water rules may stimulate renewed legislative interest.", "scope": "foam | drinking water", "session": "2026", "engagement_note": "Low priority but monitor Florida\'s 2026 legislative session (runs through March). Given the state\'s generally conservative regulatory posture, risk of broad product restrictions is lower than in other states. Maintain relationships with Florida Home Builders Association and Florida Building Industry Council as early warning systems. No immediate action required.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "GA": {"name": "Georgia", "stage": "introduced", "bills": ["SB 538"], "summary": "Georgia Senate Bill 538, the \'Forever Chemicals Transparency Act,\' has been introduced in the current legislative session. The bill requires publicly owned treatment works (POTWs) to identify industrial dischargers that may be sources of PFAS, and requires industrial users discharging or proposing to discharge PFAS to disclose those discharges to POTWs. This is a reporting and transparency measure focused on wastewater, not a direct product restriction, but creates a disclosure framework that could expand.", "scope": "reporting | contamination", "session": "2026", "engagement_note": "Assess whether any manufacturing operations discharge PFAS to POTWs in Georgia. If yes, engage immediately with the bill sponsor and the Senate Natural Resources and the Environment Committee to ensure the disclosure requirements are workable and that exemptions or thresholds for trace/incidental PFAS are included. If not a discharger, monitor but lower priority. The bill\'s POTW-focused scope is less directly threatening than product bans but sets a precedent for disclosure-first regulation. Engage the Georgia Chamber of Commerce and Georgia Manufacturers Association for coalition support.", "confidence": "high", "evidence_sources": ["JD Supra PFAS - Forever Chemicals Transparency Act/General Assembly of Georgia: Senate Bill 538"]},
+  "HI": {"name": "Hawaii", "stage": "pre_discussion", "bills": [], "summary": "Hawaii has enacted PFAS legislation on firefighting foam and has considered broader product restrictions in prior sessions. Given Hawaii\'s progressive environmental orientation and the state\'s particular concern with groundwater contamination in island ecosystems, additional legislative action on PFAS products is possible.", "scope": "foam | product restrictions", "session": "2026", "engagement_note": "Low priority at this time. Monitor Hawaii\'s legislative session through May. Engage through building and construction trade associations if a bill is introduced. Hawaii\'s unique island ecosystem arguments for PFAS restriction may be difficult to counter, but the industrial/architectural distinction remains valid.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "ID": {"name": "Idaho", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "IL": {"name": "Illinois", "stage": "pre_discussion", "bills": [], "summary": "Illinois has enacted PFAS legislation on firefighting foam and has had active legislative sessions considering PFAS restrictions in food packaging and consumer products. The state\'s large manufacturing base and active General Assembly make further legislative activity on PFAS reporting and product restrictions likely.", "scope": "foam | product restrictions", "session": "2026", "engagement_note": "Monitor the Illinois General Assembly closely through May adjournment. Illinois Manufacturers\' Association is a key ally for coalition engagement. Position the company\'s fluoropolymer coatings as enabling long-lasting, low-maintenance building products that reduce lifecycle environmental impact — a sustainability narrative that resonates in Illinois\'s political environment. Engage the Environmental Law and Policy Center and relevant committee chairs if a bill appears.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "IN": {"name": "Indiana", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "IA": {"name": "Iowa", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "KS": {"name": "Kansas", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "KY": {"name": "Kentucky", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "LA": {"name": "Louisiana", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "ME": {"name": "Maine", "stage": "enacted_watching", "bills": ["LD 1503"], "summary": "Maine enacted the nation\'s first comprehensive PFAS product ban (LD 1503), which prohibits intentionally added PFAS in all products by 2030, with active rulemaking underway by the Maine DEP to implement reporting and restriction rules. Maine\'s law is the most far-reaching in the country and serves as a model for other states. The DEP\'s ongoing rulemaking is defining the scope, exemptions, and phase-in schedules that will directly affect manufacturers of fluoropolymer-coated products sold in Maine.", "scope": "product restrictions | reporting | broad ban", "session": "2025-2026", "engagement_note": "HIGH PRIORITY. The 2030 broad ban makes this an existential compliance issue if fluoropolymer coatings are not exempted or granted currently unavoidable use (CUU) status. Engage Maine DEP\'s rulemaking docket immediately — submit detailed technical comments demonstrating: (1) the performance necessity of fluoropolymer coatings for weather resistance and durability in Maine\'s climate; (2) the absence of functionally equivalent PFAS-free alternatives; (3) the distinction between fluoropolymers (polymeric, low-bioavailability) and other PFAS. Retain Maine-licensed lobbyist. Coordinate with Maine Homebuilders and Remodelers Association. Monitor DEP rulemaking docket for upcoming comment periods and hearings.", "confidence": "high", "evidence_sources": ["training_knowledge"]},
+  "MD": {"name": "Maryland", "stage": "pre_discussion", "bills": [], "summary": "Maryland has enacted PFAS legislation covering food packaging and firefighting foam, and the legislature has demonstrated ongoing interest in expanding restrictions to consumer products and personal protective equipment. Maryland\'s General Assembly is active on environmental issues and proximity to Washington D.C. policy debates accelerates legislative awareness of PFAS issues.", "scope": "product restrictions | foam", "session": "2026", "engagement_note": "Monitor Maryland\'s 2026 legislative session (runs through April). Engage the Maryland Manufacturers Association and Home Builders Association of Maryland as early warning allies. If a product restriction bill is introduced, prioritize engagement with the Senate Environment and Transportation Committee and House Environment and Transportation Committee. Emphasize building industry applications and the durability/sustainability benefits of fluoropolymer coatings.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "MA": {"name": "Massachusetts", "stage": "pre_discussion", "bills": [], "summary": "Massachusetts has enacted PFAS restrictions on firefighting foam and food packaging, maintains active drinking water standards, and has repeatedly considered broader PFAS restrictions and reporting requirements across multiple sessions without enacting a comprehensive product ban. The legislature\'s sustained interest and progressive environmental posture make it likely that broader product restriction legislation will eventually advance.", "scope": "multiple", "session": "2025-2026", "engagement_note": "Monitor the Massachusetts legislature closely. Engage the Associated Industries of Massachusetts (AIM) and Massachusetts Building Trades Council as coalition partners. Develop relationships with the Joint Committee on Environment, Natural Resources and Agriculture. The company should proactively submit technical materials to the legislature and MassDEP establishing the fluoropolymer/PFAS distinction and the performance necessity for architectural applications. Consider requesting a stakeholder meeting with MassDEP\'s PFAS coordinator.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "MI": {"name": "Michigan", "stage": "enacted_watching", "bills": [], "summary": "Michigan has some of the nation\'s strictest PFAS drinking water standards and has enacted PFAS disclosure and product restriction legislation. The AG actively litigated a PFAS contamination case against the Gerald R. Ford International Airport Authority in 2023, with federal remand to state court, signaling continued judicial engagement. Ongoing regulatory and legislative activity on PFAS reporting, product restrictions, and contamination liability is expected given the state\'s extensive PFAS history.", "scope": "drinking water | product restrictions | reporting | contamination", "session": "2025-2026", "engagement_note": "Michigan is a high-priority watch state given both its enacted product restriction framework and active AG litigation posture. Confirm compliance with existing Michigan PFAS disclosure requirements for products sold in-state. Monitor EGLE (Michigan Dept. of Environment, Great Lakes, and Energy) rulemaking dockets for any new product-related rules. Engage the Michigan Manufacturers Association. If new bills are introduced, prioritize testimony before the Senate Committee on Environment, Great Lakes, and Energy. The AG litigation record suggests enforcement risk for supply chain PFAS disclosures.", "confidence": "high", "evidence_sources": ["Legal News - Michigan AG Brings PFAS Lawsuit Against the Gerald R. Ford International Airport Authority", "Legal News - Federal Court Remands PFAS Lawsuit by Michigan AG Against the Gerald R. Ford International Airport Authority", "training_knowledge"]},
+  "MN": {"name": "Minnesota", "stage": "enacted_watching", "bills": ["SF 2995", "HF 2310"], "summary": "Minnesota has enacted the most comprehensive PFAS statute outside Maine, requiring manufacturer reporting and prohibiting intentionally added PFAS in almost all products by January 1, 2032, with a currently unavoidable use (CUU) exemption process managed by MPCA. The MPCA held a webinar on CUU rule concepts on February 26, 2026, with comments due March 29, 2026 — a critical juncture for fluoropolymer users. A separate PFAS reporting rule was disapproved by an ALJ in August 2025 on procedural grounds and must be corrected before advancing. The 2032 deadline creates an urgent compliance planning horizon for fluoropolymer coating manufacturers.", "scope": "product restrictions | reporting | broad ban | multiple", "session": "2025-2026", "engagement_note": "URGENT — HIGHEST PRIORITY STATE. Comment deadline on CUU rule concepts is March 29, 2026 (6 days from today). File detailed technical comments with MPCA immediately arguing that fluoropolymer coatings used in architectural window/door applications should qualify as currently unavoidable uses given: (1) performance-critical weather resistance properties; (2) no functionally equivalent PFAS-free alternatives at commercial scale; (3) fluoropolymers\' distinct toxicological and environmental profile from other PFAS; (4) the long service life reducing environmental loading per unit time. Retain Minnesota-licensed regulatory counsel. Engage MPCA\'s PFAS program directly. Also monitor the reporting rule correction process — once MPCA corrects the ALJ-identified deficiency, a new comment period will open. Coordinate with Minnesota Chamber of Commerce and Builders Association of Minnesota. The 2032 ban makes this a strategic business continuity issue requiring executive attention.", "confidence": "high", "evidence_sources": ["Bergeson & Campbell - ALJ Disapproves Minnesota's Proposed PFAS Rule Package Pending Correction", "Bergeson & Campbell - Comments on Minnesota's Draft Concepts for a CUU Rule Are Due March 29, 2026", "training_knowledge"]},
+  "MS": {"name": "Mississippi", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "MO": {"name": "Missouri", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "MT": {"name": "Montana", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "NE": {"name": "Nebraska", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "NV": {"name": "Nevada", "stage": "pre_discussion", "bills": [], "summary": "Nevada has enacted PFAS legislation on firefighting foam and has seen prior legislative activity on PFAS in consumer products. Nevada\'s biennial legislature (meets in odd years) limits near-term legislative risk, but agency-level activity and next session (2027) preparation may be underway. Proximity to California\'s aggressive regulatory posture creates spillover risk.", "scope": "foam | product restrictions", "session": "2027", "engagement_note": "Low priority in the near term given Nevada\'s biennial legislative schedule. Monitor California regulatory developments for signals of Nevada alignment. Engage Nevada Builders Alliance and Nevada Manufacturers Association ahead of the 2027 session. No immediate action required.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "NH": {"name": "New Hampshire", "stage": "pre_discussion", "bills": [], "summary": "New Hampshire was among the first states to establish PFAS maximum contaminant levels for drinking water and maintains some of the strictest standards in the country. Ongoing legislative interest in expanding PFAS protections has been noted across multiple sessions. The state\'s proximity to Maine (which enacted a broad ban) and Massachusetts (active PFAS legislative interest) creates a regional pressure dynamic.", "scope": "drinking water | product restrictions", "session": "2026", "engagement_note": "Monitor New Hampshire\'s 2026 legislative session. The drinking water focus is less directly threatening to product manufacturers than broad bans, but the regulatory culture suggests openness to product restriction legislation. Engage NH Homebuilders Association and Associated General Contractors of NH. Establish contact with House Science, Technology and Energy Committee and Senate Energy and Natural Resources Committee members.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "NJ": {"name": "New Jersey", "stage": "pre_discussion", "bills": [], "summary": "New Jersey has been a leading PFAS enforcement state, with the AG securing a proposed $450 million settlement with 3M in May 2025 for contamination from former NJ manufacturing sites. NJ DEP has promulgated PFAS MCLs and ongoing regulatory activity targets contamination sources. While current activity is enforcement-focused, New Jersey\'s aggressive posture and history of product-level chemical regulation (including the NJ Toxic Catastrophe Prevention Act and related programs) make product restriction legislation a plausible near-term development.", "scope": "drinking water | contamination | product restrictions", "session": "2025-2026", "engagement_note": "Monitor New Jersey legislature\'s Environment and Energy committees for any product-related PFAS bills. The $450M 3M settlement signals AG appetite for large PFAS accountability actions — assess any NJ supply chain or distribution exposure. Engage NJ Business & Industry Association and NJ Builders Association as early warning partners. NJ DEP\'s ongoing regulatory posture warrants retaining NJ regulatory counsel on a monitoring basis.", "confidence": "high", "evidence_sources": ["Legal News - New Jersey AG Platkin Reaches $450M PFAS Settlement With 3M (regulatoryoversight.com)", "training_knowledge"]},
+  "NM": {"name": "New Mexico", "stage": "rulemaking", "bills": ["HB 212", "HJM 3"], "summary": "New Mexico is implementing HB 212 (PFAS Protection Act) through NMED rulemaking that would phase out and prohibit sales of consumer products with intentionally added PFAS, with a proposed effective date of July 2026. A rulemaking hearing was held February 23, 2026, and public comments were due March 31, 2026. Critically, the legislature passed HJM 3 on February 18, 2026, directing NMED to examine whether the fluoropolymer exemption in the PFAS Protection Act should be continued, modified, or removed — with preliminary findings due to legislative committees by December 1, 2026, and a final report due August 1, 2027. This directly threatens the one protection currently available to fluoropolymer users.", "scope": "product restrictions | reporting | broad ban", "session": "2026", "engagement_note": "URGENT — CRITICAL FLUOROPOLYMER EXEMPTION AT RISK. Two immediate action items: (1) Comment deadline March 31, 2026 on NMED\'s proposed PFAS prohibition rule — file detailed technical comments strongly supporting retention of the fluoropolymer exemption, documenting the scientific basis for distinguishing fluoropolymers from other PFAS, demonstrating no feasible alternatives for architectural coating applications, and providing lifecycle environmental benefit data; (2) Engage NMED directly as it prepares its HJM 3 report — request stakeholder meetings, submit technical dossiers, and offer facility tours or technical briefings to agency staff. Retain New Mexico-licensed regulatory and legislative counsel immediately. Coordinate with the American Chemistry Council\'s fluoropolymers panel and other fluoropolymer users for coalition comments. The December 2026 preliminary report deadline means NMED engagement must be sustained through the remainder of 2026. This is a potential bellwether — if New Mexico removes the fluoropolymer exemption, other states will follow.", "confidence": "high", "evidence_sources": ["Bergeson & Campbell - New Mexico Publishes Proposed Rule to Implement PFAS Protection Act", "Bergeson & Campbell - New Mexico Posts Public Involvement Plan for PFAS Rulemaking", "Bergeson & Campbell - NMED Posts Revised Proposed PFAS Reporting, Labeling, and Prohibition Rule", "Bergeson & Campbell - New Mexico Legislature Passes Joint Memorial Calling for NMED to Report on Whether Fluoropolymer Exemption Should Be Retained in PFAS Act"]},
+  "NY": {"name": "New York", "stage": "enacted_watching", "bills": [], "summary": "New York has enacted PFAS legislation on firefighting foam and food packaging and maintains active PFAS drinking water standards. In December 2025, DEC issued a major suite of PFAS response actions including final TOGS guidance for POTWs, a draft biosolids sampling policy, and new investigative policies — signaling an expanding regulatory footprint. Ongoing legislative activity in the 2026 session is expected to address PFAS in consumer products, cosmetics, and other categories as NY follows the Maine/Minnesota model.", "scope": "contamination | drinking water | reporting | product restrictions", "session": "2025-2026", "engagement_note": "New York is a high-priority watch state given its market size and regulatory trajectory. Monitor NY DEC\'s open rulemaking dockets, particularly the draft biosolids sampling policy (DMM-7a) for any implications on industrial dischargers. More critically, monitor the NY legislature (session runs through June) for product restriction bills that could affect architectural coatings. Engage the Business Council of New York State and New York State Builders Association. Develop relationships with the Assembly Environmental Conservation Committee and Senate Environmental Conservation Committee. New York\'s proximity to Connecticut\'s July 2026 product notification deadline creates political pressure for NY to adopt similar measures.", "confidence": "high", "evidence_sources": ["Bergeson & Campbell - New York Issues Suite of PFAS Response Actions, Including a New Study, Final Guidance, and Draft Policies", "training_knowledge"]},
+  "NC": {"name": "North Carolina", "stage": "pre_discussion", "bills": [], "summary": "North Carolina has been a focal point for PFAS contamination due to Chemours/GenX contamination in the Cape Fear River basin. Ongoing legislative and regulatory activity on PFAS in drinking water and contamination remediation continues. The contamination narrative, though focused on manufacturing emissions rather than product content, could eventually drive product-level legislation as public concern grows.", "scope": "drinking water | contamination", "session": "2025-2026", "engagement_note": "Monitor North Carolina General Assembly\'s 2026 short session (typically runs June-July) for any PFAS legislation. The contamination focus is distinct from product restrictions, but the political climate is sensitized to PFAS. Engage NC Home Builders Association and NC Chamber. Emphasize that window/door fluoropolymer coatings are a product-use application fundamentally different from the industrial discharge contamination issues at the heart of NC\'s PFAS concerns.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "ND": {"name": "North Dakota", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "OH": {"name": "Ohio", "stage": "pre_discussion", "bills": [], "summary": "Ohio has had prior PFAS legislative activity related to drinking water and firefighting foam. Significant PFAS contamination concerns exist in the state, and continued federal EPA pressure on PFAS MCLs may catalyze state legislative action in the current or upcoming sessions.", "scope": "drinking water | foam", "session": "2026", "engagement_note": "Low priority but monitor Ohio General Assembly for any introduced PFAS bills. Ohio\'s manufacturing-heavy economy and historically industry-friendly legislature suggest lower near-term risk of broad product bans. Engage Ohio Manufacturers\' Association and Ohio Home Builders Association as early warning partners. No immediate action required.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "OK": {"name": "Oklahoma", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "OR": {"name": "Oregon", "stage": "pre_discussion", "bills": [], "summary": "Oregon has enacted PFAS legislation on firefighting foam and food packaging and has considered broader product restrictions in prior sessions. Oregon\'s regulatory culture closely tracks Washington State and California, making it a likely adopter of expanded PFAS product restrictions in coming sessions. The Oregon legislature meets biennially (odd years primarily) but can hold special sessions.", "scope": "foam | product restrictions", "session": "2027", "engagement_note": "Monitor Oregon DEQ rulemaking activity even in the off-legislative-year, as Oregon agencies can advance significant regulatory actions between sessions. Engage Oregon Home Builders Association and Associated General Contractors of Oregon. Prepare for a likely product restriction bill in the 2027 session by developing Oregon-specific technical materials. Track Washington State\'s regulatory developments as leading indicator.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "PA": {"name": "Pennsylvania", "stage": "pre_discussion", "bills": [], "summary": "Pennsylvania has proposed PFAS drinking water standards and has had legislative activity on PFAS contamination. As a large manufacturing state with significant PFAS contamination sites, Pennsylvania\'s regulatory and legislative environment on PFAS is evolving. The state\'s large market size makes it strategically important to monitor.", "scope": "drinking water | contamination", "session": "2025-2026", "engagement_note": "Monitor the Pennsylvania General Assembly and DEP rulemaking dockets for PFAS activity. The current focus is drinking water MCLs rather than product restrictions, which is less immediately threatening. Engage the Pennsylvania Manufacturers Association and Pennsylvania Builders Association. Establish relationships with the Senate and House Environmental Resources and Energy Committees. Pennsylvania\'s large market makes early engagement valuable even at this pre-discussion stage.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "RI": {"name": "Rhode Island", "stage": "pre_discussion", "bills": [], "summary": "Rhode Island has enacted PFAS legislation on firefighting foam and food packaging and has considered broader restrictions. As a small state that often follows Massachusetts and Connecticut on environmental regulation, Rhode Island is likely to align with regional PFAS product restriction trends.", "scope": "foam | product restrictions", "session": "2026", "engagement_note": "Low priority but monitor given regional alignment with CT and MA. Engage Rhode Island Builders Association and Rhode Island Manufacturers Association. If CT or MA advance product restriction legislation, expect Rhode Island to follow within 1-2 sessions. No immediate action required.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "SC": {"name": "South Carolina", "stage": "pre_discussion", "bills": [], "summary": "South Carolina is the venue for the major 3M PFAS class action settlement litigation before the U.S. District Court for the District of South Carolina, with a bipartisan coalition of 22-23 state AGs opposing the proposed $12.5 billion settlement. While this is federal litigation activity rather than state legislative action, South Carolina\'s role as the litigation hub and the national PFAS liability attention this generates could eventually prompt state-level legislative interest in PFAS accountability.", "scope": "drinking water | contamination", "session": "2026", "engagement_note": "Monitor South Carolina General Assembly for any PFAS-related bills inspired by the federal litigation. South Carolina\'s generally conservative legislative posture suggests lower near-term risk of product restrictions. The litigation\'s product liability implications are distinct from product content regulations but track closely through outside litigation counsel. Engage SC Chamber of Commerce and Home Builders Association of South Carolina.", "confidence": "high", "evidence_sources": ["Legal News - bipartisan coalition (oag.ca.gov)", "Legal News - Coalition of 22 State AGs Oppose 3M's $12.5 Billion PFAS Settlement (regulatoryoversight.com)"]},
+  "SD": {"name": "South Dakota", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "TN": {"name": "Tennessee", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "TX": {"name": "Texas", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time. Texas\'s generally industry-friendly regulatory posture makes broad PFAS product restrictions unlikely in the near term.", "scope": "none", "session": "2027", "engagement_note": "No action required. Texas legislature meets biennially (next session 2027). Monitor for federal preemption developments that may affect Texas\'s approach. Low risk state.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "UT": {"name": "Utah", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "VT": {"name": "Vermont", "stage": "pre_discussion", "bills": [], "summary": "Vermont has been active in PFAS regulation, enacting restrictions on PFAS in food packaging and other consumer products, and maintaining ongoing regulatory activity through the Agency of Natural Resources. Vermont\'s small but highly progressive legislature closely tracks Maine\'s regulatory model, and further legislative action expanding PFAS product restrictions is expected.", "scope": "product restrictions | drinking water", "session": "2025-2026", "engagement_note": "Monitor Vermont legislature (session runs through May). Vermont is a small market but a significant regulatory bellwether — its actions often precede broader New England adoption. Engage Vermont Builders and Remodelers Association. Given Vermont\'s alignment with Maine\'s regulatory model, proactively develop technical materials that can be used in Vermont as well as Maine to demonstrate the case for fluoropolymer exemptions. Engage Vermont Agency of Natural Resources on any open PFAS rulemaking dockets.", "confidence": "medium", "evidence_sources": ["training_knowledge"]},
+  "VA": {"name": "Virginia", "stage": "pre_discussion", "bills": [], "summary": "Virginia has enacted PFAS legislation related to firefighting foam and has active interest in PFAS drinking water standards driven in part by significant military base contamination issues. The legislature has had prior PFAS proposals and Virginia\'s swing-state political environment makes further legislative action plausible.", "scope": "foam | drinking water", "session": "2026", "engagement_note": "Monitor Virginia General Assembly (2026 session has concluded — next regular session January 2027). Engage Virginia Chamber of Commerce and Home Builders Association of Virginia. Virginia DEQ may have active PFAS regulatory proceedings worth tracking. Low urgency until 2027 session preparation begins in fall 2026.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "WA": {"name": "Washington", "stage": "enacted_watching", "bills": [], "summary": "Washington State is among the most active PFAS regulatory states in the nation, having enacted laws restricting PFAS in food packaging, firefighting foam, cosmetics, and multiple other product categories. The Department of Ecology has active PFAS rulemaking proceedings covering additional product categories. Further legislative expansion of PFAS restrictions is expected in the 2026 session and beyond, with Washington potentially following Minnesota and Maine toward a comprehensive product ban framework.", "scope": "product restrictions | foam | reporting | multiple", "session": "2026", "engagement_note": "HIGH PRIORITY. Washington\'s 2026 legislative session (runs through March) is in its final days — monitor for any PFAS bills on the floor or in conference. Engage Washington Department of Ecology PFAS rulemaking dockets immediately for any open comment periods affecting architectural/building product coatings. Retain Washington-licensed regulatory counsel. Engage the Association of Washington Business and Washington Association of Realtors and Home Builders. Washington\'s enacted legislation requires careful product-by-product compliance analysis — confirm that current product lines satisfy all enacted requirements before focusing on future legislation. Washington\'s actions serve as the West Coast regulatory bellwether.", "confidence": "high", "evidence_sources": ["training_knowledge"]},
+  "WV": {"name": "West Virginia", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "WI": {"name": "Wisconsin", "stage": "pre_discussion", "bills": [], "summary": "Wisconsin has significant PFAS contamination concerns, including prominent contamination sites near military installations and industrial facilities, and has had prior legislative proposals on PFAS in drinking water and consumer products. Wisconsin\'s divided government has historically slowed PFAS legislation, but agency-level activity continues and political dynamics could shift.", "scope": "drinking water | contamination", "session": "2025-2026", "engagement_note": "Monitor Wisconsin legislature and DNR for PFAS activity. Wisconsin\'s recent contamination issues and proximity to Minnesota (which has enacted a comprehensive PFAS statute) create spillover pressure. Engage Wisconsin Manufacturers and Commerce and Wisconsin Builders Association. No immediate action required but elevate to active monitoring given Minnesota border dynamic.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "WY": {"name": "Wyoming", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time.", "scope": "none", "session": "2026", "engagement_note": "No action required. Monitor for developments.", "confidence": "low", "evidence_sources": ["training_knowledge"]},
+  "DC": {"name": "District of Columbia", "stage": "none", "bills": [], "summary": "No PFAS legislative or regulatory signals detected at this time. DC Council has historically aligned with progressive state approaches on chemical regulation.", "scope": "none", "session": "2026", "engagement_note": "Monitor DC Council for any PFAS legislation. DC\'s small market limits direct product impact but reputational and precedent risks warrant occasional monitoring.", "confidence": "low", "evidence_sources": ["training_knowledge"]}
+};
+
+var STAGE_COLORS = {"pre_discussion": "#6B7280", "discussion": "#9333EA", "rulemaking": "#DC2626", "introduced": "#2563EB", "committee": "#7C3AED", "passed_one": "#D97706", "advanced": "#EA580C", "enacted_watching": "#059669", "none": "#CBD5E0"};
+var STAGE_LABELS = {"pre_discussion": "Early Signals / Pre-Discussion", "discussion": "Active Discussion / Task Force", "rulemaking": "Rulemaking In Progress", "introduced": "Bill Introduced", "committee": "In Committee", "passed_one": "Passed One Chamber", "advanced": "Near Passage", "enacted_watching": "Enacted \u2014 Watching Implementation", "none": "No Activity Detected"};
+var CONF_COLORS = {"high": "#059669", "medium": "#D97706", "low": "#9CA3AF"};
+
+var activeAbbr = null;
+
+function showDetail(abbr) {
+  var state = STATE_DATA[abbr];
+  if (!state) return;
+
+  if (activeAbbr) {
+    var prev = document.querySelector('[data-abbr="' + activeAbbr + '"]');
+    if (prev) prev.classList.remove('active');
+  }
+  activeAbbr = abbr;
+  var cell = document.querySelector('[data-abbr="' + abbr + '"]');
+  if (cell) cell.classList.add('active');
+
+  var color = STAGE_COLORS[state.stage] || '#CBD5E0';
+  var stageLabel = STAGE_LABELS[state.stage] || state.stage;
+
+  // Build badges
+  var badgesHtml = '<div class="detail-badges">';
+  badgesHtml += '<span class="detail-badge" style="background:' + color + ';">' + esc(stageLabel) + '</span>';
+  if (state.confidence) {
+    var confColor = CONF_COLORS[state.confidence] || '#9CA3AF';
+    badgesHtml += '<span class="confidence-badge" style="color:' + confColor + ';border-color:' + confColor + ';">'
+      + esc(state.confidence) + ' confidence</span>';
+  }
+  badgesHtml += '</div>';
+
+  if (state.stage === 'none') {
+    var html = '<div class="detail-abbr">' + abbr + '</div>'
+      + '<div class="detail-name">' + esc(state.name || abbr) + '</div>'
+      + badgesHtml
+      + '<p style="font-size:13px;color:#A0AEC0;margin-top:8px;">'
+      + (state.summary ? esc(state.summary) : 'No PFAS legislative activity detected for this state.') + '</p>';
+    setContent(html);
+    return;
+  }
+
+  var summaryHtml = state.summary
+    ? '<p class="detail-section-label">Intelligence Summary</p><p class="detail-summary">' + esc(state.summary) + '</p>'
+    : '';
+
+  var billsHtml = '';
+  if (state.bills && state.bills.length) {
+    billsHtml = '<p class="detail-section-label">Bills / Actions</p><ul class="detail-bills">';
+    state.bills.forEach(function(b) { billsHtml += '<li>' + esc(b) + '</li>'; });
+    billsHtml += '</ul>';
+  }
+
+  var scopeHtml = '';
+  if (state.scope) {
+    scopeHtml = '<p class="detail-section-label">Scope</p><div>';
+    state.scope.split(',').forEach(function(s) {
+      s = s.trim();
+      if (s) scopeHtml += '<span class="scope-tag">' + esc(s) + '</span>';
+    });
+    scopeHtml += '</div>';
+  }
+
+  var engageHtml = '';
+  if (state.engagement_note) {
+    engageHtml = '<p class="detail-section-label">Engagement Guidance</p>'
+      + '<div class="engagement-box"><strong>Action Window</strong>' + esc(state.engagement_note) + '</div>';
+  }
+
+  var evidenceHtml = '';
+  if (state.evidence_sources && state.evidence_sources.length) {
+    evidenceHtml = '<p class="detail-section-label">Evidence Sources</p><ul class="evidence-list">';
+    state.evidence_sources.forEach(function(s) { evidenceHtml += '<li>' + esc(s) + '</li>'; });
+    evidenceHtml += '</ul>';
+  }
+
+  var html = '<div class="detail-abbr">' + abbr + '</div>'
+    + '<div class="detail-name">' + esc(state.name || abbr) + '</div>'
+    + badgesHtml + summaryHtml + billsHtml + scopeHtml + engageHtml + evidenceHtml;
+
+  setContent(html);
+}
+
+function setContent(html) {
+  document.getElementById('detailEmpty').style.display = 'none';
+  var content = document.getElementById('detailContent');
+  content.style.display = 'block';
+  content.innerHTML = html;
+  if (window.innerWidth <= 800) {
+    document.getElementById('detailPanel').classList.add('open');
+    document.getElementById('detailOverlay').classList.add('open');
+  }
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+
+</body>
+</html>
