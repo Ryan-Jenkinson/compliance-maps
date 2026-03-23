@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PFAS Regulatory Deadline Timeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: #131416;
+      color: #D4D0CA;
+      font-family: 'Source Sans 3', 'Trebuchet MS', Helvetica, sans-serif;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden; /* scroll containers handle overflow */
+    }
+
+    /* ── Page layout ─────────────────────────── */
+    .page-wrap {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ── Page header ─────────────────────────── */
+    .page-hdr {
+      background: #111315;
+      border-bottom: 3px solid #D64045;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .hdr-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #D64045;
+      margin-bottom: 5px;
+    }
+    .hdr-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: #E4E0DA;
+      letter-spacing: 1px;
+    }
+    .hdr-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #484C52;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    .back-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #858890;
+      text-decoration: none;
+      border: 1px solid #2A2E34;
+      padding: 6px 11px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .back-link:hover { color: #E4E0DA; border-color: #4A4E54; }
+
+    /* ── Gantt scroll container ───────────────── */
+    .tl-scroll {
+      flex: 1;
+      overflow: auto;
+      position: relative;
+    }
+
+    /* ── Inner container — sets total width ────── */
+    .tl-inner {
+      min-width: 11170px;
+    }
+
+    /* ── Axis header ─────────────────────────── */
+    .tl-axis {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #0F1113;
+      border-bottom: 1px solid #232830;
+    }
+    .axis-jx-col {
+      width: 220px;
+      flex-shrink: 0;
+      padding: 8px 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #343840;
+      border-right: 1px solid #1E2226;
+      position: sticky;
+      left: 0;
+      z-index: 55;
+      background: #0F1113;
+    }
+    .axis-chart-col {
+      width: 10950px;
+      flex-shrink: 0;
+      position: relative;
+      height: 42px;
+    }
+    .q-lbl {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #4A5060;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .q-tick {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: #1A1E26;
+      pointer-events: none;
+    }
+
+    /* ── Jurisdiction group ──────────────────── */
+    .jx-group {
+      display: flex;
+      border-bottom: 1px solid #191C20;
+    }
+    .jx-group:last-child { border-bottom: none; }
+    .jx-group:hover { background: rgba(255,255,255,0.012); }
+    .jx-group.inactive { opacity: 0.28; }
+
+    .jx-label {
+      width: 220px;
+      flex-shrink: 0;
+      padding: 12px 16px;
+      border-right: 1px solid #1E2226;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      min-height: 56px;
+      position: sticky;
+      left: 0;
+      z-index: 5;
+      background: #131416;
+    }
+    .jx-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #CCC8C2;
+      line-height: 1.2;
+    }
+    .jx-abbr {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: #383C42;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .jx-group.inactive .jx-name { color: #3A3E44; }
+
+    .jx-rows {
+      width: 10950px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Deadline row ────────────────────────── */
+    .dl-row {
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid #16191D;
+      min-height: 56px;
+    }
+    .dl-row:last-child { border-bottom: none; }
+    .dl-row.empty { min-height: 44px; align-items: center; }
+
+    .dl-chart-area {
+      width: 10950px;
+      flex-shrink: 0;
+      padding: 10px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      justify-content: center;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.015) 0%, transparent 60%);
+    }
+
+    .dl-bar {
+      position: relative;
+      height: 26px;
+      border: 1px solid;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      padding-right: 4px;
+      overflow: hidden;
+      min-width: 6px;
+      max-width: 100%;
+    }
+    .dl-end-pip {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      border-radius: 0 1px 1px 0;
+      flex-shrink: 0;
+    }
+    .dl-title {
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.2px;
+      padding-right: 8px;
+    }
+
+    .dl-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dl-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #4A5060;
+      letter-spacing: 0.5px;
+    }
+    .dl-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 1px 5px;
+      border: 1px solid;
+      border-radius: 1px;
+    }
+    .dl-urg {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .dl-src {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #7A9EB5;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      opacity: 0.7;
+    }
+    .dl-src:hover { opacity: 1; text-decoration: underline; }
+
+    .no-dl {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #282C32;
+      letter-spacing: 1px;
+      padding-left: 20px;
+    }
+
+    /* ── Legend ──────────────────────────────── */
+    .legend {
+      flex-shrink: 0;
+      background: #0F1113;
+      border-top: 1px solid #1E2226;
+      padding: 11px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .legend-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #3A3E44;
+      margin-right: 4px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 10px;
+      border: 1px solid;
+      border-radius: 1px;
+    }
+    .sw-high   { background:#3A1A1E; border-color:#7A3030; }
+    .sw-medium { background:#2E2510; border-color:#7A6025; }
+    .sw-low    { background:#0C201A; border-color:#2E7050; }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- Page header -->
+<div class="page-hdr">
+  <div>
+    <div class="hdr-eyebrow">PFAS / Fluoropolymer Compliance</div>
+    <div class="hdr-title">PFAS Regulatory Deadline Timeline</div>
+    <div class="hdr-sub">Generated March 23, 2026 &nbsp;·&nbsp; 27 tracked deadlines across 15 jurisdictions</div>
+  </div>
+  <div class="back-links">
+    <a href="https://ryan-jenkinson.github.io/compliance-maps/index.html" class="back-link">← PFAS Map</a>
+  </div>
+</div>
+
+<!-- Gantt scroll area -->
+<div class="tl-scroll">
+  <div class="tl-inner">
+
+    <!-- Sticky axis header -->
+    <div class="tl-axis">
+      <div class="axis-jx-col">Jurisdiction</div>
+      <div class="axis-chart-col" id="axisChart">
+        <div class="q-lbl" style="left:0.00%">Q1 2026</div><div class="q-lbl" style="left:0.41%">Q2 2026</div><div class="q-lbl" style="left:4.55%">Q3 2026</div><div class="q-lbl" style="left:8.73%">Q4 2026</div><div class="q-lbl" style="left:12.91%">Q1 2027</div><div class="q-lbl" style="left:17.00%">Q2 2027</div><div class="q-lbl" style="left:21.14%">Q3 2027</div><div class="q-lbl" style="left:25.32%">Q4 2027</div><div class="q-lbl" style="left:29.50%">Q1 2028</div><div class="q-lbl" style="left:33.64%">Q2 2028</div><div class="q-lbl" style="left:37.77%">Q3 2028</div><div class="q-lbl" style="left:41.95%">Q4 2028</div><div class="q-lbl" style="left:46.14%">Q1 2029</div><div class="q-lbl" style="left:50.23%">Q2 2029</div><div class="q-lbl" style="left:54.36%">Q3 2029</div><div class="q-lbl" style="left:58.55%">Q4 2029</div><div class="q-lbl" style="left:62.73%">Q1 2030</div><div class="q-lbl" style="left:66.82%">Q2 2030</div><div class="q-lbl" style="left:70.95%">Q3 2030</div><div class="q-lbl" style="left:75.14%">Q4 2030</div><div class="q-lbl" style="left:79.32%">Q1 2031</div><div class="q-lbl" style="left:83.41%">Q2 2031</div><div class="q-lbl" style="left:87.55%">Q3 2031</div><div class="q-lbl" style="left:91.73%">Q4 2031</div><div class="q-lbl" style="left:95.91%">Q1 2032</div>
+      </div>
+    </div>
+
+    <!-- Jurisdiction rows -->
+
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Federal</span>
+        
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="EPA TRI Reporting for PFAS (Reporting Year 2026)&#10;Due: Jul 01, 2027&#10;Facilities must submit TRI reports including newly-added PFAS substances for Reporting Year 2026 by the July 1, 2027 deadline.">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:21.14%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">EPA TRI Reporting for PFAS (Reporting Year 2026)</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            <a class="dl-src" href="https://www.federalregister.gov/documents/2026/02/27/2026-03944/implementing-statutory-addition-of-certain-per--and-polyfluoroalkyl-substances-pfas-to-the-toxics" target="_blank">source ↗</a>
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Alabama</span>
+        <span class="jx-abbr">AL</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Alaska</span>
+        <span class="jx-abbr">AK</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Arizona</span>
+        <span class="jx-abbr">AZ</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Arkansas</span>
+        <span class="jx-abbr">AR</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">California</span>
+        <span class="jx-abbr">CA</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Manufacturer registration required under DTSC (AB 347)&#10;Due: Jul 01, 2029&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:54.36%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Manufacturer registration required under DTSC (AB 34…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2029</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="DTSC enforcement begins (AB 347)&#10;Due: Jul 01, 2030&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:70.95%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">DTSC enforcement begins (AB 347)</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2030</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Colorado</span>
+        <span class="jx-abbr">CO</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Ban on PFAS in all cleaning products, textiles, food contact equipment, outdoor apparel for severe wet conditions (SB 24-081)&#10;Due: Jan 01, 2028&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:29.50%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Ban on PFAS in all cleaning products, textiles, food…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2028</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Connecticut</span>
+        <span class="jx-abbr">CT</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="PFAS labeling required across covered product categories&#10;Due: Jul 01, 2026&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:4.55%;background:#3A1A1E;border-color:#7A3030;">
+            <span class="dl-end-pip" style="background:#D64045;"></span>
+            <span class="dl-title" style="color:#F08080;">PFAS labeling required across covered product catego…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2026</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#F08080;">HIGH</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Full ban on PFAS in covered products&#10;Due: Jan 01, 2028&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:29.50%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Full ban on PFAS in covered products</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2028</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Delaware</span>
+        <span class="jx-abbr">DE</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Florida</span>
+        <span class="jx-abbr">FL</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Georgia</span>
+        <span class="jx-abbr">GA</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Hawaii</span>
+        <span class="jx-abbr">HI</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Broader food packaging and cosmetics/personal care products ban (SB 2427/HB 1896 — confirm enactment)&#10;Due: Dec 31, 2026&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:12.86%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">Broader food packaging and cosmetics/personal care p…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Dec 31, 2026</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Idaho</span>
+        <span class="jx-abbr">ID</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Illinois</span>
+        <span class="jx-abbr">IL</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="IEPA fluoropolymer report due (HB 2516)&#10;Due: Aug 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:22.55%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">IEPA fluoropolymer report due (HB 2516)</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Aug 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Ban on PFAS in cosmetics, dental floss, juvenile products, menstrual products, intimate apparel (HB 2516)&#10;Due: Jan 01, 2032&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:95.91%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Ban on PFAS in cosmetics, dental floss, juvenile pro…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2032</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Indiana</span>
+        <span class="jx-abbr">IN</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Iowa</span>
+        <span class="jx-abbr">IA</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Kansas</span>
+        <span class="jx-abbr">KS</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Kentucky</span>
+        <span class="jx-abbr">KY</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Louisiana</span>
+        <span class="jx-abbr">LA</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Maine</span>
+        <span class="jx-abbr">ME</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Phase 2 ban — artificial turf, outdoor apparel for wet weather&#10;Due: Jan 01, 2029&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:46.14%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Phase 2 ban — artificial turf, outdoor apparel for w…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2029</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Phase 3 — all remaining products&#10;Due: Jan 01, 2032&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:95.91%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Phase 3 — all remaining products</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2032</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Maryland</span>
+        <span class="jx-abbr">MD</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Massachusetts</span>
+        <span class="jx-abbr">MA</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Michigan</span>
+        <span class="jx-abbr">MI</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Minnesota</span>
+        <span class="jx-abbr">MN</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Minnesota PRISM Registration Deadline for PFAS Manufacturers&#10;Due: Jul 01, 2026&#10;Manufacturers selling PFAS-intentionally-added products must complete mandatory PRISM portal registration under Minnesota's Amara's Law requirements.">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:4.55%;background:#3A1A1E;border-color:#7A3030;">
+            <span class="dl-end-pip" style="background:#D64045;"></span>
+            <span class="dl-title" style="color:#F08080;">Minnesota PRISM Registration Deadline for PFAS Manuf…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2026</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#F08080;">HIGH</span>
+            <a class="dl-src" href="https://www.pca.state.mn.us/air-water-land-climate/pfas-use-prohibitions-and-reporting" target="_blank">source ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="PFAS manufacturer registration deadline in PRISM portal&#10;Due: Jul 01, 2026&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:4.55%;background:#3A1A1E;border-color:#7A3030;">
+            <span class="dl-end-pip" style="background:#D64045;"></span>
+            <span class="dl-title" style="color:#F08080;">PFAS manufacturer registration deadline in PRISM por…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2026</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#F08080;">HIGH</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="First annual PRISM update due&#10;Due: Feb 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:14.32%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">First annual PRISM update due</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Feb 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Ban extended to internal/electronic components (SF 3 amendment)&#10;Due: Jan 01, 2032&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:95.91%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Ban extended to internal/electronic components (SF 3…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2032</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Mississippi</span>
+        <span class="jx-abbr">MS</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Missouri</span>
+        <span class="jx-abbr">MO</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Firefighting foam PFAS ban (HB 1925 — confirm effective date)&#10;Due: Jan 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:12.91%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">Firefighting foam PFAS ban (HB 1925 — confirm effect…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Montana</span>
+        <span class="jx-abbr">MT</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Nebraska</span>
+        <span class="jx-abbr">NE</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Nevada</span>
+        <span class="jx-abbr">NV</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">New Hampshire</span>
+        <span class="jx-abbr">NH</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Ban on PFAS in food packaging, juvenile products, textile furnishings, upholstered furniture, cosmetics, feminine hygiene products (HB 1649)&#10;Due: Jan 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:12.91%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">Ban on PFAS in food packaging, juvenile products, te…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">New Jersey</span>
+        <span class="jx-abbr">NJ</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Full ban effective — fiber-based food packaging, cosmetics, carpets, fabric treatments; cookware labeling required&#10;Due: Jan 12, 2028&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:30.00%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Full ban effective — fiber-based food packaging, cos…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 12, 2028</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">New Mexico</span>
+        <span class="jx-abbr">NM</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="NMED implementation rules expected&#10;Due: Jul 01, 2026&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:4.55%;background:#3A1A1E;border-color:#7A3030;">
+            <span class="dl-end-pip" style="background:#D64045;"></span>
+            <span class="dl-title" style="color:#F08080;">NMED implementation rules expected</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2026</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#F08080;">HIGH</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Phase 1 bans take effect — cookware, food packaging, dental floss, juvenile products, firefighting foam; manufacturer reporting to NMED begins&#10;Due: Jan 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:12.91%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">Phase 1 bans take effect — cookware, food packaging,…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Phase 2 bans — carpets, cleaning products, cosmetics, textiles, ski wax, upholstered furniture&#10;Due: Jan 01, 2028&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:29.50%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Phase 2 bans — carpets, cleaning products, cosmetics…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2028</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Phase 3 — virtually all non-exempt products banned&#10;Due: Jan 01, 2032&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:95.91%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Phase 3 — virtually all non-exempt products banned</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2032</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">New York</span>
+        <span class="jx-abbr">NY</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Ban on manufacture and sale of firefighting PPE containing intentionally added PFAS (S 3008 / A 3008)&#10;Due: Jan 01, 2028&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:29.50%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">Ban on manufacture and sale of firefighting PPE cont…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2028</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">North Carolina</span>
+        <span class="jx-abbr">NC</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">North Dakota</span>
+        <span class="jx-abbr">ND</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Ohio</span>
+        <span class="jx-abbr">OH</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Oklahoma</span>
+        <span class="jx-abbr">OK</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Oregon</span>
+        <span class="jx-abbr">OR</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Ban on PFAS firefighting foam in Oregon fire departments (SB 91)&#10;Due: Jul 01, 2026&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:4.55%;background:#3A1A1E;border-color:#7A3030;">
+            <span class="dl-end-pip" style="background:#D64045;"></span>
+            <span class="dl-title" style="color:#F08080;">Ban on PFAS firefighting foam in Oregon fire departm…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jul 01, 2026</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#F08080;">HIGH</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Ban on PFAS in cosmetics (SB 546)&#10;Due: Jan 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:12.91%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">Ban on PFAS in cosmetics (SB 546)</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Pennsylvania</span>
+        <span class="jx-abbr">PA</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Rhode Island</span>
+        <span class="jx-abbr">RI</span>
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="Comprehensive ban — juvenile products, carpets/rugs, cookware, cosmetics, food packaging, textiles (S2152)&#10;Due: Jan 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:12.91%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">Comprehensive ban — juvenile products, carpets/rugs,…</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="Ban on firefighting PPE containing PFAS (HB 5019)&#10;Due: Jan 01, 2027&#10;">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:12.91%;background:#2E2510;border-color:#7A6025;">
+            <span class="dl-end-pip" style="background:#C49030;"></span>
+            <span class="dl-title" style="color:#D4A84B;">Ban on firefighting PPE containing PFAS (HB 5019)</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Jan 01, 2027</span>
+            <span class="dl-badge" style="color:#D64045;border-color:#D6404580;">PFAS</span>
+            <span class="dl-urg" style="color:#D4A84B;">MEDIUM</span>
+            
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">South Carolina</span>
+        <span class="jx-abbr">SC</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">South Dakota</span>
+        <span class="jx-abbr">SD</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Tennessee</span>
+        <span class="jx-abbr">TN</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Texas</span>
+        <span class="jx-abbr">TX</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Utah</span>
+        <span class="jx-abbr">UT</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Vermont</span>
+        <span class="jx-abbr">VT</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Virginia</span>
+        <span class="jx-abbr">VA</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Washington</span>
+        <span class="jx-abbr">WA</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">West Virginia</span>
+        <span class="jx-abbr">WV</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Wisconsin</span>
+        <span class="jx-abbr">WI</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+    <div class="jx-group inactive">
+      <div class="jx-label">
+        <span class="jx-name">Wyoming</span>
+        <span class="jx-abbr">WY</span>
+      </div>
+      <div class="jx-rows"><div class="dl-row empty"><span class="no-dl">No tracked deadlines</span></div></div>
+    </div>
+
+  </div><!-- /tl-inner -->
+</div><!-- /tl-scroll -->
+
+<!-- Legend -->
+<div class="legend">
+  <span class="legend-title">Urgency:</span>
+  <span class="legend-item"><span class="legend-swatch sw-high"></span><span style="color:#F08080">High (&lt;6 mo)</span></span>
+  <span class="legend-item"><span class="legend-swatch sw-medium"></span><span style="color:#D4A84B">Medium (6–12 mo)</span></span>
+  <span class="legend-item"><span class="legend-swatch sw-low"></span><span style="color:#5EB88A">Low (&gt;12 mo)</span></span>
+  <span class="legend-title" style="margin-left:16px">Bar width = time remaining until deadline</span>
+</div>
+
+</div><!-- /page-wrap -->
+
+<script>
+(function() {
+  var axisChart = document.getElementById('axisChart');
+  if (!axisChart) return;
+  var ticks = [0.0, 0.4090909090909091, 4.545454545454546, 8.727272727272728, 12.909090909090908, 17.0, 21.136363636363637, 25.318181818181817, 29.5, 33.63636363636363, 37.77272727272727, 41.95454545454545, 46.13636363636363, 50.227272727272734, 54.36363636363636, 58.54545454545455, 62.727272727272734, 66.81818181818183, 70.95454545454545, 75.13636363636364, 79.31818181818183, 83.4090909090909, 87.54545454545455, 91.72727272727272, 95.9090909090909];
+  ticks.forEach(function(p) {
+    var t = document.createElement('div');
+    t.className = 'q-tick';
+    t.style.left = p + '%';
+    axisChart.appendChild(t);
+  });
+})();
+</script>
+
+</body>
+</html>

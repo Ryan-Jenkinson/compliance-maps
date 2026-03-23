@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TSCA Regulatory Deadline Timeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: #131416;
+      color: #D4D0CA;
+      font-family: 'Source Sans 3', 'Trebuchet MS', Helvetica, sans-serif;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden; /* scroll containers handle overflow */
+    }
+
+    /* ── Page layout ─────────────────────────── */
+    .page-wrap {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ── Page header ─────────────────────────── */
+    .page-hdr {
+      background: #111315;
+      border-bottom: 3px solid #7A9EB5;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .hdr-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #7A9EB5;
+      margin-bottom: 5px;
+    }
+    .hdr-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: #E4E0DA;
+      letter-spacing: 1px;
+    }
+    .hdr-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #484C52;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    .back-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #858890;
+      text-decoration: none;
+      border: 1px solid #2A2E34;
+      padding: 6px 11px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .back-link:hover { color: #E4E0DA; border-color: #4A4E54; }
+
+    /* ── Gantt scroll container ───────────────── */
+    .tl-scroll {
+      flex: 1;
+      overflow: auto;
+      position: relative;
+    }
+
+    /* ── Inner container — sets total width ────── */
+    .tl-inner {
+      min-width: 3370px;
+    }
+
+    /* ── Axis header ─────────────────────────── */
+    .tl-axis {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #0F1113;
+      border-bottom: 1px solid #232830;
+    }
+    .axis-jx-col {
+      width: 220px;
+      flex-shrink: 0;
+      padding: 8px 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #343840;
+      border-right: 1px solid #1E2226;
+      position: sticky;
+      left: 0;
+      z-index: 55;
+      background: #0F1113;
+    }
+    .axis-chart-col {
+      width: 3150px;
+      flex-shrink: 0;
+      position: relative;
+      height: 42px;
+    }
+    .q-lbl {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #4A5060;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .q-tick {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: #1A1E26;
+      pointer-events: none;
+    }
+
+    /* ── Jurisdiction group ──────────────────── */
+    .jx-group {
+      display: flex;
+      border-bottom: 1px solid #191C20;
+    }
+    .jx-group:last-child { border-bottom: none; }
+    .jx-group:hover { background: rgba(255,255,255,0.012); }
+    .jx-group.inactive { opacity: 0.28; }
+
+    .jx-label {
+      width: 220px;
+      flex-shrink: 0;
+      padding: 12px 16px;
+      border-right: 1px solid #1E2226;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      min-height: 56px;
+      position: sticky;
+      left: 0;
+      z-index: 5;
+      background: #131416;
+    }
+    .jx-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #CCC8C2;
+      line-height: 1.2;
+    }
+    .jx-abbr {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: #383C42;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .jx-group.inactive .jx-name { color: #3A3E44; }
+
+    .jx-rows {
+      width: 3150px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Deadline row ────────────────────────── */
+    .dl-row {
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid #16191D;
+      min-height: 56px;
+    }
+    .dl-row:last-child { border-bottom: none; }
+    .dl-row.empty { min-height: 44px; align-items: center; }
+
+    .dl-chart-area {
+      width: 3150px;
+      flex-shrink: 0;
+      padding: 10px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      justify-content: center;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.015) 0%, transparent 60%);
+    }
+
+    .dl-bar {
+      position: relative;
+      height: 26px;
+      border: 1px solid;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      padding-right: 4px;
+      overflow: hidden;
+      min-width: 6px;
+      max-width: 100%;
+    }
+    .dl-end-pip {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      border-radius: 0 1px 1px 0;
+      flex-shrink: 0;
+    }
+    .dl-title {
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.2px;
+      padding-right: 8px;
+    }
+
+    .dl-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dl-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #4A5060;
+      letter-spacing: 0.5px;
+    }
+    .dl-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 1px 5px;
+      border: 1px solid;
+      border-radius: 1px;
+    }
+    .dl-urg {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .dl-src {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #7A9EB5;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      opacity: 0.7;
+    }
+    .dl-src:hover { opacity: 1; text-decoration: underline; }
+
+    .no-dl {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      color: #282C32;
+      letter-spacing: 1px;
+      padding-left: 20px;
+    }
+
+    /* ── Legend ──────────────────────────────── */
+    .legend {
+      flex-shrink: 0;
+      background: #0F1113;
+      border-top: 1px solid #1E2226;
+      padding: 11px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .legend-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #3A3E44;
+      margin-right: 4px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 10px;
+      border: 1px solid;
+      border-radius: 1px;
+    }
+    .sw-high   { background:#3A1A1E; border-color:#7A3030; }
+    .sw-medium { background:#2E2510; border-color:#7A6025; }
+    .sw-low    { background:#0C201A; border-color:#2E7050; }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- Page header -->
+<div class="page-hdr">
+  <div>
+    <div class="hdr-eyebrow">Toxic Substances Control Act</div>
+    <div class="hdr-title">TSCA Regulatory Deadline Timeline</div>
+    <div class="hdr-sub">Generated March 23, 2026 &nbsp;·&nbsp; 2 tracked deadlines across 1 jurisdiction</div>
+  </div>
+  <div class="back-links">
+    <a href="https://ryan-jenkinson.github.io/compliance-maps/index.html" class="back-link">← PFAS Map</a>
+  </div>
+</div>
+
+<!-- Gantt scroll area -->
+<div class="tl-scroll">
+  <div class="tl-inner">
+
+    <!-- Sticky axis header -->
+    <div class="tl-axis">
+      <div class="axis-jx-col">Jurisdiction</div>
+      <div class="axis-chart-col" id="axisChart">
+        <div class="q-lbl" style="left:0.00%">Q1 2026</div><div class="q-lbl" style="left:1.50%">Q2 2026</div><div class="q-lbl" style="left:16.67%">Q3 2026</div><div class="q-lbl" style="left:32.00%">Q4 2026</div><div class="q-lbl" style="left:47.33%">Q1 2027</div><div class="q-lbl" style="left:62.33%">Q2 2027</div><div class="q-lbl" style="left:77.50%">Q3 2027</div><div class="q-lbl" style="left:92.83%">Q4 2027</div>
+      </div>
+    </div>
+
+    <!-- Jurisdiction rows -->
+
+    <div class="jx-group">
+      <div class="jx-label">
+        <span class="jx-name">Federal</span>
+        
+      </div>
+      <div class="jx-rows">
+      <div class="dl-row" title="EPA TSCA CBI Claims ICR Approval Expiry&#10;Due: Aug 31, 2026&#10;Current approval for TSCA Confidential Business Information claims information collection request (ICR No. 2706.04) expires; EPA is seeking renewal.">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:26.83%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">EPA TSCA CBI Claims ICR Approval Expiry</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Aug 31, 2026</span>
+            <span class="dl-badge" style="color:#7A9EB5;border-color:#7A9EB580;">TSCA</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            <a class="dl-src" href="https://www.federalregister.gov/documents/2026/02/25/2026-03763/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank">source ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="EPA Chemical Data Reporting ICR Approval Expiry&#10;Due: Oct 31, 2026&#10;Current approval for TSCA Chemical Data Reporting information collection request (ICR No. 1884.17) expires; EPA is seeking renewal.">
+        <div class="dl-chart-area">
+          <div class="dl-bar" style="width:37.00%;background:#0C201A;border-color:#2E7050;">
+            <span class="dl-end-pip" style="background:#3A8A62;"></span>
+            <span class="dl-title" style="color:#5EB88A;">EPA Chemical Data Reporting ICR Approval Expiry</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Oct 31, 2026</span>
+            <span class="dl-badge" style="color:#7A9EB5;border-color:#7A9EB580;">TSCA</span>
+            <span class="dl-urg" style="color:#5EB88A;">LOW</span>
+            <a class="dl-src" href="https://www.federalregister.gov/documents/2026/02/24/2026-03636/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank">source ↗</a>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+  </div><!-- /tl-inner -->
+</div><!-- /tl-scroll -->
+
+<!-- Legend -->
+<div class="legend">
+  <span class="legend-title">Urgency:</span>
+  <span class="legend-item"><span class="legend-swatch sw-high"></span><span style="color:#F08080">High (&lt;6 mo)</span></span>
+  <span class="legend-item"><span class="legend-swatch sw-medium"></span><span style="color:#D4A84B">Medium (6–12 mo)</span></span>
+  <span class="legend-item"><span class="legend-swatch sw-low"></span><span style="color:#5EB88A">Low (&gt;12 mo)</span></span>
+  <span class="legend-title" style="margin-left:16px">Bar width = time remaining until deadline</span>
+</div>
+
+</div><!-- /page-wrap -->
+
+<script>
+(function() {
+  var axisChart = document.getElementById('axisChart');
+  if (!axisChart) return;
+  var ticks = [0.0, 1.5, 16.666666666666664, 32.0, 47.333333333333336, 62.33333333333333, 77.5, 92.83333333333333];
+  ticks.forEach(function(p) {
+    var t = document.createElement('div');
+    t.className = 'q-tick';
+    t.style.left = p + '%';
+    axisChart.appendChild(t);
+  });
+})();
+</script>
+
+</body>
+</html>
