@@ -105,6 +105,27 @@
       color: #1B4B82;
     }
 
+    /* ---- Activity heat layer ---- */
+    .activity-1 { box-shadow: inset 0 -3px 0 #DD6B20; }
+    .activity-2 { box-shadow: inset 0 -3px 0 #C05621; }
+    .activity-3 { box-shadow: inset 0 -3px 0 #9C4221; }
+
+    /* ---- Download button ---- */
+    .download-btn {
+      display: inline-block;
+      background: #2C2C2C;
+      color: white;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 2px;
+      margin-bottom: 16px;
+    }
+
     /* ---- Legend ---- */
     .legend {
       display: flex;
@@ -245,13 +266,14 @@
 <div class="page-header">
   <p class="brand">Compliance Intelligence</p>
   <h1>EPR State Tracker</h1>
-  <p class="sub">Extended Producer Responsibility laws covering packaging, electronics, paint &amp; tires &nbsp;&middot;&nbsp; Last updated: 2026-03-22</p>
+  <p class="sub">Extended Producer Responsibility laws covering packaging, electronics, paint &amp; tires &nbsp;&middot;&nbsp; Last updated: 2026-03-23</p>
 </div>
 
 <div class="page-body">
 
   <!-- Map -->
   <div class="map-panel">
+    <a class="download-btn" href="./epr-tracker.xlsx" download>&#8595; Download Excel</a>
     <p class="map-title">Click any state for details</p>
     <div class="state-grid" id="stateGrid">
 <div class="state-cell status-comprehensive" style="grid-row:1;grid-column:12;background-color:#1B6CA8;" data-abbr="ME" onclick="showDetail('ME')" title="Maine">ME</div>
@@ -311,6 +333,10 @@
 <div class="legend-item"><span class="legend-swatch" style="background:#4A9EC4;"></span><span class="legend-label">Limited Programs (1-2)</span></div>
 <div class="legend-item"><span class="legend-swatch" style="background:#A8D4E8;"></span><span class="legend-label">Proposed Legislation</span></div>
 <div class="legend-item"><span class="legend-swatch" style="background:#E8EDF0;"></span><span class="legend-label">No EPR Programs</span></div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:#E8EDF0;box-shadow:inset 0 -3px 0 #DD6B20;"></span>
+        <span class="legend-label">Activity this week (amber = articles mentioning this state)</span>
+      </div>
     </div>
   </div>
 
@@ -323,7 +349,7 @@
 </div>
 
 <div class="page-footer">
-  Data current as of 2026-03-22. This tracker covers enacted and proposed state EPR laws for packaging/plastics,
+  Data current as of 2026-03-23. This tracker covers enacted and proposed state EPR laws for packaging/plastics,
   electronics/e-waste, paint, and tires. Program scope and deadlines vary by state. Verify compliance obligations
   with legal counsel before making business decisions.
 </div>
