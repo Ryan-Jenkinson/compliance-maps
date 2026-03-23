@@ -60,24 +60,45 @@
       letter-spacing: 1px;
       margin-top: 4px;
     }
-    .back-links {
+    /* ── Site nav ─────────────────────────────── */
+    .site-nav {
+      background: #0D0F11;
+      border-bottom: 1px solid #1E2226;
+      padding: 7px 28px;
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 4px;
       flex-wrap: wrap;
+      flex-shrink: 0;
     }
-    .back-link {
+    .nav-section {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
+      color: #2E3238;
+      font-size: 8px;
       font-weight: 600;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: #858890;
-      text-decoration: none;
-      border: 1px solid #2A2E34;
-      padding: 6px 11px;
-      transition: color 0.15s, border-color 0.15s;
+      padding: 0 6px 0 2px;
     }
-    .back-link:hover { color: #E4E0DA; border-color: #4A4E54; }
+    .nav-sep {
+      width: 1px;
+      height: 12px;
+      background: #1E2226;
+      margin: 0 8px;
+    }
+    .nav-item {
+      font-family: 'IBM Plex Mono', monospace;
+      color: #4A5060;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-decoration: none;
+      padding: 3px 9px;
+      border-radius: 2px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: #9EA4B0; }
+    .nav-item.active { background: rgba(214,64,69,0.12); color: #D64045; font-weight: 600; }
 
     /* ── Gantt scroll container ───────────────── */
     .tl-scroll {
@@ -337,10 +358,16 @@
     <div class="hdr-title">Regulatory Deadline Timeline</div>
     <div class="hdr-sub">Generated March 23, 2026 &nbsp;·&nbsp; 29 tracked deadlines across 15 jurisdictions</div>
   </div>
-  <div class="back-links">
-    <a href="https://ryan-jenkinson.github.io/compliance-maps/index.html" class="back-link">← PFAS Map</a><a href="https://ryan-jenkinson.github.io/compliance-maps/epr-map.html" class="back-link">← EPR Map</a><a href="https://ryan-jenkinson.github.io/compliance-maps/reach-map.html" class="back-link">← REACH Map</a>
-  </div>
 </div>
+
+<!-- Site nav -->
+<nav class="site-nav">
+  <span class="nav-section">Maps</span>
+  <a href="https://ryan-jenkinson.github.io/compliance-maps/index.html" class="nav-item">PFAS</a><a href="https://ryan-jenkinson.github.io/compliance-maps/epr-map.html" class="nav-item">EPR</a><a href="https://ryan-jenkinson.github.io/compliance-maps/reach-map.html" class="nav-item">REACH</a>
+  <div class="nav-sep"></div>
+  <span class="nav-section">Timelines</span>
+  <a href="https://ryan-jenkinson.github.io/compliance-maps/pfas-timeline.html" class="nav-item">PFAS</a><a href="https://ryan-jenkinson.github.io/compliance-maps/epr-timeline.html" class="nav-item">EPR</a><a href="https://ryan-jenkinson.github.io/compliance-maps/reach-timeline.html" class="nav-item">REACH</a><a href="https://ryan-jenkinson.github.io/compliance-maps/tsca-timeline.html" class="nav-item">TSCA</a><a href="https://ryan-jenkinson.github.io/compliance-maps/deadline-timeline.html" class="nav-item active">All Topics</a>
+</nav>
 
 <!-- Gantt scroll area -->
 <div class="tl-scroll">
