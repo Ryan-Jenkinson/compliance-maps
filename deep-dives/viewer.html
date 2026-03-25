@@ -628,14 +628,16 @@
     if (!email) return;
     var res = document.getElementById('sub-result');
     if (isLocal) {
-      fetch('http://localhost:5000/subscribe', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({email: email, keyword: _q})
-      })
-      .then(function(r) { return r.json(); })
-      .then(function() {
-        res.className = 'sub-ok'; res.textContent = '✓ Subscribed — you\'ll get alerts for "' + _q + '"';
+      var fd = new FormData();
+      fd.append('email', email);
+      fd.append('keyword', _q);
+      fetch('http://localhost:5000/subscribe', { method: 'POST', body: fd })
+      .then(function(r) {
+        if (r.ok) {
+          res.className = 'sub-ok'; res.textContent = '✓ Subscribed — you\'ll get alerts for "' + _q + '"';
+        } else {
+          res.className = 'sub-err'; res.textContent = 'Server error (' + r.status + ')';
+        }
       })
       .catch(function() {
         res.className = 'sub-err'; res.textContent = 'Could not connect. Start the server: python3 server.py';
