@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TSCA Intelligence — Compliance Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4F5F7;
+      --surface: #FFFFFF;
+      --surface-sunken: #EBEDF0;
+      --surface-dark: #1A1D23;
+      --surface-dark-2: #22252C;
+      --border: #D8DBE0;
+      --border-light: #E8EAED;
+      --text-primary: #111318;
+      --text-secondary: #4A4F5C;
+      --text-muted: #7A8194;
+      --red: #D63031; --red-bg: #FEF0F0; --red-border: #FACACA;
+      --amber: #CB7B0A; --amber-bg: #FEF6E8; --amber-border: #F5DFA6;
+      --green: #0F7B3F; --green-bg: #EEFAF3; --green-border: #B2E0C7;
+      --blue: #1565C0; --blue-bg: #EBF3FD; --blue-border: #BBDEFB;
+      --teal: #0F766E;
+      --purple: #6D28D9; --purple-bg: #EDE9FE; --purple-border: #DDD6FE;
+      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+      --topbar-h: 52px;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+      --max-w: 900px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: clamp(14px, 1.1vw, 16px); }
+    body {
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOPBAR ──────────────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: var(--surface-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px;
+      z-index: 200;
+      border-bottom: 3px solid var(--blue);
+    }
+    .topbar-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: 4px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .topbar-back:hover { color: #fff; border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.08); text-decoration: none; }
+    .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.18); flex-shrink: 0; }
+    .topbar-label { font-size: 11px; font-family: var(--mono); color: rgba(255,255,255,0.40); white-space: nowrap; }
+    .topbar-query {
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+    .topbar-spacer { flex: 1; }
+    .topbar-pills { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .topbar-pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 2px 10px;
+      white-space: nowrap;
+    }
+    .topbar-date { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.35); white-space: nowrap; }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────── */
+    .main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: calc(var(--topbar-h) + 24px) 24px 80px;
+    }
+
+    /* ── HERO STATS BAR ──────────────────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .stat-card.has-urgency .stat-value { color: var(--red); }
+    .stat-card.has-bills .stat-value { color: var(--purple); }
+
+    /* ── TREND CHART ─────────────────────────────────────────────── */
+    .trend-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .trend-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .trend-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 60px;
+    }
+    .trend-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .trend-bar {
+      width: 100%;
+      background: var(--blue);
+      border-radius: 2px 2px 0 0;
+      min-height: 2px;
+      opacity: 0.7;
+      transition: opacity 0.12s;
+    }
+    .trend-bar:hover { opacity: 1; }
+    .trend-bar-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-align: center;
+    }
+    .trend-bar-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    /* ── SYNTHESIS CARD ──────────────────────────────────────────── */
+    .synthesis-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .synthesis-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .synthesis-overview {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+    .synthesis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 680px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synthesis-block {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 5px;
+      padding: 14px 16px;
+    }
+    .synthesis-block-title {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .synthesis-block-title.impact { color: var(--amber); }
+    .synthesis-block-title.risks  { color: var(--red); }
+    .synthesis-block-title.steps  { color: var(--green); }
+    .synthesis-block p { font-size: 13px; line-height: 1.55; color: var(--text-secondary); }
+    .synthesis-footer {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* ── SECTION HEADERS ─────────────────────────────────────────── */
+    .section { margin-bottom: 28px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+    }
+    .section-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface-sunken);
+      border-radius: 10px;
+      padding: 1px 8px;
+    }
+
+    /* ── ARTICLE CARDS ───────────────────────────────────────────── */
+    .article-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      transition: border-color 0.12s;
+    }
+    .article-card:hover { border-color: var(--blue); }
+    .article-head { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .article-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; min-width: 0; }
+    .article-title a { color: inherit; }
+    .article-title a:hover { color: var(--blue); text-decoration: none; }
+    .article-snippet {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .article-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .meta-item { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+
+    /* ── BADGES ──────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: 10px; font-weight: 700; font-family: var(--mono);
+      border-radius: 3px; padding: 1px 5px; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .badge-high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+    .badge-medium { background: var(--amber-bg);   color: var(--amber);  border: 1px solid var(--amber-border); }
+    .badge-low    { background: var(--green-bg);   color: var(--green);  border: 1px solid var(--green-border); }
+    .badge-topic  { background: var(--blue-bg);    color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-direct   { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+    .badge-indirect { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-monitor  { background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* ── DEADLINE CARDS ──────────────────────────────────────────── */
+    .deadline-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .deadline-date-block {
+      flex-shrink: 0; text-align: center;
+      background: var(--surface-sunken); border-radius: 5px; padding: 8px 12px; min-width: 68px;
+    }
+    .deadline-month { font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.06em; }
+    .deadline-day   { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .deadline-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .deadline-desc  { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .deadline-meta  { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+
+    /* ── BILL CARDS ──────────────────────────────────────────────── */
+    .bill-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+    }
+    .bill-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; }
+    .bill-label { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+    .bill-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; }
+    .bill-meta  { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+    .stage-badge {
+      font-family: var(--mono); font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; border-radius: 3px; padding: 1px 6px;
+      background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border);
+    }
+    .stage-enacted  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+    .stage-advanced { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
+
+    /* ── SUBSCRIBE CARD ──────────────────────────────────────────── */
+    .subscribe-card {
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-top: 40px;
+      color: #fff;
+    }
+    .subscribe-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.40);
+      margin-bottom: 8px;
+    }
+    .subscribe-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .subscribe-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      max-width: 520px;
+    }
+    .subscribe-features {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .subscribe-feature {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      font-family: var(--mono);
+    }
+    .subscribe-feature-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+    .subscribe-form { display: flex; gap: 10px; flex-wrap: wrap; }
+    .subscribe-input {
+      flex: 1 0 220px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      outline: none;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .subscribe-input::placeholder { color: rgba(255,255,255,0.30); }
+    .subscribe-input:focus { border-color: var(--blue); background: rgba(255,255,255,0.12); }
+    .subscribe-btn {
+      padding: 9px 22px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .subscribe-btn:hover { background: #0d47a1; }
+    .subscribe-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.30);
+      margin-top: 10px;
+      font-family: var(--mono);
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 13px;
+      background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <a class="topbar-back" href="../dashboard.html">&#8592; Dashboard</a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-label">deep dive</span>
+  <span class="topbar-query">TSCA</span>
+  <div class="topbar-spacer"></div>
+  <div class="topbar-pills">
+    <span class="topbar-pill">21 articles</span>
+    <span class="topbar-pill">7 deadlines</span>
+    
+  </div>
+  <div class="topbar-sep"></div>
+  <span class="topbar-date">March 25, 2026</span>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Articles</div>
+      <div class="stat-value">21</div>
+      <div class="stat-sub">last 6 months</div>
+    </div>
+    <div class="stat-card has-urgency">
+      <div class="stat-label">Deadlines</div>
+      <div class="stat-value">7</div>
+      <div class="stat-sub">includes HIGH urgency</div>
+    </div>
+    <div class="stat-card ">
+      <div class="stat-label">Bills</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">active legislation</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Coverage</div>
+      <div class="stat-value">6</div>
+      <div class="stat-sub">months tracked</div>
+    </div>
+  </div>
+
+  <!-- Trend chart -->
+  
+  <div class="trend-card">
+    <div class="trend-title">Article Volume — TSCA</div>
+    <div class="trend-bars" id="trend-bars">
+      
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">2</div>
+        <div class="trend-bar"
+             style="height:8px;"
+             title="None: 2 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">3</div>
+        <div class="trend-bar"
+             style="height:12px;"
+             title="None: 3 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">3</div>
+        <div class="trend-bar"
+             style="height:12px;"
+             title="None: 3 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">13</div>
+        <div class="trend-bar"
+             style="height:52px;"
+             title="None: 13 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+  <!-- AI Synthesis -->
+  
+  <div class="synthesis-card">
+    <div class="synthesis-label">&#9670; AI Intelligence Summary — TSCA</div>
+    
+    <div class="synthesis-overview">The EPA is actively narrowing and reinterpreting TSCA Section 8(a)(7) PFAS reporting requirements, proposing exemptions including de minimis thresholds and articles exclusions. Simultaneously, the agency is extending postponements on TCE (trichloroethylene) and other chemical use restrictions while managing renewal of its Chemical Data Reporting and CBI claims collection processes through 2026.</div>
+    
+    <div class="synthesis-grid">
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title impact">Company Impact</div>
+        <p>The proposed narrowing of TSCA Section 8(a)(7) PFAS reporting—particularly exemptions for articles and de minimis uses—directly reduces your direct PFAS reporting burden for fluoropolymer coatings, BUT creates critical indirect risk: if supplier manufacturers incorrectly interpret exemptions and fail to report their PFAS-containing components to EPA, those same products may also fail Minnesota PRISM registration by July 1, 2026, cutting off your supply chain. The TCE postponement extension does not affect your immediate operations unless your manufacturing processes or suppliers use TCE in synthesis or cleaning.</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title risks">Key Risks</div>
+        <p>Top risk: Supplier confusion over EPA&#39;s narrowed TSCA Section 8(a)(7) reporting scope could lead manufacturers of your sourced components (seals, gaskets, electronics, adhesives) to underreport or skip EPA TSCA reporting—and simultaneously underestimate or ignore MN PRISM registration obligations, both rooted in identical PFAS inventories. Secondary risk: the de minimis exemptions and articles exclusions under the new EPA interpretation may not align with Minnesota&#39;s broader PRISM definition, creating a compliance gap where EPA-exempt PFAS articles still require MN registration. Tertiary risk: foreign manufacturers exporting to Minnesota may not track these U.S. EPA-specific exemptions and could face surprise enforcement or supply disruption.</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title steps">Next Steps</div>
+        <p>Immediately issue a targeted supplier communication clarifying that EPA&#39;s narrowed TSCA Section 8(a)(7) scope does NOT exempt PFAS-containing articles, coatings, or components from Minnesota PRISM registration—stress that MN law is independent and broader than federal exemptions. Audit your tier-1 and tier-2 suppliers&#39; understanding of PRISM by requesting confirmation of their PFAS inventory status and whether they have engaged their upstream manufacturers (especially foreign suppliers of electronics, seals, lubricants, and adhesives) on PRISM deadlines. Cross-reference your Assent platform PFAS declarations against the finalized EPA TSCA reporting exemptions (expected mid-2026) to ensure your direct products are correctly classified under both rules. Establish a 90-day supplier verification checkpoint (target: April 1, 2026) to confirm all critical component manufacturers have committed to PRISM registration by July 1, 2026.</p>
+      </div>
+      
+    </div>
+    
+    <div class="synthesis-footer">Analysis generated 2026-03-25 17:04</div>
+    
+  </div>
+  
+
+  <!-- Articles -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Articles</span>
+      <span class="section-count">21</span>
+    </div>
+    
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/chemicals-under-tsca/pollution-prevention-and-toxics-news-stories" target="_blank" rel="noopener">recent actions on pollution prevention and toxic chemicals</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: recent actions on pollution prevention and toxic chemicals</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/assessing-and-managing-chemicals-under-tsca/frank-r-lautenberg-chemical-safety-21st-century-act" target="_blank" rel="noopener">Frank R. Lautenberg Chemical Safety for the 21st Century Act</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: Frank R. Lautenberg Chemical Safety for the 21st Century Act</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/chemicals-under-tsca/epa-extends-compliance-dates-perchloroethylene-and-carbon-tetrachloride-tsca" target="_blank" rel="noopener">EPA Extends Compliance Dates for Perchloroethylene and Carbon Tetrachloride TSCA Rules</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: EPA Extends Compliance Dates for Perchloroethylene and Carbon Tetrachloride TSCA Rules</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/chemicals-under-tsca/epa-showcase-gold-standard-science-2026-society-toxicologys-annual-meeting" target="_blank" rel="noopener">EPA to Showcase Gold Standard Science at 2026 Society of Toxicology’s Annual Meeting</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: EPA to Showcase Gold Standard Science at 2026 Society of Toxicology’s Annual Meeting</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/chemicals-under-tsca/epa-proposes-updates-formaldehyde-emission-standards-adding-new-quality" target="_blank" rel="noopener">EPA Proposes Updates to Formaldehyde Emission Standards, Adding New Quality Control Test Method for Composite Wood Products</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: EPA Proposes Updates to Formaldehyde Emission Standards, Adding New Quality Control Test Method for Composite Wood Products</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/chemicals-under-tsca/icymi-epa-requests-nominations-panel-members-and-ad-hoc-reviewers-science" target="_blank" rel="noopener">ICYMI: EPA Requests Nominations for Panel Members and Ad Hoc Reviewers for the Science Advisory Committee on Chemicals</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: ICYMI: EPA Requests Nominations for Panel Members and Ad Hoc Reviewers for the Science Advisory Committee on Chemicals</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/tsca-inventory" target="_blank" rel="noopener">TSCA Chemical Substance Inventory</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: TSCA Chemical Substance Inventory</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/chemicals-under-tsca/forms/contact-us-about-chemicals-under-toxic-substance-control-act-tsca" target="_blank" rel="noopener">Contact Us about Chemicals under the Toxic Substance Control Act (TSCA)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA TSCA update: Contact Us about Chemicals under the Toxic Substance Control Act (TSCA)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.saferstates.org/insights/250-groups-urge-congress-to-reject-chemical-lobby-push-to-weaken-tsca/" target="_blank" rel="noopener">250+ groups urge Congress to reject chemical lobby push to weaken TSCA</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Safer States: 250+ groups urge Congress to reject chemical lobby push to weaken TSCA</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Safer States</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/news/" target="_blank" rel="noopener">Knowledge &amp; Insights</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: Knowledge &amp; InsightsMemorandaMonthly Federal Developments MemorandumArticles2026 Forecast for U.S. Federal and International Chemical Regulatory PolicyPer- and Polyfluoroalkyl Substances (PFAS) News and InformationResources ShowcaseNews &amp; EventsBooks by B&amp;CFAQs – FIFRAFAQs – RCRAFAQs – TSCASubscribe</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/03/23/2026-05584/certain-new-chemicals-or-significant-new-uses-statements-of-findings-january-2026" target="_blank" rel="noopener">Certain New Chemicals or Significant New Uses; Statements of Findings-January 2026</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">The Toxic Substances Control Act (TSCA) requires EPA to publish in the Federal Register a statement of its findings after its review of certain TSCA submissions when EPA makes a finding that a new chemical substance or significant new use is not likely to present an unreasonable risk of injury to health or the environment. Such statements apply to premanufacture notices (PMNs), microbial commercial activity notices (MCANs), and significant new use notices (SNUNs) submitted to EPA under TSCA. Thi</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-03-23</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/03/10/2026-04651/certain-new-chemicals-receipt-and-status-information-for-september-december-2025" target="_blank" rel="noopener">Certain New Chemicals; Receipt and Status Information for September-December 2025</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">This document announces the Agency&#39;s receipt of new chemical submissions under the Toxic Substances Control Act (TSCA), including information about the receipt of a Premanufacture Notice (PMN), Significant New Use Notice (SNUN), Microbial Commercial Activity Notice (MCAN), and an amendment to a previously submitted notice; test information; a biotechnology exemption application; an application for a test marketing exemption (TME); and a notice of commencement of manufacture (defined by statute t</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-03-10</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/03/04/2026-04301/certain-new-chemicals-or-significant-new-uses-statements-of-findings-november-2025-to-december-2025" target="_blank" rel="noopener">Certain New Chemicals or Significant New Uses; Statements of Findings-November 2025 to December 2025</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">The Toxic Substances Control Act (TSCA) requires EPA to publish in the Federal Register a statement of its findings after its review of certain TSCA submissions when EPA makes a finding that a new chemical substance or significant new use is not likely to present an unreasonable risk of injury to health or the environment. Such statements apply to premanufacture notices (PMNs), microbial commercial activity notices (MCANs), and significant new use notices (SNUNs) submitted to EPA under TSCA. Thi</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-03-04</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/02/25/2026-03763/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank" rel="noopener">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Confidential Business Information Claims Under the Toxic Substances Control Act (TSCA)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">In compliance with the Paperwork Reduction Act (PRA), this document announces the availability of and solicits public comment on the following Information Collection Request (ICR) that EPA is planning to submit to the Office of Management and Budget (OMB): Confidential Business Information Claims under the Toxic Substances Control Act (TSCA) (EPA ICR No. 2706.04 and OMB Control No. 2070-0223). This ICR represents a renewal of an existing ICR that is currently approved through August 31, 2026. Be</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-02-25</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/02/24/2026-03636/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank" rel="noopener">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Chemical Data Reporting Under the Toxic Substances Control Act (TSCA)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">In compliance with the Paperwork Reduction Act (PRA), this document announces the availability of and solicits public comment on the following Information Collection Request (ICR) that EPA is planning to submit to the Office of Management and Budget (OMB): Chemical Data Reporting under the Toxic Substances Control Act (TSCA) (EPA ICR No. 1884.17 and OMB Control No. 2070-0162). This ICR represents a renewal of an existing ICR that is currently approved through October 31, 2026. Before submitting </div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-02-24</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/02/18/2026-03155/extension-of-postponement-of-effectiveness-for-certain-provisions-of-trichloroethylene-tce" target="_blank" rel="noopener">Extension of Postponement of Effectiveness for Certain Provisions of Trichloroethylene (TCE); Regulation Under the Toxic Substances Control Act (TSCA)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">The Environmental Protection Agency (EPA or Agency) is extending the postponement of the effectiveness of certain regulatory provisions of the final rule entitled &#34;Trichloroethylene (TCE); Regulation Under the Toxic Substances Control Act (TSCA)&#34; for an additional 90 days. Specifically, this postponement applies to the conditions imposed on the uses with TSCA section 6(g) exemptions.</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-02-18</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/media-type/memoranda/" target="_blank" rel="noopener">More
+								Memoranda</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: MemorandaPFAS – What to Know Now, and What to Expect(December 29, 2025)EPA Proposes to Narrow Scope of TSCA Section 8(a)(7) PFAS Reporting Rule; Exemptions Would Include De Minimis Amounts, Imported Articles(November 13, 2025)AICIS Will Require Information on 522 PFAS Imported or Manufactured in Australia(October 24, 2025)New Mexico Publishes Proposed Rule to Implement PFAS Protection Act, Will Ho</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        <span class="meta-item">2025-12-29</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/lynn-l-bergeson-hallelujah-epa-proposes-to-narrow-scope-of-tsca-section-8a7-pfas-reporting-rule-chemical-processing-december-10-2025/" target="_blank" rel="noopener">Lynn L. Bergeson, “Hallelujah, EPA Proposes to Narrow Scope of TSCA Section 8(a)(7) PFAS Reporting Rule,” Chemical Processing, December 10, 2025.</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: Lynn L. Bergeson, “Hallelujah, EPA Proposes to Narrow Scope of TSCA Section 8(a)(7) PFAS Reporting Rule,” Chemical Processing, December 10, 2025.(December 12, 2025)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        <span class="meta-item">2025-12-10</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/media-type/articles/" target="_blank" rel="noopener">More
+								Articles</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: ArticlesLynn L. Bergeson, “Hallelujah, EPA Proposes to Narrow Scope of TSCA Section 8(a)(7) PFAS Reporting Rule,” Chemical Processing, December 10, 2025.(December 12, 2025)More
+								Articles</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        <span class="meta-item">2025-12-10</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/tsca-pfas-reporting-implications-of-epas-new-statutory-interpretation-on-articles/" target="_blank" rel="noopener">TSCA PFAS Reporting: Implications of EPA’s New Statutory Interpretation on Articles</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: TSCA PFAS Reporting: Implications of EPA’s New Statutory Interpretation on Articles(November 21, 2025)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        <span class="meta-item">2025-11-21</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/epa_proposes_to_narrow_scope_of_tsca_section_8a7_pfas_reporting_rule/" target="_blank" rel="noopener">EPA Proposes to Narrow Scope of TSCA Section 8(a)(7) PFAS Reporting Rule; Exemptions Would Include De Minimis Amounts, Imported Articles</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: EPA Proposes to Narrow Scope of TSCA Section 8(a)(7) PFAS Reporting Rule; Exemptions Would Include De Minimis Amounts, Imported Articles(November 13, 2025)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        <span class="meta-item">2025-11-13</span>
+      </div>
+    </div>
+    
+    
+  </div>
+
+  <!-- Deadlines -->
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Related Deadlines</span>
+      <span class="section-count">7</span>
+    </div>
+    
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">May</div>
+        <div class="deadline-day">18</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA TCE Section 6(g) Exemption Postponement</div>
+        <div class="deadline-desc">Monitor EPA extension of TCE TSCA Section 6 rule effectiveness postponement for potential finalization or further extension.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">tsca</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Aug</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA TSCA CBI Claims ICR Approval Expiry</div>
+        <div class="deadline-desc">Current approval for TSCA Confidential Business Information claims information collection request (ICR No. 2706.04) expires; EPA is seeking renewal.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-low">LOW</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">tsca</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Aug</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA TSCA CBI Claims Information Collection Renewal</div>
+        <div class="deadline-desc">Current TSCA Confidential Business Information claims reporting approval expires; EPA seeking comment on renewal.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-low">LOW</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">TSCA</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Aug</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA TSCA CBI Claims Collection Renewal</div>
+        <div class="deadline-desc">Current approval for TSCA confidential business information claims information collection expires; renewal review underway.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-low">LOW</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">tsca</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Aug</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">TSCA CBI Claims ICR Approval Expires</div>
+        <div class="deadline-desc">Current Confidential Business Information claims Information Collection Request approval expires under TSCA.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-low">LOW</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">TSCA</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Oct</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA Chemical Data Reporting ICR Approval Expiry</div>
+        <div class="deadline-desc">Current approval for TSCA Chemical Data Reporting information collection request (ICR No. 1884.17) expires; EPA is seeking renewal.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-low">LOW</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">tsca</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Oct</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA TSCA Chemical Data Reporting Collection Renewal</div>
+        <div class="deadline-desc">Current TSCA Chemical Data Reporting approval expires; EPA seeking comment on renewal of ICR No. 1884.17.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">TSCA</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  <!-- Bills -->
+  
+
+  <!-- Subscribe -->
+  <div class="subscribe-card">
+    <div class="subscribe-eyebrow">&#9670; Intelligence Subscription</div>
+    <div class="subscribe-title">Subscribe to TSCA Updates</div>
+    <div class="subscribe-desc">
+      Get an email whenever new articles, deadlines, or bills matching "TSCA" are found.
+      Each alert links back to a refreshed version of this page with updated AI analysis.
+    </div>
+    <div class="subscribe-features">
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>New article alerts</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Deadline reminders</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Bill status changes</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>One-click unsubscribe</div>
+    </div>
+    <form class="subscribe-form" action="/subscribe" method="POST" id="subscribe-form">
+      <input type="hidden" name="keyword" value="TSCA">
+      <input class="subscribe-input" type="email" name="email"
+             placeholder="your@email.com" required autocomplete="email">
+      <button class="subscribe-btn" type="submit">Subscribe to TSCA</button>
+    </form>
+    <div class="subscribe-note" id="subscribe-note">
+      Requires the local server: <code style="color:rgba(255,255,255,0.5);">python server.py</code>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  var form = document.getElementById('subscribe-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      
+      e.preventDefault();
+      document.getElementById('subscribe-note').textContent = 'Start the local server first: python server.py';
+      document.getElementById('subscribe-note').style.color = '#CB7B0A';
+      
+    });
+  }
+</script>
+
+</body>
+</html>

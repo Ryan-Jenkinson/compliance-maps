@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPR Intelligence — Compliance Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4F5F7;
+      --surface: #FFFFFF;
+      --surface-sunken: #EBEDF0;
+      --surface-dark: #1A1D23;
+      --surface-dark-2: #22252C;
+      --border: #D8DBE0;
+      --border-light: #E8EAED;
+      --text-primary: #111318;
+      --text-secondary: #4A4F5C;
+      --text-muted: #7A8194;
+      --red: #D63031; --red-bg: #FEF0F0; --red-border: #FACACA;
+      --amber: #CB7B0A; --amber-bg: #FEF6E8; --amber-border: #F5DFA6;
+      --green: #0F7B3F; --green-bg: #EEFAF3; --green-border: #B2E0C7;
+      --blue: #1565C0; --blue-bg: #EBF3FD; --blue-border: #BBDEFB;
+      --teal: #0F766E;
+      --purple: #6D28D9; --purple-bg: #EDE9FE; --purple-border: #DDD6FE;
+      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+      --topbar-h: 52px;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+      --max-w: 900px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: clamp(14px, 1.1vw, 16px); }
+    body {
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOPBAR ──────────────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: var(--surface-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px;
+      z-index: 200;
+      border-bottom: 3px solid var(--blue);
+    }
+    .topbar-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: 4px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .topbar-back:hover { color: #fff; border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.08); text-decoration: none; }
+    .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.18); flex-shrink: 0; }
+    .topbar-label { font-size: 11px; font-family: var(--mono); color: rgba(255,255,255,0.40); white-space: nowrap; }
+    .topbar-query {
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+    .topbar-spacer { flex: 1; }
+    .topbar-pills { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .topbar-pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 2px 10px;
+      white-space: nowrap;
+    }
+    .topbar-date { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.35); white-space: nowrap; }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────── */
+    .main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: calc(var(--topbar-h) + 24px) 24px 80px;
+    }
+
+    /* ── HERO STATS BAR ──────────────────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .stat-card.has-urgency .stat-value { color: var(--red); }
+    .stat-card.has-bills .stat-value { color: var(--purple); }
+
+    /* ── TREND CHART ─────────────────────────────────────────────── */
+    .trend-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .trend-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .trend-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 60px;
+    }
+    .trend-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .trend-bar {
+      width: 100%;
+      background: var(--blue);
+      border-radius: 2px 2px 0 0;
+      min-height: 2px;
+      opacity: 0.7;
+      transition: opacity 0.12s;
+    }
+    .trend-bar:hover { opacity: 1; }
+    .trend-bar-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-align: center;
+    }
+    .trend-bar-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    /* ── SYNTHESIS CARD ──────────────────────────────────────────── */
+    .synthesis-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .synthesis-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .synthesis-overview {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+    .synthesis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 680px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synthesis-block {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 5px;
+      padding: 14px 16px;
+    }
+    .synthesis-block-title {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .synthesis-block-title.impact { color: var(--amber); }
+    .synthesis-block-title.risks  { color: var(--red); }
+    .synthesis-block-title.steps  { color: var(--green); }
+    .synthesis-block p { font-size: 13px; line-height: 1.55; color: var(--text-secondary); }
+    .synthesis-footer {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* ── SECTION HEADERS ─────────────────────────────────────────── */
+    .section { margin-bottom: 28px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+    }
+    .section-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface-sunken);
+      border-radius: 10px;
+      padding: 1px 8px;
+    }
+
+    /* ── ARTICLE CARDS ───────────────────────────────────────────── */
+    .article-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      transition: border-color 0.12s;
+    }
+    .article-card:hover { border-color: var(--blue); }
+    .article-head { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .article-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; min-width: 0; }
+    .article-title a { color: inherit; }
+    .article-title a:hover { color: var(--blue); text-decoration: none; }
+    .article-snippet {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .article-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .meta-item { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+
+    /* ── BADGES ──────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: 10px; font-weight: 700; font-family: var(--mono);
+      border-radius: 3px; padding: 1px 5px; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .badge-high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+    .badge-medium { background: var(--amber-bg);   color: var(--amber);  border: 1px solid var(--amber-border); }
+    .badge-low    { background: var(--green-bg);   color: var(--green);  border: 1px solid var(--green-border); }
+    .badge-topic  { background: var(--blue-bg);    color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-direct   { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+    .badge-indirect { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-monitor  { background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* ── DEADLINE CARDS ──────────────────────────────────────────── */
+    .deadline-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .deadline-date-block {
+      flex-shrink: 0; text-align: center;
+      background: var(--surface-sunken); border-radius: 5px; padding: 8px 12px; min-width: 68px;
+    }
+    .deadline-month { font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.06em; }
+    .deadline-day   { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .deadline-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .deadline-desc  { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .deadline-meta  { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+
+    /* ── BILL CARDS ──────────────────────────────────────────────── */
+    .bill-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+    }
+    .bill-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; }
+    .bill-label { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+    .bill-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; }
+    .bill-meta  { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+    .stage-badge {
+      font-family: var(--mono); font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; border-radius: 3px; padding: 1px 6px;
+      background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border);
+    }
+    .stage-enacted  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+    .stage-advanced { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
+
+    /* ── SUBSCRIBE CARD ──────────────────────────────────────────── */
+    .subscribe-card {
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-top: 40px;
+      color: #fff;
+    }
+    .subscribe-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.40);
+      margin-bottom: 8px;
+    }
+    .subscribe-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .subscribe-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      max-width: 520px;
+    }
+    .subscribe-features {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .subscribe-feature {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      font-family: var(--mono);
+    }
+    .subscribe-feature-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+    .subscribe-form { display: flex; gap: 10px; flex-wrap: wrap; }
+    .subscribe-input {
+      flex: 1 0 220px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      outline: none;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .subscribe-input::placeholder { color: rgba(255,255,255,0.30); }
+    .subscribe-input:focus { border-color: var(--blue); background: rgba(255,255,255,0.12); }
+    .subscribe-btn {
+      padding: 9px 22px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .subscribe-btn:hover { background: #0d47a1; }
+    .subscribe-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.30);
+      margin-top: 10px;
+      font-family: var(--mono);
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 13px;
+      background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <a class="topbar-back" href="../dashboard.html">&#8592; Dashboard</a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-label">deep dive</span>
+  <span class="topbar-query">EPR</span>
+  <div class="topbar-spacer"></div>
+  <div class="topbar-pills">
+    <span class="topbar-pill">8 articles</span>
+    <span class="topbar-pill">7 deadlines</span>
+    
+  </div>
+  <div class="topbar-sep"></div>
+  <span class="topbar-date">March 25, 2026</span>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Articles</div>
+      <div class="stat-value">8</div>
+      <div class="stat-sub">last 6 months</div>
+    </div>
+    <div class="stat-card has-urgency">
+      <div class="stat-label">Deadlines</div>
+      <div class="stat-value">7</div>
+      <div class="stat-sub">includes HIGH urgency</div>
+    </div>
+    <div class="stat-card ">
+      <div class="stat-label">Bills</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">active legislation</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Coverage</div>
+      <div class="stat-value">6</div>
+      <div class="stat-sub">months tracked</div>
+    </div>
+  </div>
+
+  <!-- Trend chart -->
+  
+  <div class="trend-card">
+    <div class="trend-title">Article Volume — EPR</div>
+    <div class="trend-bars" id="trend-bars">
+      
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">2</div>
+        <div class="trend-bar"
+             style="height:17px;"
+             title="None: 2 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">6</div>
+        <div class="trend-bar"
+             style="height:52px;"
+             title="None: 6 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+  <!-- AI Synthesis -->
+  
+  <div class="synthesis-card">
+    <div class="synthesis-label">&#9670; AI Intelligence Summary — EPR</div>
+    
+    <div class="synthesis-overview">Extended Producer Responsibility (EPR) laws are expanding across US states—Maine, Oregon, and emerging programs in New Jersey, Maryland, and Washington—shifting packaging end-of-life costs from municipalities to producers. These laws require manufacturers to register, report packaging volumes, and fund stewardship programs, creating operational and financial compliance obligations that differ by state and phase-in schedule.</div>
+    
+    <div class="synthesis-grid">
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title impact">Company Impact</div>
+        <p>As a fluoropolymer manufacturer, you must register and report packaging used for your coated component products in all active EPR states (Maine Phase 2 fees increase July 1, 2026; Maryland opens registration January 1, 2027; Washington deadline July 1, 2027). Indirectly, your supply chain faces cascading EPR cost exposure: suppliers and their manufacturers must also comply in these states, potentially raising component prices and requiring supply chain audits to confirm EPR registration status before procurement commitments.</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title risks">Key Risks</div>
+        <p>Failure to register or misreport packaging data by state deadlines results in fines, product sales bans, and operational disruption in key markets. Your suppliers may not register in time or may underestimate packaging volumes in their EPR filings, creating procurement gaps when products are pulled from state distribution channels. International suppliers exporting to EPR states may lack visibility into US compliance requirements, leaving you exposed to supply interruptions.</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title steps">Next Steps</div>
+        <p>Immediately map all packaging used across your manufacturing footprint by state (Maine, Oregon, California, Colorado) and identify current EPR registration status; assign owners for Maryland (Jan 2027), Washington (July 2027), and any emerging states. Launch a companion supplier campaign targeting packaging material vendors and component manufacturers, requiring attestation of EPR registration status in all relevant states and identifying reformulation opportunities to reduce packaging complexity. Schedule Q2 2026 review of Maine Phase 2 fee impacts and budget accordingly; confirm Assent platform captures packaging data alongside PFAS declarations.</p>
+      </div>
+      
+    </div>
+    
+    <div class="synthesis-footer">Analysis generated 2026-03-25 17:04</div>
+    
+  </div>
+  
+
+  <!-- Articles -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Articles</span>
+      <span class="section-count">8</span>
+    </div>
+    
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.pca.state.mn.us/air-water-land-climate/minnesotas-pfas-blueprint" target="_blank" rel="noopener">Minnesota&#39;s PFAS Blueprint</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Minnesota MPCA update: Minnesota&#39;s PFAS Blueprint</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">MN MPCA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://productstewardship.us/webinar/webinar-series-preparing-producers-for-oregon-packaging-epr/" target="_blank" rel="noopener">Oregon Packaging EPR for Producers</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">PSI: Oregon Packaging EPR for Producers</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">EPR</span>
+        <span class="meta-item">Product Stewardship Institute</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.regulatoryoversight.com/2024/10/are-plastics-the-new-pfas/" target="_blank" rel="noopener">Are Plastics the New PFAS?</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Legal News: A recent conference led by Connecticut Attorney General (AG) William Tong discussed the alleged problems and potential solutions associated with plastics use and waste. Conference attendees included nearly two dozen representatives from state AG offices, medical and public health researchers, and leaders in the recycling and reclamation industry. Conversations focused on plastics’ tendency to brea</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.regulatoryoversight.com/2024/10/are-plastics-the-new-pfas/#more-20349" target="_blank" rel="noopener">Continue ReadingAre Plastics the New PFAS?</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Legal News: A recent conference led by Connecticut Attorney General (AG) William Tong discussed the alleged problems and potential solutions associated with plastics use and waste. Conference attendees included nearly two dozen representatives from state AG offices, medical and public health researchers, and leaders in the recycling and reclamation industry. Conversations focused on plastics’ tendency to brea</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01345" target="_blank" rel="noopener">AG Number 2026-01345 (View Details) Notice PDF: 2026-01345.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">AG Number 2026-01345 (View Details) Notice PDF: 2026-01345.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Takari International, Inc.; Amazon.com, Inc.; Amazon.com Services LLC; Amazon.com Sales, Inc. Chemical: Lead and lead compounds Source: Oven Dried Jeprox Fish Complaint (0)   Settlement (0)   Judgment (0)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">Prop65</span>
+        <span class="meta-item">CA AG — Prop 65 60-Day Notices</span>
+        <span class="meta-item">2026-03-25</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/03/17/2026-05151/initiation-of-section-301-investigations-of-acts-policies-and-practices-of-various-economies-related" target="_blank" rel="noopener">Initiation of Section 301 Investigations of Acts, Policies, and Practices of Various Economies Related to the Failure To Impose and Effectively Enforce a Prohibition on the Importation of Goods Produced With Forced Labor</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">The U.S. Trade Representative (Trade Representative) is initiating investigations with respect to acts, policies, and practices of the economies listed in Annex A of this notice related to the failure to impose and effectively enforce a prohibition on the importation of goods produced with forced labor. USTR is seeking public comments in connection with these investigations and will hold public hearings.</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">ForcedLabor</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-03-17</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/02/25/2026-03763/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank" rel="noopener">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Confidential Business Information Claims Under the Toxic Substances Control Act (TSCA)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">In compliance with the Paperwork Reduction Act (PRA), this document announces the availability of and solicits public comment on the following Information Collection Request (ICR) that EPA is planning to submit to the Office of Management and Budget (OMB): Confidential Business Information Claims under the Toxic Substances Control Act (TSCA) (EPA ICR No. 2706.04 and OMB Control No. 2070-0223). This ICR represents a renewal of an existing ICR that is currently approved through August 31, 2026. Be</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-02-25</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.federalregister.gov/documents/2026/02/24/2026-03636/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank" rel="noopener">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Chemical Data Reporting Under the Toxic Substances Control Act (TSCA)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">In compliance with the Paperwork Reduction Act (PRA), this document announces the availability of and solicits public comment on the following Information Collection Request (ICR) that EPA is planning to submit to the Office of Management and Budget (OMB): Chemical Data Reporting under the Toxic Substances Control Act (TSCA) (EPA ICR No. 1884.17 and OMB Control No. 2070-0162). This ICR represents a renewal of an existing ICR that is currently approved through October 31, 2026. Before submitting </div>
+      <div class="article-meta">
+        <span class="badge badge-topic">TSCA</span>
+        <span class="meta-item">Federal Register</span>
+        <span class="meta-item">2026-02-24</span>
+      </div>
+    </div>
+    
+    
+  </div>
+
+  <!-- Deadlines -->
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Related Deadlines</span>
+      <span class="section-count">7</span>
+    </div>
+    
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">Maine EPR: Phase 2 Stewardship Fee Increases</div>
+        <div class="deadline-desc">Maine packaging stewardship program Phase 2 fee schedule takes effect; producers pay increased per-unit fees to Maine DEP based on packaging weight and material type.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">Maine</span>
+          <span class="badge badge-topic">epr</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Dec</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">NJ EPR: DEP Packaging Rules Finalization</div>
+        <div class="deadline-desc">New Jersey DEP must finalize packaging EPR rules establishing PRO requirements, covered materials definitions, and producer registration procedures under A5322.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">New Jersey</span>
+          <span class="badge badge-topic">epr</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Dec</div>
+        <div class="deadline-day">31</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">FTC Green Guides Update: Recyclability &amp; Compostability Claims</div>
+        <div class="deadline-desc">FTC expected to finalize updated Green Guides governing recyclability and compostability claims on packaging labels; affects EPR compliance marketing across all state programs.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">epr</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jan</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">Maine EPR: Municipal Cost Reimbursement Program Expansion</div>
+        <div class="deadline-desc">Maine DEP expands reimbursements to municipalities for recycling collection costs under the packaging EPR program; producers fund municipal recycling infrastructure.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Maine</span>
+          <span class="badge badge-topic">epr</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jan</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">Maryland Packaging EPR: Producer Registration Opens</div>
+        <div class="deadline-desc">Maryland covered producers must register with state-approved PRO under Maryland&#39;s packaging EPR law and begin paying stewardship fees.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Maryland</span>
+          <span class="badge badge-topic">epr</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">SF 3: First Producer Responsibility Plans Due to MPCA</div>
+        <div class="deadline-desc">Minnesota producers must submit first EPR responsibility plans to MPCA covering packaging sales volumes, material categories, and fee payments.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Minnesota</span>
+          <span class="badge badge-topic">epr</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">WA Packaging EPR: Producer Registration Deadline</div>
+        <div class="deadline-desc">Washington covered packaging producers must register with a state-approved PRO; program operational after ECOLOGY rulemaking completion.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Washington</span>
+          <span class="badge badge-topic">epr</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  <!-- Bills -->
+  
+
+  <!-- Subscribe -->
+  <div class="subscribe-card">
+    <div class="subscribe-eyebrow">&#9670; Intelligence Subscription</div>
+    <div class="subscribe-title">Subscribe to EPR Updates</div>
+    <div class="subscribe-desc">
+      Get an email whenever new articles, deadlines, or bills matching "EPR" are found.
+      Each alert links back to a refreshed version of this page with updated AI analysis.
+    </div>
+    <div class="subscribe-features">
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>New article alerts</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Deadline reminders</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Bill status changes</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>One-click unsubscribe</div>
+    </div>
+    <form class="subscribe-form" action="/subscribe" method="POST" id="subscribe-form">
+      <input type="hidden" name="keyword" value="EPR">
+      <input class="subscribe-input" type="email" name="email"
+             placeholder="your@email.com" required autocomplete="email">
+      <button class="subscribe-btn" type="submit">Subscribe to EPR</button>
+    </form>
+    <div class="subscribe-note" id="subscribe-note">
+      Requires the local server: <code style="color:rgba(255,255,255,0.5);">python server.py</code>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  var form = document.getElementById('subscribe-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      
+      e.preventDefault();
+      document.getElementById('subscribe-note').textContent = 'Start the local server first: python server.py';
+      document.getElementById('subscribe-note').style.color = '#CB7B0A';
+      
+    });
+  }
+</script>
+
+</body>
+</html>

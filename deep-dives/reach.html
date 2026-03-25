@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REACH Intelligence — Compliance Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4F5F7;
+      --surface: #FFFFFF;
+      --surface-sunken: #EBEDF0;
+      --surface-dark: #1A1D23;
+      --surface-dark-2: #22252C;
+      --border: #D8DBE0;
+      --border-light: #E8EAED;
+      --text-primary: #111318;
+      --text-secondary: #4A4F5C;
+      --text-muted: #7A8194;
+      --red: #D63031; --red-bg: #FEF0F0; --red-border: #FACACA;
+      --amber: #CB7B0A; --amber-bg: #FEF6E8; --amber-border: #F5DFA6;
+      --green: #0F7B3F; --green-bg: #EEFAF3; --green-border: #B2E0C7;
+      --blue: #1565C0; --blue-bg: #EBF3FD; --blue-border: #BBDEFB;
+      --teal: #0F766E;
+      --purple: #6D28D9; --purple-bg: #EDE9FE; --purple-border: #DDD6FE;
+      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+      --topbar-h: 52px;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+      --max-w: 900px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: clamp(14px, 1.1vw, 16px); }
+    body {
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOPBAR ──────────────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: var(--surface-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px;
+      z-index: 200;
+      border-bottom: 3px solid var(--blue);
+    }
+    .topbar-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: 4px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .topbar-back:hover { color: #fff; border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.08); text-decoration: none; }
+    .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.18); flex-shrink: 0; }
+    .topbar-label { font-size: 11px; font-family: var(--mono); color: rgba(255,255,255,0.40); white-space: nowrap; }
+    .topbar-query {
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+    .topbar-spacer { flex: 1; }
+    .topbar-pills { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .topbar-pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 2px 10px;
+      white-space: nowrap;
+    }
+    .topbar-date { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.35); white-space: nowrap; }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────── */
+    .main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: calc(var(--topbar-h) + 24px) 24px 80px;
+    }
+
+    /* ── HERO STATS BAR ──────────────────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .stat-card.has-urgency .stat-value { color: var(--red); }
+    .stat-card.has-bills .stat-value { color: var(--purple); }
+
+    /* ── TREND CHART ─────────────────────────────────────────────── */
+    .trend-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .trend-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .trend-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 60px;
+    }
+    .trend-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .trend-bar {
+      width: 100%;
+      background: var(--blue);
+      border-radius: 2px 2px 0 0;
+      min-height: 2px;
+      opacity: 0.7;
+      transition: opacity 0.12s;
+    }
+    .trend-bar:hover { opacity: 1; }
+    .trend-bar-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-align: center;
+    }
+    .trend-bar-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    /* ── SYNTHESIS CARD ──────────────────────────────────────────── */
+    .synthesis-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .synthesis-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .synthesis-overview {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+    .synthesis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 680px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synthesis-block {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 5px;
+      padding: 14px 16px;
+    }
+    .synthesis-block-title {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .synthesis-block-title.impact { color: var(--amber); }
+    .synthesis-block-title.risks  { color: var(--red); }
+    .synthesis-block-title.steps  { color: var(--green); }
+    .synthesis-block p { font-size: 13px; line-height: 1.55; color: var(--text-secondary); }
+    .synthesis-footer {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* ── SECTION HEADERS ─────────────────────────────────────────── */
+    .section { margin-bottom: 28px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+    }
+    .section-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface-sunken);
+      border-radius: 10px;
+      padding: 1px 8px;
+    }
+
+    /* ── ARTICLE CARDS ───────────────────────────────────────────── */
+    .article-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      transition: border-color 0.12s;
+    }
+    .article-card:hover { border-color: var(--blue); }
+    .article-head { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .article-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; min-width: 0; }
+    .article-title a { color: inherit; }
+    .article-title a:hover { color: var(--blue); text-decoration: none; }
+    .article-snippet {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .article-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .meta-item { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+
+    /* ── BADGES ──────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: 10px; font-weight: 700; font-family: var(--mono);
+      border-radius: 3px; padding: 1px 5px; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .badge-high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+    .badge-medium { background: var(--amber-bg);   color: var(--amber);  border: 1px solid var(--amber-border); }
+    .badge-low    { background: var(--green-bg);   color: var(--green);  border: 1px solid var(--green-border); }
+    .badge-topic  { background: var(--blue-bg);    color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-direct   { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+    .badge-indirect { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-monitor  { background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* ── DEADLINE CARDS ──────────────────────────────────────────── */
+    .deadline-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .deadline-date-block {
+      flex-shrink: 0; text-align: center;
+      background: var(--surface-sunken); border-radius: 5px; padding: 8px 12px; min-width: 68px;
+    }
+    .deadline-month { font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.06em; }
+    .deadline-day   { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .deadline-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .deadline-desc  { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .deadline-meta  { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+
+    /* ── BILL CARDS ──────────────────────────────────────────────── */
+    .bill-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+    }
+    .bill-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; }
+    .bill-label { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+    .bill-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; }
+    .bill-meta  { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+    .stage-badge {
+      font-family: var(--mono); font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; border-radius: 3px; padding: 1px 6px;
+      background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border);
+    }
+    .stage-enacted  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+    .stage-advanced { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
+
+    /* ── SUBSCRIBE CARD ──────────────────────────────────────────── */
+    .subscribe-card {
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-top: 40px;
+      color: #fff;
+    }
+    .subscribe-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.40);
+      margin-bottom: 8px;
+    }
+    .subscribe-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .subscribe-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      max-width: 520px;
+    }
+    .subscribe-features {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .subscribe-feature {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      font-family: var(--mono);
+    }
+    .subscribe-feature-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+    .subscribe-form { display: flex; gap: 10px; flex-wrap: wrap; }
+    .subscribe-input {
+      flex: 1 0 220px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      outline: none;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .subscribe-input::placeholder { color: rgba(255,255,255,0.30); }
+    .subscribe-input:focus { border-color: var(--blue); background: rgba(255,255,255,0.12); }
+    .subscribe-btn {
+      padding: 9px 22px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .subscribe-btn:hover { background: #0d47a1; }
+    .subscribe-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.30);
+      margin-top: 10px;
+      font-family: var(--mono);
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 13px;
+      background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <a class="topbar-back" href="../dashboard.html">&#8592; Dashboard</a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-label">deep dive</span>
+  <span class="topbar-query">REACH</span>
+  <div class="topbar-spacer"></div>
+  <div class="topbar-pills">
+    <span class="topbar-pill">4 articles</span>
+    <span class="topbar-pill">5 deadlines</span>
+    
+  </div>
+  <div class="topbar-sep"></div>
+  <span class="topbar-date">March 25, 2026</span>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Articles</div>
+      <div class="stat-value">4</div>
+      <div class="stat-sub">last 6 months</div>
+    </div>
+    <div class="stat-card has-urgency">
+      <div class="stat-label">Deadlines</div>
+      <div class="stat-value">5</div>
+      <div class="stat-sub">includes HIGH urgency</div>
+    </div>
+    <div class="stat-card ">
+      <div class="stat-label">Bills</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">active legislation</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Coverage</div>
+      <div class="stat-value">6</div>
+      <div class="stat-sub">months tracked</div>
+    </div>
+  </div>
+
+  <!-- Trend chart -->
+  
+  <div class="trend-card">
+    <div class="trend-title">Article Volume — REACH</div>
+    <div class="trend-bars" id="trend-bars">
+      
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count"></div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 0 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">1</div>
+        <div class="trend-bar"
+             style="height:17px;"
+             title="None: 1 article"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">3</div>
+        <div class="trend-bar"
+             style="height:52px;"
+             title="None: 3 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+  <!-- AI Synthesis -->
+  
+  <div class="synthesis-card">
+    <div class="synthesis-label">&#9670; AI Intelligence Summary — REACH</div>
+    
+    <div class="synthesis-overview">The EU is advancing a broad PFAS class restriction under REACH, with the RAC (Risk Assessment Committee) having adopted its opinion and ECHA publication expected imminently. This restriction will create a de facto ban on PFAS manufacturing, import, and use across the EU market. Concurrently, the US is seeing increased state-level PFAS enforcement (NJ&#39;s $450M 3M settlement) and awareness campaigns, signaling escalating legal and commercial pressure on PFAS manufacturers globally.</div>
+    
+    <div class="synthesis-grid">
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title impact">Company Impact</div>
+        <p>DIRECT: If the EU PFAS restriction is adopted, the company&#39;s fluoropolymer coating products containing PFAS cannot be manufactured in or imported into the EU after the compliance deadline (typically 18-36 months post-adoption). This affects both captive manufacturing in EU facilities and export revenue. INDIRECT: EU restriction will accelerate reformulation across the global supply chain; suppliers and their manufacturers will prioritize non-PFAS alternatives, potentially deprioritizing products destined for the US-only market. This creates a window where component availability may tighten before new non-PFAS variants scale. Additionally, the NJ settlement signals aggressive state AG litigation risk—suppliers facing similar actions may exit PFAS categories entirely, narrowing sourcing options for critical components (seals, gaskets, coatings).</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title risks">Key Risks</div>
+        <p>The EU PFAS class restriction, once published by ECHA, will trigger a global supply chain realignment; components currently available may become unavailable in 18–36 months if suppliers cannot reformulate. State-level PFAS litigation (NJ model) increases risk that suppliers and OEMs will face enforcement actions, accelerating unplanned product discontinuations. The company&#39;s indirect supply chain exposure is acute: foreign manufacturers of seals, gaskets, adhesives, and electronics coatings used in the company&#39;s products may face EU restrictions independently of US Amara&#39;s Law deadlines, creating a dual compliance squeeze.</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title steps">Next Steps</div>
+        <p>Immediately obtain and analyze the full ECHA PFAS restriction opinion when published; map which company products and supply-chain components contain PFAS covered by the restriction scope, and prioritize reformulation for products with significant EU footprint or supplier dependence. Expand supplier outreach campaign to include explicit notification that EU PFAS restriction is imminent and will affect global sourcing timelines; request suppliers to flag any components sourced from EU manufacturers that will require reformulation or substitution by the EU deadline. Engage Assent platform to cross-reference PFAS-containing suppliers against known EU manufacturing locations and assess reformulation feasibility for high-criticality components (cylinder O-rings, gaskets, adhesives) in parallel with Amara&#39;s Law PRISM registration work. Conduct scenario planning for component availability gaps during the transition period and identify backup suppliers or non-PFAS alternatives for mission-critical items.</p>
+      </div>
+      
+    </div>
+    
+    <div class="synthesis-footer">Analysis generated 2026-03-25 17:04</div>
+    
+  </div>
+  
+
+  <!-- Articles -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Articles</span>
+      <span class="section-count">4</span>
+    </div>
+    
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.regulatoryoversight.com/2025/05/new-jersey-ag-platkin-reaches-450m-pfas-settlement-with-3m/#more-21615" target="_blank" rel="noopener">Continue ReadingNew Jersey AG Platkin Reaches $450M PFAS Settlement With 3M</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Legal News: On May 13, New Jersey Attorney General (AG) Matthew Platkin announced a proposed $450 million settlement agreement with 3M regarding allegations that, among other issues, contamination of perfluoroalkyl and polyfluoroalkyl substances (PFAS) emanated from a site now owned by 3M. The settlement resolves these claims and New Jersey’s broader claims that the state and its agencies have or may have in </div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.jdsupra.com/legalnews/rac-adopts-opinion-on-proposed-reach-4647189/" target="_blank" rel="noopener">RAC Adopts Opinion on Proposed REACH Restriction Proposal for PFAS, ECHA Will Publish Opinion “Soon”</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">JD Supra PFAS: RAC Adopts Opinion on Proposed REACH Restriction Proposal for PFAS, ECHA Will Publish Opinion “Soon”</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: JD Supra PFAS</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.regulatoryoversight.com/2025/05/new-jersey-ag-platkin-reaches-450m-pfas-settlement-with-3m/" target="_blank" rel="noopener">New Jersey AG Platkin Reaches $450M PFAS Settlement With 3M</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Legal News: On May 13, New Jersey Attorney General (AG) Matthew Platkin announced a proposed $450 million settlement agreement with 3M regarding allegations that, among other issues, contamination of perfluoroalkyl and polyfluoroalkyl substances (PFAS) emanated from a site now owned by 3M. The settlement resolves these claims and New Jersey’s broader claims that the state and its agencies have or may have in </div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://news.delaware.gov/2026/02/25/dhss-dnrec-reopen-pfas-awareness-and-outreach-grant-opportunity-through-march-27/" target="_blank" rel="noopener">DHSS, DNREC Reopen PFAS Awareness and Outreach Grant Opportunity Through March 27</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Delaware DNREC: DHSS, DNREC Reopen PFAS Awareness and Outreach Grant Opportunity Through March 27</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Delaware DNREC</span>
+        <span class="meta-item">2026-02-25</span>
+      </div>
+    </div>
+    
+    
+  </div>
+
+  <!-- Deadlines -->
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Related Deadlines</span>
+      <span class="section-count">5</span>
+    </div>
+    
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Nov</div>
+        <div class="deadline-day">05</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">ECHA DBDPE SVHC Article 33 Notification</div>
+        <div class="deadline-desc">Notify recipients of articles containing DBDPE brominated flame retardant per REACH Article 33.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">EU</span>
+          <span class="badge badge-topic">reach</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Nov</div>
+        <div class="deadline-day">05</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">REACH Article 33 Notification for DBDPE</div>
+        <div class="deadline-desc">Suppliers must provide Article 33 notification for products containing DBDPE added to SVHC Candidate List.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">EU</span>
+          <span class="badge badge-topic">REACH</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Feb</div>
+        <div class="deadline-day">04</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">ECHA BPAF SVHC Article 33 Notification</div>
+        <div class="deadline-desc">Notify recipients of articles containing Bisphenol AF per REACH Article 33 immediately upon SVHC listing.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">EU</span>
+          <span class="badge badge-topic">reach</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Feb</div>
+        <div class="deadline-day">04</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">REACH Article 33 Notification for n-hexane</div>
+        <div class="deadline-desc">Suppliers must provide Article 33 notification for products containing n-hexane added to SVHC Candidate List.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">EU</span>
+          <span class="badge badge-topic">REACH</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Feb</div>
+        <div class="deadline-day">04</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">REACH Article 33 Notification for Bisphenol AF</div>
+        <div class="deadline-desc">Suppliers must provide Article 33 notification for products containing Bisphenol AF added to SVHC Candidate List.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">EU</span>
+          <span class="badge badge-topic">REACH</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  <!-- Bills -->
+  
+
+  <!-- Subscribe -->
+  <div class="subscribe-card">
+    <div class="subscribe-eyebrow">&#9670; Intelligence Subscription</div>
+    <div class="subscribe-title">Subscribe to REACH Updates</div>
+    <div class="subscribe-desc">
+      Get an email whenever new articles, deadlines, or bills matching "REACH" are found.
+      Each alert links back to a refreshed version of this page with updated AI analysis.
+    </div>
+    <div class="subscribe-features">
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>New article alerts</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Deadline reminders</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Bill status changes</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>One-click unsubscribe</div>
+    </div>
+    <form class="subscribe-form" action="/subscribe" method="POST" id="subscribe-form">
+      <input type="hidden" name="keyword" value="REACH">
+      <input class="subscribe-input" type="email" name="email"
+             placeholder="your@email.com" required autocomplete="email">
+      <button class="subscribe-btn" type="submit">Subscribe to REACH</button>
+    </form>
+    <div class="subscribe-note" id="subscribe-note">
+      Requires the local server: <code style="color:rgba(255,255,255,0.5);">python server.py</code>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  var form = document.getElementById('subscribe-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      
+      e.preventDefault();
+      document.getElementById('subscribe-note').textContent = 'Start the local server first: python server.py';
+      document.getElementById('subscribe-note').style.color = '#CB7B0A';
+      
+    });
+  }
+</script>
+
+</body>
+</html>

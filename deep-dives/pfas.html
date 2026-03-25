@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PFAS Intelligence — Compliance Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4F5F7;
+      --surface: #FFFFFF;
+      --surface-sunken: #EBEDF0;
+      --surface-dark: #1A1D23;
+      --surface-dark-2: #22252C;
+      --border: #D8DBE0;
+      --border-light: #E8EAED;
+      --text-primary: #111318;
+      --text-secondary: #4A4F5C;
+      --text-muted: #7A8194;
+      --red: #D63031; --red-bg: #FEF0F0; --red-border: #FACACA;
+      --amber: #CB7B0A; --amber-bg: #FEF6E8; --amber-border: #F5DFA6;
+      --green: #0F7B3F; --green-bg: #EEFAF3; --green-border: #B2E0C7;
+      --blue: #1565C0; --blue-bg: #EBF3FD; --blue-border: #BBDEFB;
+      --teal: #0F766E;
+      --purple: #6D28D9; --purple-bg: #EDE9FE; --purple-border: #DDD6FE;
+      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+      --topbar-h: 52px;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+      --max-w: 900px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: clamp(14px, 1.1vw, 16px); }
+    body {
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOPBAR ──────────────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: var(--surface-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px;
+      z-index: 200;
+      border-bottom: 3px solid var(--blue);
+    }
+    .topbar-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: 4px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .topbar-back:hover { color: #fff; border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.08); text-decoration: none; }
+    .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.18); flex-shrink: 0; }
+    .topbar-label { font-size: 11px; font-family: var(--mono); color: rgba(255,255,255,0.40); white-space: nowrap; }
+    .topbar-query {
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+    .topbar-spacer { flex: 1; }
+    .topbar-pills { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .topbar-pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 2px 10px;
+      white-space: nowrap;
+    }
+    .topbar-date { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.35); white-space: nowrap; }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────── */
+    .main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: calc(var(--topbar-h) + 24px) 24px 80px;
+    }
+
+    /* ── HERO STATS BAR ──────────────────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .stat-card.has-urgency .stat-value { color: var(--red); }
+    .stat-card.has-bills .stat-value { color: var(--purple); }
+
+    /* ── TREND CHART ─────────────────────────────────────────────── */
+    .trend-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .trend-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .trend-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 60px;
+    }
+    .trend-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .trend-bar {
+      width: 100%;
+      background: var(--blue);
+      border-radius: 2px 2px 0 0;
+      min-height: 2px;
+      opacity: 0.7;
+      transition: opacity 0.12s;
+    }
+    .trend-bar:hover { opacity: 1; }
+    .trend-bar-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-align: center;
+    }
+    .trend-bar-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    /* ── SYNTHESIS CARD ──────────────────────────────────────────── */
+    .synthesis-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .synthesis-label {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .synthesis-overview {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+    .synthesis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 680px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synthesis-block {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 5px;
+      padding: 14px 16px;
+    }
+    .synthesis-block-title {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .synthesis-block-title.impact { color: var(--amber); }
+    .synthesis-block-title.risks  { color: var(--red); }
+    .synthesis-block-title.steps  { color: var(--green); }
+    .synthesis-block p { font-size: 13px; line-height: 1.55; color: var(--text-secondary); }
+    .synthesis-footer {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* ── SECTION HEADERS ─────────────────────────────────────────── */
+    .section { margin-bottom: 28px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+    }
+    .section-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface-sunken);
+      border-radius: 10px;
+      padding: 1px 8px;
+    }
+
+    /* ── ARTICLE CARDS ───────────────────────────────────────────── */
+    .article-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      transition: border-color 0.12s;
+    }
+    .article-card:hover { border-color: var(--blue); }
+    .article-head { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .article-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; min-width: 0; }
+    .article-title a { color: inherit; }
+    .article-title a:hover { color: var(--blue); text-decoration: none; }
+    .article-snippet {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .article-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .meta-item { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+
+    /* ── BADGES ──────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: 10px; font-weight: 700; font-family: var(--mono);
+      border-radius: 3px; padding: 1px 5px; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .badge-high   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+    .badge-medium { background: var(--amber-bg);   color: var(--amber);  border: 1px solid var(--amber-border); }
+    .badge-low    { background: var(--green-bg);   color: var(--green);  border: 1px solid var(--green-border); }
+    .badge-topic  { background: var(--blue-bg);    color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-direct   { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+    .badge-indirect { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+    .badge-monitor  { background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* ── DEADLINE CARDS ──────────────────────────────────────────── */
+    .deadline-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .deadline-date-block {
+      flex-shrink: 0; text-align: center;
+      background: var(--surface-sunken); border-radius: 5px; padding: 8px 12px; min-width: 68px;
+    }
+    .deadline-month { font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.06em; }
+    .deadline-day   { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .deadline-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .deadline-desc  { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .deadline-meta  { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+
+    /* ── BILL CARDS ──────────────────────────────────────────────── */
+    .bill-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+    }
+    .bill-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; }
+    .bill-label { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+    .bill-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; }
+    .bill-meta  { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+    .stage-badge {
+      font-family: var(--mono); font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; border-radius: 3px; padding: 1px 6px;
+      background: var(--surface-sunken); color: var(--text-muted); border: 1px solid var(--border);
+    }
+    .stage-enacted  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+    .stage-advanced { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
+
+    /* ── SUBSCRIBE CARD ──────────────────────────────────────────── */
+    .subscribe-card {
+      background: var(--surface-dark);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-top: 40px;
+      color: #fff;
+    }
+    .subscribe-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.40);
+      margin-bottom: 8px;
+    }
+    .subscribe-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .subscribe-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      max-width: 520px;
+    }
+    .subscribe-features {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .subscribe-feature {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      font-family: var(--mono);
+    }
+    .subscribe-feature-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+    .subscribe-form { display: flex; gap: 10px; flex-wrap: wrap; }
+    .subscribe-input {
+      flex: 1 0 220px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      outline: none;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .subscribe-input::placeholder { color: rgba(255,255,255,0.30); }
+    .subscribe-input:focus { border-color: var(--blue); background: rgba(255,255,255,0.12); }
+    .subscribe-btn {
+      padding: 9px 22px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .subscribe-btn:hover { background: #0d47a1; }
+    .subscribe-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.30);
+      margin-top: 10px;
+      font-family: var(--mono);
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 13px;
+      background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <a class="topbar-back" href="../dashboard.html">&#8592; Dashboard</a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-label">deep dive</span>
+  <span class="topbar-query">PFAS</span>
+  <div class="topbar-spacer"></div>
+  <div class="topbar-pills">
+    <span class="topbar-pill">100 articles</span>
+    <span class="topbar-pill">8 deadlines</span>
+    
+  </div>
+  <div class="topbar-sep"></div>
+  <span class="topbar-date">March 25, 2026</span>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Articles</div>
+      <div class="stat-value">100</div>
+      <div class="stat-sub">last 6 months</div>
+    </div>
+    <div class="stat-card has-urgency">
+      <div class="stat-label">Deadlines</div>
+      <div class="stat-value">8</div>
+      <div class="stat-sub">includes HIGH urgency</div>
+    </div>
+    <div class="stat-card ">
+      <div class="stat-label">Bills</div>
+      <div class="stat-value">0</div>
+      <div class="stat-sub">active legislation</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Coverage</div>
+      <div class="stat-value">6</div>
+      <div class="stat-sub">months tracked</div>
+    </div>
+  </div>
+
+  <!-- Trend chart -->
+  
+  <div class="trend-card">
+    <div class="trend-title">Article Volume — PFAS</div>
+    <div class="trend-bars" id="trend-bars">
+      
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">8</div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 8 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">8</div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 8 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">7</div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 7 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">3</div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 3 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">8</div>
+        <div class="trend-bar"
+             style="height:2px;"
+             title="None: 8 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+      <div class="trend-bar-wrap">
+        <div class="trend-bar-count">157</div>
+        <div class="trend-bar"
+             style="height:52px;"
+             title="None: 157 articles"></div>
+        <div class="trend-bar-label"></div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+  <!-- AI Synthesis -->
+  
+  <div class="synthesis-card">
+    <div class="synthesis-label">&#9670; AI Intelligence Summary — PFAS</div>
+    
+    <div class="synthesis-overview">New Mexico has enacted sweeping PFAS labeling obligations effective January 1, 2027, joining Minnesota&#39;s landmark Amara&#39;s Law (PRISM registration deadline July 1, 2026) in creating state-level PFAS restrictions. The regulatory landscape is accelerating: EPA is expanding PFAS reporting requirements under TSCA, multiple state AGs (Tennessee, Michigan, New Jersey) are pursuing enforcement actions against PFAS manufacturers, and federal court challenges to EPA drinking water standards continue. Multi-state PFAS compliance is now a critical operational requirement, not a future consideration.</div>
+    
+    <div class="synthesis-grid">
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title impact">Company Impact</div>
+        <p>DIRECT: Your fluoropolymer coating products containing PFAS must be registered in Minnesota PRISM by July 1, 2026; New Mexico&#39;s January 1, 2027 labeling rule will require product labeling or reformulation decisions for any PFAS-containing products sold there. INDIRECT (supply chain): The July 1, 2026 Minnesota deadline creates cascading risk—if your suppliers&#39; upstream manufacturers (domestic and foreign) fail to register PRISM, those components become illegal to distribute in Minnesota starting July 2, 2026, potentially disrupting electronics, seals, gaskets, lubricants, and adhesives sourcing. New Mexico&#39;s labeling requirement will create parallel supply chain verification demands across your component and material suppliers.</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title risks">Key Risks</div>
+        <p>CRITICAL: Minnesota PRISM deadline is 18 months away; failure to register direct PFAS products or failure to secure supplier commitments to register creates operational shutdown risk in a key market. SECONDARY: New Mexico labeling rule (13 months out) applies to products sold there; absence of a clear labeling strategy now means either rapid reformulation or market exit decisions under time pressure. TERTIARY: Evolving EPA TRI reporting (2027 submission deadline) and potential future federal use restrictions could require additional disclosure and reformulation cycles. Supply chain visibility gaps—you may not know which purchased components contain PFAS upstream until suppliers respond to your education campaigns.</p>
+      </div>
+      
+      
+      <div class="synthesis-block">
+        <div class="synthesis-block-title steps">Next Steps</div>
+        <p>IMMEDIATE (Next 30 days): Finalize PRISM registration timeline for all direct PFAS products; confirm Assent platform has captured all fluoropolymer coating SKUs and PFAS substance declarations. Accelerate supplier outreach campaign—send second-wave targeted emails to electronics, seal/gasket, lubricant, and adhesive suppliers with explicit PRISM deadline language and request PFAS declarations by Q2 2026. WITHIN 90 DAYS: Map New Mexico product sales and initiate reformulation vs. labeling decisions for PFAS-containing products in that state; assess foreign supplier compliance risk (particularly for electronics and automation components). Establish monthly tracker of supplier PRISM registration status and escalate non-responsive suppliers to procurement leadership.</p>
+      </div>
+      
+    </div>
+    
+    <div class="synthesis-footer">Analysis generated 2026-03-25 17:03</div>
+    
+  </div>
+  
+
+  <!-- Articles -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Articles</span>
+      <span class="section-count">100</span>
+    </div>
+    
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.env.nm.gov/pfas/wp-content/uploads/sites/25/2026/02/Consumer-Factsheet_2-18-26-REVISED.pdf" target="_blank" rel="noopener">Fact Sheet: Protecting New Mexicans From PFAS in Consumer Products</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New Mexico Environment Dept: Fact Sheet: Protecting New Mexicans From PFAS in Consumer Products</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New Mexico Environment Dept</span>
+        <span class="meta-item">2027-01-01</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.env.nm.gov/pfas/wp-content/uploads/sites/25/2026/02/Regulation-Factsheet_2-18-26-REVISED.pdf" target="_blank" rel="noopener">Fact Sheet: New Mexico’s PFAS Protection Act Regulation</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New Mexico Environment Dept: Fact Sheet: New Mexico’s PFAS Protection Act Regulation</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New Mexico Environment Dept</span>
+        <span class="meta-item">2027-01-01</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/pfas-in-consumer-products-navigating-multi-state-compliance-and-regulatory-strategy-december-2-2025-1100-a-m-1200-p-m-est-via-webinar/" target="_blank" rel="noopener">“PFAS in consumer products: a multi-state compliance guide,” April 14, 2026, 11:00 a.m. – 12:00 p.m. (EDT), via webinar</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: “PFAS in consumer products: a multi-state compliance guide,” April 14, 2026, 11:00 a.m. – 12:00 p.m. (EDT), via webinar(October 22, 2025)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        <span class="meta-item">2026-04-14</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.lawbc.com/media-type/seminars-and-webinars/" target="_blank" rel="noopener">More
+								Seminars &amp; Webinars</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Bergeson &amp; Campbell: Seminars and Webinars“PFAS in consumer products: a multi-state compliance guide,” April 14, 2026, 11:00 a.m. – 12:00 p.m. (EDT), via webinar(October 22, 2025)More
+								Seminars &amp; Webinars</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: Bergeson &amp; Campbell</span>
+        <span class="meta-item">2026-04-14</span>
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dec.ny.gov/environmental-protection/per-and-polyfluoroalkyl-substances-pfas" target="_blank" rel="noopener">Per- and Polyfluoroalkyl Substances (PFAS)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New York DEC: Per- and Polyfluoroalkyl Substances (PFAS)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New York DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.regulatoryoversight.com/2025/05/new-jersey-ag-platkin-reaches-450m-pfas-settlement-with-3m/#more-21615" target="_blank" rel="noopener">Continue ReadingNew Jersey AG Platkin Reaches $450M PFAS Settlement With 3M</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Legal News: On May 13, New Jersey Attorney General (AG) Matthew Platkin announced a proposed $450 million settlement agreement with 3M regarding allegations that, among other issues, contamination of perfluoroalkyl and polyfluoroalkyl substances (PFAS) emanated from a site now owned by 3M. The settlement resolves these claims and New Jersey’s broader claims that the state and its agencies have or may have in </div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.regulatoryoversight.com/2023/12/federal-court-remands-pfas-lawsuit-by-michigan-ag-against-the-gerald-r-ford-international-airport-authority/" target="_blank" rel="noopener">Federal Court Remands PFAS Lawsuit by Michigan AG Against the Gerald R. Ford International Airport Authority</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Legal News: A federal judge has denied theGerald R. Ford International Airport Authority‘s attempt to move an environmental lawsuit to federal court to be filed by Michigan Attorney General (AG) Dana Nessel, alleging that per- and polyfluoroalkyl substance (PFAS) releases by the airport authority contaminated the regional drinking water supply.</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.regulatoryoversight.com/2023/07/tennessee-ag-sues-more-than-20-pfas-manufacturers/#more-18638" target="_blank" rel="noopener">Continue ReadingTennessee AG Sues More Than 20 PFAS Manufacturers</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Legal News: Tennessee AG Jonathan Skrmetti is suing more than 20 per- and polyfluoroalkyl substance (PFAS) manufacturers, including 3M and DuPont, seeking injunctive and monetary relief under the state’s public nuisance and uniform fraudulent transfer laws.</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.jdsupra.com/legalnews/new-mexico-enacts-sweeping-pfas-9914686/" target="_blank" rel="noopener">New Mexico Enacts Sweeping PFAS Labeling Obligation</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">JD Supra PFAS: New Mexico Enacts Sweeping PFAS Labeling Obligation</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Law Firm: JD Supra PFAS</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://natlawreview.com/article/hardwick-pfas-case-and-potential-class-11-million-people-back" target="_blank" rel="noopener">Court Rebuffs EPA Efforts To Stay PFAS Drinking Water Legal Challenge</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Court Rebuffs EPA Efforts To Stay PFAS Drinking Water Legal Challenge</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Legal News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/newsreleases/epa-announces-it-will-keep-maximum-contaminant-levels-pfoa-pfos" target="_blank" rel="noopener">Read the news release</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: Read the news release</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/pfas/pfas-resources-data-and-tools" target="_blank" rel="noopener">Find resources and tools</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: Find resources and tools</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/pfas/key-epa-actions-address-pfas" target="_blank" rel="noopener">Learn what EPA is doing</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: Learn what EPA is doing</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/system/files/documents/2021-10/pfas-roadmap_final-508.pdf" target="_blank" rel="noopener">PFAS Strategic Roadmap (pdf)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: PFAS Strategic Roadmap (pdf)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/newsreleases/epa-expands-toxic-chemical-reporting-strengthening-transparency-pfas-pollution" target="_blank" rel="noopener">EPA Expands Toxic Chemical Reporting, Strengthening Transparency on PFAS Pollution</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: EPA Expands Toxic Chemical Reporting, Strengthening Transparency on PFAS Pollution</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/newsreleases/trump-epa-highlights-major-year-one-pfas-actions-combat-risks-and-make-america-healthy" target="_blank" rel="noopener">Trump EPA Highlights Major Year One PFAS Actions to Combat Risks and Make America Healthy Again</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: Trump EPA Highlights Major Year One PFAS Actions to Combat Risks and Make America Healthy Again</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/newsreleases/epa-proposes-changes-make-pfas-reporting-requirements-more-practical-and-0" target="_blank" rel="noopener">EPA Proposes Changes to Make PFAS Reporting Requirements More Practical and Implementable, Reducing Regulatory Burden</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: EPA Proposes Changes to Make PFAS Reporting Requirements More Practical and Implementable, Reducing Regulatory Burden</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/pfas/press-releases-related-pfas" target="_blank" rel="noopener">Read more news releases</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: Read more news releases</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.epa.gov/pfas/forms/contact-us-about-pfoa-pfos-and-other-pfas" target="_blank" rel="noopener">Contact Us About PFOA, PFOS and Other PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EPA PFAS update: Contact Us About PFOA, PFOS and Other PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.pca.state.mn.us/air-water-land-climate/minnesotas-pfas-blueprint" target="_blank" rel="noopener">Minnesota&#39;s PFAS Blueprint</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Minnesota MPCA update: Minnesota&#39;s PFAS Blueprint</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">MN MPCA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.pca.state.mn.us/air-water-land-climate/pfas-use-prohibitions-and-reporting" target="_blank" rel="noopener">PFAS use prohibitions</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Minnesota MPCA update: PFAS use prohibitions</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">MN MPCA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.pca.state.mn.us/air-water-land-climate/2025-pfas-prohibitions" target="_blank" rel="noopener">2025 PFAS prohibitions</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Minnesota MPCA update: 2025 PFAS prohibitions</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">MN MPCA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.pca.state.mn.us/air-water-land-climate/disposing-of-products-containing-pfas" target="_blank" rel="noopener">Disposing of products containing PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Minnesota MPCA update: Disposing of products containing PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">MN MPCA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.pca.state.mn.us/air-water-land-climate/reporting-pfas-in-products" target="_blank" rel="noopener">Reporting PFAS in products</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Minnesota MPCA update: Reporting PFAS in products</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">MN MPCA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.pca.state.mn.us/air-water-land-climate/communications-toolkit-pfas-reduction-and-amaras-law" target="_blank" rel="noopener">PFAS communications toolkit</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Minnesota MPCA update: PFAS communications toolkit</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">MN MPCA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.wctv.tv/2026/03/23/scientists-forever-chemicals-probably-coming-tallahassee-wastewater-field-flowing-wakulla-springs/" target="_blank" rel="noopener">Scientists: ‘Forever chemicals’ probably coming from Tallahassee wastewater field</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: Scientists: ‘Forever chemicals’ probably coming from Tallahassee wastewater field</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.theguardian.com/environment/2026/mar/20/bentham-north-yorkshire-pfas-toxic-forever-chemicals-blood" target="_blank" rel="noopener">People in UK town found to have ‘alarming’ levels of toxic Pfas chemicals in blood</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: People in UK town found to have ‘alarming’ levels of toxic Pfas chemicals in blood</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.thenewlede.org/2026/03/sewage-sludge-battle-heats-up-as-health-advocates-appeal-move-to-dismiss-epa-lawsuit/" target="_blank" rel="noopener">Sewage sludge battle heats up as health advocates appeal move to dismiss U.S. EPA lawsuit</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: Sewage sludge battle heats up as health advocates appeal move to dismiss U.S. EPA lawsuit</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://wisconsinexaminer.com/2026/03/17/wisconsin-senate-unanimously-passes-pfas-legislation/" target="_blank" rel="noopener">Wisconsin Senate unanimously passes PFAS legislation</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: Wisconsin Senate unanimously passes PFAS legislation</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://edition.cnn.com/2026/03/17/health/pfas-low-bone-density-kids-wellness" target="_blank" rel="noopener">PFAS chemicals linked to lower bone density in children</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: PFAS chemicals linked to lower bone density in children</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.wpr.org/news/wisconsin-senate-passes-bills-pfas" target="_blank" rel="noopener">After years of gridlock, Wisconsin Senate passes bills addressing PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: After years of gridlock, Wisconsin Senate passes bills addressing PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.santafenewmexican.com/news/local_news/state-enters-into-agreements-with-four-southern-new-mexico-dairies-to-test-for-pfas/article_21b88c9a-b586-4e24-a0a2-9c81bd3bcaeb.html" target="_blank" rel="noopener">State enters into agreements with four southern New Mexico dairies to test for PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: State enters into agreements with four southern New Mexico dairies to test for PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.ehn.org/webinar-plastic-chemicals-infertility-what-we-know-now" target="_blank" rel="noopener">Webinar: Plastic, chemicals &amp; infertility: What we know now</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: Webinar: Plastic, chemicals &amp; infertility: What we know now</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cen.acs.org/business/instrumentation/Analytical-chemists-answer-call-PFAS/104/web/2026/03" target="_blank" rel="noopener">Analytical chemists answer the call on PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: Analytical chemists answer the call on PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.theguardian.com/environment/2026/mar/14/pfas-lobby-firms" target="_blank" rel="noopener">Some top U.S. lobbying firms are working both sides of the PFAS issue at the same time</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: Some top U.S. lobbying firms are working both sides of the PFAS issue at the same time</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://sourcenm.com/2026/03/12/new-mexico-announces-agreement-to-test-curry-county-dairies-groundwater-for-toxic-chemicals/" target="_blank" rel="noopener">New Mexico announces agreement to test Curry County dairies’ groundwater for toxic chemicals</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: New Mexico announces agreement to test Curry County dairies’ groundwater for toxic chemicals</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.ehn.org/pfas-water-childhood-cancer" target="_blank" rel="noopener">Childhood cancers linked to PFAS water contamination</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EHN PFAS coverage: Childhood cancers linked to PFAS water contamination</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Environmental Health News</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.saferstates.org/press-room/expansive-pfas-protections-take-effect-in-2026-as-states-lead-on-chemical-safety/" target="_blank" rel="noopener">Expansive PFAS protections take effect in 2026, as states lead on chemical safety</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Safer States: Expansive PFAS protections take effect in 2026, as states lead on chemical safety</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Safer States</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.saferstates.org/insights/states-lead-the-way-in-2025-momentum-on-pfas-plastics-and-toxic-chemicals/" target="_blank" rel="noopener">States Lead the Way in 2025: Momentum on PFAS, Plastics, and Toxic Chemicals</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Safer States: States Lead the Way in 2025: Momentum on PFAS, Plastics, and Toxic Chemicals</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Safer States</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.saferstates.org/press-room/pfas-forever-chemical-policies-expected-to-be-more-expansive-in-states-this-year-new-analysis-finds/" target="_blank" rel="noopener">PFAS “forever chemical” policies expected to be more expansive in states this year, new analysis finds</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Safer States: PFAS “forever chemical” policies expected to be more expansive in states this year, new analysis finds</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Safer States</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.saferstates.org/insights/states-lead-the-way-new-pfas-restrictions-going-into-effect-in-2025/" target="_blank" rel="noopener">States Lead the Way: New PFAS Restrictions Going into Effect in 2025</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Safer States: States Lead the Way: New PFAS Restrictions Going into Effect in 2025</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Safer States</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.governor.ny.gov/news/new-york-state-launches-private-well-pfas-testing-and-mitigation-rebate-pilot-program-six" target="_blank" rel="noopener">New York State Launches Private Well PFAS Testing and Mitigation Rebate Pilot Program in Six Counties</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New York DEC: New York State Launches Private Well PFAS Testing and Mitigation Rebate Pilot Program in Six Counties</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New York DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dec.ny.gov/sites/default/files/2025-12/pfasreport.pdf" target="_blank" rel="noopener">Report: A Decade of Progress on PFAS: Summarizing DEC’s Response</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New York DEC: Report: A Decade of Progress on PFAS: Summarizing DEC’s Response</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New York DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.health.ny.gov/environmental/water/drinking/emerging_pfas_publicwater.htm" target="_blank" rel="noopener">Public Water Systems and Drinking Water Standards for PFAS and Other Emerging Contaminants</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New York DEC: Public Water Systems and Drinking Water Standards for PFAS and Other Emerging Contaminants</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New York DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dec.ny.gov/docs/remediation_hudson_pdf/pfasprivatewellsfs.pdf" target="_blank" rel="noopener">Reducing PFAS in Private Wells (PDF)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New York DEC: Reducing PFAS in Private Wells (PDF)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New York DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dec.ny.gov/docs/remediation_hudson_pdf/classbfffoamfs.pdf" target="_blank" rel="noopener">Phasing Out PFAS-Containing Class B Firefighting Foam (ARRR/AR-AFFF)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New York DEC: Phasing Out PFAS-Containing Class B Firefighting Foam (ARRR/AR-AFFF)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New York DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dec.ny.gov/environmental-protection/water/emerging-contaminants" target="_blank" rel="noopener">addressing PFAS in New York’s waters</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New York DEC: addressing PFAS in New York’s waters</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New York DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://ecology.wa.gov/Waste-Toxics/Reducing-toxic-chemicals/Addressing-priority-toxic-chemicals" target="_blank" rel="noopener">Our work to address PFAS, PCBs and more</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Washington Ecology: Our work to address PFAS, PCBs and more</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Washington Ecology</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/environment/water-quality/engage-with-the-water-quality-control-division/regulating-per-and" target="_blank" rel="noopener">Regulating per- and polyfluoroalkyl substances (PFAS) in drinking water</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: Regulating per- and polyfluoroalkyl substances (PFAS) in drinking water</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/hm/pfas-afff-self-cert" target="_blank" rel="noopener">Class B firefighting foam containing PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: Class B firefighting foam containing PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/mapping/sampling-efforts" target="_blank" rel="noopener">PFAS sampling efforts across the state</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: PFAS sampling efforts across the state</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/mapping/contamination-evaluation" target="_blank" rel="noopener">PFAS contamination evaluation map</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: PFAS contamination evaluation map</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/health/pregnancy-and-children" target="_blank" rel="noopener">PFAS: pregnancy, infant feeding, and young children</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: PFAS: pregnancy, infant feeding, and young children</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/health/talk-to-your-provider" target="_blank" rel="noopener">Talking to your health care provider about PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: Talking to your health care provider about PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/health/providers-guide" target="_blank" rel="noopener">A guide for health care providers: addressing PFAS concerns</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: A guide for health care providers: addressing PFAS concerns</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/health/reducing-exposure" target="_blank" rel="noopener">Reducing your exposure to PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: Reducing your exposure to PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/health/consumer-products" target="_blank" rel="noopener">Guidance for PFAS in consumer products</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: Guidance for PFAS in consumer products</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://cdphe.colorado.gov/pfas/pfas-health/pfas-testing" target="_blank" rel="noopener">PFAS Testing and Assistance Program (PFAS TAP)</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Colorado CDPHE: PFAS Testing and Assistance Program (PFAS TAP)</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Colorado CDPHE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dec.vermont.gov/pfas/pfas-pollution-prevention-p2-projects" target="_blank" rel="noopener">PFAS Pollution Prevention Project</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Vermont DEC: PFAS Pollution Prevention Project</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Vermont DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.healthvermont.gov/environment/drinking-water/perfluoroalkyl-and-polyfluoroalkyl-substances-pfas-drinking-water" target="_blank" rel="noopener">Are PFAS harmful to my health?</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Vermont DEC: Are PFAS harmful to my health?</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Vermont DEC</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.oregon.gov/oha/PH/HealthyEnvironments/DrinkingWater/Operations/Pages/PFAS.aspx" target="_blank" rel="noopener">OHA Drinking Water Services PFAS website</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Oregon DEQ: OHA Drinking Water Services PFAS website</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Oregon DEQ</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://epa.illinois.gov/topics/water-quality/pfas/pfas-healthadvisory.html" target="_blank" rel="noopener">PFAS Statewide Health Advisory</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Illinois EPA: PFAS Statewide Health Advisory</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Illinois EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://epa.illinois.gov/topics/water-quality/pfas/pfas-statewide-investigation-network.html" target="_blank" rel="noopener">PFAS Statewide Investigation Network: Community Water Supply Sampling</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Illinois EPA: PFAS Statewide Investigation Network: Community Water Supply Sampling</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Illinois EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://epa.illinois.gov/topics/water-quality/pfas/pfas-investigation-network-interactive-dashboard-and-map.html" target="_blank" rel="noopener">PFAS Investigation Network Interactive Dashboard and Map</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Illinois EPA: PFAS Investigation Network Interactive Dashboard and Map</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Illinois EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://epa.illinois.gov/topics/water-quality/pfas/pfas-fish-sampling.html" target="_blank" rel="noopener">PFAS Sampling in the Fish Contaminant Monitoring Program</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Illinois EPA: PFAS Sampling in the Fish Contaminant Monitoring Program</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Illinois EPA</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://health.ri.gov/publications/factsheets/Health-Effects-of-PFAS.pdf" target="_blank" rel="noopener">Rhode Island Department of Health’s PFAS Health Effects Factsheet</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Rhode Island DEM: Rhode Island Department of Health’s PFAS Health Effects Factsheet</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Rhode Island DEM</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://health.ri.gov/water/for/privatewellowners/about/testing/" target="_blank" rel="noopener">guidance on testing well water for PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Rhode Island DEM: guidance on testing well water for PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Rhode Island DEM</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.env.nm.gov/wp-content/uploads/2025/02/2025-2-3-DOH-PFAS-Blood-Testing-Fact-Sheet.pdf" target="_blank" rel="noopener">Department of Health fact sheet on how to manage your PFAS exposure</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New Mexico Environment Dept: Department of Health fact sheet on how to manage your PFAS exposure</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New Mexico Environment Dept</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://service.web.env.nm.gov/urls/otmaAKGD" target="_blank" rel="noopener">State funds clean water connections for PFAS-exposed Curry County families</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New Mexico Environment Dept: State funds clean water connections for PFAS-exposed Curry County families</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New Mexico Environment Dept</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.env.nm.gov/wp-content/uploads/2024/08/NMED-NMHealth-to-hold-public-meeting-for-those-interested-in-free-PFAS-blood-testing-in-Clovis.pdf" target="_blank" rel="noopener">NMED, NMHealth to hold public meeting for those interested in free PFAS blood testing in Clovis</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New Mexico Environment Dept: NMED, NMHealth to hold public meeting for those interested in free PFAS blood testing in Clovis</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New Mexico Environment Dept</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.env.nm.gov/wp-content/uploads/2020/02/2020-02-10-Clovis-PR-final.pdf" target="_blank" rel="noopener">PFAS detected in Clovis public drinking water system</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New Mexico Environment Dept: PFAS detected in Clovis public drinking water system</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New Mexico Environment Dept</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.env.nm.gov/wp-content/uploads/2020/02/2020-02-07-PIO-Clovis-PR_-SPANISH.pdf" target="_blank" rel="noopener">PFAS detectadas en el sistema público de agua potable de Clovis</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">New Mexico Environment Dept: PFAS detectadas en el sistema público de agua potable de Clovis</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">New Mexico Environment Dept</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.michigan.gov/pfasresponse" target="_blank" rel="noopener">Michigan PFAS Action Response Team</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Michigan EGLE: Michigan PFAS Action Response Team</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Michigan EGLE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.michigan.gov/pfasresponse/drinking-water/statewide-survey" target="_blank" rel="noopener">Statewide PFAS Survey of Public Water Supplies</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Michigan EGLE: Statewide PFAS Survey of Public Water Supplies</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Michigan EGLE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.michigan.gov/pfasresponse/investigations/sites-aoi" target="_blank" rel="noopener">PFAS Sites and Areas of Interest</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Michigan EGLE: PFAS Sites and Areas of Interest</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Michigan EGLE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.michigan.gov/pfasresponse/investigations/firefighting-foam" target="_blank" rel="noopener">Go to Firefighting Foam and PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Michigan EGLE: Go to Firefighting Foam and PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Michigan EGLE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.michigan.gov/pfasresponse/investigations/sampling-guidance/analyte-list" target="_blank" rel="noopener">PFAS Minimum Laboratory Analyte List</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Michigan EGLE: PFAS Minimum Laboratory Analyte List</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Michigan EGLE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.michigan.gov/pfasresponse/-/media/Project/Websites/PFAS-Response/Drinking-Water/Certified-PFAS-Labs.pdf?rev=52e44c5f62724537bf0c10c31774256e&amp;hash=1DDC9D033BA2ABC840E9DF00AF7D7D27" target="_blank" rel="noopener">List of Certified PFAS Laboratories</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Michigan EGLE: List of Certified PFAS Laboratories</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Michigan EGLE</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/Advisories.html" target="_blank" rel="noopener">Consumption Advisories and PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: Consumption Advisories and PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/DaneCounty.html" target="_blank" rel="noopener">PFAS Contamination in Dane County</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Contamination in Dane County</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/Marinette.html" target="_blank" rel="noopener">PFAS Contamination in the Marinette and Peshtigo Area</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Contamination in the Marinette and Peshtigo Area</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/Campbell.html" target="_blank" rel="noopener">PFAS Contamination in the Town of Campbell and French Island</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Contamination in the Town of Campbell and French Island</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/Stella.html" target="_blank" rel="noopener">PFAS Contamination in the Town of Stella</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Contamination in the Town of Stella</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/Impacts.html" target="_blank" rel="noopener">Environmental and Health Impacts of PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: Environmental and Health Impacts of PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/Cleanup.html" target="_blank" rel="noopener">PFAS Investigation and Cleanup</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Investigation and Cleanup</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/Labs.html" target="_blank" rel="noopener">PFAS Lab Analysis in Wisconsin</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Lab Analysis in Wisconsin</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/Groundwater/PFASStudy.html" target="_blank" rel="noopener">PFAS Ambient Shallow Groundwater Study</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Ambient Shallow Groundwater Study</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/topic/PFAS/PrivateWells.html" target="_blank" rel="noopener">PFAS Contamination in Private Wells</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS Contamination in Private Wells</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://dnr.wisconsin.gov/node/34086" target="_blank" rel="noopener">PFAS_Topic Contact_PFAS Contacts</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wisconsin DNR: PFAS_Topic Contact_PFAS Contacts</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wisconsin DNR</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://deq.mt.gov/files/Land\Documents/2024_PFAS_ActionPlan_ProgressReport_FINAL.pdf" target="_blank" rel="noopener">2024 PFAS Action Plan Progress Report</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Montana DEQ: 2024 PFAS Action Plan Progress Report</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Montana DEQ</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://deq.mt.gov/files/DEQAdmin/PFAS/March 2022 PFAS Fact Sheet.pdf" target="_blank" rel="noopener">PFAS and Your Health Fact Sheet</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Montana DEQ: PFAS and Your Health Fact Sheet</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Montana DEQ</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://healthandwelfare.idaho.gov/health-wellness/environmental-health/and-polyfluoroalkyl-substances-pfas" target="_blank" rel="noopener">Department of Health and Welfare PFAS Information</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Idaho DEQ: Department of Health and Welfare PFAS Information</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Idaho DEQ</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="http://deq.wyoming.gov/water-quality/emerging-contaminants/pfas-in-drinking-water-monitoring-assistance-program/" target="_blank" rel="noopener">PFAS in Drinking Water Monitoring Assistance Program</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Wyoming DEQ: PFAS in Drinking Water Monitoring Assistance Program</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Wyoming DEQ</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.assent.com/blog/canadian-pfas-reporting-crash-course/" target="_blank" rel="noopener">Canadian PFAS Reporting Crash Course</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Assent supply chain compliance: Canadian PFAS Reporting Crash Course</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Assent</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.assent.com/resources/guide/your-proactive-pfas-compliance-plan/" target="_blank" rel="noopener">Your Proactive PFAS Compliance Plan</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Assent supply chain compliance: Your Proactive PFAS Compliance Plan</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Assent</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.assent.com/resources/webinar/preparing-for-pfas-rules-in-2026-what-manufacturers-need-to-know-now/" target="_blank" rel="noopener">Preparing for PFAS Rules in 2026: What Manufacturers Need to Know Now</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">Assent supply chain compliance: Preparing for PFAS Rules in 2026: What Manufacturers Need to Know Now</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">Assent</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.ewg.org/research/ewg-25-million-pounds-toxic-pfas-pesticides-spread-california-farmland-annually" target="_blank" rel="noopener">a new analysis and...</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EWG: WASHINGTON – Every year, an average of 2.5 million pounds of pesticides containing the “forever chemicals” known as PFAS are sprayed on California crop fields, according toa new analysis and...</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EWG</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.ewg.org/interactive-maps/pfas_contamination/map/" target="_blank" rel="noopener">PFAS contamination in the U.S.</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EWG: PFAS contamination in the U.S.</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EWG</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.ewg.org/interactive-maps/2021_suspected_industrial_discharges_of_pfas/map/" target="_blank" rel="noopener">Suspected industrial discharges of PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EWG: Suspected industrial discharges of PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EWG</span>
+        
+      </div>
+    </div>
+    <div class="article-card">
+      <div class="article-head">
+        <div class="article-title"><a href="https://www.ewg.org/interactive-maps/2020-military-pfas-sites/map/" target="_blank" rel="noopener">Military sites with known or suspected discharges of PFAS</a></div>
+        <span class="badge badge-direct">Direct</span>
+      </div>
+      <div class="article-snippet">EWG: Military sites with known or suspected discharges of PFAS</div>
+      <div class="article-meta">
+        <span class="badge badge-topic">PFAS</span>
+        <span class="meta-item">EWG</span>
+        
+      </div>
+    </div>
+    
+    
+  </div>
+
+  <!-- Deadlines -->
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Related Deadlines</span>
+      <span class="section-count">8</span>
+    </div>
+    
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">Minnesota PRISM Registration Deadline for PFAS Manufacturers</div>
+        <div class="deadline-desc">Manufacturers selling PFAS-intentionally-added products must complete mandatory PRISM portal registration under Minnesota&#39;s Amara&#39;s Law requirements.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">Minnesota</span>
+          <span class="badge badge-topic">pfas</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">Minnesota PRISM Portal PFAS Registration Deadline</div>
+        <div class="deadline-desc">Register PFAS products in Minnesota&#39;s updated PRISM reporting system by this deadline.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">Minnesota</span>
+          <span class="badge badge-topic">PFAS</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">Minnesota PRISM PFAS Reporting Deadline</div>
+        <div class="deadline-desc">Submit PFAS reporting under Minnesota&#39;s PRISM portal ahead of the July 1, 2026 deadline for Amara&#39;s Law compliance.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">Minnesota</span>
+          <span class="badge badge-topic">pfas</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">Minnesota PFAS Product Registration Deadline</div>
+        <div class="deadline-desc">Manufacturers must register PFAS-containing products in Minnesota&#39;s PRISM reporting system.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-high">HIGH</span>
+          <span class="meta-item">Minnesota</span>
+          <span class="badge badge-topic">PFAS</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jan</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">New Mexico PFAS Labeling Requirement Compliance</div>
+        <div class="deadline-desc">Manufacturers must comply with New Mexico&#39;s PFAS labeling requirements for consumer products sold in the state.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">New Mexico</span>
+          <span class="badge badge-topic">PFAS</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA TRI Reporting for PFAS (Reporting Year 2026)</div>
+        <div class="deadline-desc">Facilities must submit TRI reports including newly-added PFAS substances for Reporting Year 2026 by the July 1, 2027 deadline.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">pfas</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA TRI PFAS Reporting Year 2026 Submission</div>
+        <div class="deadline-desc">Submit Toxics Release Inventory reports for PFAS substances covered under Reporting Year 2026 obligations.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">PFAS</span>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-card">
+      <div class="deadline-date-block">
+        <div class="deadline-month">Jul</div>
+        <div class="deadline-day">01</div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="deadline-title">EPA PFAS TRI Reporting for Year 2026</div>
+        <div class="deadline-desc">Submit Toxics Release Inventory reports for PFAS for reporting year 2026 to EPA.</div>
+        <div class="deadline-meta">
+          <span class="badge badge-medium">MEDIUM</span>
+          <span class="meta-item">Federal</span>
+          <span class="badge badge-topic">PFAS</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  <!-- Bills -->
+  
+
+  <!-- Subscribe -->
+  <div class="subscribe-card">
+    <div class="subscribe-eyebrow">&#9670; Intelligence Subscription</div>
+    <div class="subscribe-title">Subscribe to PFAS Updates</div>
+    <div class="subscribe-desc">
+      Get an email whenever new articles, deadlines, or bills matching "PFAS" are found.
+      Each alert links back to a refreshed version of this page with updated AI analysis.
+    </div>
+    <div class="subscribe-features">
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>New article alerts</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Deadline reminders</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>Bill status changes</div>
+      <div class="subscribe-feature"><div class="subscribe-feature-dot"></div>One-click unsubscribe</div>
+    </div>
+    <form class="subscribe-form" action="/subscribe" method="POST" id="subscribe-form">
+      <input type="hidden" name="keyword" value="PFAS">
+      <input class="subscribe-input" type="email" name="email"
+             placeholder="your@email.com" required autocomplete="email">
+      <button class="subscribe-btn" type="submit">Subscribe to PFAS</button>
+    </form>
+    <div class="subscribe-note" id="subscribe-note">
+      Requires the local server: <code style="color:rgba(255,255,255,0.5);">python server.py</code>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  var form = document.getElementById('subscribe-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      
+      e.preventDefault();
+      document.getElementById('subscribe-note').textContent = 'Start the local server first: python server.py';
+      document.getElementById('subscribe-note').style.color = '#CB7B0A';
+      
+    });
+  }
+</script>
+
+</body>
+</html>
