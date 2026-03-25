@@ -1,0 +1,2835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forced Labor &amp; Supply Chain Transparency — Compliance Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --topic-color: #7B241C;
+      --bg: #F4F5F7;
+      --surface: #FFFFFF;
+      --surface-dark: #1A1D23;
+      --border: #D8DBE0;
+      --border-light: #E8EAED;
+      --text-primary: #111318;
+      --text-secondary: #4A4F5C;
+      --text-muted: #7A8194;
+      --red: #D63031;
+      --red-bg: #FEF0F0;
+      --red-border: #FACACA;
+      --amber: #CB7B0A;
+      --amber-bg: #FEF6E8;
+      --green: #0F7B3F;
+      --green-bg: #EEFAF3;
+      --green-border: #B2E0C7;
+      --blue: #1565C0;
+      --blue-bg: #EBF3FD;
+      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+      --article-sidebar-w: 440px;
+      --topbar-h: 52px;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: clamp(13px, 1vw, 15px); }
+    body {
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOPBAR ─────────────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: var(--surface-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      z-index: 200;
+      border-bottom: 3px solid var(--topic-color);
+    }
+    .topbar-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.55);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 4px 10px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .topbar-back:hover { color: #fff; border-color: rgba(255,255,255,0.3); text-decoration: none; }
+    .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.12); }
+    .topbar-topic {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      color: var(--topic-color);
+    }
+    .topbar-label { color: rgba(255,255,255,0.45); font-size: 12px; font-family: var(--mono); }
+    .topbar-date { margin-left: auto; color: rgba(255,255,255,0.35); font-size: 11px; font-family: var(--mono); }
+
+    /* ── LAYOUT: main content + fixed right article sidebar ─────── */
+    .layout {
+      display: flex;
+      margin-top: var(--topbar-h);
+      min-height: calc(100vh - var(--topbar-h));
+    }
+
+    /* ── MAIN CONTENT (center, scrollable) ──────────────────────── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      margin-right: var(--article-sidebar-w);
+      padding: 24px 28px 60px;
+      overflow-y: auto;
+    }
+
+    /* ── ARTICLE SIDEBAR (fixed right) ──────────────────────────── */
+    .article-sidebar {
+      position: fixed;
+      top: var(--topbar-h);
+      right: 0;
+      width: var(--article-sidebar-w);
+      height: calc(100vh - var(--topbar-h));
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    .article-sidebar-head {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+    .article-sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .article-sidebar-title::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--topic-color);
+    }
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-search {
+      flex: 1;
+      min-width: 120px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      outline: none;
+    }
+    .filter-search:focus { border-color: var(--topic-color); background: var(--surface); }
+    .filter-select {
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 11px;
+      font-family: var(--mono);
+      background: var(--bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      outline: none;
+    }
+    .filter-select:focus { border-color: var(--topic-color); }
+    .filter-count {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .article-list-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .article-list-scroll::-webkit-scrollbar { width: 4px; }
+    .article-list-scroll::-webkit-scrollbar-track { background: transparent; }
+    .article-list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .month-divider {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      padding: 10px 16px 3px;
+    }
+
+    .article-item {
+      padding: 9px 16px;
+      border-left: 2px solid transparent;
+      transition: border-color 0.1s, background 0.1s;
+    }
+    .article-item:hover { background: var(--bg); }
+    .article-item.is-new { border-left-color: var(--topic-color); }
+    .article-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+      margin-bottom: 3px;
+      flex-wrap: wrap;
+    }
+    .article-headline {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.35;
+      flex: 1;
+      min-width: 0;
+    }
+    .article-headline a { color: var(--text-primary); }
+    .article-headline a:hover { color: var(--topic-color); text-decoration: none; }
+    .article-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-snippet {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .no-results {
+      display: none;
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .no-results.visible { display: block; }
+
+    /* ── BADGES ─────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: 9px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .05em;
+      border-radius: 2px;
+      padding: 1px 4px;
+      flex-shrink: 0;
+    }
+    .badge-new { background: var(--topic-color); color: #fff; }
+    .badge-high { background: var(--red-bg); color: var(--red); }
+    .badge-medium { background: var(--amber-bg); color: var(--amber); }
+    .badge-low { background: var(--green-bg); color: var(--green); }
+
+    /* ── MAIN CONTENT WIDGETS ───────────────────────────────────── */
+
+    /* Section header row */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--topic-color);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+    }
+    .section-title-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+    }
+
+    /* Panel card */
+    .panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-title-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--topic-color);
+    }
+
+    /* KPI row */
+    .kpi-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      border-top: 3px solid var(--topic-color);
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--topic-color);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* Insight blocks */
+    .insight-block {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .insight-block + .insight-block { margin-top: 12px; border-top: 1px solid var(--border-light); padding-top: 12px; }
+    .insight-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--topic-color);
+      margin-bottom: 4px;
+    }
+    .insight-bullets {
+      list-style: none;
+      margin-top: 6px;
+    }
+    .insight-bullets li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 3px 0 3px 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .insight-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 2px;
+      color: var(--topic-color);
+      font-weight: 700;
+    }
+    .insight-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .04em;
+      border-radius: 3px;
+      padding: 2px 6px;
+      margin: 4px 3px 0 0;
+    }
+    .insight-badge.hi { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .insight-badge.med { background: var(--amber-bg); color: var(--amber); border: 1px solid #F5DFA6; }
+    .insight-badge.lo { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .insight-badge-neutral { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* Breaking news alert */
+    .breaking-alert {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
+      color: #8B1A1A;
+    }
+    .breaking-alert-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--red);
+      margin-bottom: 3px;
+    }
+
+    /* Trend chart */
+    .trend-chart-wrap { margin: 4px 0 6px; }
+    .trend-chart-axis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Summary text */
+    .summary-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Impact rows */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 8px 12px;
+    }
+    .impact-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text-muted);
+      padding-top: 2px;
+      line-height: 1.4;
+    }
+    .impact-text { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+    .impact-list {
+      list-style: none;
+      margin: 0;
+    }
+    .impact-list li {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      padding: 2px 0 2px 12px;
+      position: relative;
+    }
+    .impact-list li::before {
+      content: '›';
+      position: absolute; left: 1px;
+      color: var(--topic-color); font-weight: 700;
+    }
+
+    /* Strategy block */
+    .strategy-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      border-left: 3px solid var(--topic-color);
+      padding-left: 12px;
+    }
+
+    /* Deadline list */
+    .dl-list { display: flex; flex-direction: column; gap: 0; }
+    .dl-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .dl-item:last-child { border-bottom: none; }
+    .dl-days {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 52px;
+      text-align: right;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    .dl-days.urgent { color: var(--red); }
+    .dl-days.soon { color: var(--amber); }
+    .dl-days.normal { color: var(--text-muted); }
+    .dl-pipe {
+      width: 2px;
+      min-height: 38px;
+      border-radius: 1px;
+      flex-shrink: 0;
+      background: var(--border);
+      align-self: stretch;
+    }
+    .dl-body { flex: 1; min-width: 0; }
+    .dl-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; line-height: 1.35; }
+    .dl-meta { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+
+    /* Bills table */
+    .bill-grid { display: flex; flex-direction: column; gap: 0; }
+    .bill-row {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-light);
+      align-items: flex-start;
+    }
+    .bill-row:last-child { border-bottom: none; }
+    .bill-id {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--topic-color);
+      min-width: 68px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    .bill-body { flex: 1; min-width: 0; }
+    .bill-title-text { font-size: 12.5px; font-weight: 500; color: var(--text-primary); line-height: 1.35; margin-bottom: 2px; }
+    .bill-action-text { font-size: 11px; color: var(--text-muted); }
+    .bill-stage-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      padding: 1px 4px;
+      flex-shrink: 0;
+      background: var(--bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      margin-top: 1px;
+    }
+    .bill-stage-tag.enacted_watching { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+    .bill-stage-tag.passed_one, .bill-stage-tag.advanced { background: var(--amber-bg); color: var(--amber); border-color: #F5DFA6; }
+
+    /* ── RESOURCE CARDS ─────────────────────────────────────────── */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .resource-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 18px 18px 16px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--topic-color);
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s;
+      min-height: 96px;
+      position: relative;
+      overflow: hidden;
+    }
+    .resource-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(var(--topic-color-rgb, 192,57,43), 0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .resource-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      border-color: var(--topic-color);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+    .resource-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      transition: background 0.18s;
+    }
+    .resource-card:hover .resource-card-icon {
+      background: color-mix(in srgb, var(--topic-color) 10%, white);
+    }
+    .resource-card-body { flex: 1; }
+    .resource-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .resource-card-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .resource-card-arrow {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      font-size: 13px;
+      color: var(--topic-color);
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .resource-card:hover .resource-card-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    /* Two-column grid for panels */
+    .panel-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .panel-grid-2 .panel { margin-bottom: 0; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .article-sidebar {
+        position: static;
+        width: 100%;
+        height: 500px;
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+      .main { margin-right: 0; }
+      .layout { flex-direction: column; }
+      .panel-grid-2 { grid-template-columns: 1fr; }
+      .resource-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="topbar-back" href="dashboard.html">&#8592; Dashboard</a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-topic">ForcedLabor</span>
+  <span class="topbar-label">Forced Labor &amp; Supply Chain Transparency</span>
+  <span class="topbar-date">24 Mar 2026</span>
+</div>
+
+<div class="layout">
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- KPI Row --><div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-value">69</div>
+        <div class="kpi-label">Articles / 6 mo</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">0</div>
+        <div class="kpi-label">New This Week</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">29</div>
+        <div class="kpi-label">Active Bills</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">0</div>
+        <div class="kpi-label">Deadlines</div>
+      </div>
+    </div>
+
+    <!-- AI Intelligence Summary -->
+    
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">AI Intelligence</span>
+      <div class="section-title-line"></div>
+    </div>
+
+    
+    <div class="breaking-alert">
+      <div class="breaking-alert-label">&#9679; Breaking</div>
+      The March 17, 2026 Federal Register initiation of Section 301 investigations explicitly targeting forced labor enforcement failures is the week&#39;s most material development — this is directly relevant to our import posture and could result in new tariffs or import restrictions on goods from countries acting as transshipment points for Xinjiang-origin materials, which is a known risk vector for our aluminum and electronics supply chains.
+    </div>
+    
+
+    <div class="panel-grid-2">
+      
+      <div class="panel">
+        <div class="panel-title"><div class="panel-title-dot"></div>6-Month Trend</div>
+        <div class="insight-block">The regulatory environment around forced labor and supply chain transparency is accelerating, not decelerating — driven by the Trump administration&#39;s aggressive use of trade tools (Section 301, tariffs, executive orders) layered on top of the standing UFLPA enforcement architecture that CBP continues to operate. The dominant theme is the convergence of forced labor enforcement with broader trade protectionism: Section 301 investigations now explicitly incorporate forced labor failure-to-enforce as a trade violation trigger, expanding the universe of countries and supply chains under scrutiny beyond Xinjiang. This creates a compounding risk environment where both the UFLPA rebuttable presumption and new tariff-based penalties can apply simultaneously to the same import.</div>
+      </div>
+      
+      
+      <div class="panel">
+        <div class="panel-title"><div class="panel-title-dot"></div>Last 30 Days</div>
+        <div class="insight-block">The most significant filing in the past 30 days is the March 17 Federal Register notice initiating Section 301 investigations against economies failing to enforce forced labor import prohibitions — this is a structural escalation, not a routine enforcement action, and signals the administration intends to use tariff leverage to compel trading partners to police their own supply chains for forced labor. No UFLPA-specific detention data or new Entity List additions were captured in this article set for the 30-day window, but the Section 301 action is the dominant signal. The practical implication is that aluminum, glass, and electronics routed through third-country transshipment hubs are now at elevated risk of both UFLPA detention and Section 301 tariff action simultaneously.</div>
+      </div>
+      
+    </div>
+
+    
+    <div class="panel">
+      <div class="panel-title"><div class="panel-title-dot"></div>Strategic Priorities</div>
+      <ul class="insight-bullets">
+        
+        <li>Immediately audit all China-sourced component suppliers (aluminum, glass, electronics, cotton seals) for UFLPA Entity List status and initiate country-of-origin declarations that trace to raw material level — prioritize aluminum extrusion suppliers given the Section 301 transshipment targeting; have documentation packages ready for CBP in advance of any detention, not after.</li>
+        
+        <li>Assess third-country transshipment exposure in your aluminum and glass supply chains — identify any tier-1 or tier-2 suppliers sourcing Xinjiang-origin feedstock through Vietnam, Malaysia, Mexico, or other hubs, as these routes are now the explicit target of the new Section 301 investigation and no longer provide safe harbor from either UFLPA or tariff risk.</li>
+        
+        <li>Establish a border detention response protocol with your customs broker and outside trade counsel: given CBP staffing reductions, detention resolution timelines are extending — pre-position alternative sourcing options or safety stock for the highest-risk critical-path components (aluminum profiles, automation sensors) to maintain a production buffer of at least 60 days against a detention scenario.</li>
+        
+      </ul>
+      
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light);"><span class="insight-badge hi">HIGH IMPACT</span>
+        <span class="insight-badge insight-badge-neutral">69 articles / 6mo</span>
+      </div>
+      
+    </div>
+    
+    
+
+    <!-- Article Volume Trend -->
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">30-Day Article Volume</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="panel">
+      <div class="trend-chart-wrap">
+        <svg width="100%" height="68" viewBox="0 0 520 68"
+             preserveAspectRatio="none" style="overflow:visible;display:block;">
+          <defs>
+            <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7B241C" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#7B241C" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs><polygon points="0.0,64 0.0,58.6 17.9,58.6 17.9,57.3 35.9,57.3 35.9,60.0 53.8,60.0 53.8,58.6 71.7,58.6 71.7,58.6 89.7,58.6 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,58.6 179.3,58.6 179.3,58.6 197.2,58.6 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,58.6 304.8,58.6 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,60.0 394.5,60.0 394.5,58.6 412.4,58.6 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,50.5 466.2,50.5 466.2,60.0 484.1,60.0 484.1,60.0 502.1,60.0 502.1,50.5 520.0,50.5 520.0,0.0 520.0,64" fill="url(#chart-fill)"/>
+          <polyline points="0.0,58.6 17.9,58.6 17.9,57.3 35.9,57.3 35.9,60.0 53.8,60.0 53.8,58.6 71.7,58.6 71.7,58.6 89.7,58.6 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,58.6 179.3,58.6 179.3,58.6 197.2,58.6 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,58.6 304.8,58.6 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,60.0 394.5,60.0 394.5,58.6 412.4,58.6 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,50.5 466.2,50.5 466.2,60.0 484.1,60.0 484.1,60.0 502.1,60.0 502.1,50.5 520.0,50.5 520.0,0.0 " fill="none" stroke="#7B241C" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <div class="trend-chart-axis">
+          <span>30 days ago</span>
+          <span style="font-weight:700;color:var(--text-primary);">67 articles in 30 days</span>
+          <span>Today</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- This Week Summary -->
+    
+
+    <!-- Company Impact -->
+    
+    
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">Company Impact</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="panel">
+      <div class="impact-grid">
+        
+        
+        <span class="impact-label">Supply Chain</span>
+        <span class="impact-text">Aluminum (windows/frames), electronics (automation components/sensors), glass (polysilicon supply chain), and cotton-based seals/gaskets sourced from China carry direct Xinjiang exposure risk — CBP detention of any of these creates an operational shutdown scenario.</span>
+        
+        
+        <span class="impact-label">Actions</span>
+        <ul class="impact-list"><li>Audit all active China-sourced component purchase orders against the current UFLPA Entity List; flag any supplier or sub-supplier match for immediate sourcing review and prepare CBP rebuttal documentation package for high-risk SKUs (aluminum, electronics, glass, cotton).</li><li>Submit public comment to USTR&#39;s Section 301 forced labor investigation docket to document your supply chain exposure and protect your ability to import affected component categories if tariff or restriction actions follow.</li></ul>
+        
+        
+        <span class="impact-label">Supplier</span>
+        <ul class="impact-list"><li>Issue formal country-of-origin and sub-supplier disclosure requests to all China-based tier-1 suppliers in electronics, aluminum, glass, and seal/gasket categories, requiring written confirmation of no Xinjiang-origin materials and documentation traceable to the mine/factory level.</li><li>Add UFLPA Entity List screening as a standing quarterly check in supplier qualification procedures and notify all distributors of China-manufactured components that entity list additions trigger immediate shipment holds — they must proactively communicate any upstream supplier changes.</li></ul>
+        
+      </div>
+    </div>
+    
+
+    <!-- Strategy Note -->
+    
+    
+
+    <!-- Upcoming Deadlines -->
+    
+
+    <!-- Legislative Activity -->
+    
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">Legislative Activity</span>
+      <span style="font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-left:4px;">(29 active bills)</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="panel">
+      <div class="bill-grid">
+        
+        <div class="bill-row">
+          <div class="bill-id">CA AB2653</div>
+          <div class="bill-body">
+            <div class="bill-title-text">State contracts: certification process: Sweatfree AI Code of Conduct.</div>
+            
+            <div class="bill-action-text">Re-referred to Com. on G.O. · 2026-03-23</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US SB688</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Fighting Foreign Illegal Seafood Harvests Act of 2025</div>
+            
+            <div class="bill-action-text">Passed Senate with an amendment by Unanimous Consent. (text of amendment in the… · 2026-03-22</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">IL SB3518</div>
+          <div class="bill-body">
+            <div class="bill-title-text">PROCUREMENT-NO DEFORESTATION</div>
+            
+            <div class="bill-action-text">Rule 2-10 Committee Deadline Established As March 27, 2026 · 2026-03-13</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">NY A10626</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishes a New York state prison labor board to ensure that all labor programs comply with the r…</div>
+            
+            <div class="bill-action-text">referred to correction · 2026-03-13</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">IL HB5038</div>
+          <div class="bill-body">
+            <div class="bill-title-text">PROCUREMENT-NO DEFORESTATION</div>
+            
+            <div class="bill-action-text">Assigned to State Government Administration Committee · 2026-03-04</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">NY S00438</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishes the prescription drug supply chain transparency act; requires pharmacy services adminis…</div>
+            
+            <div class="bill-action-text">AMENDED ON THIRD READING 438A · 2026-02-25</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MI HB5288</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Economic development: Michigan strategic fund; compliance with the Uyghur forced labor prevention a…</div>
+            
+            <div class="bill-action-text">Referred To Committee On Economic And Community Development · 2026-02-11</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB7516</div>
+          <div class="bill-body">
+            <div class="bill-title-text">No Funds for Forced Labor Act</div>
+            
+            <div class="bill-action-text">Referred to the House Committee on Financial Services. · 2026-02-11</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">CA AB1245</div>
+          <div class="bill-body">
+            <div class="bill-title-text">State contracts: certification process: forced labor and human trafficking.</div>
+            
+            <div class="bill-action-text">In Senate. Read first time. To Com. on RLS. for assignment. · 2026-01-29</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MI HB5460</div>
+          <div class="bill-body">
+            <div class="bill-title-text">State management: purchasing; state procurement of electric motor vehicles made with forced labor; …</div>
+            
+            <div class="bill-action-text">Bill Electronically Reproduced 01/21/2026 · 2026-01-22</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">WV HB4586</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Relating to government procurement of electric vehicles</div>
+            
+            <div class="bill-action-text">To House Government Adminstration · 2026-01-20</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag introduced">introduced</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US SB3471</div>
+          <div class="bill-body">
+            <div class="bill-title-text">EFFECTIVE Food Procurement Act Enabling Farmer, Food worker, Environmental, and Climate Targets thr…</div>
+            
+            <div class="bill-action-text">Committee on Small Business and Entrepreneurship. Hearings held. · 2026-01-14</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">NJ A1284</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Prohibits public procurement of electric vehicles that may have been made through forced labor.</div>
+            
+            <div class="bill-action-text">Introduced, Referred to Assembly Environment and Solid Waste Committee · 2026-01-13</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">NY S01208</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishes a New York state prison labor board to ensure that all labor programs comply with the r…</div>
+            
+            <div class="bill-action-text">REFERRED TO CRIME VICTIMS, CRIME AND CORRECTION · 2026-01-07</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB6706</div>
+          <div class="bill-body">
+            <div class="bill-title-text">EFFECTIVE Food Procurement Act Enabling Farmer, Food worker, Environmental, and Climate Targets thr…</div>
+            
+            <div class="bill-action-text">Referred to the House Committee on Agriculture. · 2025-12-15</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB3756</div>
+          <div class="bill-body">
+            <div class="bill-title-text">FISH Act of 2025 Fighting Foreign Illegal Seafood Harvests Act of 2025</div>
+            
+            <div class="bill-action-text">Subcommittee Hearings Held · 2025-11-19</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MI SB0715</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Economic development: Michigan strategic fund; compliance with the Uyghur forced labor prevention a…</div>
+            
+            <div class="bill-action-text">Referred To Committee On Finance, Insurance, And Consumer Protection · 2025-11-13</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB2635</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Uyghur Policy Act of 2025</div>
+            
+            <div class="bill-action-text">Received in the Senate and Read twice and referred to the Committee on Foreign … · 2025-09-03</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">CA AB381</div>
+          <div class="bill-body">
+            <div class="bill-title-text">State contracts: certification process: forced labor and human trafficking.</div>
+            
+            <div class="bill-action-text">In committee: Held under submission. · 2025-08-29</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB4830</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Uyghur Genocide Accountability and Sanctions Act of 2025</div>
+            
+            <div class="bill-action-text">Referred to the Committee on Foreign Affairs, and in addition to the Committees… · 2025-08-01</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US SB2560</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Uyghur Genocide Accountability and Sanctions Act of 2025</div>
+            
+            <div class="bill-action-text">Read twice and referred to the Committee on Foreign Relations. · 2025-07-30</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB4434</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Cosmetic Supply Chain Transparency Act of 2025</div>
+            
+            <div class="bill-action-text">Referred to the House Committee on Energy and Commerce. · 2025-07-16</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US SB1685</div>
+          <div class="bill-body">
+            <div class="bill-title-text">No Funds for Forced Labor Act</div>
+            
+            <div class="bill-action-text">Read twice and referred to the Committee on Foreign Relations. · 2025-05-08</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB1724</div>
+          <div class="bill-body">
+            <div class="bill-title-text">No Dollars to Uyghur Forced Labor Act</div>
+            
+            <div class="bill-action-text">Received in the Senate and Read twice and referred to the Committee on Foreign … · 2025-05-06</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US SB1542</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Uyghur Policy Act of 2025</div>
+            
+            <div class="bill-action-text">Read twice and referred to the Committee on Foreign Relations. · 2025-04-30</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US SB1358</div>
+          <div class="bill-body">
+            <div class="bill-title-text">TASK Act Transaction and Sourcing Knowledge Act</div>
+            
+            <div class="bill-action-text">Read twice and referred to the Committee on Banking, Housing, and Urban Affairs. · 2025-04-08</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB2349</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Uyghur Human Rights Protection Act</div>
+            
+            <div class="bill-action-text">Referred to the Committee on the Judiciary, and in addition to the Committee on… · 2025-03-25</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB2310</div>
+          <div class="bill-body">
+            <div class="bill-title-text">COBALT Supply Chain Act China’s Odious and Brutally Atrocious Labor Trafficking Supply Chain Act</div>
+            
+            <div class="bill-action-text">Referred to the Committee on Ways and Means, and in addition to the Committees … · 2025-03-24</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">US HB512</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Imported Seafood Safety Standards Act</div>
+            
+            <div class="bill-action-text">Referred to the Committee on Energy and Commerce, and in addition to the Commit… · 2025-01-16</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+      </div>
+    </div>
+    
+
+    <!-- Resources -->
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">Resources</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="resource-grid" style="margin-bottom:24px;">
+      
+      
+      
+    </div>
+
+  </main>
+
+  <!-- ── RIGHT ARTICLE SIDEBAR ─────────────────────────────────── -->
+  <aside class="article-sidebar">
+    <div class="article-sidebar-head">
+      <div class="article-sidebar-title">Article Archive</div>
+      <div class="filter-row">
+        <input class="filter-search" id="tp-search" type="text" placeholder="Search…" oninput="filterArticles()">
+        <select class="filter-select" id="tp-period" onchange="filterArticles()">
+          <option value="">All time</option>
+          <option value="7">7 days</option>
+          <option value="30">30 days</option>
+          <option value="90">90 days</option>
+        </select>
+      </div>
+      <div class="filter-count" id="tp-count">69 articles</div>
+    </div>
+
+    <div class="article-list-scroll" id="tp-article-list">
+      <div class="no-results" id="tp-no-results">No articles match your filters.</div>
+      
+      <div class="month-divider" data-month-divider>2026-03</div><div class="article-item"
+           data-headline="self-regulatory organizations; cboe exchange, inc.; notice of filing and immediate effectiveness of a proposed rule change to amend its fees schedule to amend its floor booth fees"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05662/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-and-immediate-effectiveness-of-a" target="_blank">Self-Regulatory Organizations; Cboe Exchange, Inc.; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Amend Its Fees Schedule To Amend Its Floor Booth Fees</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="trade and economic security"
+           data-snippet="dhs — uflpa: trade and economic security"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/topics/trade-and-economic-security" target="_blank">Trade and Economic Security</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: Trade and Economic Security</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="uflpa entity list"
+           data-snippet="dhs — uflpa: uflpa entity list"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/uflpa-entity-list" target="_blank">UFLPA Entity List</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: UFLPA Entity List</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="public law no. 117-78"
+           data-snippet="dhs — uflpa: public law no. 117-78"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.govinfo.gov/app/details/PLAW-117publ78" target="_blank">Public Law No. 117-78</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: Public Law No. 117-78</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="forced labor enforcement task force"
+           data-snippet="dhs — uflpa: forced labor enforcement task force"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/forcedlabor" target="_blank">Forced Labor Enforcement Task Force</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: Forced Labor Enforcement Task Force</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="cbp operational guidance for importers"
+           data-snippet="dhs — uflpa: cbp operational guidance for importers"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/document/guidance/uflpa-operational-guidance-importers" target="_blank">CBP Operational Guidance for Importers</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: CBP Operational Guidance for Importers</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="federal register notices"
+           data-snippet="dhs — uflpa: federal register notices"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/search?conditions%5Bagencies%5D%5B%5D=homeland-security-department&amp;conditions%5Bterm%5D=%22UFLPA+ENTITY+LIST%22&amp;order=newest" target="_blank">Federal Register Notices</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: Federal Register Notices</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="regulations.gov"
+           data-snippet="dhs — uflpa: regulations.gov"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.Regulations.gov" target="_blank">Regulations.gov</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: Regulations.gov</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="public comments"
+           data-snippet="dhs — uflpa: public comments"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.regulations.gov/docket/DHS-2022-0001/comments" target="_blank">Public Comments</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: Public Comments</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="hearing transcript"
+           data-snippet="dhs — uflpa: hearing transcript"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.regulations.gov/comment/DHS-2022-0001-0192" target="_blank">Hearing Transcript</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: Hearing Transcript</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="the united nations guiding principles on business and human rights"
+           data-snippet="dhs — uflpa: the united nations guiding principles on business and human rights"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.business-humanrights.org/en/big-issues/un-guiding-principles-on-business-human-rights/" target="_blank">The United Nations Guiding Principles on Business and Human Rights</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: The United Nations Guiding Principles on Business and Human Rights</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="the organization for economic co-operation and development guidelines for multinational enterprises (including sector-specific guidance)"
+           data-snippet="dhs — uflpa: the organization for economic co-operation and development guidelines for multinational enterprises (including sector-specific guidance)"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.oecd.org/corporate/mne/" target="_blank">The Organization for Economic Co-operation and Development Guidelines for Multinational Enterprises (including sector-specific guidance)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: The Organization for Economic Co-operation and Development Guidelines for Multinational Enterprises (including sector-specific guidance)</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="the international labour organization tripartite declaration of principles concerning multinational enterprises and social policy"
+           data-snippet="dhs — uflpa: the international labour organization tripartite declaration of principles concerning multinational enterprises and social policy"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.ilo.org/empent/areas/mne-declaration/lang--en/index.htm" target="_blank">The International Labour Organization Tripartite Declaration of Principles concerning Multinational Enterprises and Social Policy</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: The International Labour Organization Tripartite Declaration of Principles concerning Multinational Enterprises and Social Policy</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="the international labour organization publication, combating forced labour: a handbook for employers and business"
+           data-snippet="dhs — uflpa: the international labour organization publication, combating forced labour: a handbook for employers and business"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_101171.pdf" target="_blank">The International Labour Organization publication, Combating Forced Labour: A Handbook for Employers and Business</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: The International Labour Organization publication, Combating Forced Labour: A Handbook for Employers and Business</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="international labour organization guidelines concerning the measurement of forced labor"
+           data-snippet="dhs — uflpa: international labour organization guidelines concerning the measurement of forced labor"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.ilo.org/wcmsp5/groups/public/---dgreports/---stat/documents/meetingdocument/wcms_648619.pdf" target="_blank">International Labour Organization Guidelines Concerning the Measurement of Forced Labor</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: International Labour Organization Guidelines Concerning the Measurement of Forced Labor</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="international labour organization general principles and operational guidelines for fair recruitment"
+           data-snippet="dhs — uflpa: international labour organization general principles and operational guidelines for fair recruitment"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.ilo.org/wcmsp5/groups/public/---ed_protect/---protrav/---migrant/documents/publication/wcms_536755.pdf" target="_blank">International Labour Organization General Principles and Operational Guidelines for Fair Recruitment</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: International Labour Organization General Principles and Operational Guidelines for Fair Recruitment</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="international organization for migration’s ethical recruitment standards"
+           data-snippet="dhs — uflpa: international organization for migration’s ethical recruitment standards"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://iris.iom.int/sites/g/files/tmzbdl201/files/documents/IRIS%20Standard%20Report%20.pdf" target="_blank">International Organization for Migration’s ethical recruitment standards</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: International Organization for Migration’s ethical recruitment standards</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="the office of the high commissioner for human rights guide on the corporate responsibility to respect human rights (ohchr guide)"
+           data-snippet="dhs — uflpa: the office of the high commissioner for human rights guide on the corporate responsibility to respect human rights (ohchr guide)"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.ohchr.org/sites/default/files/Documents/Publications/HR.PUB.12.2_En.pdf" target="_blank">The Office of the High Commissioner for Human Rights guide on The Corporate Responsibility to Respect Human Rights (OHCHR guide)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA: The Office of the High Commissioner for Human Rights guide on The Corporate Responsibility to Respect Human Rights (OHCHR guide)</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="enforce and protect act (eapa)"
+           data-snippet="cbp — forced labor: enforce and protect act (eapa)"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/eapa" target="_blank">Enforce and Protect Act (EAPA)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Enforce and Protect Act (EAPA)</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="leveling the playing field"
+           data-snippet="cbp — forced labor: leveling the playing field"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/forced-labor/leveling-playing-field" target="_blank">Leveling the Playing Field</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Leveling the Playing Field</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="laws and authorities"
+           data-snippet="cbp — forced labor: laws and authorities"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/forced-labor/laws-and-authorities" target="_blank">Laws and Authorities</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Laws and Authorities</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="uyghur forced labor prevention act (uflpa)"
+           data-snippet="cbp — forced labor: uyghur forced labor prevention act (uflpa)"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/forced-labor/UFLPA" target="_blank">Uyghur Forced Labor Prevention Act (UFLPA)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Uyghur Forced Labor Prevention Act (UFLPA)</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="forced labor faqs"
+           data-snippet="cbp — forced labor: forced labor faqs"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/forced-labor/frequently-asked-questions" target="_blank">Forced Labor FAQs</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Forced Labor FAQs</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="basic importing and exporting"
+           data-snippet="cbp — forced labor: basic importing and exporting"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/basic-import-export" target="_blank">Basic Importing and Exporting</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Basic Importing and Exporting</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="ace: the import and export processing system"
+           data-snippet="cbp — forced labor: ace: the import and export processing system"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/automated" target="_blank">ACE: The Import and Export Processing System</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: ACE: The Import and Export Processing System</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="ecbp broker instruction and training resources"
+           data-snippet="cbp — forced labor: ecbp broker instruction and training resources"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/eCBP" target="_blank">eCBP Broker Instruction and Training Resources</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: eCBP Broker Instruction and Training Resources</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="priority trade issues"
+           data-snippet="cbp — forced labor: priority trade issues"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/priority-issues" target="_blank">Priority Trade Issues</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Priority Trade Issues</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="programs and administration"
+           data-snippet="cbp — forced labor: programs and administration"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/programs-administration" target="_blank">Programs and Administration</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Programs and Administration</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="rulings and legal decisions"
+           data-snippet="cbp — forced labor: rulings and legal decisions"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/rulings" target="_blank">Rulings and Legal Decisions</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Rulings and Legal Decisions</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="stakeholder engagement"
+           data-snippet="cbp — forced labor: stakeholder engagement"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/stakeholder-engagement" target="_blank">Stakeholder Engagement</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Stakeholder Engagement</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="trade facilitation and trade enforcement act"
+           data-snippet="cbp — forced labor: trade facilitation and trade enforcement act"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/trade-enforcement/tftea" target="_blank">Trade Facilitation and Trade Enforcement Act</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Trade Facilitation and Trade Enforcement Act</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="centers of excellence and expertise"
+           data-snippet="cbp — forced labor: centers of excellence and expertise"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/centers-excellence-and-expertise-information" target="_blank">Centers of Excellence and Expertise</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Centers of Excellence and Expertise</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="ams air features"
+           data-snippet="cbp — forced labor: ams air features"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/acs/ams/air-features" target="_blank">AMS Air Features</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: AMS Air Features</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="cbp facilitates broker licensing though the global enrollment system"
+           data-snippet="cbp — forced labor: cbp facilitates broker licensing though the global enrollment system"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/trade-community/cbp-facilitates-broker-licensing-though-global-enrollment-system" target="_blank">CBP Facilitates Broker Licensing Though the Global Enrollment System</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: CBP Facilitates Broker Licensing Though the Global Enrollment System</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="cybersecurity resiliency"
+           data-snippet="cbp — forced labor: cybersecurity resiliency"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/cybersecurity-resiliency" target="_blank">Cybersecurity Resiliency</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Cybersecurity Resiliency</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="frontline articles"
+           data-snippet="cbp — forced labor: frontline articles"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/office-trade-frontline-articles" target="_blank">Frontline Articles</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Frontline Articles</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="the truth behind counterfeits"
+           data-snippet="cbp — forced labor: the truth behind counterfeits"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/fakegoodsrealdangers" target="_blank">The Truth Behind Counterfeits</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: The Truth Behind Counterfeits</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="automated clearinghouse"
+           data-snippet="cbp — forced labor: automated clearinghouse"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.cbp.gov/trade/automated/ach" target="_blank">Automated Clearinghouse</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>CBP — Forced Labor</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">CBP — Forced Labor: Automated Clearinghouse</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="disrupt terrorist financing"
+           data-snippet="dhs — uflpa entity list: disrupt terrorist financing"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/topic/disrupt-terrorist-financing" target="_blank">Disrupt Terrorist Financing</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA Entity List</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA Entity List: Disrupt Terrorist Financing</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="fraud and counterfeiting"
+           data-snippet="dhs — uflpa entity list: fraud and counterfeiting"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/fraud-and-counterfeit" target="_blank">Fraud and Counterfeiting</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA Entity List</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA Entity List: Fraud and Counterfeiting</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="intellectual property rights"
+           data-snippet="dhs — uflpa entity list: intellectual property rights"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/intellectual-property-rights" target="_blank">Intellectual Property Rights</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA Entity List</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA Entity List: Intellectual Property Rights</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="trade transparency"
+           data-snippet="dhs — uflpa entity list: trade transparency"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/trade-transparency" target="_blank">Trade Transparency</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA Entity List</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA Entity List: Trade Transparency</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="supply chain resilience center"
+           data-snippet="dhs — uflpa entity list: supply chain resilience center"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/scrc" target="_blank">Supply Chain Resilience Center</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA Entity List</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA Entity List: Supply Chain Resilience Center</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="uflpa fact sheet"
+           data-snippet="dhs — uflpa entity list: uflpa fact sheet"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.dhs.gov/2025-updates-strategy-prevent-importation-goods-mined-produced-or-manufactured-forced-labor-peoples" target="_blank">UFLPA Fact Sheet</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>DHS — UFLPA Entity List</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">DHS — UFLPA Entity List: UFLPA Fact Sheet</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="application of the federal securities laws to certain types of crypto assets and certain transactions involving crypto assets"
+           data-snippet="the securities and exchange commission (&#34;commission&#34; or &#34;sec&#34;) issues herein an interpretation regarding the application of the federal securities laws to certain types of crypto assets and certain transactions involving crypto assets. the references in this release to &#34;we&#34; and &#34;our&#34; are to the commission. the commodity futures trading commission (&#34;cftc&#34;) provides herein guidance relating to that interpretation."
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05635/application-of-the-federal-securities-laws-to-certain-types-of-crypto-assets-and-certain" target="_blank">Application of the Federal Securities Laws to Certain Types of Crypto Assets and Certain Transactions Involving Crypto Assets</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+        <div class="article-snippet">The Securities and Exchange Commission (&#34;Commission&#34; or &#34;SEC&#34;) issues herein an interpretation regarding the application of the Federal securities laws to certain types of crypto assets and certain transactions involving crypto assets. The references in this release to &#34;we&#34; and &#34;our&#34; are to the Commission. The Commodity Futures Trading Commission (&#34;CFTC&#34;) provides herein guidance relating to that interpretation.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; cboe exchange, inc.; notice of filing of amendment nos. 1 and 2 and order granting accelerated approval of a proposed rule change, as modified and superseded by amendment no. 2, to amend rule 5.4 to change the minimum increment for options on the cboe magnificent 10 index"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05561/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-of-amendment-nos-1-and-2-and-order" target="_blank">Self-Regulatory Organizations; Cboe Exchange, Inc.; Notice of Filing of Amendment Nos. 1 and 2 and Order Granting Accelerated Approval of a Proposed Rule Change, as Modified and Superseded by Amendment No. 2, To Amend Rule 5.4 To Change the Minimum Increment for Options on the Cboe Magnificent 10 Index</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; the nasdaq stock market llc; notice of filing and immediate effectiveness of proposed rule change to amend the designated liquidity provider and market quality supporter programs in equity 7, section 114"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05560/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-and-immediate" target="_blank">Self-Regulatory Organizations; The Nasdaq Stock Market LLC; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Amend the Designated Liquidity Provider and Market Quality Supporter Programs in Equity 7, Section 114</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; fixed income clearing corporation; order instituting proceedings to determine whether to approve or disapprove a proposed rule change to amend and restate the second amended and restated cross-margining agreement between ficc and cme and amend related gsd rules"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05558/self-regulatory-organizations-fixed-income-clearing-corporation-order-instituting-proceedings-to" target="_blank">Self-Regulatory Organizations; Fixed Income Clearing Corporation; Order Instituting Proceedings To Determine Whether To Approve or Disapprove a Proposed Rule Change To Amend and Restate the Second Amended and Restated Cross-Margining Agreement Between FICC and CME and Amend Related GSD Rules</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; nyse arca, inc.; notice of filing and immediate effectiveness of proposed rule change to amend exchange rules 5.32-o, 5.35-o, and 6.8-o regarding options on certain crypto assets"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05557/self-regulatory-organizations-nyse-arca-inc-notice-of-filing-and-immediate-effectiveness-of-proposed" target="_blank">Self-Regulatory Organizations; NYSE Arca, Inc.; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Amend Exchange Rules 5.32-O, 5.35-O, and 6.8-O Regarding Options on Certain Crypto Assets</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; cboe byx exchange, inc.; notice of filing and immediate effectiveness of a proposed rule change to adopt rules 11.28 and 11.29 relating the regulatory and operations trading halts, integrate several definitions and concepts from the amended cta/cq plan, reorganize existing rule 11.18, and to make conforming changes to related rules"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05556/self-regulatory-organizations-cboe-byx-exchange-inc-notice-of-filing-and-immediate-effectiveness-of" target="_blank">Self-Regulatory Organizations; Cboe BYX Exchange, Inc.; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Adopt Rules 11.28 and 11.29 Relating the Regulatory and Operations Trading Halts, Integrate Several Definitions and Concepts From the Amended CTA/CQ Plan, Reorganize Existing Rule 11.18, and To Make Conforming Changes to Related Rules</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; nyse american llc; notice of filing and immediate effectiveness of proposed change to amend exchange rules 904, 903g, and 906g regarding options on certain crypto assets"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05554/self-regulatory-organizations-nyse-american-llc-notice-of-filing-and-immediate-effectiveness-of" target="_blank">Self-Regulatory Organizations; NYSE American LLC; Notice of Filing and Immediate Effectiveness of Proposed Change To Amend Exchange Rules 904, 903G, and 906G Regarding Options on Certain Crypto Assets</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; nyse american llc; notice of filing of proposed change to amend section 1003 of the nyse american company guide"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-20">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/20/2026-05481/self-regulatory-organizations-nyse-american-llc-notice-of-filing-of-proposed-change-to-amend-section" target="_blank">Self-Regulatory Organizations; NYSE American LLC; Notice of Filing of Proposed Change To Amend Section 1003 of the NYSE American Company Guide</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-20</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; new york stock exchange llc; notice of filing of amendment no. 1 and order instituting proceedings to determine whether to approve or disapprove a proposed rule change, as modified by amendment no. 1, to amend section 802.01c of the nyse listed company manual"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-20">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/20/2026-05480/self-regulatory-organizations-new-york-stock-exchange-llc-notice-of-filing-of-amendment-no-1-and" target="_blank">Self-Regulatory Organizations; New York Stock Exchange LLC; Notice of Filing of Amendment No. 1 and Order Instituting Proceedings To Determine Whether To Approve or Disapprove a Proposed Rule Change, as Modified by Amendment No. 1, To Amend Section 802.01C of the NYSE Listed Company Manual</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-20</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; nyse american llc; notice of filing of amendment nos. 1, 2 and 3 and order instituting proceedings to determine whether to approve or disapprove a proposed rule change, as modified by amendment nos. 1, 2, and 3, to amend sections 1003 and 1009 of the nyse american company guide"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-20">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/20/2026-05479/self-regulatory-organizations-nyse-american-llc-notice-of-filing-of-amendment-nos-1-2-and-3-and" target="_blank">Self-Regulatory Organizations; NYSE American LLC; Notice of Filing of Amendment Nos. 1, 2 and 3 and Order Instituting Proceedings To Determine Whether To Approve or Disapprove a Proposed Rule Change, as Modified by Amendment Nos. 1, 2, and 3, To Amend Sections 1003 and 1009 of the NYSE American Company Guide</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-20</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; miax pearl, llc; notice of filing and immediate effectiveness of a proposed rule change to amend exchange rule 2613(a), usage of data feeds"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-20">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/20/2026-05477/self-regulatory-organizations-miax-pearl-llc-notice-of-filing-and-immediate-effectiveness-of-a" target="_blank">Self-Regulatory Organizations; MIAX PEARL, LLC; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Amend Exchange Rule 2613(a), Usage of Data Feeds</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-20</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; nyse arca, inc.; notice of filing and immediate effectiveness of proposed rule change to amend the nyse arca equities fees and charges"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-20">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/20/2026-05476/self-regulatory-organizations-nyse-arca-inc-notice-of-filing-and-immediate-effectiveness-of-proposed" target="_blank">Self-Regulatory Organizations; NYSE Arca, Inc.; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Amend the NYSE Arca Equities Fees and Charges</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-20</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; the nasdaq stock market llc; notice of filing of proposed rule change to list and trade shares of the vaneck jitosol etf under nasdaq rule 5711(d) (commodity-based trust shares)"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-20">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/20/2026-05475/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-proposed-rule-change" target="_blank">Self-Regulatory Organizations; The Nasdaq Stock Market LLC; Notice of Filing of Proposed Rule Change To List and Trade Shares of the VanEck JitoSOL ETF Under Nasdaq Rule 5711(d) (Commodity-Based Trust Shares)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-20</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="self-regulatory organizations; nasdaq phlx llc; notice of filing and immediate effectiveness of proposed rule change to expand the exchange&#39;s co-location services"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-20">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/20/2026-05474/self-regulatory-organizations-nasdaq-phlx-llc-notice-of-filing-and-immediate-effectiveness-of" target="_blank">Self-Regulatory Organizations; Nasdaq PHLX LLC; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Expand the Exchange&#39;s Co-Location Services</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-20</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="initiation of section 301 investigations of acts, policies, and practices of various economies related to the failure to impose and effectively enforce a prohibition on the importation of goods produced with forced labor"
+           data-snippet="the u.s. trade representative (trade representative) is initiating investigations with respect to acts, policies, and practices of the economies listed in annex a of this notice related to the failure to impose and effectively enforce a prohibition on the importation of goods produced with forced labor. ustr is seeking public comments in connection with these investigations and will hold public hearings."
+           data-urgency="low"
+           data-date="2026-03-17">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/17/2026-05151/initiation-of-section-301-investigations-of-acts-policies-and-practices-of-various-economies-related" target="_blank">Initiation of Section 301 Investigations of Acts, Policies, and Practices of Various Economies Related to the Failure To Impose and Effectively Enforce a Prohibition on the Importation of Goods Produced With Forced Labor</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-17</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Trade Representative (Trade Representative) is initiating investigations with respect to acts, policies, and practices of the economies listed in Annex A of this notice related to the failure to impose and effectively enforce a prohibition on the importation of goods produced with forced labor. USTR is seeking public comments in connection with these investigations and will hold public hearings.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="combating cybercrime, fraud, and predatory schemes against american citizens"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-11">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/11/2026-04826/combating-cybercrime-fraud-and-predatory-schemes-against-american-citizens" target="_blank">Combating Cybercrime, Fraud, and Predatory Schemes Against American Citizens</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-11</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="reduction in force"
+           data-snippet="the office of personnel management (opm) is issuing a proposed rule to revise its reduction-in-force (rif) regulations. the proposed rule would make the rif regulations more streamlined, efficient, and merit-based by prioritizing performance over tenure and length of service when determining which employees will be retained in a rif and modifying the types of employees who are excluded from rif competition. opm also proposes to revise its regulations regarding the reemployment priority list (rpl"
+           data-urgency="low"
+           data-date="2026-03-05">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/05/2026-04377/reduction-in-force" target="_blank">Reduction in Force</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-05</span>
+          
+        </div>
+        
+        <div class="article-snippet">The Office of Personnel Management (OPM) is issuing a proposed rule to revise its reduction-in-force (RIF) regulations. The proposed rule would make the RIF regulations more streamlined, efficient, and merit-based by prioritizing performance over tenure and length of service when determining which employees will be retained in a RIF and modifying the types of employees who are excluded from RIF competition. OPM also proposes to revise its regulations regarding the reemployment priority list (RPL</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="airworthiness directives; airbus canada limited partnership (type certificate previously held by c series aircraft limited partnership (csalp); bombardier, inc.) airplanes"
+           data-snippet="the faa is adopting a new airworthiness directive (ad) for certain airbus canada limited partnership model bd-500-1a10 and bd-500- 1a11 airplanes. this ad was prompted by reports of certain fuel transfer float valves failing in the closed position, preventing normal fuel transfer between the center and wing fuel tanks. this ad requires replacing the existing fuel transfer float valves on airplanes approved for extended-range twin-engine operation performance standards (etops). the faa is issuing"
+           data-urgency="low"
+           data-date="2026-03-04">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/04/2026-04278/airworthiness-directives-airbus-canada-limited-partnership-type-certificate-previously-held-by-c" target="_blank">Airworthiness Directives; Airbus Canada Limited Partnership (Type Certificate Previously Held by C Series Aircraft Limited Partnership (CSALP); Bombardier, Inc.) Airplanes</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-04</span>
+          
+        </div>
+        
+        <div class="article-snippet">The FAA is adopting a new airworthiness directive (AD) for certain Airbus Canada Limited Partnership Model BD-500-1A10 and BD-500- 1A11 airplanes. This AD was prompted by reports of certain fuel transfer float valves failing in the closed position, preventing normal fuel transfer between the center and wing fuel tanks. This AD requires replacing the existing fuel transfer float valves on airplanes approved for extended-range twin-engine operation performance standards (ETOPS). The FAA is issuing</div>
+        
+      </div>
+      <div class="month-divider" data-month-divider>2026-02</div><div class="article-item"
+           data-headline="regulatory guidance relating to the criteria and process for initial recognition of an accrediting agency"
+           data-snippet="this interpretive rule sets forth the department&#39;s interpretation of certain regulations at the criteria for recognition, and the recognition process, governing an accrediting agency&#39;s submission of a written application seeking initial recognition. in general, the provisions in this interpretive rule are designed to reduce unnecessary barriers to the recognition of accrediting agencies to promote competition in the market for assessing the quality of education or training offered by postseconda"
+           data-urgency="low"
+           data-date="2026-02-27">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/02/27/2026-03953/regulatory-guidance-relating-to-the-criteria-and-process-for-initial-recognition-of-an-accrediting" target="_blank">Regulatory Guidance Relating to the Criteria and Process for Initial Recognition of an Accrediting Agency</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-02-27</span>
+          
+        </div>
+        
+        <div class="article-snippet">This interpretive rule sets forth the Department&#39;s interpretation of certain regulations at the Criteria for Recognition, and the Recognition Process, governing an accrediting agency&#39;s submission of a written application seeking initial recognition. In general, the provisions in this interpretive rule are designed to reduce unnecessary barriers to the recognition of accrediting agencies to promote competition in the market for assessing the quality of education or training offered by postseconda</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="proposed exemption from certain prohibited transaction restrictions for certain asset managers related to ubs ag (ubs) located in zurich, switzerland"
+           data-snippet="if granted, this proposed exemption would allow certain current and future ubs-related asset managers to rely on prohibited transaction exemption (pte) 84-14 until may 4, 2031, if certain conditions are met, notwithstanding four judgments of conviction and one non-prosecution agreement involving entities within ubs&#39; corporate umbrella."
+           data-urgency="low"
+           data-date="2026-02-26">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/02/26/2026-03825/proposed-exemption-from-certain-prohibited-transaction-restrictions-for-certain-asset-managers" target="_blank">Proposed Exemption From Certain Prohibited Transaction Restrictions for Certain Asset Managers Related to UBS AG (UBS) Located in Zurich, Switzerland</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-02-26</span>
+          
+        </div>
+        
+        <div class="article-snippet">If granted, this proposed exemption would allow certain current and future UBS-related asset managers to rely on Prohibited Transaction Exemption (PTE) 84-14 until May 4, 2031, if certain conditions are met, notwithstanding four judgments of conviction and one non-prosecution agreement involving entities within UBS&#39; corporate umbrella.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="performance appraisal for general schedule, prevailing rate, and certain other employees"
+           data-snippet="the office of personnel management (opm) is issuing a proposed rule to increase the efficiency of performance management for non- senior executive service (ses) employees, including general schedule (gs) and prevailing rate employees. the proposed rule amends the approved patterns of summary levels by removing a &#34;level 2&#34;; requires agencies to undergo biennial appraisal system certifications with opm; requires a supervisory critical element for all supervisors covered under this subpart; removes"
+           data-urgency="low"
+           data-date="2026-02-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03619/performance-appraisal-for-general-schedule-prevailing-rate-and-certain-other-employees" target="_blank">Performance Appraisal for General Schedule, Prevailing Rate, and Certain Other Employees</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-02-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">The Office of Personnel Management (OPM) is issuing a proposed rule to increase the efficiency of performance management for non- Senior Executive Service (SES) employees, including General Schedule (GS) and prevailing rate employees. The proposed rule amends the approved patterns of summary levels by removing a &#34;Level 2&#34;; requires agencies to undergo biennial appraisal system certifications with OPM; requires a supervisory critical element for all supervisors covered under this subpart; removes</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="managing senior professional performance"
+           data-snippet="the office of personnel management (opm) and the office of management and budget (omb) are proposing to revise the rules governing the performance appraisal of senior-level (sl) and scientific or professional (st) employees, collectively referred to as &#34;senior professionals.&#34; this rulemaking would establish a new subpart specifically dedicated to senior professional performance appraisal. the new subpart would align more closely with the ses performance appraisal regulations, eliminate senior pr"
+           data-urgency="low"
+           data-date="2026-02-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03610/managing-senior-professional-performance" target="_blank">Managing Senior Professional Performance</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-02-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">The Office of Personnel Management (OPM) and the Office of Management and Budget (OMB) are proposing to revise the rules governing the performance appraisal of senior-level (SL) and scientific or professional (ST) employees, collectively referred to as &#34;senior professionals.&#34; This rulemaking would establish a new subpart specifically dedicated to senior professional performance appraisal. The new subpart would align more closely with the SES performance appraisal regulations, eliminate senior pr</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="employment authorization reform for asylum applicants"
+           data-snippet="the u.s. department of homeland security (dhs) proposes to modify regulations governing applications for asylum and withholding of removal (asylum applications) and employment authorization based on a pending asylum application. the proposed rule would change filing and eligibility requirements for aliens requesting employment authorization and an employment authorization document (ead) based on a pending asylum application. the changes include pausing acceptance of ead applications from asylum "
+           data-urgency="low"
+           data-date="2026-02-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/02/23/2026-03595/employment-authorization-reform-for-asylum-applicants" target="_blank">Employment Authorization Reform for Asylum Applicants</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-02-23</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Homeland Security (DHS) proposes to modify regulations governing applications for asylum and withholding of removal (asylum applications) and employment authorization based on a pending asylum application. The proposed rule would change filing and eligibility requirements for aliens requesting employment authorization and an employment authorization document (EAD) based on a pending asylum application. The changes include pausing acceptance of EAD applications from asylum </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="maximum line speed under the new swine slaughter inspection system (nsis)"
+           data-snippet="fsis is proposing to amend the federal meat inspection regulations to allow establishments operating under the nsis to determine their own line speeds based on their ability to maintain process control. fsis is also proposing to clarify that the fsis inspector may reduce the rate of establishment operations at any point in the slaughter process when, in their judgement, there is a loss of process control, or a carcass-by-carcass inspection cannot be adequately performed within the time available"
+           data-urgency="low"
+           data-date="2026-02-19">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/02/19/2026-03228/maximum-line-speed-under-the-new-swine-slaughter-inspection-system-nsis" target="_blank">Maximum Line Speed Under the New Swine Slaughter Inspection System (NSIS)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-02-19</span>
+          
+        </div>
+        
+        <div class="article-snippet">FSIS is proposing to amend the Federal meat inspection regulations to allow establishments operating under the NSIS to determine their own line speeds based on their ability to maintain process control. FSIS is also proposing to clarify that the FSIS inspector may reduce the rate of establishment operations at any point in the slaughter process when, in their judgement, there is a loss of process control, or a carcass-by-carcass inspection cannot be adequately performed within the time available</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="restoring integrity to the issuance of non-domiciled commercial drivers licenses (cdl)"
+           data-snippet="fmcsa amends the federal regulations for state driver&#39;s licensing agencies (sdlas) issuing commercial driving credentials to non-domiciled individuals. this final rule reaffirms, with minor changes, the provisions of the interim final rule (ifr) published on september 29, 2025. specifically, this final rule limits eligibility for non-domiciled commercial learner&#39;s permits (clps) and commercial driver&#39;s licenses (cdls) for foreign-domiciled individuals to those who hold specific, verifiable emplo"
+           data-urgency="low"
+           data-date="2026-02-13">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/02/13/2026-02965/restoring-integrity-to-the-issuance-of-non-domiciled-commercial-drivers-licenses-cdl" target="_blank">Restoring Integrity to the Issuance of Non-Domiciled Commercial Drivers Licenses (CDL)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-02-13</span>
+          
+        </div>
+        
+        <div class="article-snippet">FMCSA amends the Federal regulations for State Driver&#39;s Licensing Agencies (SDLAs) issuing commercial driving credentials to non-domiciled individuals. This final rule reaffirms, with minor changes, the provisions of the interim final rule (IFR) published on September 29, 2025. Specifically, this final rule limits eligibility for non-domiciled Commercial Learner&#39;s Permits (CLPs) and Commercial Driver&#39;s Licenses (CDLs) for foreign-domiciled individuals to those who hold specific, verifiable emplo</div>
+        
+      </div>
+      
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  function filterArticles() {
+    const query = document.getElementById('tp-search').value.toLowerCase().trim();
+    const periodFilter = parseInt(document.getElementById('tp-period').value) || 0;
+    const now = new Date();
+    const items = document.querySelectorAll('#tp-article-list .article-item');
+    const dividers = document.querySelectorAll('#tp-article-list .month-divider');
+    let visibleCount = 0;
+
+    items.forEach(item => {
+      const headline = item.dataset.headline || '';
+      const snippet = item.dataset.snippet || '';
+      const dateStr = item.dataset.date || '';
+      let show = true;
+      if (query && !headline.includes(query) && !snippet.includes(query)) show = false;
+      if (periodFilter && dateStr) {
+        const cutoff = new Date(now.getTime() - periodFilter * 86400000);
+        if (new Date(dateStr) < cutoff) show = false;
+      }
+      item.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    });
+
+    dividers.forEach(div => {
+      let next = div.nextElementSibling;
+      let hasVisible = false;
+      while (next && !next.hasAttribute('data-month-divider')) {
+        if (next.classList.contains('article-item') && next.style.display !== 'none') { hasVisible = true; break; }
+        next = next.nextElementSibling;
+      }
+      div.style.display = hasVisible ? '' : 'none';
+    });
+
+    document.getElementById('tp-count').textContent = visibleCount + ' articles';
+    document.getElementById('tp-no-results').classList.toggle('visible', visibleCount === 0 && items.length > 0);
+  }
+</script>
+</body>
+</html>

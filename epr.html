@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extended Producer Responsibility — Compliance Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --topic-color: #27AE60;
+      --bg: #F4F5F7;
+      --surface: #FFFFFF;
+      --surface-dark: #1A1D23;
+      --border: #D8DBE0;
+      --border-light: #E8EAED;
+      --text-primary: #111318;
+      --text-secondary: #4A4F5C;
+      --text-muted: #7A8194;
+      --red: #D63031;
+      --red-bg: #FEF0F0;
+      --red-border: #FACACA;
+      --amber: #CB7B0A;
+      --amber-bg: #FEF6E8;
+      --green: #0F7B3F;
+      --green-bg: #EEFAF3;
+      --green-border: #B2E0C7;
+      --blue: #1565C0;
+      --blue-bg: #EBF3FD;
+      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+      --article-sidebar-w: 440px;
+      --topbar-h: 52px;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: clamp(13px, 1vw, 15px); }
+    body {
+      background: var(--bg);
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── TOPBAR ─────────────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: var(--surface-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      z-index: 200;
+      border-bottom: 3px solid var(--topic-color);
+    }
+    .topbar-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.55);
+      font-size: 12px;
+      font-family: var(--mono);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 4px 10px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .topbar-back:hover { color: #fff; border-color: rgba(255,255,255,0.3); text-decoration: none; }
+    .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.12); }
+    .topbar-topic {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      color: var(--topic-color);
+    }
+    .topbar-label { color: rgba(255,255,255,0.45); font-size: 12px; font-family: var(--mono); }
+    .topbar-date { margin-left: auto; color: rgba(255,255,255,0.35); font-size: 11px; font-family: var(--mono); }
+
+    /* ── LAYOUT: main content + fixed right article sidebar ─────── */
+    .layout {
+      display: flex;
+      margin-top: var(--topbar-h);
+      min-height: calc(100vh - var(--topbar-h));
+    }
+
+    /* ── MAIN CONTENT (center, scrollable) ──────────────────────── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      margin-right: var(--article-sidebar-w);
+      padding: 24px 28px 60px;
+      overflow-y: auto;
+    }
+
+    /* ── ARTICLE SIDEBAR (fixed right) ──────────────────────────── */
+    .article-sidebar {
+      position: fixed;
+      top: var(--topbar-h);
+      right: 0;
+      width: var(--article-sidebar-w);
+      height: calc(100vh - var(--topbar-h));
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    .article-sidebar-head {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+    .article-sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .article-sidebar-title::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--topic-color);
+    }
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-search {
+      flex: 1;
+      min-width: 120px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      outline: none;
+    }
+    .filter-search:focus { border-color: var(--topic-color); background: var(--surface); }
+    .filter-select {
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 11px;
+      font-family: var(--mono);
+      background: var(--bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      outline: none;
+    }
+    .filter-select:focus { border-color: var(--topic-color); }
+    .filter-count {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .article-list-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .article-list-scroll::-webkit-scrollbar { width: 4px; }
+    .article-list-scroll::-webkit-scrollbar-track { background: transparent; }
+    .article-list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .month-divider {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      padding: 10px 16px 3px;
+    }
+
+    .article-item {
+      padding: 9px 16px;
+      border-left: 2px solid transparent;
+      transition: border-color 0.1s, background 0.1s;
+    }
+    .article-item:hover { background: var(--bg); }
+    .article-item.is-new { border-left-color: var(--topic-color); }
+    .article-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+      margin-bottom: 3px;
+      flex-wrap: wrap;
+    }
+    .article-headline {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.35;
+      flex: 1;
+      min-width: 0;
+    }
+    .article-headline a { color: var(--text-primary); }
+    .article-headline a:hover { color: var(--topic-color); text-decoration: none; }
+    .article-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .article-snippet {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .no-results {
+      display: none;
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .no-results.visible { display: block; }
+
+    /* ── BADGES ─────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: 9px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .05em;
+      border-radius: 2px;
+      padding: 1px 4px;
+      flex-shrink: 0;
+    }
+    .badge-new { background: var(--topic-color); color: #fff; }
+    .badge-high { background: var(--red-bg); color: var(--red); }
+    .badge-medium { background: var(--amber-bg); color: var(--amber); }
+    .badge-low { background: var(--green-bg); color: var(--green); }
+
+    /* ── MAIN CONTENT WIDGETS ───────────────────────────────────── */
+
+    /* Section header row */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--topic-color);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+    }
+    .section-title-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+    }
+
+    /* Panel card */
+    .panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-title-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--topic-color);
+    }
+
+    /* KPI row */
+    .kpi-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .kpi-card {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      border-top: 3px solid var(--topic-color);
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--topic-color);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* Insight blocks */
+    .insight-block {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .insight-block + .insight-block { margin-top: 12px; border-top: 1px solid var(--border-light); padding-top: 12px; }
+    .insight-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--topic-color);
+      margin-bottom: 4px;
+    }
+    .insight-bullets {
+      list-style: none;
+      margin-top: 6px;
+    }
+    .insight-bullets li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 3px 0 3px 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .insight-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 2px;
+      color: var(--topic-color);
+      font-weight: 700;
+    }
+    .insight-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .04em;
+      border-radius: 3px;
+      padding: 2px 6px;
+      margin: 4px 3px 0 0;
+    }
+    .insight-badge.hi { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .insight-badge.med { background: var(--amber-bg); color: var(--amber); border: 1px solid #F5DFA6; }
+    .insight-badge.lo { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .insight-badge-neutral { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* Breaking news alert */
+    .breaking-alert {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
+      color: #8B1A1A;
+    }
+    .breaking-alert-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--red);
+      margin-bottom: 3px;
+    }
+
+    /* Trend chart */
+    .trend-chart-wrap { margin: 4px 0 6px; }
+    .trend-chart-axis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Summary text */
+    .summary-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Impact rows */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 8px 12px;
+    }
+    .impact-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text-muted);
+      padding-top: 2px;
+      line-height: 1.4;
+    }
+    .impact-text { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+    .impact-list {
+      list-style: none;
+      margin: 0;
+    }
+    .impact-list li {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      padding: 2px 0 2px 12px;
+      position: relative;
+    }
+    .impact-list li::before {
+      content: '›';
+      position: absolute; left: 1px;
+      color: var(--topic-color); font-weight: 700;
+    }
+
+    /* Strategy block */
+    .strategy-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      border-left: 3px solid var(--topic-color);
+      padding-left: 12px;
+    }
+
+    /* Deadline list */
+    .dl-list { display: flex; flex-direction: column; gap: 0; }
+    .dl-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .dl-item:last-child { border-bottom: none; }
+    .dl-days {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 52px;
+      text-align: right;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    .dl-days.urgent { color: var(--red); }
+    .dl-days.soon { color: var(--amber); }
+    .dl-days.normal { color: var(--text-muted); }
+    .dl-pipe {
+      width: 2px;
+      min-height: 38px;
+      border-radius: 1px;
+      flex-shrink: 0;
+      background: var(--border);
+      align-self: stretch;
+    }
+    .dl-body { flex: 1; min-width: 0; }
+    .dl-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; line-height: 1.35; }
+    .dl-meta { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+
+    /* Bills table */
+    .bill-grid { display: flex; flex-direction: column; gap: 0; }
+    .bill-row {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-light);
+      align-items: flex-start;
+    }
+    .bill-row:last-child { border-bottom: none; }
+    .bill-id {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--topic-color);
+      min-width: 68px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    .bill-body { flex: 1; min-width: 0; }
+    .bill-title-text { font-size: 12.5px; font-weight: 500; color: var(--text-primary); line-height: 1.35; margin-bottom: 2px; }
+    .bill-action-text { font-size: 11px; color: var(--text-muted); }
+    .bill-stage-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      padding: 1px 4px;
+      flex-shrink: 0;
+      background: var(--bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      margin-top: 1px;
+    }
+    .bill-stage-tag.enacted_watching { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+    .bill-stage-tag.passed_one, .bill-stage-tag.advanced { background: var(--amber-bg); color: var(--amber); border-color: #F5DFA6; }
+
+    /* ── RESOURCE CARDS ─────────────────────────────────────────── */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .resource-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 18px 18px 16px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--topic-color);
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s;
+      min-height: 96px;
+      position: relative;
+      overflow: hidden;
+    }
+    .resource-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(var(--topic-color-rgb, 192,57,43), 0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .resource-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      border-color: var(--topic-color);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+    .resource-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      transition: background 0.18s;
+    }
+    .resource-card:hover .resource-card-icon {
+      background: color-mix(in srgb, var(--topic-color) 10%, white);
+    }
+    .resource-card-body { flex: 1; }
+    .resource-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .resource-card-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .resource-card-arrow {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      font-size: 13px;
+      color: var(--topic-color);
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .resource-card:hover .resource-card-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    /* Two-column grid for panels */
+    .panel-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .panel-grid-2 .panel { margin-bottom: 0; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .article-sidebar {
+        position: static;
+        width: 100%;
+        height: 500px;
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+      .main { margin-right: 0; }
+      .layout { flex-direction: column; }
+      .panel-grid-2 { grid-template-columns: 1fr; }
+      .resource-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="topbar-back" href="dashboard.html">&#8592; Dashboard</a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-topic">EPR</span>
+  <span class="topbar-label">Extended Producer Responsibility</span>
+  <span class="topbar-date">24 Mar 2026</span>
+</div>
+
+<div class="layout">
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- KPI Row --><div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-value">14</div>
+        <div class="kpi-label">Articles / 6 mo</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">0</div>
+        <div class="kpi-label">New This Week</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">30</div>
+        <div class="kpi-label">Active Bills</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">16</div>
+        <div class="kpi-label">Deadlines</div>
+      </div>
+    </div>
+
+    <!-- AI Intelligence Summary -->
+    
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">AI Intelligence</span>
+      <div class="section-title-line"></div>
+    </div>
+
+    
+    <div class="breaking-alert">
+      <div class="breaking-alert-label">&#9679; Breaking</div>
+      A Product Stewardship Institute article on Oregon Packaging EPR for Producers dropped March 25 — this is the most actionable item this week and likely contains updated producer guidance, registration timelines, or fee structure details specific to Oregon HB 3065. Pull and review immediately.
+    </div>
+    
+
+    <div class="panel-grid-2">
+      
+      <div class="panel">
+        <div class="panel-title"><div class="panel-title-dot"></div>6-Month Trend</div>
+        <div class="insight-block">The 6-month EPR regulatory landscape for packaging is characterized by state-level program maturation rather than federal action, with Oregon, California, Maine, and Colorado all moving toward operational enforcement phases. Activity is accelerating at the state level as PROs finalize fee structures, producer registration requirements, and recycled content compliance timelines. The dominant theme is producer registration and fee obligation — companies shipping packaged goods into EPR states are transitioning from a &#39;watch and wait&#39; posture to active compliance obligations with real financial consequences.</div>
+      </div>
+      
+      
+      <div class="panel">
+        <div class="panel-title"><div class="panel-title-dot"></div>Last 30 Days</div>
+        <div class="insight-block">The only substantive EPR-relevant signal in the past 30 days is a Product Stewardship Institute article published March 25, 2026 specifically addressing Oregon Packaging EPR producer obligations — this is a direct compliance signal, not background noise. The Federal Register activity in this window is entirely unrelated to EPR (antidumping reviews, agriculture, wildlife), confirming no new federal EPR rulemaking has emerged. The Oregon PSI publication warrants immediate review for updated registration deadlines or fee schedule details.</div>
+      </div>
+      
+    </div>
+
+    
+    <div class="panel">
+      <div class="panel-title"><div class="panel-title-dot"></div>Strategic Priorities</div>
+      <ul class="insight-bullets">
+        
+        <li>Immediately review the March 25 PSI Oregon Packaging EPR article and confirm whether producer registration is now open or has an imminent deadline; if so, initiate registration with the CAA-administered PRO and document fee payment obligations for OR shipments.</li>
+        
+        <li>Complete a packaging material inventory audit across all SKUs shipped into CA, OR, ME, and CO — capturing material type, weight per unit, and annual volume by state — to calculate fee exposure and identify which materials fail recycled content thresholds under each state&#39;s stepped targets.</li>
+        
+        <li>Establish a multi-state EPR compliance calendar mapping all registration deadlines, annual report due dates, and fee payment windows for CA SB 54, OR HB 3065, ME, and CO into a single tracked dashboard with owner assignment and 60-day advance alerts.</li>
+        
+      </ul>
+      
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light);"><span class="insight-badge hi">HIGH IMPACT</span>
+        <span class="insight-badge insight-badge-neutral">14 articles / 6mo</span>
+      </div>
+      
+    </div>
+    
+    
+
+    <!-- Article Volume Trend -->
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">30-Day Article Volume</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="panel">
+      <div class="trend-chart-wrap">
+        <svg width="100%" height="68" viewBox="0 0 520 68"
+             preserveAspectRatio="none" style="overflow:visible;display:block;">
+          <defs>
+            <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#27AE60" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#27AE60" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs><polygon points="0.0,64 0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,30.0 215.2,30.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,0.0 269.0,0.0 269.0,0.0 286.9,0.0 286.9,60.0 304.8,60.0 304.8,30.0 322.8,30.0 322.8,30.0 340.7,30.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,30.0 394.5,30.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,0.0 448.3,0.0 448.3,60.0 466.2,60.0 466.2,60.0 484.1,60.0 484.1,60.0 502.1,60.0 502.1,0.0 520.0,0.0 520.0,30.0 520.0,64" fill="url(#chart-fill)"/>
+          <polyline points="0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,30.0 215.2,30.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,0.0 269.0,0.0 269.0,0.0 286.9,0.0 286.9,60.0 304.8,60.0 304.8,30.0 322.8,30.0 322.8,30.0 340.7,30.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,30.0 394.5,30.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,0.0 448.3,0.0 448.3,60.0 466.2,60.0 466.2,60.0 484.1,60.0 484.1,60.0 502.1,60.0 502.1,0.0 520.0,0.0 520.0,30.0 " fill="none" stroke="#27AE60" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <div class="trend-chart-axis">
+          <span>30 days ago</span>
+          <span style="font-weight:700;color:var(--text-primary);">13 articles in 30 days</span>
+          <span>Today</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- This Week Summary -->
+    
+
+    <!-- Company Impact -->
+    
+    
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">Company Impact</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="panel">
+      <div class="impact-grid">
+        
+        <span class="impact-label">Products</span>
+        <span class="impact-text">As a producer shipping packaged products into Oregon, the company must register with Oregon&#39;s PRO and pay applicable fees once the program activates, with packaging redesign potentially required to meet recycled content mandates.</span>
+        
+        
+        
+        <span class="impact-label">Actions</span>
+        <ul class="impact-list"><li>Attend or review the PSI Oregon EPR webinar series to confirm current registration timelines, fee structures, and recycled content targets, and map all product SKUs shipped into Oregon against packaging material categories requiring PRO enrollment.</li><li>Audit current packaging designs used for Oregon-bound shipments against Oregon&#39;s anticipated recycled content targets and identify redesign candidates to reduce fee exposure before program fees are assessed.</li></ul>
+        
+        
+      </div>
+    </div>
+    
+
+    <!-- Strategy Note -->
+    
+    
+
+    <!-- Upcoming Deadlines -->
+    
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">Upcoming Deadlines</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="panel">
+      <div class="dl-list">
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              98d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">SF 3: PRO Must Be Operational</div>
+            <div class="dl-meta">
+              Minnesota
+               · 2026-06-30
+               · HIGH
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              99d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">SB 543: Producer Registration with PRO Opens</div>
+            <div class="dl-meta">
+              Oregon
+               · 2026-07-01
+               · HIGH
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              99d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">Maine EPR: Phase 2 Stewardship Fee Increases</div>
+            <div class="dl-meta">
+              Maine
+               · 2026-07-01
+               · HIGH
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              282d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">SB 54: Producer Registration with PRO Deadline</div>
+            <div class="dl-meta">
+              California
+               · 2026-12-31
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              282d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">NJ EPR: DEP Packaging Rules Finalization</div>
+            <div class="dl-meta">
+              New Jersey
+               · 2026-12-31
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              282d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">FTC Green Guides Update: Recyclability &amp; Compostability Claims</div>
+            <div class="dl-meta">
+              Federal
+               · 2026-12-31
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              283d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">HB 22-1355: Producer Registration with PRO</div>
+            <div class="dl-meta">
+              Colorado
+               · 2027-01-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              283d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">Maine EPR: Municipal Cost Reimbursement Program Expansion</div>
+            <div class="dl-meta">
+              Maine
+               · 2027-01-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              283d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">Maryland Packaging EPR: Producer Registration Opens</div>
+            <div class="dl-meta">
+              Maryland
+               · 2027-01-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              313d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">SB 543: First Annual Producer Responsibility Plan Due</div>
+            <div class="dl-meta">
+              Oregon
+               · 2027-01-31
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              464d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">SF 3: First Producer Responsibility Plans Due to MPCA</div>
+            <div class="dl-meta">
+              Minnesota
+               · 2027-07-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              464d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">WA Packaging EPR: Producer Registration Deadline</div>
+            <div class="dl-meta">
+              Washington
+               · 2027-07-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              648d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">SB 543: Phase 1 Recycling Rate Targets Effective</div>
+            <div class="dl-meta">
+              Oregon
+               · 2028-01-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              648d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">HB 22-1355: Phase 1 Recycled Content Targets</div>
+            <div class="dl-meta">
+              Colorado
+               · 2028-01-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              648d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">PPWR: EU Packaging and Packaging Waste Regulation Takes Effect</div>
+            <div class="dl-meta">
+              EU
+               · 2028-01-01
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        <div class="dl-item">
+          <div class="dl-days normal">
+            
+              1013d
+            
+          </div>
+          <div class="dl-pipe" style="background:var(--border);"></div>
+          <div class="dl-body">
+            <div class="dl-title">SB 54: 30% Single-Use Plastic Reduction Target</div>
+            <div class="dl-meta">
+              California
+               · 2028-12-31
+               · MEDIUM
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+
+    <!-- Legislative Activity -->
+    
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">Legislative Activity</span>
+      <span style="font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-left:4px;">(30 active bills)</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="panel">
+      <div class="bill-grid">
+        
+        <div class="bill-row">
+          <div class="bill-id">MI HB5771</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Consumer protection: other; surveillance pricing; prohibit. Amends secs. 3, 5 &amp; 11 of 1976 PA 331 (…</div>
+            
+            <div class="bill-action-text">Bill Electronically Reproduced 03/19/2026 · 2026-04-14</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MN HF1426</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Stewardship program for circuit boards, batteries, and electrical products established; mercury in …</div>
+            
+            <div class="bill-action-text">Author changed Hollins be shown as Chief Author · 2026-03-23</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">CA AB2245</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Lubricants waste: packaging: producer responsibility.</div>
+            
+            <div class="bill-action-text">From committee chair, with author&#39;s amendments: Amend, and re-refer to Com. on … · 2026-03-23</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MD HB833</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Commission to Advance Lithium-Ion Battery Safety in Maryland - Reestablishment</div>
+            
+            <div class="bill-action-text">Referred Education, Energy, and the Environment · 2026-03-20</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">CT SB00147</div>
+          <div class="bill-body">
+            <div class="bill-title-text">An Act Concerning A Study On The Need For Extended Producer Responsibility For Solar Panels And Vap…</div>
+            
+            <div class="bill-action-text">Referred to Office of Legislative Research and Office of Fiscal Analysis 03/25/… · 2026-03-20</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">VT H0915</div>
+          <div class="bill-body">
+            <div class="bill-title-text">An act relating to establishing an extended producer responsibility program for beverage containers</div>
+            
+            <div class="bill-action-text">Notice Calendar: Favorable · 2026-03-20</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">ID H0889</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Amends, repeals, and adds to existing law regarding the procurement of property by the State of Idaho.</div>
+            
+            <div class="bill-action-text">Introduced, read first time; referred to: State Affairs · 2026-03-20</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">HI HCR194</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishing The Joint Legislative Mattress Stewardship Program Design Working Group To Study, Eval…</div>
+            
+            <div class="bill-action-text">Resolution scheduled to be heard by EEP on Tuesday, 03-24-26 9:00AM in conferen… · 2026-03-20</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">HI HR184</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishing The Joint Legislative Mattress Stewardship Program Design Working Group To Study, Eval…</div>
+            
+            <div class="bill-action-text">Resolution scheduled to be heard by EEP on Tuesday, 03-24-26 9:00AM in conferen… · 2026-03-20</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">IL HB4652</div>
+          <div class="bill-body">
+            <div class="bill-title-text">ELECTRONIC DEVICE STEWARDSHIP</div>
+            
+            <div class="bill-action-text">To Cannabis &amp; Intoxicating Products Subcommittee · 2026-03-19</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">IL HB5181</div>
+          <div class="bill-body">
+            <div class="bill-title-text">FUNDS AND MANDATES-VARIOUS</div>
+            
+            <div class="bill-action-text">Placed on Calendar 2nd Reading - Short Debate · 2026-03-19</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">HI SR29</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishing The Joint Legislative Mattress Stewardship Program Design Working Group To Study, Eval…</div>
+            
+            <div class="bill-action-text">Referred to HHS/AEN. · 2026-03-19</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">HI SCR39</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishing The Joint Legislative Mattress Stewardship Program Design Working Group To Study, Eval…</div>
+            
+            <div class="bill-action-text">Referred to HHS/AEN. · 2026-03-19</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">TN HB0600</div>
+          <div class="bill-body">
+            <div class="bill-title-text">AN ACT to amend Tennessee Code Annotated, Title 4, Chapter 29, Part 2 and Title 68, Chapter 211, re…</div>
+            
+            <div class="bill-action-text">Taken off notice for cal in s/c Agriculture and Natural Resources Subcommittee … · 2026-03-18</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MI HB5722</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Trade: other; original equipment manufacturers of motorized wheelchairs to provide certain parts, t…</div>
+            
+            <div class="bill-action-text">Bill Electronically Reproduced 03/17/2026 · 2026-03-18</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">IL SB2852</div>
+          <div class="bill-body">
+            <div class="bill-title-text">EPA-SOLID WASTE-FOOD WASTE</div>
+            
+            <div class="bill-action-text">Rule 2-10 Committee Deadline Established As April 24, 2026 · 2026-03-13</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">IL SB3157</div>
+          <div class="bill-body">
+            <div class="bill-title-text">LUBRICANT RESPONSIBILITY ACT</div>
+            
+            <div class="bill-action-text">Rule 2-10 Committee Deadline Established As March 27, 2026 · 2026-03-13</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MD SB553</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Commission to Advance Lithium-Ion Battery Safety in Maryland - Reestablishment</div>
+            
+            <div class="bill-action-text">Referred Environment and Transportation · 2026-03-13</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">WA HB2416</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Concerning fair treatment of waste to energy facilities under the climate commitment act.</div>
+            
+            <div class="bill-action-text">Delivered to Governor. · 2026-03-12</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag advanced">advanced</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">TN SB0269</div>
+          <div class="bill-body">
+            <div class="bill-title-text">AN ACT to amend Tennessee Code Annotated, Title 4, Chapter 29, Part 2 and Title 68, Chapter 211, re…</div>
+            
+            <div class="bill-action-text">Assigned to General Subcommittee of Senate Energy, Ag., and Nat. Resources Committee · 2026-03-11</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">MI SB0701</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Consumer credit: interest rates; maximum interest rate allowed for medical debt; modify. Amends sec…</div>
+            
+            <div class="bill-action-text">Referred To Committee On Health Policy · 2026-03-11</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag passed_one">passed_one</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">NY S06765</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Relates to the proper collection and disposal of mercury thermostats; establishes a fund for the st…</div>
+            
+            <div class="bill-action-text">REPORTED AND COMMITTED TO FINANCE · 2026-03-10</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">OR HB4144</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Relating to batteries.</div>
+            
+            <div class="bill-action-text">President signed. · 2026-03-10</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag advanced">advanced</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">CA SB1010</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Solid waste: Plastic Pollution Prevention and Packaging Producer Responsibility Act.</div>
+            
+            <div class="bill-action-text">Set for hearing April 8. · 2026-03-10</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">CA SB1180</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Plastic Pollution Prevention and Packaging Producer Responsibility Act: California Plastic Pollutio…</div>
+            
+            <div class="bill-action-text">Set for hearing April 8. · 2026-03-10</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">CA AB2253</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Solid waste: products: environmental marketing claims.</div>
+            
+            <div class="bill-action-text">Referred to Com. on NAT. RES. · 2026-03-09</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">NH HB1096</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishing a committee to study ways to manage disposal of vapes and e-cigarettes.</div>
+            
+            <div class="bill-action-text">Inexpedient to Legislate: Motion Adopted Voice Vote 03/05/2026 House Journal  6 · 2026-03-05</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">RI S3012</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Creates multiple chapters to provide and establish a comprehensive program for extended producer re…</div>
+            
+            <div class="bill-action-text">Introduced, referred to Senate Environment and Agriculture · 2026-03-05</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">RI S2794</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Establishes the Beverage Container Recycling Act.</div>
+            
+            <div class="bill-action-text">Introduced, referred to Senate Environment and Agriculture · 2026-03-04</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+        <div class="bill-row">
+          <div class="bill-id">WA HB2616</div>
+          <div class="bill-body">
+            <div class="bill-title-text">Concerning agriculture.</div>
+            
+            <div class="bill-action-text">Public hearing in the House Committee on Consumer Protection &amp; Business at 8:00 AM. · 2026-03-03</div>
+            
+          </div>
+          
+          <div class="bill-stage-tag committee">committee</div>
+          
+        </div>
+        
+      </div>
+    </div>
+    
+
+    <!-- Resources -->
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">Resources</span>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="resource-grid" style="margin-bottom:24px;">
+      
+      <a class="resource-card" href="https://ryan-jenkinson.github.io/compliance-maps/epr-timeline.html" target="_blank">
+        <div class="resource-card-icon">&#x1F4C5;</div>
+        <div class="resource-card-body">
+          <div class="resource-card-title">Regulatory Timeline</div>
+          <div class="resource-card-desc">Key milestones and enforcement dates on an interactive timeline</div>
+        </div>
+        <span class="resource-card-arrow">&#x2197;</span>
+      </a>
+      
+      
+      <a class="resource-card" href="https://ryan-jenkinson.github.io/compliance-maps/epr-map.html" target="_blank">
+        <div class="resource-card-icon">&#x1F5FA;</div>
+        <div class="resource-card-body">
+          <div class="resource-card-title">State Coverage Map</div>
+          <div class="resource-card-desc">Geographic coverage map showing state-level EPR regulation status</div>
+        </div>
+        <span class="resource-card-arrow">&#x2197;</span>
+      </a>
+      
+      <a class="resource-card" href="https://ryan-jenkinson.github.io/compliance-maps/epr-tracker.xlsx" target="_blank">
+        <div class="resource-card-icon">&#x1F4CA;</div>
+        <div class="resource-card-body">
+          <div class="resource-card-title">Excel Tracker</div>
+          <div class="resource-card-desc">Downloadable spreadsheet with full bill and deadline tracking data</div>
+        </div>
+        <span class="resource-card-arrow">&#x2197;</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ── RIGHT ARTICLE SIDEBAR ─────────────────────────────────── -->
+  <aside class="article-sidebar">
+    <div class="article-sidebar-head">
+      <div class="article-sidebar-title">Article Archive</div>
+      <div class="filter-row">
+        <input class="filter-search" id="tp-search" type="text" placeholder="Search…" oninput="filterArticles()">
+        <select class="filter-select" id="tp-period" onchange="filterArticles()">
+          <option value="">All time</option>
+          <option value="7">7 days</option>
+          <option value="30">30 days</option>
+          <option value="90">90 days</option>
+        </select>
+      </div>
+      <div class="filter-count" id="tp-count">14 articles</div>
+    </div>
+
+    <div class="article-list-scroll" id="tp-article-list">
+      <div class="no-results" id="tp-no-results">No articles match your filters.</div>
+      
+      <div class="month-divider" data-month-divider>2026-03</div><div class="article-item"
+           data-headline="oregon packaging epr for producers"
+           data-snippet="psi: oregon packaging epr for producers"
+           data-urgency="low"
+           data-date="2026-03-25">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://productstewardship.us/webinar/webinar-series-preparing-producers-for-oregon-packaging-epr/" target="_blank">Oregon Packaging EPR for Producers</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Product Stewardship Institute</span>
+          
+          <span>·</span>
+          <span>2026-03-25</span>
+          
+        </div>
+        
+        <div class="article-snippet">PSI: Oregon Packaging EPR for Producers</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="endangered and threatened wildlife and plants; designation of critical habitat for 22 species in the commonwealth of the northern mariana islands and the territory of guam"
+           data-snippet="we, the u.s. fish and wildlife service (service), propose to designate critical habitat for 9 animal species and 13 plant species from the mariana islands (the u.s. territory of guam and the commonwealth of northern mariana islands) under the endangered species act (act). in total across both the territory and commonwealth, approximately 59,886 acres (24,235 hectares) on the islands of aguiguan, alamagan, asunci[oacute]n, guam (including the island of cocos), pagan, rota, saipan, sarigan, and ti"
+           data-urgency="low"
+           data-date="2026-03-24">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05678/endangered-and-threatened-wildlife-and-plants-designation-of-critical-habitat-for-22-species-in-the" target="_blank">Endangered and Threatened Wildlife and Plants; Designation of Critical Habitat for 22 Species in the Commonwealth of the Northern Mariana Islands and the Territory of Guam</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-24</span>
+          
+        </div>
+        
+        <div class="article-snippet">We, the U.S. Fish and Wildlife Service (Service), propose to designate critical habitat for 9 animal species and 13 plant species from the Mariana Islands (the U.S. Territory of Guam and the Commonwealth of Northern Mariana Islands) under the Endangered Species Act (Act). In total across both the Territory and Commonwealth, approximately 59,886 acres (24,235 hectares) on the islands of Aguiguan, Alamagan, Asunci[oacute]n, Guam (including the island of Cocos), Pagan, Rota, Saipan, Sarigan, and Ti</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="national organic program: national list of allowed and prohibited substances per october 2021, october 2022, and october 2024 recommendations (crops and livestock)"
+           data-snippet="this proposed rule would amend the u.s. department of agriculture&#39;s (usda) organic regulations related to organic crop and livestock production. the proposed rule would provide additional tools to organic producers, allowing carbon dioxide in organic crop production and meloxicam as a pain treatment in organic livestock production. additionally, this rulemaking would remove overly burdensome restrictions for methionine, an amino acid, in organic poultry feed and would affirm that sodium nitrate "
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05598/national-organic-program-national-list-of-allowed-and-prohibited-substances-per-october-2021-october" target="_blank">National Organic Program: National List of Allowed and Prohibited Substances per October 2021, October 2022, and October 2024 Recommendations (Crops and Livestock)</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+        <div class="article-snippet">This proposed rule would amend the U.S. Department of Agriculture&#39;s (USDA) organic regulations related to organic crop and livestock production. The proposed rule would provide additional tools to organic producers, allowing carbon dioxide in organic crop production and meloxicam as a pain treatment in organic livestock production. Additionally, this rulemaking would remove overly burdensome restrictions for methionine, an amino acid, in organic poultry feed and would affirm that sodium nitrate </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="agency information collection activities: proposed request and comment request"
+           data-snippet=""
+           data-urgency="low"
+           data-date="2026-03-23">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05600/agency-information-collection-activities-proposed-request-and-comment-request" target="_blank">Agency Information Collection Activities: Proposed Request and Comment Request</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-23</span>
+          
+        </div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="certain uncoated paper from portugal: final results of antidumping duty administrative review; 2023-2024"
+           data-snippet="the u.s. department of commerce (commerce) determines that the navigator company, s.a. (navigator), the sole producer or exporter subject to this administrative review, made sales of certain uncoated paper (uncoated paper) from portugal in the united states at prices below normal value (nv) during the period of review. the period of review (por) is march 1, 2023, through february 29, 2024."
+           data-urgency="low"
+           data-date="2026-03-19">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05441/certain-uncoated-paper-from-portugal-final-results-of-antidumping-duty-administrative-review" target="_blank">Certain Uncoated Paper From Portugal: Final Results of Antidumping Duty Administrative Review; 2023-2024</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-19</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) determines that The Navigator Company, S.A. (Navigator), the sole producer or exporter subject to this administrative review, made sales of certain uncoated paper (uncoated paper) from Portugal in the United States at prices below normal value (NV) during the period of review. The period of review (POR) is March 1, 2023, through February 29, 2024.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="certain new pneumatic off-the-road tires from india: final results of countervailing duty administrative review; 2023"
+           data-snippet="the u.s. department of commerce (commerce) determines that countervailable subsidies were provided to producers and/or exporters of certain new pneumatic off-the-road tires (otr tires) from india, during the period of review (por) january 1, 2023, through december 31, 2023."
+           data-urgency="low"
+           data-date="2026-03-19">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05440/certain-new-pneumatic-off-the-road-tires-from-india-final-results-of-countervailing-duty" target="_blank">Certain New Pneumatic Off-the-Road Tires From India: Final Results of Countervailing Duty Administrative Review; 2023</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-19</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) determines that countervailable subsidies were provided to producers and/or exporters of certain new pneumatic off-the-road tires (OTR tires) from India, during the period of review (POR) January 1, 2023, through December 31, 2023.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="oil country tubular goods from socialist republic of vietnam: preliminary results and rescission, in part, of antidumping duty administrative review; 2023-2024"
+           data-snippet="the u.s. department of commerce (commerce) preliminarily finds that producers and/or exporters subject to this administrative review made sales of subject merchandise at less than normal value (nv) during the period of review (por) september 1, 2023, through august 31, 2024. commerce is also rescinding this review, in part, with respect to two companies. interested parties are invited to comment on these preliminary results."
+           data-urgency="low"
+           data-date="2026-03-16">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/16/2026-04995/oil-country-tubular-goods-from-socialist-republic-of-vietnam-preliminary-results-and-rescission-in" target="_blank">Oil Country Tubular Goods From Socialist Republic of Vietnam: Preliminary Results and Rescission, in Part, of Antidumping Duty Administrative Review; 2023-2024</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-16</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) preliminarily finds that producers and/or exporters subject to this administrative review made sales of subject merchandise at less than normal value (NV) during the period of review (POR) September 1, 2023, through August 31, 2024. Commerce is also rescinding this review, in part, with respect to two companies. Interested parties are invited to comment on these preliminary results.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="wooden cabinets and vanities and components thereof from the people&#39;s republic of china: final results of countervailing duty administrative review; 2023"
+           data-snippet="the u.s. department of commerce (commerce) determines that certain producers and exporters of wooden cabinets and vanities and components thereof (wooden cabinets) from the people&#39;s republic of china (china) received countervailable subsidies during the period of review (por) january 1, 2023, through december 31, 2023."
+           data-urgency="low"
+           data-date="2026-03-13">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/13/2026-04943/wooden-cabinets-and-vanities-and-components-thereof-from-the-peoples-republic-of-china-final-results" target="_blank">Wooden Cabinets and Vanities and Components Thereof From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-13</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) determines that certain producers and exporters of wooden cabinets and vanities and components thereof (wooden cabinets) from the People&#39;s Republic of China (China) received countervailable subsidies during the period of review (POR) January 1, 2023, through December 31, 2023.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="certain corrosion inhibitors from the people&#39;s republic of china: final results of countervailing duty administrative review; 2023"
+           data-snippet="the u.s. department of commerce (commerce) determines that certain producers/exporters of certain corrosion inhibitors (corrosion inhibitors) from the people&#39;s republic of china (china) received countervailable subsidies during the period of review (por) january 1, 2023, through december 31, 2023."
+           data-urgency="low"
+           data-date="2026-03-12">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/12/2026-04877/certain-corrosion-inhibitors-from-the-peoples-republic-of-china-final-results-of-countervailing-duty" target="_blank">Certain Corrosion Inhibitors From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-12</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) determines that certain producers/exporters of certain corrosion inhibitors (corrosion inhibitors) from the People&#39;s Republic of China (China) received countervailable subsidies during the period of review (POR) January 1, 2023, through December 31, 2023.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="diffusion-annealed, nickel-plated flat-rolled steel products from japan: final results of antidumping duty administrative review; 2023-2024"
+           data-snippet="the u.s. department of commerce (commerce) determines that toyo kohan co., ltd. (toyo kohan), the sole producer/exporter subject to this administrative review, did not make sales of subject merchandise at less than normal value during the period of review (por) may 1, 2023, through april 30, 2024."
+           data-urgency="low"
+           data-date="2026-03-10">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04611/diffusion-annealed-nickel-plated-flat-rolled-steel-products-from-japan-final-results-of-antidumping" target="_blank">Diffusion-Annealed, Nickel-Plated Flat-Rolled Steel Products From Japan: Final Results of Antidumping Duty Administrative Review; 2023-2024</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-10</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) determines that Toyo Kohan Co., Ltd. (Toyo Kohan), the sole producer/exporter subject to this administrative review, did not make sales of subject merchandise at less than normal value during the period of review (POR) May 1, 2023, through April 30, 2024.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="common alloy aluminum sheet from india: final results of countervailing duty administrative review; 2023"
+           data-snippet="the u.s. department of commerce (commerce) determines that manaksia aluminium company limited (malco), a producer/exporter of common alloy aluminum sheet from india, received countervailable subsidies during the period of review (por), january 1, 2023, through december 31, 2023."
+           data-urgency="low"
+           data-date="2026-03-10">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04610/common-alloy-aluminum-sheet-from-india-final-results-of-countervailing-duty-administrative-review" target="_blank">Common Alloy Aluminum Sheet From India: Final Results of Countervailing Duty Administrative Review; 2023</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-10</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) determines that Manaksia Aluminium Company Limited (MALCO), a producer/exporter of common alloy aluminum sheet from India, received countervailable subsidies during the period of review (POR), January 1, 2023, through December 31, 2023.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="christmas tree promotion, research, and information order"
+           data-snippet="this final rule implements changes to the christmas tree promotion, research, and information order (order). these changes include amending the board&#39;s name from &#34;christmas tree promotion board&#34; to &#34;real christmas tree board&#34;, increasing the administrative expenses cap from 10 to 15 percent, allowing importers to request refunds of assessments paid on trees that were shipped to the united states but not sold, and increasing the mandatory period to maintain books and records relating to the order"
+           data-urgency="low"
+           data-date="2026-03-09">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/09/2026-04586/christmas-tree-promotion-research-and-information-order" target="_blank">Christmas Tree Promotion, Research, and Information Order</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-09</span>
+          
+        </div>
+        
+        <div class="article-snippet">This final rule implements changes to the Christmas Tree Promotion, Research, and Information Order (Order). These changes include amending the Board&#39;s name from &#34;Christmas Tree Promotion Board&#34; to &#34;Real Christmas Tree Board&#34;, increasing the administrative expenses cap from 10 to 15 percent, allowing importers to request refunds of assessments paid on trees that were shipped to the United States but not sold, and increasing the mandatory period to maintain books and records relating to the Order</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="almonds grown in california; extension of inedible disposition obligation deadline"
+           data-snippet="this proposed rule would implement a recommendation from the almond board of california (board) to extend the inedible disposition obligation deadline prescribed under the federal marketing order for almonds grown in california (order) from september 30 to november 30 indefinitely."
+           data-urgency="low"
+           data-date="2026-03-09">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/09/2026-04573/almonds-grown-in-california-extension-of-inedible-disposition-obligation-deadline" target="_blank">Almonds Grown in California; Extension of Inedible Disposition Obligation Deadline</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-09</span>
+          
+        </div>
+        
+        <div class="article-snippet">This proposed rule would implement a recommendation from the Almond Board of California (Board) to extend the inedible disposition obligation deadline prescribed under the Federal marketing order for almonds grown in California (Order) from September 30 to November 30 indefinitely.</div>
+        
+      </div>
+      <div class="article-item"
+           data-headline="certain cold-rolled steel flat products from the republic of korea: preliminary results and rescission, in part, of antidumping administrative review; 2023-2024"
+           data-snippet="the u.s. department of commerce (commerce) preliminarily determines that certain cold-rolled steel flat products (cold-rolled steel) from the republic of korea (korea) were not made at less than normal value (nv) during the period of review (por) september 1, 2023, through august 31, 2024. in addition, commerce is rescinding the review, in part, with respect to 35 companies. interested parties are invited to comment on these preliminary results."
+           data-urgency="low"
+           data-date="2026-03-06">
+        <div class="article-head">
+          
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/06/2026-04405/certain-cold-rolled-steel-flat-products-from-the-republic-of-korea-preliminary-results-and" target="_blank">Certain Cold-Rolled Steel Flat Products From the Republic of Korea: Preliminary Results and Rescission, in Part, of Antidumping Administrative Review; 2023-2024</a>
+          </span>
+          <span class="badge badge-low">LOW</span>
+        </div>
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-06</span>
+          
+        </div>
+        
+        <div class="article-snippet">The U.S. Department of Commerce (Commerce) preliminarily determines that certain cold-rolled steel flat products (cold-rolled steel) from the Republic of Korea (Korea) were not made at less than normal value (NV) during the period of review (POR) September 1, 2023, through August 31, 2024. In addition, Commerce is rescinding the review, in part, with respect to 35 companies. Interested parties are invited to comment on these preliminary results.</div>
+        
+      </div>
+      
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  function filterArticles() {
+    const query = document.getElementById('tp-search').value.toLowerCase().trim();
+    const periodFilter = parseInt(document.getElementById('tp-period').value) || 0;
+    const now = new Date();
+    const items = document.querySelectorAll('#tp-article-list .article-item');
+    const dividers = document.querySelectorAll('#tp-article-list .month-divider');
+    let visibleCount = 0;
+
+    items.forEach(item => {
+      const headline = item.dataset.headline || '';
+      const snippet = item.dataset.snippet || '';
+      const dateStr = item.dataset.date || '';
+      let show = true;
+      if (query && !headline.includes(query) && !snippet.includes(query)) show = false;
+      if (periodFilter && dateStr) {
+        const cutoff = new Date(now.getTime() - periodFilter * 86400000);
+        if (new Date(dateStr) < cutoff) show = false;
+      }
+      item.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    });
+
+    dividers.forEach(div => {
+      let next = div.nextElementSibling;
+      let hasVisible = false;
+      while (next && !next.hasAttribute('data-month-divider')) {
+        if (next.classList.contains('article-item') && next.style.display !== 'none') { hasVisible = true; break; }
+        next = next.nextElementSibling;
+      }
+      div.style.display = hasVisible ? '' : 'none';
+    });
+
+    document.getElementById('tp-count').textContent = visibleCount + ' articles';
+    document.getElementById('tp-no-results').classList.toggle('visible', visibleCount === 0 && items.length > 0);
+  }
+</script>
+</body>
+</html>
