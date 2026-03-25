@@ -750,6 +750,58 @@
     .article-item.hidden-by-search,
     .article-item.hidden-by-urgency,
     .article-item.hidden-by-new { display: none; }
+    .article-item.hidden-by-date { display: none; }
+    .article-item.historical { opacity: 0.85; }
+    .article-show-history {
+      display: block; width: 100%; padding: 8px 14px;
+      background: none; border: none; border-top: 1px solid var(--border);
+      color: var(--accent); font-size: 12px; cursor: pointer;
+      text-align: center; font-family: inherit;
+    }
+    .article-show-history:hover { background: var(--bg-secondary); }
+    .insight-panel {
+      background: var(--bg-secondary); border-radius: 6px;
+      padding: 12px 14px; margin-bottom: 12px;
+      border-left: 3px solid var(--accent);
+    }
+    .insight-panel-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 8px;
+    }
+    .insight-trend { font-size: 13px; color: var(--text-primary); line-height: 1.6; margin-bottom: 8px; }
+    .insight-bullets { list-style: none; padding: 0; margin: 0; }
+    .insight-bullets li {
+      font-size: 12.5px; color: var(--text-secondary); padding: 3px 0;
+      padding-left: 14px; position: relative; line-height: 1.5;
+    }
+    .insight-bullets li::before { content: "›"; position: absolute; left: 0; color: var(--accent); }
+    .insight-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .insight-badge {
+      font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600;
+      background: var(--border-light); color: var(--text-secondary);
+    }
+    .insight-badge.hi { background: #FFF0F0; color: var(--red); }
+    .insight-badge.med { background: #FFF8EC; color: var(--amber); }
+    .insight-badge.lo { background: #F0FFF8; color: var(--green); }
+    .monthly-chart-bar { transition: opacity 0.15s; }
+    .monthly-chart-bar:hover { opacity: 0.8; }
+    .history-modal-article {
+      padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 13px;
+    }
+    .history-modal-article:last-child { border-bottom: none; }
+    .history-modal-article a { color: var(--text-primary); text-decoration: none; font-weight: 500; }
+    .history-modal-article a:hover { color: var(--accent); }
+    .history-modal-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+    .history-modal-snippet { font-size: 12px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+    .history-search { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px;
+      font-size: 13px; margin-bottom: 12px; font-family: inherit; background: var(--bg-primary); color: var(--text-primary); }
+    .history-filter-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .history-filter-chip {
+      padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+      border: 1px solid var(--border); cursor: pointer; background: var(--bg-primary);
+      color: var(--text-secondary); transition: all 0.15s;
+    }
+    .history-filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     .filter-bar {
       display: flex;
@@ -1904,7 +1956,7 @@
       <span class="rail-label">Calendar .ics</span>
     </a>
     
-    <div class="rail-footer-text">Updated 2026-03-24 21:08:43</div>
+    <div class="rail-footer-text">Updated 2026-03-24 21:47:32</div>
     <button class="rail-toggle-btn" onclick="toggleSidebarPersist()" title="Collapse sidebar">
       <span class="toggle-open">&#171;</span>
       <span class="toggle-close">&#187;</span>
@@ -1966,6 +2018,27 @@
     <button class="drawer-reset" onclick="resetWidgets()">Reset to defaults</button>
   </div>
 </div>
+
+  <!-- All-articles history modal -->
+  <div id="history-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9000;align-items:center;justify-content:center;" onclick="closeHistoryModal(event)">
+    <div style="background:var(--bg-primary);border-radius:12px;width:min(820px,95vw);max-height:85vh;display:flex;flex-direction:column;overflow:hidden;" onclick="event.stopPropagation()">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+        <span id="history-modal-title" style="font-weight:700;font-size:15px;flex:1;">Article History</span>
+        <span id="history-modal-count" style="font-size:12px;color:var(--text-muted);"></span>
+        <button onclick="closeHistoryModal()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;color:var(--text-secondary);">Close</button>
+      </div>
+      <div style="padding:12px 20px;border-bottom:1px solid var(--border-light);">
+        <input class="history-search" id="history-modal-search" placeholder="Search articles..." oninput="filterHistoryModal()">
+        <div class="history-filter-row" id="history-filter-row">
+          <button class="history-filter-chip active" data-period="all" onclick="setHistoryPeriod(this,'all')">All time</button>
+          <button class="history-filter-chip" data-period="7" onclick="setHistoryPeriod(this,'7')">Last 7 days</button>
+          <button class="history-filter-chip" data-period="30" onclick="setHistoryPeriod(this,'30')">Last 30 days</button>
+          <button class="history-filter-chip" data-period="90" onclick="setHistoryPeriod(this,'90')">Last 90 days</button>
+        </div>
+      </div>
+      <div id="history-modal-body" style="overflow-y:auto;flex:1;padding:8px 20px 16px;"></div>
+    </div>
+  </div>
 
 <!-- ═══ EXPAND MODAL ═══ -->
 <div class="expand-modal-overlay" id="expand-modal-overlay" onclick="closeExpandModal(event)">
@@ -2311,13 +2384,19 @@
               
               
 
-              <!-- Articles -->
-              <div class="article-feed">
+              <!-- Articles — 30-day default, full history in popout --><div class="article-feed" id="feed-pfas">
+                
+
                 
                   
-                  <div class="article-item" data-urgency="HIGH" data-topic="pfas"
-                       data-headline="minnesota prism system updated; mpca holds cuu webinar" data-summary="as of march 9, 2026, minnesota has updated its pfas reporting information system for manufacturers (prism), with the mpca having held a february 2026 webinar on commercially useful units (cuus). the prism portal opened february 2, 2026, accepting registrations ahead of the july 1, 2026 deadline under amara&#39;s law. manufacturers and importers of pfas-containing products sold in minnesota must be registered or face a sales prohibition." data-source="bergeson &amp; campbell"
-                       data-date="2026-03-09" data-new="false">
+                  <div class="article-item"
+                       data-urgency="HIGH" data-topic="pfas"
+                       data-headline="minnesota prism system updated; mpca holds cuu webinar"
+                       data-summary="as of march 9, 2026, minnesota has updated its pfas reporting information system for manufacturers (prism), with the mpca having held a february 2026 webinar on commercially useful units (cuus). the prism portal opened february 2, 2026, accepting registrations ahead of the july 1, 2026 deadline under amara&#39;s law. manufacturers and importers of pfas-containing products sold in minnesota must be registered or face a sales prohibition."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2026-03-09"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/minnesota-updates-its-pfas-reporting-system/">Minnesota PRISM System Updated; MPCA Holds CUU Webinar</a></span>
@@ -2340,10 +2419,14 @@
                     <span class="article-deadline-tag">2026-07-01</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="wisconsin senate unanimously passes pfas legislation" data-summary="the wisconsin senate unanimously passed multiple pfas bills in march 2026, breaking years of legislative gridlock on the issue. the bills address pfas contamination and could impose new obligations on manufacturers and users of pfas-containing products in wisconsin. final enactment depends on the governor&#39;s signature and implementing rulemaking." data-source="environmental health news / wisconsin examiner"
-                       data-date="2026-03-17" data-new="false">
+                  <div class="article-item"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="wisconsin senate unanimously passes pfas legislation"
+                       data-summary="the wisconsin senate unanimously passed multiple pfas bills in march 2026, breaking years of legislative gridlock on the issue. the bills address pfas contamination and could impose new obligations on manufacturers and users of pfas-containing products in wisconsin. final enactment depends on the governor&#39;s signature and implementing rulemaking."
+                       data-source="environmental health news / wisconsin examiner"
+                       data-date="2026-03-17"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://wisconsinexaminer.com/2026/03/17/wisconsin-senate-unanimously-passes-pfas-legislation/">Wisconsin Senate Unanimously Passes PFAS Legislation</a></span>
@@ -2364,10 +2447,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="california releases draft pfas profile for floor maintenance products" data-summary="california dtsc released a draft product profile for floor maintenance products containing pfas and held a public workshop on march 19, 2026, under the safer consumer products program. this is an early step toward potential pfas use restrictions or labeling requirements for this product category in california. companies supplying or purchasing floor care products for california facilities should monitor the rulemaking trajectory." data-source="bergeson &amp; campbell"
-                       data-date="2026-03-19" data-new="false">
+                  <div class="article-item"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="california releases draft pfas profile for floor maintenance products"
+                       data-summary="california dtsc released a draft product profile for floor maintenance products containing pfas and held a public workshop on march 19, 2026, under the safer consumer products program. this is an early step toward potential pfas use restrictions or labeling requirements for this product category in california. companies supplying or purchasing floor care products for california facilities should monitor the rulemaking trajectory."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2026-03-19"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/california-releases-draft-profile-for-floor-maintenance-products-containing-pfas-will-hold-workshop-on-march-19-2026/">California Releases Draft PFAS Profile for Floor Maintenance Products</a></span>
@@ -2388,10 +2475,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="epa adds pfas to tri via federal register; reporting year 2026" data-summary="epa published a final rule on february 27, 2026, implementing the statutory addition of certain pfas to the toxics release inventory (tri) under epcra, effective for reporting year 2026. one additional perfluoroalkyl substance is now subject to annual release and waste management reporting obligations. covered facilities must evaluate whether they meet reporting thresholds for this newly listed substance." data-source="federal register / epa"
-                       data-date="2026-02-27" data-new="false">
+                  <div class="article-item"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="epa adds pfas to tri via federal register; reporting year 2026"
+                       data-summary="epa published a final rule on february 27, 2026, implementing the statutory addition of certain pfas to the toxics release inventory (tri) under epcra, effective for reporting year 2026. one additional perfluoroalkyl substance is now subject to annual release and waste management reporting obligations. covered facilities must evaluate whether they meet reporting thresholds for this newly listed substance."
+                       data-source="federal register / epa"
+                       data-date="2026-02-27"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/02/27/2026-03944/implementing-statutory-addition-of-certain-per--and-polyfluoroalkyl-substances-pfas-to-the-toxics">EPA Adds PFAS to TRI via Federal Register; Reporting Year 2026</a></span>
@@ -2414,10 +2505,14 @@
                     <span class="article-deadline-tag">2027-07-01</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="epa announces pfas coordinating group for cross-agency alignment" data-summary="epa announced a pfas coordinating group in february 2026 to align regulatory approaches across agency offices. this signals continued federal regulatory attention to pfas but may also introduce some coordination on timing and scope of overlapping rules including tsca, tri, and drinking water standards. near-term enforcement posture under the current administration remains to be seen." data-source="bergeson &amp; campbell"
-                       data-date="2026-02-14" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="epa announces pfas coordinating group for cross-agency alignment"
+                       data-summary="epa announced a pfas coordinating group in february 2026 to align regulatory approaches across agency offices. this signals continued federal regulatory attention to pfas but may also introduce some coordination on timing and scope of overlapping rules including tsca, tri, and drinking water standards. near-term enforcement posture under the current administration remains to be seen."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2026-02-14"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/epa-announces-pfas-coordinating-group/">EPA Announces PFAS Coordinating Group for Cross-Agency Alignment</a></span>
@@ -2438,10 +2533,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="new mexico legislature questions fluoropolymer exemption in pfas act" data-summary="the new mexico legislature passed a joint memorial in february 2026 directing nmed to report on whether the current fluoropolymer exemption in the state pfas protection act should be retained. if the exemption is removed, fluoropolymer-based coatings and components would become subject to new mexico&#39;s reporting, labeling, and potential prohibition requirements. this is a direct threat to companies relying on fluoropolymer exemptions in multi-state compliance strategies." data-source="bergeson &amp; campbell"
-                       data-date="2026-02-23" data-new="false">
+                  <div class="article-item"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="new mexico legislature questions fluoropolymer exemption in pfas act"
+                       data-summary="the new mexico legislature passed a joint memorial in february 2026 directing nmed to report on whether the current fluoropolymer exemption in the state pfas protection act should be retained. if the exemption is removed, fluoropolymer-based coatings and components would become subject to new mexico&#39;s reporting, labeling, and potential prohibition requirements. this is a direct threat to companies relying on fluoropolymer exemptions in multi-state compliance strategies."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2026-02-23"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/new-mexico-legislature-passes-joint-memorial-calling-for-nmed-to-report-on-whether-fluoropolymer-exemption-should-be-retained-in-pfas-act/">New Mexico Legislature Questions Fluoropolymer Exemption in PFAS Act</a></span>
@@ -2462,10 +2561,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="HIGH" data-topic="pfas"
-                       data-headline="minnesota publishes final pfas in products reporting and fees rule" data-summary="minnesota published its final pfas in products reporting and fees rule in december 2025, establishing the regulatory framework and fee schedule that governs prism registrations under amara&#39;s law. the final rule confirms the july 1, 2026 registration deadline and establishes the cost structure for reporting manufacturers. this rule is now binding on all manufacturers selling pfas-containing products in minnesota." data-source="bergeson &amp; campbell"
-                       data-date="2025-12-09" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="HIGH" data-topic="pfas"
+                       data-headline="minnesota publishes final pfas in products reporting and fees rule"
+                       data-summary="minnesota published its final pfas in products reporting and fees rule in december 2025, establishing the regulatory framework and fee schedule that governs prism registrations under amara&#39;s law. the final rule confirms the july 1, 2026 registration deadline and establishes the cost structure for reporting manufacturers. this rule is now binding on all manufacturers selling pfas-containing products in minnesota."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2025-12-09"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/minnesota-publishes-final-pfas-in-products-reporting-and-fees-rule/">Minnesota Publishes Final PFAS in Products Reporting and Fees Rule</a></span>
@@ -2488,10 +2591,14 @@
                     <span class="article-deadline-tag">2026-07-01</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="epa proposes narrowing tsca section 8(a)(7) pfas reporting; exempts imported articles" data-summary="epa proposed in november 2025 to narrow the scope of the tsca section 8(a)(7) pfas reporting rule, including potential exemptions for de minimis quantities and imported articles. a companion legal analysis flagged that epa&#39;s new statutory interpretation on articles could significantly reduce reporting obligations for importers of pfas-containing finished goods. the proposal, if finalized, reduces but does not eliminate tsca pfas reporting obligations for manufacturers and importers." data-source="bergeson &amp; campbell"
-                       data-date="2025-11-13" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="epa proposes narrowing tsca section 8(a)(7) pfas reporting; exempts imported articles"
+                       data-summary="epa proposed in november 2025 to narrow the scope of the tsca section 8(a)(7) pfas reporting rule, including potential exemptions for de minimis quantities and imported articles. a companion legal analysis flagged that epa&#39;s new statutory interpretation on articles could significantly reduce reporting obligations for importers of pfas-containing finished goods. the proposal, if finalized, reduces but does not eliminate tsca pfas reporting obligations for manufacturers and importers."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2025-11-13"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/epa_proposes_to_narrow_scope_of_tsca_section_8a7_pfas_reporting_rule/">EPA Proposes Narrowing TSCA Section 8(a)(7) PFAS Reporting; Exempts Imported Articles</a></span>
@@ -2512,10 +2619,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="reach universal pfas restriction: rac opinion adopted, publication imminent" data-summary="the eu risk assessment committee (rac) has adopted its opinion on the proposed universal pfas restriction under reach, with echa expected to publish the opinion shortly. this restriction, if adopted, would apply to the manufacture, use, and placing on market of nearly all pfas substances across the eu with limited derogations. companies with european customers or suppliers using fluoropolymer coatings must track derogation timelines closely." data-source="jd supra"
-                       data-date="" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="reach universal pfas restriction: rac opinion adopted, publication imminent"
+                       data-summary="the eu risk assessment committee (rac) has adopted its opinion on the proposed universal pfas restriction under reach, with echa expected to publish the opinion shortly. this restriction, if adopted, would apply to the manufacture, use, and placing on market of nearly all pfas substances across the eu with limited derogations. companies with european customers or suppliers using fluoropolymer coatings must track derogation timelines closely."
+                       data-source="jd supra"
+                       data-date=""
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.jdsupra.com/legalnews/rac-adopts-opinion-on-proposed-reach-4647189/">REACH Universal PFAS Restriction: RAC Opinion Adopted, Publication Imminent</a></span>
@@ -2533,10 +2644,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="new mexico pfas rule revised; labeling requirements and faqs published" data-summary="nmed posted a revised proposed pfas reporting, labeling, and prohibition rule in january 2026, following a series of public engagement steps including faqs on labeling published in november 2025. the rule would impose disclosure and labeling obligations on manufacturers of pfas-containing products sold in new mexico, with potential prohibition categories. companies should evaluate whether their fluoropolymer-coated components trigger obligations under this emerging framework." data-source="bergeson &amp; campbell"
-                       data-date="2026-01-23" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="new mexico pfas rule revised; labeling requirements and faqs published"
+                       data-summary="nmed posted a revised proposed pfas reporting, labeling, and prohibition rule in january 2026, following a series of public engagement steps including faqs on labeling published in november 2025. the rule would impose disclosure and labeling obligations on manufacturers of pfas-containing products sold in new mexico, with potential prohibition categories. companies should evaluate whether their fluoropolymer-coated components trigger obligations under this emerging framework."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2026-01-23"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/nmed-posts-revised-proposed-pfas-reporting-labeling-and-prohibition-rule/">New Mexico PFAS Rule Revised; Labeling Requirements and FAQs Published</a></span>
@@ -2557,10 +2672,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="safer states: expansive state pfas restrictions take effect 2025–2026" data-summary="safer states reports that multiple state-level pfas restrictions are taking effect in 2025 and 2026 across categories including textiles, food packaging, cookware, firefighting foam, and industrial products. the breadth of these state laws means that companies selling into multiple states face a patchwork of category-specific bans and reporting requirements beyond minnesota&#39;s prism. monitoring emerging restrictions in me, or, co, wa, and il is essential for product line compliance." data-source="safer states"
-                       data-date="" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="safer states: expansive state pfas restrictions take effect 2025–2026"
+                       data-summary="safer states reports that multiple state-level pfas restrictions are taking effect in 2025 and 2026 across categories including textiles, food packaging, cookware, firefighting foam, and industrial products. the breadth of these state laws means that companies selling into multiple states face a patchwork of category-specific bans and reporting requirements beyond minnesota&#39;s prism. monitoring emerging restrictions in me, or, co, wa, and il is essential for product line compliance."
+                       data-source="safer states"
+                       data-date=""
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.saferstates.org/press-room/expansive-pfas-protections-take-effect-in-2026-as-states-lead-on-chemical-safety/">Safer States: Expansive State PFAS Restrictions Take Effect 2025–2026</a></span>
@@ -2578,10 +2697,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="pfas"
-                       data-headline="new jersey ag reaches $450m pfas settlement with 3m" data-summary="new jersey ag announced a $450 million settlement with 3m resolving pfas contamination claims tied to a 3m-owned site. this settlement, combined with 3m&#39;s exit from pfas manufacturing, further reduces 3m&#39;s role as a viable fluoropolymer raw material supplier and reinforces the need to qualify alternative sources. the litigation landscape signals continued financial and reputational risk for pfas manufacturers." data-source="regulatory oversight"
-                       data-date="" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="LOW" data-topic="pfas"
+                       data-headline="new jersey ag reaches $450m pfas settlement with 3m"
+                       data-summary="new jersey ag announced a $450 million settlement with 3m resolving pfas contamination claims tied to a 3m-owned site. this settlement, combined with 3m&#39;s exit from pfas manufacturing, further reduces 3m&#39;s role as a viable fluoropolymer raw material supplier and reinforces the need to qualify alternative sources. the litigation landscape signals continued financial and reputational risk for pfas manufacturers."
+                       data-source="regulatory oversight"
+                       data-date=""
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.regulatoryoversight.com/2025/05/new-jersey-ag-platkin-reaches-450m-pfas-settlement-with-3m/">New Jersey AG Reaches $450M PFAS Settlement With 3M</a></span>
@@ -2599,10 +2722,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="HIGH" data-topic="pfas"
-                       data-headline="mpca prism supplemental guide published for reporting scenarios" data-summary="the minnesota mpca published a prism supplemental guide to assist manufacturers with complex reporting scenarios under amara&#39;s law, including multi-component products, contract manufacturers, and imported goods. the guide is a critical reference for companies navigating the cuu (commercially useful unit) determination process. companies and their foreign suppliers must consult this guide when preparing prism submissions." data-source="mn mpca"
-                       data-date="" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="HIGH" data-topic="pfas"
+                       data-headline="mpca prism supplemental guide published for reporting scenarios"
+                       data-summary="the minnesota mpca published a prism supplemental guide to assist manufacturers with complex reporting scenarios under amara&#39;s law, including multi-component products, contract manufacturers, and imported goods. the guide is a critical reference for companies navigating the cuu (commercially useful unit) determination process. companies and their foreign suppliers must consult this guide when preparing prism submissions."
+                       data-source="mn mpca"
+                       data-date=""
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.pca.state.mn.us/sites/default/files/c-pfc1-28.pdf">MPCA PRISM Supplemental Guide Published for Reporting Scenarios</a></span>
@@ -2622,10 +2749,14 @@
                     <span class="article-deadline-tag">2026-07-01</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="pfas"
-                       data-headline="minnesota 2025 pfas prohibitions now in effect" data-summary="minnesota&#39;s 2025 pfas prohibitions are now in effect, covering specific product categories including cookware, ski wax, and carpets under amara&#39;s law&#39;s prohibition framework. these prohibitions are separate from but complementary to the prism reporting obligation and signal minnesota&#39;s intent to broaden product-category bans over time. companies should verify that none of their product lines fall into currently prohibited categories." data-source="mn mpca"
-                       data-date="" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="pfas"
+                       data-headline="minnesota 2025 pfas prohibitions now in effect"
+                       data-summary="minnesota&#39;s 2025 pfas prohibitions are now in effect, covering specific product categories including cookware, ski wax, and carpets under amara&#39;s law&#39;s prohibition framework. these prohibitions are separate from but complementary to the prism reporting obligation and signal minnesota&#39;s intent to broaden product-category bans over time. companies should verify that none of their product lines fall into currently prohibited categories."
+                       data-source="mn mpca"
+                       data-date=""
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.pca.state.mn.us/air-water-land-climate/2025-pfas-prohibitions">Minnesota 2025 PFAS Prohibitions Now in Effect</a></span>
@@ -2643,10 +2774,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="pfas"
-                       data-headline="australia aicis requires pfas information on 522 substances" data-summary="australia&#39;s aicis (australian industrial chemicals introduction scheme) is requiring information reporting on 522 pfas imported or manufactured in australia, expanding the global regulatory web around pfas substances. this is relevant for any company with australian operations or suppliers sourcing fluorochemicals through australia. while not directly actionable for us-only operations, it reinforces global supply chain pfas data collection requirements." data-source="bergeson &amp; campbell"
-                       data-date="2025-10-24" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="LOW" data-topic="pfas"
+                       data-headline="australia aicis requires pfas information on 522 substances"
+                       data-summary="australia&#39;s aicis (australian industrial chemicals introduction scheme) is requiring information reporting on 522 pfas imported or manufactured in australia, expanding the global regulatory web around pfas substances. this is relevant for any company with australian operations or suppliers sourcing fluorochemicals through australia. while not directly actionable for us-only operations, it reinforces global supply chain pfas data collection requirements."
+                       data-source="bergeson &amp; campbell"
+                       data-date="2025-10-24"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.lawbc.com/aicis-will-require-information-on-522-pfas-imported-or-manufactured-in-australia/">Australia AICIS Requires PFAS Information on 522 Substances</a></span>
@@ -2667,7 +2802,11 @@
                     
                     
                   </div>
-                  
+                  <button class="article-show-history"
+                          onclick="openHistoryModal('PFAS', 'PFAS &amp; Per/Polyfluoroalkyl Substances')"
+                          title="View full 6-month article archive">
+                    View full history — 0 articles (6 months) &#x2197;
+                  </button>
                 
               </div>
             </div>
@@ -2737,13 +2876,19 @@
               
               
 
-              <!-- Articles -->
-              <div class="article-feed">
+              <!-- Articles — 30-day default, full history in popout --><div class="article-feed" id="feed-epr">
+                
+
                 
                   
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="epr"
-                       data-headline="psi webinar series prepares producers for oregon packaging epr requirements" data-summary="the product stewardship institute is hosting a webinar series specifically aimed at helping producers understand and prepare for oregon&#39;s packaging epr program obligations. oregon&#39;s epr law requires producers selling packaged goods into the state to register with a producer responsibility organization and meet recycled content and collection targets. the series targets compliance readiness ahead of oregon&#39;s program implementation milestones." data-source="product stewardship institute"
-                       data-date="" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="epr"
+                       data-headline="psi webinar series prepares producers for oregon packaging epr requirements"
+                       data-summary="the product stewardship institute is hosting a webinar series specifically aimed at helping producers understand and prepare for oregon&#39;s packaging epr program obligations. oregon&#39;s epr law requires producers selling packaged goods into the state to register with a producer responsibility organization and meet recycled content and collection targets. the series targets compliance readiness ahead of oregon&#39;s program implementation milestones."
+                       data-source="product stewardship institute"
+                       data-date=""
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://productstewardship.us/webinar/webinar-series-preparing-producers-for-oregon-packaging-epr/">PSI Webinar Series Prepares Producers for Oregon Packaging EPR Requirements</a></span>
@@ -2763,7 +2908,11 @@
                     <span class="article-deadline-tag">Oregon EPR producer registration and fee obligations anticipated to begin 2025-2026 per program rulemaking schedule</span>
                     
                   </div>
-                  
+                  <button class="article-show-history"
+                          onclick="openHistoryModal('EPR', 'Extended Producer Responsibility')"
+                          title="View full 6-month article archive">
+                    View full history — 0 articles (6 months) &#x2197;
+                  </button>
                 
               </div>
             </div>
@@ -2843,13 +2992,19 @@
               
               
 
-              <!-- Articles -->
-              <div class="article-feed">
+              <!-- Articles — 30-day default, full history in popout --><div class="article-feed" id="feed-reach">
+                
+
                 
                   
-                  <div class="article-item" data-urgency="HIGH" data-topic="reach"
-                       data-headline="echa adds n-hexane to svhc candidate list" data-summary="echa added n-hexane to the svhc candidate list on february 4, 2026, due to its reproductive toxicity classification. this triggers mandatory svhc communication obligations under reach article 33 for articles containing n-hexane above 0.1% w/w. suppliers and importers of affected articles must now disclose its presence to customers and consumers upon request within 45 days." data-source="echa"
-                       data-date="2026-02-04" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="HIGH" data-topic="reach"
+                       data-headline="echa adds n-hexane to svhc candidate list"
+                       data-summary="echa added n-hexane to the svhc candidate list on february 4, 2026, due to its reproductive toxicity classification. this triggers mandatory svhc communication obligations under reach article 33 for articles containing n-hexane above 0.1% w/w. suppliers and importers of affected articles must now disclose its presence to customers and consumers upon request within 45 days."
+                       data-source="echa"
+                       data-date="2026-02-04"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://echa.europa.eu/substance-information/-/substanceinfo/100.003.435">ECHA Adds n-Hexane to SVHC Candidate List</a></span>
@@ -2872,10 +3027,14 @@
                     <span class="article-deadline-tag">Immediate: 45-day response obligation to customer/consumer SVHC inquiries now active</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="HIGH" data-topic="reach"
-                       data-headline="echa adds fluorinated bisphenol af to svhc candidate list" data-summary="4,4&#39;-[2,2,2-trifluoro-1-(trifluoromethyl)ethylidene]diphenol (bisphenol af) and its salts were added to the svhc candidate list on february 4, 2026, identified as a substance of very high concern. bisphenol af is used as a crosslinker in fluoroelastomers and fluoropolymer processing, directly relevant to pfas-containing coatings and sealing compounds. reach article 33 communication obligations apply immediately for articles exceeding the 0.1% w/w threshold." data-source="echa"
-                       data-date="2026-02-04" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="HIGH" data-topic="reach"
+                       data-headline="echa adds fluorinated bisphenol af to svhc candidate list"
+                       data-summary="4,4&#39;-[2,2,2-trifluoro-1-(trifluoromethyl)ethylidene]diphenol (bisphenol af) and its salts were added to the svhc candidate list on february 4, 2026, identified as a substance of very high concern. bisphenol af is used as a crosslinker in fluoroelastomers and fluoropolymer processing, directly relevant to pfas-containing coatings and sealing compounds. reach article 33 communication obligations apply immediately for articles exceeding the 0.1% w/w threshold."
+                       data-source="echa"
+                       data-date="2026-02-04"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://echa.europa.eu/substance-information/-/substanceinfo/100.510.847">ECHA Adds Fluorinated Bisphenol AF to SVHC Candidate List</a></span>
@@ -2898,10 +3057,14 @@
                     <span class="article-deadline-tag">Immediate: 45-day SVHC disclosure obligation now active for affected articles</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="reach"
-                       data-headline="echa adds flame retardant dbdpe to svhc candidate list" data-summary="1,1&#39;-(ethane-1,2-diyl)bis[pentabromobenzene] (dbdpe), a high-volume brominated flame retardant widely used in electronics, polymers, and textiles, was added to the svhc candidate list on november 5, 2025. its listing triggers reach article 33 obligations and positions it as a candidate for the authorization list, which would restrict its use in eu-supplied products. electronics and pcb assemblies sourced from suppliers using dbdpe as a flame retardant are at risk." data-source="echa"
-                       data-date="2025-11-05" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="reach"
+                       data-headline="echa adds flame retardant dbdpe to svhc candidate list"
+                       data-summary="1,1&#39;-(ethane-1,2-diyl)bis[pentabromobenzene] (dbdpe), a high-volume brominated flame retardant widely used in electronics, polymers, and textiles, was added to the svhc candidate list on november 5, 2025. its listing triggers reach article 33 obligations and positions it as a candidate for the authorization list, which would restrict its use in eu-supplied products. electronics and pcb assemblies sourced from suppliers using dbdpe as a flame retardant are at risk."
+                       data-source="echa"
+                       data-date="2025-11-05"
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://echa.europa.eu/substance-information/-/substanceinfo/100.076.669">ECHA Adds Flame Retardant DBDPE to SVHC Candidate List</a></span>
@@ -2924,7 +3087,11 @@
                     <span class="article-deadline-tag">Immediate: Article 33 obligations active; monitor for Annex XIV inclusion proposal</span>
                     
                   </div>
-                  
+                  <button class="article-show-history"
+                          onclick="openHistoryModal('REACH', 'REACH &amp; Chemical Regulation (EU/International)')"
+                          title="View full 6-month article archive">
+                    View full history — 0 articles (6 months) &#x2197;
+                  </button>
                 
               </div>
             </div>
@@ -3006,13 +3173,19 @@
               
               
 
-              <!-- Articles -->
-              <div class="article-feed">
+              <!-- Articles — 30-day default, full history in popout --><div class="article-feed" id="feed-tsca">
+                
+
                 
                   
-                  <div class="article-item" data-urgency="HIGH" data-topic="tsca"
-                       data-headline="epa extends tce section 6(g) exemption postponement by 90 days" data-summary="epa is extending the postponement of effectiveness for certain provisions of its final tce rule under tsca section 6, specifically the conditions imposed on uses with section 6(g) exemptions, for an additional 90 days. this extension delays enforcement of restrictions on industrial/commercial uses of trichloroethylene that had received limited-use exemptions. affected facilities operating under those exemptions gain additional time before compliance conditions take effect." data-source="federal register"
-                       data-date="2026-02-18" data-new="true">
+                  <div class="article-item historical"
+                       data-urgency="HIGH" data-topic="tsca"
+                       data-headline="epa extends tce section 6(g) exemption postponement by 90 days"
+                       data-summary="epa is extending the postponement of effectiveness for certain provisions of its final tce rule under tsca section 6, specifically the conditions imposed on uses with section 6(g) exemptions, for an additional 90 days. this extension delays enforcement of restrictions on industrial/commercial uses of trichloroethylene that had received limited-use exemptions. affected facilities operating under those exemptions gain additional time before compliance conditions take effect."
+                       data-source="federal register"
+                       data-date="2026-02-18"
+                       data-new="true"
+                       data-recent="false">
                     <div class="article-head">
                       <span class="badge badge-new">New</span>
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/02/18/2026-03155/extension-of-postponement-of-effectiveness-for-certain-provisions-of-trichloroethylene-tce">EPA Extends TCE Section 6(g) Exemption Postponement by 90 Days</a></span>
@@ -3035,10 +3208,14 @@
                     <span class="article-deadline-tag">Approximately 90 days from 2026-02-18 (~2026-05-19); confirm exact effective date in rule text</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="HIGH" data-topic="tsca"
-                       data-headline="epa extends compliance dates for perchloroethylene and carbon tetrachloride tsca rules" data-summary="epa has extended compliance deadlines for its tsca section 6 final rules on perchloroethylene (pce) and carbon tetrachloride (ccl4), both of which impose use restrictions and workplace controls on industrial applications of these solvents. the extensions provide regulated facilities additional time to achieve compliance with applicable conditions, but the underlying restrictions remain in force. manufacturers and downstream users of pce or ccl4 in coatings, cleaning, or process applications must monitor the revised compliance schedule." data-source="epa"
-                       data-date="" data-new="true">
+                  <div class="article-item historical"
+                       data-urgency="HIGH" data-topic="tsca"
+                       data-headline="epa extends compliance dates for perchloroethylene and carbon tetrachloride tsca rules"
+                       data-summary="epa has extended compliance deadlines for its tsca section 6 final rules on perchloroethylene (pce) and carbon tetrachloride (ccl4), both of which impose use restrictions and workplace controls on industrial applications of these solvents. the extensions provide regulated facilities additional time to achieve compliance with applicable conditions, but the underlying restrictions remain in force. manufacturers and downstream users of pce or ccl4 in coatings, cleaning, or process applications must monitor the revised compliance schedule."
+                       data-source="epa"
+                       data-date=""
+                       data-new="true"
+                       data-recent="false">
                     <div class="article-head">
                       <span class="badge badge-new">New</span>
                       <span class="article-headline"><a href="https://www.epa.gov/chemicals-under-tsca/epa-extends-compliance-dates-perchloroethylene-and-carbon-tetrachloride-tsca">EPA Extends Compliance Dates for Perchloroethylene and Carbon Tetrachloride TSCA Rules</a></span>
@@ -3058,10 +3235,14 @@
                     <span class="article-deadline-tag">Revised compliance dates not specified in snippet; confirm current deadlines via EPA TSCA docket</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="tsca"
-                       data-headline="epa proposes new qc test method for formaldehyde emission standards" data-summary="epa has proposed updates to formaldehyde emission standards for composite wood products under tsca title vi, adding a new quality control test method for third-party certification bodies and manufacturers. the proposal does not change the existing emission limits but would affect how compliance testing is conducted and documented. manufacturers or purchasers of composite wood panels used in cabinetry, fixtures, or facility construction should monitor the rulemaking for finalization." data-source="epa"
-                       data-date="" data-new="false">
+                  <div class="article-item historical"
+                       data-urgency="MEDIUM" data-topic="tsca"
+                       data-headline="epa proposes new qc test method for formaldehyde emission standards"
+                       data-summary="epa has proposed updates to formaldehyde emission standards for composite wood products under tsca title vi, adding a new quality control test method for third-party certification bodies and manufacturers. the proposal does not change the existing emission limits but would affect how compliance testing is conducted and documented. manufacturers or purchasers of composite wood panels used in cabinetry, fixtures, or facility construction should monitor the rulemaking for finalization."
+                       data-source="epa"
+                       data-date=""
+                       data-new="false"
+                       data-recent="false">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.epa.gov/chemicals-under-tsca/epa-proposes-updates-formaldehyde-emission-standards-adding-new-quality">EPA Proposes New QC Test Method for Formaldehyde Emission Standards</a></span>
@@ -3081,10 +3262,14 @@
                     <span class="article-deadline-tag">Comment period deadline not specified in snippet; check Federal Register docket</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="tsca"
-                       data-headline="epa proposes renewal of tsca chemical data reporting information collection" data-summary="epa is proposing to renew the information collection request (icr) for chemical data reporting (cdr) under tsca section 8(a), currently approved through october 31, 2026. cdr requires manufacturers and importers of chemical substances above threshold quantities (generally 25,000 lbs/year, lower for certain chemicals) to report production volume, use, and exposure data to epa every four years. this renewal signals continuity of the cdr obligation with no anticipated structural changes." data-source="federal register"
-                       data-date="2026-02-24" data-new="false">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="tsca"
+                       data-headline="epa proposes renewal of tsca chemical data reporting information collection"
+                       data-summary="epa is proposing to renew the information collection request (icr) for chemical data reporting (cdr) under tsca section 8(a), currently approved through october 31, 2026. cdr requires manufacturers and importers of chemical substances above threshold quantities (generally 25,000 lbs/year, lower for certain chemicals) to report production volume, use, and exposure data to epa every four years. this renewal signals continuity of the cdr obligation with no anticipated structural changes."
+                       data-source="federal register"
+                       data-date="2026-02-24"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/02/24/2026-03636/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment">EPA Proposes Renewal of TSCA Chemical Data Reporting Information Collection</a></span>
@@ -3107,10 +3292,14 @@
                     <span class="article-deadline-tag">Current ICR approval expires 2026-10-31; next CDR reporting cycle opens 2028</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="tsca"
-                       data-headline="epa proposes renewal of tsca cbi claims information collection" data-summary="epa is proposing to renew the icr governing confidential business information (cbi) claims under tsca, currently approved through august 31, 2026. this renewal covers the administrative burden associated with substantiating cbi claims on chemical identity, production data, and other submissions across tsca programs. no substantive changes to cbi claim requirements are indicated." data-source="federal register"
-                       data-date="2026-02-25" data-new="false">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="tsca"
+                       data-headline="epa proposes renewal of tsca cbi claims information collection"
+                       data-summary="epa is proposing to renew the icr governing confidential business information (cbi) claims under tsca, currently approved through august 31, 2026. this renewal covers the administrative burden associated with substantiating cbi claims on chemical identity, production data, and other submissions across tsca programs. no substantive changes to cbi claim requirements are indicated."
+                       data-source="federal register"
+                       data-date="2026-02-25"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/02/25/2026-03763/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment">EPA Proposes Renewal of TSCA CBI Claims Information Collection</a></span>
@@ -3133,10 +3322,14 @@
                     <span class="article-deadline-tag">Current ICR approval expires 2026-08-31</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="tsca"
-                       data-headline="epa publishes tsca new chemical findings for november–december 2025" data-summary="epa published statements of findings for pmns, mcans, and snuns reviewed during november–december 2025, confirming these new chemical substances or significant new uses are not likely to present unreasonable risk. these notices establish that the covered substances may commence manufacture or import without additional epa restriction. relevant for tracking whether any newly cleared chemicals appear in supplier formulations or coating processes." data-source="federal register"
-                       data-date="2026-03-04" data-new="false">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="tsca"
+                       data-headline="epa publishes tsca new chemical findings for november–december 2025"
+                       data-summary="epa published statements of findings for pmns, mcans, and snuns reviewed during november–december 2025, confirming these new chemical substances or significant new uses are not likely to present unreasonable risk. these notices establish that the covered substances may commence manufacture or import without additional epa restriction. relevant for tracking whether any newly cleared chemicals appear in supplier formulations or coating processes."
+                       data-source="federal register"
+                       data-date="2026-03-04"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/03/04/2026-04301/certain-new-chemicals-or-significant-new-uses-statements-of-findings-november-2025-to-december-2025">EPA Publishes TSCA New Chemical Findings for November–December 2025</a></span>
@@ -3157,10 +3350,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="tsca"
-                       data-headline="epa publishes tsca new chemical receipt and status for sep–dec 2025" data-summary="epa published its receipt and status log for new chemical submissions (pmns, snuns, mcans, tmes) filed between september and december 2025, including notices of commencement of manufacture. this is a routine transparency publication tracking the pipeline of new substances entering or seeking to enter us commerce under tsca. useful for monitoring whether alternative chemistries submitted by suppliers or coating formulators are advancing through epa review." data-source="federal register"
-                       data-date="2026-03-10" data-new="false">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="tsca"
+                       data-headline="epa publishes tsca new chemical receipt and status for sep–dec 2025"
+                       data-summary="epa published its receipt and status log for new chemical submissions (pmns, snuns, mcans, tmes) filed between september and december 2025, including notices of commencement of manufacture. this is a routine transparency publication tracking the pipeline of new substances entering or seeking to enter us commerce under tsca. useful for monitoring whether alternative chemistries submitted by suppliers or coating formulators are advancing through epa review."
+                       data-source="federal register"
+                       data-date="2026-03-10"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/03/10/2026-04651/certain-new-chemicals-receipt-and-status-information-for-september-december-2025">EPA Publishes TSCA New Chemical Receipt and Status for Sep–Dec 2025</a></span>
@@ -3181,10 +3378,14 @@
                     
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="tsca"
-                       data-headline="epa publishes tsca new chemical findings for january 2026" data-summary="epa published statements of findings for new chemical pmns, mcans, and snuns reviewed in january 2026, confirming no unreasonable risk determination for the covered substances. these cleared substances may now be manufactured or imported without further epa restriction under tsca section 5. monitor if any cleared substances are fluoropolymer alternatives or coating-chemistry candidates relevant to reformulation efforts." data-source="federal register"
-                       data-date="2026-03-23" data-new="false">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="tsca"
+                       data-headline="epa publishes tsca new chemical findings for january 2026"
+                       data-summary="epa published statements of findings for new chemical pmns, mcans, and snuns reviewed in january 2026, confirming no unreasonable risk determination for the covered substances. these cleared substances may now be manufactured or imported without further epa restriction under tsca section 5. monitor if any cleared substances are fluoropolymer alternatives or coating-chemistry candidates relevant to reformulation efforts."
+                       data-source="federal register"
+                       data-date="2026-03-23"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/03/23/2026-05584/certain-new-chemicals-or-significant-new-uses-statements-of-findings-january-2026">EPA Publishes TSCA New Chemical Findings for January 2026</a></span>
@@ -3205,7 +3406,11 @@
                     
                     
                   </div>
-                  
+                  <button class="article-show-history"
+                          onclick="openHistoryModal('TSCA', 'TSCA &amp; US Chemical Regulation')"
+                          title="View full 6-month article archive">
+                    View full history — 0 articles (6 months) &#x2197;
+                  </button>
                 
               </div>
             </div>
@@ -3287,13 +3492,19 @@
               
               
 
-              <!-- Articles -->
-              <div class="article-feed">
+              <!-- Articles — 30-day default, full history in popout --><div class="article-feed" id="feed-prop65">
+                
+
                 
                   
-                  <div class="article-item" data-urgency="LOW" data-topic="prop65"
-                       data-headline="60-day notice filed against nutrasky for lead in supplements" data-summary="calsafe research center filed notice ag#2026-01347 on 03/24/2026 alleging lead violations in ninja supplements dietary products sold in california. while a food/supplement product, this notice signals continued aggressive enforcement by calsafe/manning law targeting lead in ingestible and consumer goods. the 60-day clock for the alleged violator to cure or face lawsuit begins at filing." data-source="ca ag — prop 65 60-day notices"
-                       data-date="2026-03-24" data-new="true">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="prop65"
+                       data-headline="60-day notice filed against nutrasky for lead in supplements"
+                       data-summary="calsafe research center filed notice ag#2026-01347 on 03/24/2026 alleging lead violations in ninja supplements dietary products sold in california. while a food/supplement product, this notice signals continued aggressive enforcement by calsafe/manning law targeting lead in ingestible and consumer goods. the 60-day clock for the alleged violator to cure or face lawsuit begins at filing."
+                       data-source="ca ag — prop 65 60-day notices"
+                       data-date="2026-03-24"
+                       data-new="true"
+                       data-recent="true">
                     <div class="article-head">
                       <span class="badge badge-new">New</span>
                       <span class="article-headline"><a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01347">60-Day Notice Filed Against NutraSky for Lead in Supplements</a></span>
@@ -3316,10 +3527,14 @@
                     <span class="article-deadline-tag">2026-05-23</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="prop65"
-                       data-headline="lead violation notice filed against magma foods for tamarind paste" data-summary="calsafe research center filed amended notice ag#2026-01346 on 03/24/2026 against magma foods pvt. ltd. for lead in tamicon tamarind concentrate, amending a prior notice. this is a food product action with no direct relevance to manufactured components, but reinforces the pattern of lead enforcement across imported goods from international manufacturers." data-source="ca ag — prop 65 60-day notices"
-                       data-date="2026-03-24" data-new="true">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="prop65"
+                       data-headline="lead violation notice filed against magma foods for tamarind paste"
+                       data-summary="calsafe research center filed amended notice ag#2026-01346 on 03/24/2026 against magma foods pvt. ltd. for lead in tamicon tamarind concentrate, amending a prior notice. this is a food product action with no direct relevance to manufactured components, but reinforces the pattern of lead enforcement across imported goods from international manufacturers."
+                       data-source="ca ag — prop 65 60-day notices"
+                       data-date="2026-03-24"
+                       data-new="true"
+                       data-recent="true">
                     <div class="article-head">
                       <span class="badge badge-new">New</span>
                       <span class="article-headline"><a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01346">Lead Violation Notice Filed Against Magma Foods for Tamarind Paste</a></span>
@@ -3342,10 +3557,14 @@
                     <span class="article-deadline-tag">2026-05-23</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="prop65"
-                       data-headline="dinp phthalate notice targets toiletry bags sold at walmart" data-summary="ag#2026-01340 (filed 03/16/2026) names ezpacking, inc. and walmart for dinp in toiletry bags — a vinyl/flexible plastic consumer product. this is directly analogous to the phthalate risk in vinyl profiles and flexible plastic components purchased by the company, confirming that dinp enforcement in soft goods and packaging-adjacent products is active." data-source="ca ag — prop 65 60-day notices"
-                       data-date="2026-03-16" data-new="false">
+                  <div class="article-item"
+                       data-urgency="MEDIUM" data-topic="prop65"
+                       data-headline="dinp phthalate notice targets toiletry bags sold at walmart"
+                       data-summary="ag#2026-01340 (filed 03/16/2026) names ezpacking, inc. and walmart for dinp in toiletry bags — a vinyl/flexible plastic consumer product. this is directly analogous to the phthalate risk in vinyl profiles and flexible plastic components purchased by the company, confirming that dinp enforcement in soft goods and packaging-adjacent products is active."
+                       data-source="ca ag — prop 65 60-day notices"
+                       data-date="2026-03-16"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01340">DINP Phthalate Notice Targets Toiletry Bags Sold at Walmart</a></span>
@@ -3368,10 +3587,14 @@
                     <span class="article-deadline-tag">2026-05-15</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="MEDIUM" data-topic="prop65"
-                       data-headline="dehp phthalate notice targets makeup organizer bags at tjx retailers" data-summary="ag#2026-01339 (filed 03/16/2026) alleges dehp violations in a premium makeup organizer bag sold at homegoods and t.j. maxx, naming both the product manufacturer and the retailer. this reinforces that retailers as well as manufacturers bear prop 65 exposure for phthalates in vinyl and flexible plastic consumer goods, a direct parallel to phthalate-containing vinyl profiles in the company&#39;s bill of materials." data-source="ca ag — prop 65 60-day notices"
-                       data-date="2026-03-16" data-new="false">
+                  <div class="article-item"
+                       data-urgency="MEDIUM" data-topic="prop65"
+                       data-headline="dehp phthalate notice targets makeup organizer bags at tjx retailers"
+                       data-summary="ag#2026-01339 (filed 03/16/2026) alleges dehp violations in a premium makeup organizer bag sold at homegoods and t.j. maxx, naming both the product manufacturer and the retailer. this reinforces that retailers as well as manufacturers bear prop 65 exposure for phthalates in vinyl and flexible plastic consumer goods, a direct parallel to phthalate-containing vinyl profiles in the company&#39;s bill of materials."
+                       data-source="ca ag — prop 65 60-day notices"
+                       data-date="2026-03-16"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01339">DEHP Phthalate Notice Targets Makeup Organizer Bags at TJX Retailers</a></span>
@@ -3394,10 +3617,14 @@
                     <span class="article-deadline-tag">2026-05-15</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="prop65"
-                       data-headline="lead and cadmium notices filed against multiple food and seafood products" data-summary="a cluster of 60-day notices filed 03/16/2026–03/22/2026 (ag#2026-01328 through ag#2026-01345) targets lead and cadmium in food products including seaweed chips, sardines, kale, and canned goods. while food-sector actions, they confirm that consumer advocacy group and clean product advocates are running systematic, high-volume enforcement sweeps for lead and cadmium — the same chemicals present in hardware and coatings in the company&#39;s manufactured products." data-source="ca ag — prop 65 60-day notices"
-                       data-date="2026-03-16" data-new="false">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="prop65"
+                       data-headline="lead and cadmium notices filed against multiple food and seafood products"
+                       data-summary="a cluster of 60-day notices filed 03/16/2026–03/22/2026 (ag#2026-01328 through ag#2026-01345) targets lead and cadmium in food products including seaweed chips, sardines, kale, and canned goods. while food-sector actions, they confirm that consumer advocacy group and clean product advocates are running systematic, high-volume enforcement sweeps for lead and cadmium — the same chemicals present in hardware and coatings in the company&#39;s manufactured products."
+                       data-source="ca ag — prop 65 60-day notices"
+                       data-date="2026-03-16"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01345">Lead and Cadmium Notices Filed Against Multiple Food and Seafood Products</a></span>
@@ -3418,7 +3645,11 @@
                     
                     
                   </div>
-                  
+                  <button class="article-show-history"
+                          onclick="openHistoryModal('Prop65', 'California Proposition 65')"
+                          title="View full 6-month article archive">
+                    View full history — 0 articles (6 months) &#x2197;
+                  </button>
                 
               </div>
             </div>
@@ -3498,13 +3729,19 @@
               
               
 
-              <!-- Articles -->
-              <div class="article-feed">
+              <!-- Articles — 30-day default, full history in popout --><div class="article-feed" id="feed-conflictminerals">
+                
+
                 
                   
-                  <div class="article-item" data-urgency="HIGH" data-topic="conflictminerals"
-                       data-headline="osi systems files annual form sd conflict minerals report with sec" data-summary="osi systems inc. (osis), a manufacturer of security and inspection systems containing electronics with 3tg minerals, filed its annual form sd conflict minerals disclosure with the sec on march 23, 2026, covering calendar year 2025. this filing reflects continued active sec enforcement of dodd-frank section 1502 reporting obligations for publicly traded manufacturers. the filing demonstrates that peer electronics-integrated manufacturers are maintaining rcoi programs and cmrt collection from their supply chains." data-source="sec edgar — form sd"
-                       data-date="2026-03-23" data-new="false">
+                  <div class="article-item"
+                       data-urgency="HIGH" data-topic="conflictminerals"
+                       data-headline="osi systems files annual form sd conflict minerals report with sec"
+                       data-summary="osi systems inc. (osis), a manufacturer of security and inspection systems containing electronics with 3tg minerals, filed its annual form sd conflict minerals disclosure with the sec on march 23, 2026, covering calendar year 2025. this filing reflects continued active sec enforcement of dodd-frank section 1502 reporting obligations for publicly traded manufacturers. the filing demonstrates that peer electronics-integrated manufacturers are maintaining rcoi programs and cmrt collection from their supply chains."
+                       data-source="sec edgar — form sd"
+                       data-date="2026-03-23"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm">OSI Systems Files Annual Form SD Conflict Minerals Report with SEC</a></span>
@@ -3527,10 +3764,14 @@
                     <span class="article-deadline-tag">Form SD due May 31, 2026 for calendar year 2025 reporting period</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="HIGH" data-topic="conflictminerals"
-                       data-headline="alpha &amp; omega semiconductor files form sd for conflict minerals reporting" data-summary="alpha &amp; omega semiconductor ltd. (aosl), a semiconductor manufacturer with direct 3tg supply chain exposure through tantalum capacitors and gold wire bonding, filed its form sd conflict minerals disclosure in february 2026. as a direct upstream supplier category for the company&#39;s automation electronics procurement, aosl&#39;s active cmrt compliance posture is relevant context for supply chain due diligence. this filing confirms that semiconductor suppliers in the company&#39;s procurement base are conducting their own rcoi and cmrt collection, which the company can leverage in its supplier outreach." data-source="sec edgar — form sd"
-                       data-date="2026-02-27" data-new="false">
+                  <div class="article-item"
+                       data-urgency="HIGH" data-topic="conflictminerals"
+                       data-headline="alpha &amp; omega semiconductor files form sd for conflict minerals reporting"
+                       data-summary="alpha &amp; omega semiconductor ltd. (aosl), a semiconductor manufacturer with direct 3tg supply chain exposure through tantalum capacitors and gold wire bonding, filed its form sd conflict minerals disclosure in february 2026. as a direct upstream supplier category for the company&#39;s automation electronics procurement, aosl&#39;s active cmrt compliance posture is relevant context for supply chain due diligence. this filing confirms that semiconductor suppliers in the company&#39;s procurement base are conducting their own rcoi and cmrt collection, which the company can leverage in its supplier outreach."
+                       data-source="sec edgar — form sd"
+                       data-date="2026-02-27"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm">Alpha &amp; Omega Semiconductor Files Form SD for Conflict Minerals Reporting</a></span>
@@ -3553,10 +3794,14 @@
                     <span class="article-deadline-tag">Form SD due May 31, 2026 for calendar year 2025 reporting period</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="LOW" data-topic="conflictminerals"
-                       data-headline="noaa deep seabed mining applications signal emerging alternative 3tg supply routes" data-summary="noaa received two applications for deep seabed hard mineral exploration licenses under the deep seabed hard mineral resources act, with public hearings announced for american metal resources llc and seax inc. deep seabed mining targets polymetallic nodules rich in cobalt, nickel, manganese, and copper, but also contains tantalum and other critical minerals relevant to 3tg supply chain diversification. while not a near-term sourcing alternative, this development signals a potential future pathway to conflict-free domestic or international mineral supply outside the drc-adjacent region." data-source="federal register"
-                       data-date="2026-03-23" data-new="false">
+                  <div class="article-item"
+                       data-urgency="LOW" data-topic="conflictminerals"
+                       data-headline="noaa deep seabed mining applications signal emerging alternative 3tg supply routes"
+                       data-summary="noaa received two applications for deep seabed hard mineral exploration licenses under the deep seabed hard mineral resources act, with public hearings announced for american metal resources llc and seax inc. deep seabed mining targets polymetallic nodules rich in cobalt, nickel, manganese, and copper, but also contains tantalum and other critical minerals relevant to 3tg supply chain diversification. while not a near-term sourcing alternative, this development signals a potential future pathway to conflict-free domestic or international mineral supply outside the drc-adjacent region."
+                       data-source="federal register"
+                       data-date="2026-03-23"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and">NOAA Deep Seabed Mining Applications Signal Emerging Alternative 3TG Supply Routes</a></span>
@@ -3577,7 +3822,11 @@
                     
                     
                   </div>
-                  
+                  <button class="article-show-history"
+                          onclick="openHistoryModal('ConflictMinerals', 'Conflict Minerals (SEC/Dodd-Frank)')"
+                          title="View full 6-month article archive">
+                    View full history — 0 articles (6 months) &#x2197;
+                  </button>
                 
               </div>
             </div>
@@ -3652,13 +3901,19 @@
               
               
 
-              <!-- Articles -->
-              <div class="article-feed">
+              <!-- Articles — 30-day default, full history in popout --><div class="article-feed" id="feed-forcedlabor">
+                
+
                 
                   
-                  <div class="article-item" data-urgency="HIGH" data-topic="forcedlabor"
-                       data-headline="ustr initiates section 301 investigations into forced labor import failures" data-summary="on march 17, 2026, ustr initiated section 301 investigations against multiple economies for failing to prohibit imports of goods produced with forced labor. public comments are being sought and hearings will be held. if tariff actions result, they could affect china-sourced components already under uflpa scrutiny, compounding import risk for aluminum, electronics, and other xinjiang-exposure categories." data-source="federal register"
-                       data-date="2026-03-17" data-new="false">
+                  <div class="article-item"
+                       data-urgency="HIGH" data-topic="forcedlabor"
+                       data-headline="ustr initiates section 301 investigations into forced labor import failures"
+                       data-summary="on march 17, 2026, ustr initiated section 301 investigations against multiple economies for failing to prohibit imports of goods produced with forced labor. public comments are being sought and hearings will be held. if tariff actions result, they could affect china-sourced components already under uflpa scrutiny, compounding import risk for aluminum, electronics, and other xinjiang-exposure categories."
+                       data-source="federal register"
+                       data-date="2026-03-17"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.federalregister.gov/documents/2026/03/17/2026-05151/initiation-of-section-301-investigations-of-acts-policies-and-practices-of-various-economies-related">USTR Initiates Section 301 Investigations Into Forced Labor Import Failures</a></span>
@@ -3681,10 +3936,14 @@
                     <span class="article-deadline-tag">Monitor USTR docket for public comment deadlines and hearing dates</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="HIGH" data-topic="forcedlabor"
-                       data-headline="dhs uflpa entity list and operational guidance remain active enforcement framework" data-summary="dhs continues to maintain and update the uflpa entity list, and cbp&#39;s operational guidance for importers remains in effect, requiring importers to rebut the presumption of forced labor for any goods with xinjiang nexus. shipments from any entity added to the list are subject to automatic detention pending extensive documentation. the forced labor enforcement task force actively reviews and expands the entity list on a rolling basis." data-source="dhs — uflpa"
-                       data-date="2026-03-24" data-new="false">
+                  <div class="article-item"
+                       data-urgency="HIGH" data-topic="forcedlabor"
+                       data-headline="dhs uflpa entity list and operational guidance remain active enforcement framework"
+                       data-summary="dhs continues to maintain and update the uflpa entity list, and cbp&#39;s operational guidance for importers remains in effect, requiring importers to rebut the presumption of forced labor for any goods with xinjiang nexus. shipments from any entity added to the list are subject to automatic detention pending extensive documentation. the forced labor enforcement task force actively reviews and expands the entity list on a rolling basis."
+                       data-source="dhs — uflpa"
+                       data-date="2026-03-24"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.dhs.gov/uflpa-entity-list">DHS UFLPA Entity List and Operational Guidance Remain Active Enforcement Framework</a></span>
@@ -3707,10 +3966,14 @@
                     <span class="article-deadline-tag">Ongoing — Entity List updated on rolling basis; no fixed deadline</span>
                     
                   </div>
-                  
-                  <div class="article-item" data-urgency="HIGH" data-topic="forcedlabor"
-                       data-headline="cbp forced labor enforcement authorities and eapa remain fully operational" data-summary="cbp continues to enforce uflpa and the enforce and protect act (eapa) as priority trade issues, with detention authority for any goods touching xinjiang. importers must maintain cbp-ready documentation packages to contest detentions, including supply chain mapping and evidence of origin. failure to rebut the presumption results in exclusion or seizure of goods." data-source="cbp — forced labor"
-                       data-date="2026-03-24" data-new="false">
+                  <div class="article-item"
+                       data-urgency="HIGH" data-topic="forcedlabor"
+                       data-headline="cbp forced labor enforcement authorities and eapa remain fully operational"
+                       data-summary="cbp continues to enforce uflpa and the enforce and protect act (eapa) as priority trade issues, with detention authority for any goods touching xinjiang. importers must maintain cbp-ready documentation packages to contest detentions, including supply chain mapping and evidence of origin. failure to rebut the presumption results in exclusion or seizure of goods."
+                       data-source="cbp — forced labor"
+                       data-date="2026-03-24"
+                       data-new="false"
+                       data-recent="true">
                     <div class="article-head">
                       
                       <span class="article-headline"><a href="https://www.cbp.gov/trade/forced-labor/UFLPA">CBP Forced Labor Enforcement Authorities and EAPA Remain Fully Operational</a></span>
@@ -3733,7 +3996,11 @@
                     <span class="article-deadline-tag">Ongoing enforcement; importer response windows are typically 30 days post-detention</span>
                     
                   </div>
-                  
+                  <button class="article-show-history"
+                          onclick="openHistoryModal('ForcedLabor', 'Forced Labor &amp; Supply Chain Transparency')"
+                          title="View full 6-month article archive">
+                    View full history — 0 articles (6 months) &#x2197;
+                  </button>
                 
               </div>
             </div>
@@ -9622,6 +9889,75 @@
           </div>
         </div>
 
+        <!-- 6-Month Activity Trend -->
+        
+        <div class="panel animate-in" data-widget-id="monthly-trend" data-widget-label="6-Month Trend" style="margin-bottom:12px;">
+          <div class="panel-header">
+            <span class="panel-title">6-Month Trend</span>
+            <span class="panel-badge">0 articles</span>
+          </div>
+          <div class="panel-body" style="padding:10px 14px 8px;"><svg width="100%" height="66" viewBox="0 0 156 66"
+                 preserveAspectRatio="none" style="overflow:visible;">
+              <rect class="monthly-chart-bar"
+                    x="2" y="47" width="20" height="1"
+                    rx="2" fill="var(--accent)" opacity="0.7"
+                    title="Oct 2025: 0 articles"/>
+              <text x="12" y="62"
+                    text-anchor="middle" font-size="7" fill="var(--text-tertiary)">
+                Oct
+              </text>
+              
+              <rect class="monthly-chart-bar"
+                    x="28" y="47" width="20" height="1"
+                    rx="2" fill="var(--accent)" opacity="0.7"
+                    title="Nov 2025: 0 articles"/>
+              <text x="38" y="62"
+                    text-anchor="middle" font-size="7" fill="var(--text-tertiary)">
+                Nov
+              </text>
+              
+              <rect class="monthly-chart-bar"
+                    x="54" y="47" width="20" height="1"
+                    rx="2" fill="var(--accent)" opacity="0.7"
+                    title="Dec 2025: 0 articles"/>
+              <text x="64" y="62"
+                    text-anchor="middle" font-size="7" fill="var(--text-tertiary)">
+                Dec
+              </text>
+              
+              <rect class="monthly-chart-bar"
+                    x="80" y="47" width="20" height="1"
+                    rx="2" fill="var(--accent)" opacity="0.7"
+                    title="Jan 2026: 0 articles"/>
+              <text x="90" y="62"
+                    text-anchor="middle" font-size="7" fill="var(--text-tertiary)">
+                Jan
+              </text>
+              
+              <rect class="monthly-chart-bar"
+                    x="106" y="47" width="20" height="1"
+                    rx="2" fill="var(--accent)" opacity="0.7"
+                    title="Feb 2026: 0 articles"/>
+              <text x="116" y="62"
+                    text-anchor="middle" font-size="7" fill="var(--text-tertiary)">
+                Feb
+              </text>
+              
+              <rect class="monthly-chart-bar"
+                    x="132" y="47" width="20" height="1"
+                    rx="2" fill="var(--accent)" opacity="0.7"
+                    title="Mar 2026: 0 articles"/>
+              <text x="142" y="62"
+                    text-anchor="middle" font-size="7" fill="var(--text-tertiary)">
+                Mar
+              </text>
+              
+              
+            </svg>
+          </div>
+        </div>
+        
+
         <!-- 28-Day Trends -->
         
         <div class="panel animate-in" data-widget-id="trends" data-widget-label="28-Day Trends" style="margin-bottom:12px;">
@@ -9995,7 +10331,7 @@
 
   <!-- ── Dev Tools Footer ── -->
   <div style="border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:16px;font-size: 13px;color:var(--text-tertiary);">
-    <span>Last updated: 2026-03-24 21:08:43</span>
+    <span>Last updated: 2026-03-24 21:47:32</span>
     <span style="flex:1;"></span>
     <a href="director_review.html"       style="color:var(--text-tertiary);text-decoration:none;border:1px solid var(--border);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size: 12px;font-weight:600;letter-spacing:.04em;"
        title="Latest director critique">Director Review</a>
@@ -10154,6 +10490,20 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
   window.handleSearch = function(query) {
     state.searchQuery = query.trim().toLowerCase();
     applyFilters();
+    // Show archive article count in search results
+    if (state.searchQuery) {
+      var archiveMatches = _allArticles.filter(function(a) {
+        var q = state.searchQuery;
+        return (a.title||'').toLowerCase().indexOf(q) !== -1 ||
+               (a.snippet||'').toLowerCase().indexOf(q) !== -1 ||
+               (a.source||'').toLowerCase().indexOf(q) !== -1;
+      });
+      var countEl = document.getElementById('search-count');
+      if (countEl && archiveMatches.length > 0) {
+        countEl.title = archiveMatches.length + ' matches in 6-month archive (click search bar to see all)';
+        countEl.textContent = countEl.textContent + ' (+' + archiveMatches.length + ' archived)';
+      }
+    }
   };
 
   /* ── Topic filter ── */
@@ -11146,6 +11496,86 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
     });
   });
 })();
+
+  /* ── 6-Month Article History Modal ── */
+  var _allArticles = [];
+  try { _allArticles = []; } catch(e) {}
+
+  var _historyTopic = null;
+  var _historyPeriod = 'all';
+
+  window.openHistoryModal = function(topic, label) {
+    _historyTopic = topic;
+    _historyPeriod = 'all';
+    document.getElementById('history-modal-title').textContent = label + ' — Article Archive';
+    document.getElementById('history-modal-search').value = '';
+    document.querySelectorAll('.history-filter-chip').forEach(function(c) {
+      c.classList.toggle('active', c.dataset.period === 'all');
+    });
+    filterHistoryModal();
+    var overlay = document.getElementById('history-modal-overlay');
+    overlay.style.display = 'flex';
+    setTimeout(function() { document.getElementById('history-modal-search').focus(); }, 100);
+  };
+
+  window.closeHistoryModal = function(e) {
+    if (e && e.target !== document.getElementById('history-modal-overlay')) return;
+    document.getElementById('history-modal-overlay').style.display = 'none';
+  };
+
+  window.setHistoryPeriod = function(btn, period) {
+    _historyPeriod = period;
+    document.querySelectorAll('.history-filter-chip').forEach(function(c) {
+      c.classList.toggle('active', c === btn);
+    });
+    filterHistoryModal();
+  };
+
+  window.filterHistoryModal = function() {
+    var q = document.getElementById('history-modal-search').value.toLowerCase().trim();
+    var cutoff = '';
+    if (_historyPeriod !== 'all') {
+      var d = new Date();
+      d.setDate(d.getDate() - parseInt(_historyPeriod));
+      cutoff = d.toISOString().slice(0,10);
+    }
+
+    var filtered = _allArticles.filter(function(a) {
+      if (_historyTopic && (a.topic || '').toLowerCase() !== _historyTopic.toLowerCase()) return false;
+      if (cutoff && (a.first_seen || '') < cutoff) return false;
+      if (!q) return true;
+      return (a.title || '').toLowerCase().indexOf(q) !== -1 ||
+             (a.snippet || '').toLowerCase().indexOf(q) !== -1 ||
+             (a.source || '').toLowerCase().indexOf(q) !== -1;
+    });
+
+    filtered.sort(function(a,b) { return (b.first_seen||'').localeCompare(a.first_seen||''); });
+
+    document.getElementById('history-modal-count').textContent = filtered.length + ' articles';
+
+    var html = filtered.length ? filtered.map(function(a) {
+      var badge = a.is_new ? '<span style="background:#EBF8FF;color:#1A56A0;font-size:10px;padding:1px 6px;border-radius:8px;font-weight:600;margin-right:6px;">New</span>' : '';
+      return '<div class="history-modal-article">' +
+        '<div>' + badge + '<a href="' + (a.url||'#') + '" target="_blank">' + (a.title||'Untitled') + '</a></div>' +
+        '<div class="history-modal-meta">' + (a.source||'') + (a.pub_date ? ' &middot; ' + a.pub_date : '') + '</div>' +
+        (a.snippet ? '<div class="history-modal-snippet">' + a.snippet + '</div>' : '') +
+        '</div>';
+    }).join('') : '<p style="color:var(--text-muted);text-align:center;padding:24px 0;">No articles found.</p>';
+
+    document.getElementById('history-modal-body').innerHTML = html;
+  };
+
+  /* ── Updated global search — also searches 6-month article archive ── */
+  // Extend handleSearch to show archive results when searching
+  var _originalHandleSearch = window.handleSearch;
+  window.handleSearch = function(query) {
+    _originalHandleSearch(query);
+    // When query is active, also populate history modal if open
+    var overlay = document.getElementById('history-modal-overlay');
+    if (overlay && overlay.style.display !== 'none') {
+      filterHistoryModal();
+    }
+  };
 </script>
 
 </body>
