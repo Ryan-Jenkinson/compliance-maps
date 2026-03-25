@@ -30,6 +30,9 @@
       --blue-bg: #EBF3FD;
       --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+      --surface-sunken: #EBEDF0;
+      --text-tertiary: #7A8194;
+      --accent: var(--topic-color);
       --article-sidebar-w: 616px;
       --topbar-h: 52px;
       --radius: 6px;
@@ -660,6 +663,132 @@
       transform: translate(0, 0);
     }
 
+    /* ── Impact badge ───────────────────────────────────────────── */
+    .badge-impact { font-size: 9px; font-weight: 700; font-family: var(--mono);
+      letter-spacing: .03em; border-radius: 2px; padding: 1px 4px; }
+    .badge-impact.hi { background: var(--red-bg); color: var(--red); }
+    .badge-impact.mid { background: var(--amber-bg); color: var(--amber); }
+    .badge-impact.lo { background: var(--green-bg); color: var(--green); }
+
+    /* ── Deadline clickable ──────────────────────────────────────── */
+    .dl-item-clickable { cursor: pointer; transition: background .12s; }
+    .dl-item-clickable:hover { background: var(--surface-sunken, #EBEDF0); }
+    .dl-click-hint { font-size: 11px; color: var(--blue); font-family: var(--mono);
+      margin-top: 3px; font-weight: 600; opacity: 0; transition: opacity .15s; }
+    .dl-item-clickable:hover .dl-click-hint { opacity: 1; }
+
+    /* ── Bill row clickable ──────────────────────────────────────── */
+    .bill-row-clickable { cursor: pointer; transition: background .12s; }
+    .bill-row-clickable:hover { background: var(--surface-sunken, #EBEDF0); }
+
+    /* ── Bill Detail Modal ───────────────────────────────────────── */
+    .bd-overlay {
+      display: none; position: fixed; inset: 0; z-index: 2100;
+      background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+      align-items: flex-start; justify-content: center;
+      padding: 32px 16px; overflow-y: auto;
+    }
+    .bd-overlay.open { display: flex; }
+    .bd-modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; box-shadow: 0 24px 80px rgba(0,0,0,.35);
+      width: min(820px, 96vw); max-height: none;
+      display: flex; flex-direction: column;
+    }
+    .bd-header {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .bd-header-left { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+    .bd-bill-label { font-size: 14px; font-weight: 700; font-family: var(--mono);
+      color: var(--text-primary); letter-spacing: -.01em; }
+    .bd-topic-badge { font-size: 11px; font-weight: 700; font-family: var(--mono);
+      letter-spacing: .05em; padding: 2px 6px; border-radius: 3px;
+      background: var(--surface-sunken, #EBEDF0); color: var(--text-secondary); }
+    .bd-severity-badge { font-size: 11px; font-weight: 700; font-family: var(--mono);
+      letter-spacing: .05em; padding: 2px 6px; border-radius: 3px; }
+    .bd-close-btn {
+      background: none; border: 1px solid var(--border); border-radius: 4px;
+      padding: 4px 12px; font-size: 12px; font-weight: 600; font-family: var(--mono);
+      color: var(--text-secondary); cursor: pointer; letter-spacing: .04em;
+      transition: border-color .15s, color .15s;
+    }
+    .bd-close-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+    .bd-body { padding: 0; overflow-y: visible; }
+    .bd-section { padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
+    .bd-section:last-child { border-bottom: none; }
+    .bd-section-title { font-size: 10px; font-weight: 700; font-family: var(--mono);
+      letter-spacing: .08em; color: var(--text-tertiary, #7A8194);
+      text-transform: uppercase; margin-bottom: 6px; }
+    .bd-section-body { font-size: 13px; color: var(--text-primary); line-height: 1.55; }
+    .bd-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .bd-two-col .bd-section { border-right: 1px solid var(--border-light); }
+    .bd-two-col .bd-section:last-child { border-right: none; }
+    .bd-action-list { margin: 0; padding: 0 0 0 16px;
+      font-size: 13px; color: var(--text-primary); line-height: 1.6; }
+    .bd-action-list li { margin-bottom: 4px; }
+    .bd-follow-up-item { display: flex; align-items: flex-start; gap: 10px;
+      padding: 6px 0; border-bottom: 1px solid var(--border-light); }
+    .bd-follow-up-item:last-child { border-bottom: none; }
+    .bd-fu-date { min-width: 80px; font-size: 12px; font-family: var(--mono);
+      font-weight: 700; color: var(--text-secondary); }
+    .bd-fu-conf { font-size: 10px; font-family: var(--mono); font-weight: 600;
+      padding: 1px 4px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; }
+    .bd-fu-conf.known { background:#d1fae5;color:#065f46; }
+    .bd-fu-conf.probable { background:#fef3c7;color:#92400e; }
+    .bd-fu-conf.possible { background:#f1f5f9;color:#64748b; }
+    .bd-ics-btn { display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 8px; padding: 6px 14px;
+      background: var(--topic-color); color: #fff;
+      border: none; border-radius: 5px; font-size: 12px;
+      font-weight: 700; font-family: var(--mono); cursor: pointer;
+      text-decoration: none; letter-spacing: .03em; }
+    .bd-ics-btn:hover { opacity: .9; }
+    .bd-pending { padding: 32px 18px; text-align: center;
+      color: var(--text-secondary); font-size: 13px; }
+    .bd-pending-title { font-size: 14px; font-weight: 700; color: var(--text-primary);
+      margin-bottom: 8px; font-family: var(--mono); }
+    .bd-source-link { font-size: 12px; font-family: var(--mono); color: var(--blue);
+      text-decoration: none; padding: 4px 0; }
+    .bd-source-link:hover { text-decoration: underline; }
+    @media (max-width: 600px) {
+      .bd-two-col { grid-template-columns: 1fr; }
+      .bd-two-col .bd-section { border-right: none; }
+    }
+
+    /* ── Deadline Detail Modal ───────────────────────────────────── */
+    .dd-overlay {
+      display: none; position: fixed; inset: 0; z-index: 2200;
+      background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+      align-items: flex-start; justify-content: center;
+      padding: 32px 16px; overflow-y: auto;
+    }
+    .dd-overlay.open { display: flex; }
+    .dd-modal { background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; box-shadow: 0 24px 80px rgba(0,0,0,.35);
+      width: min(860px, 96vw); display: flex; flex-direction: column; }
+    .dd-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .dd-header-left { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+    .dd-title-label { font-size: 14px; font-weight: 700; color: var(--text-primary);
+      line-height: 1.3; flex: 1; }
+    .dd-countdown { font-size: 13px; font-family: var(--mono); font-weight: 700;
+      padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+    .dd-body { padding: 0; overflow-y: visible; }
+    .dd-prep-row { display: flex; gap: 0; overflow: hidden;
+      border-bottom: 1px solid var(--border-light); }
+    .dd-prep-step { flex: 1; padding: 10px 14px; border-right: 1px solid var(--border-light);
+      font-size: 12px; }
+    .dd-prep-step:last-child { border-right: none; }
+    .dd-prep-label { font-size: 10px; font-weight: 700; font-family: var(--mono);
+      letter-spacing: .07em; color: var(--text-tertiary, #7A8194);
+      text-transform: uppercase; margin-bottom: 4px; }
+    .dd-prep-past { opacity: .45; }
+    @media (max-width: 600px) {
+      .dd-prep-row { flex-direction: column; }
+      .dd-prep-step { border-right: none; border-bottom: 1px solid var(--border-light); }
+    }
+
     /* Two-column grid for panels */
     .panel-grid-2 {
       display: grid;
@@ -697,6 +826,37 @@
   <span class="topbar-topic">TSCA</span>
   <span class="topbar-label">TSCA &amp; US Chemical Regulation</span>
   <span class="topbar-date">24 Mar 2026</span>
+</div>
+
+<!-- ═══ BILL DETAIL MODAL ═══ -->
+<div class="bd-overlay" id="bd-overlay" onclick="closeBillDetail(event)">
+  <div class="bd-modal" onclick="event.stopPropagation()">
+    <div class="bd-header">
+      <div class="bd-header-left">
+        <span class="bd-bill-label" id="bd-bill-label">—</span>
+        <span class="bd-topic-badge" id="bd-topic-badge"></span>
+        <span class="bd-severity-badge" id="bd-severity-badge"></span>
+      </div>
+      <button class="bd-close-btn" onclick="closeBillDetail()">Close</button>
+    </div>
+    <div class="bd-body" id="bd-body"><!-- rendered by JS --></div>
+  </div>
+</div>
+
+<!-- ═══ DEADLINE DETAIL MODAL ═══ -->
+<div class="dd-overlay" id="dd-overlay" onclick="closeDeadlineDetail(event)">
+  <div class="dd-modal" onclick="event.stopPropagation()">
+    <div class="dd-header">
+      <div class="dd-header-left">
+        <span class="bd-topic-badge" id="dd-topic-badge"></span>
+        <span class="bd-severity-badge" id="dd-severity-badge"></span>
+        <span class="dd-title-label" id="dd-title-label">—</span>
+      </div>
+      <span class="dd-countdown" id="dd-countdown"></span>
+      <button class="bd-close-btn" onclick="closeDeadlineDetail()">Close</button>
+    </div>
+    <div class="dd-body" id="dd-body"><!-- rendered by JS --></div>
+  </div>
 </div>
 
 <div class="layout">
@@ -846,7 +1006,8 @@
     </div>
     <div class="panel">
       <div class="dl-list">
-        <div class="dl-item">
+        <div class="dl-item dl-item-clickable"
+             data-deadline-id="235" onclick="openDeadlineDetailFromEl(this)">
           <div class="dl-days normal">
             
               160d
@@ -858,11 +1019,13 @@
             <div class="dl-meta">
               Federal
                · 2026-08-31
-               · LOW
+               · <span style="font-weight:600;">LOW</span>
             </div>
+            <div class="dl-click-hint">Click for AI analysis →</div>
           </div>
         </div>
-        <div class="dl-item">
+        <div class="dl-item dl-item-clickable"
+             data-deadline-id="239" onclick="openDeadlineDetailFromEl(this)">
           <div class="dl-days normal">
             
               160d
@@ -874,11 +1037,13 @@
             <div class="dl-meta">
               Federal
                · 2026-08-31
-               · LOW
+               · <span style="font-weight:600;">LOW</span>
             </div>
+            <div class="dl-click-hint">Click for AI analysis →</div>
           </div>
         </div>
-        <div class="dl-item">
+        <div class="dl-item dl-item-clickable"
+             data-deadline-id="333" onclick="openDeadlineDetailFromEl(this)">
           <div class="dl-days normal">
             
               160d
@@ -890,11 +1055,13 @@
             <div class="dl-meta">
               Federal
                · 2026-08-31
-               · LOW
+               · <span style="font-weight:600;">LOW</span>
             </div>
+            <div class="dl-click-hint">Click for AI analysis →</div>
           </div>
         </div>
-        <div class="dl-item">
+        <div class="dl-item dl-item-clickable"
+             data-deadline-id="236" onclick="openDeadlineDetailFromEl(this)">
           <div class="dl-days normal">
             
               221d
@@ -906,11 +1073,13 @@
             <div class="dl-meta">
               Federal
                · 2026-10-31
-               · LOW
+               · <span style="font-weight:600;">LOW</span>
             </div>
+            <div class="dl-click-hint">Click for AI analysis →</div>
           </div>
         </div>
-        <div class="dl-item">
+        <div class="dl-item dl-item-clickable"
+             data-deadline-id="240" onclick="openDeadlineDetailFromEl(this)">
           <div class="dl-days normal">
             
               221d
@@ -922,8 +1091,9 @@
             <div class="dl-meta">
               Federal
                · 2026-10-31
-               · MEDIUM
+               · <span style="font-weight:600;">MEDIUM</span>
             </div>
+            <div class="dl-click-hint">Click for AI analysis →</div>
           </div>
         </div>
         
@@ -942,7 +1112,11 @@
     <div class="panel">
       <div class="bill-grid">
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="IL"
+             data-bill="HB5553"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">IL HB5553</div>
           <div class="bill-body">
             <div class="bill-title-text">END TEAR GAS EXPOSURES ACT</div>
@@ -955,7 +1129,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB1812"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB1812</div>
           <div class="bill-body">
             <div class="bill-title-text">Solid waste: compostable products.</div>
@@ -968,7 +1146,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="PA"
+             data-bill="HB2229"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">PA HB2229</div>
           <div class="bill-body">
             <div class="bill-title-text">In general provisions, further providing for powers and duties of the department.</div>
@@ -981,7 +1163,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB2549"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB2549</div>
           <div class="bill-body">
             <div class="bill-title-text">Electronic Waste Recycling Act of 2003: manufacturer notices.</div>
@@ -994,7 +1180,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="KY"
+             data-bill="HB767"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">KY HB767</div>
           <div class="bill-body">
             <div class="bill-title-text">AN ACT relating to emergency management and declaring an emergency.</div>
@@ -1007,7 +1197,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="IL"
+             data-bill="HB5052"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">IL HB5052</div>
           <div class="bill-body">
             <div class="bill-title-text">CRIME VICTIMS RIGHTS</div>
@@ -1020,7 +1214,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB1795"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB1795</div>
           <div class="bill-body">
             <div class="bill-title-text">Smoke Damage Recovery Act.</div>
@@ -1033,7 +1231,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="SB1093"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA SB1093</div>
           <div class="bill-body">
             <div class="bill-title-text">Mobilehome parks: disaster assistance.</div>
@@ -1046,7 +1248,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="SB1116"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA SB1116</div>
           <div class="bill-body">
             <div class="bill-title-text">Planning and zoning: housing development projects: subdivisions.</div>
@@ -1059,7 +1265,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="KS"
+             data-bill="HB2785"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">KS HB2785</div>
           <div class="bill-body">
             <div class="bill-title-text">Renaming the medication donation program providing for the registration of qualifying centers to ac…</div>
@@ -1072,7 +1282,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB2390"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB2390</div>
           <div class="bill-body">
             <div class="bill-title-text">Streamlined housing approvals: objective standards: review and modifications.</div>
@@ -1085,7 +1299,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="US"
+             data-bill="HB6644"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">US HB6644</div>
           <div class="bill-body">
             <div class="bill-title-text">21st Century ROAD to Housing Act</div>
@@ -1098,7 +1316,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB1604"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB1604</div>
           <div class="bill-body">
             <div class="bill-title-text">Product safety: proofs of purchase: intentionally added bisphenols.</div>
@@ -1111,7 +1333,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="IL"
+             data-bill="SB3506"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">IL SB3506</div>
           <div class="bill-body">
             <div class="bill-title-text">CRIME VICTIMS RIGHTS</div>
@@ -1124,7 +1350,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB2667"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB2667</div>
           <div class="bill-body">
             <div class="bill-title-text">Vape products: household hazardous waste: advertising.</div>
@@ -1137,7 +1367,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="SB1289"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA SB1289</div>
           <div class="bill-body">
             <div class="bill-title-text">Hazardous waste contingency plans.</div>
@@ -1150,7 +1384,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB2776"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB2776</div>
           <div class="bill-body">
             <div class="bill-title-text">Hazardous materials: storage tanks.</div>
@@ -1163,7 +1401,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="VA"
+             data-bill="HB998"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">VA HB998</div>
           <div class="bill-body">
             <div class="bill-title-text">Menstrual products ingredient labeling; restriction of substances, delayed effective date.</div>
@@ -1176,7 +1418,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="UT"
+             data-bill="SB0251"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">UT SB0251</div>
           <div class="bill-body">
             <div class="bill-title-text">Local Health Department and Department of Environmental Quality Coordination</div>
@@ -1189,7 +1435,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="UT"
+             data-bill="HB0301"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">UT HB0301</div>
           <div class="bill-body">
             <div class="bill-title-text">Drug Recodification</div>
@@ -1202,7 +1452,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="IL"
+             data-bill="SB4045"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">IL SB4045</div>
           <div class="bill-body">
             <div class="bill-title-text">END TEAR GAS EXPOSURES ACT</div>
@@ -1215,7 +1469,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="UT"
+             data-bill="HB0582"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">UT HB0582</div>
           <div class="bill-body">
             <div class="bill-title-text">Asbestos Amendments</div>
@@ -1228,7 +1486,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB1617"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB1617</div>
           <div class="bill-body">
             <div class="bill-title-text">Household hazardous waste: reporting.</div>
@@ -1241,7 +1503,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB1642"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB1642</div>
           <div class="bill-body">
             <div class="bill-title-text">Wildfires: contamination standards.</div>
@@ -1254,7 +1520,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="SB1259"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA SB1259</div>
           <div class="bill-body">
             <div class="bill-title-text">Refineries: decommissioning and remediation: cost estimates.</div>
@@ -1267,7 +1537,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="MI"
+             data-bill="SB0823"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">MI SB0823</div>
           <div class="bill-body">
             <div class="bill-title-text">Environmental protection: air pollution; petroleum and carbon dioxide pipeline act; exclude carbon …</div>
@@ -1280,7 +1554,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="NY"
+             data-bill="S09006"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">NY S09006</div>
           <div class="bill-body">
             <div class="bill-title-text">Enacts into law major components of legislation necessary to implement the state education, labor, …</div>
@@ -1293,7 +1571,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB2034"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB2034</div>
           <div class="bill-body">
             <div class="bill-title-text">Food safety: unsafe additives and ingredient disclosures.</div>
@@ -1306,7 +1588,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB2428"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB2428</div>
           <div class="bill-body">
             <div class="bill-title-text">Criminal fees.</div>
@@ -1319,7 +1605,11 @@
           
         </div>
         
-        <div class="bill-row">
+        <div class="bill-row bill-row-clickable"
+             data-state="CA"
+             data-bill="AB2462"
+             onclick="openBillDetailFromEl(this)"
+             title="Click for AI analysis">
           <div class="bill-id">CA AB2462</div>
           <div class="bill-body">
             <div class="bill-title-text">Unsafe products: disposal: penalties.</div>
@@ -1390,6 +1680,7 @@
             <a href="https://www.epa.gov/chemicals-under-tsca/pollution-prevention-and-toxics-news-stories" target="_blank">recent actions on pollution prevention and toxic chemicals</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1413,6 +1704,7 @@
             <a href="https://www.epa.gov/assessing-and-managing-chemicals-under-tsca/frank-r-lautenberg-chemical-safety-21st-century-act" target="_blank">Frank R. Lautenberg Chemical Safety for the 21st Century Act</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1436,6 +1728,7 @@
             <a href="https://www.epa.gov/chemicals-under-tsca/epa-extends-compliance-dates-perchloroethylene-and-carbon-tetrachloride-tsca" target="_blank">EPA Extends Compliance Dates for Perchloroethylene and Carbon Tetrachloride TSCA Rules</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1459,6 +1752,7 @@
             <a href="https://www.epa.gov/chemicals-under-tsca/epa-showcase-gold-standard-science-2026-society-toxicologys-annual-meeting" target="_blank">EPA to Showcase Gold Standard Science at 2026 Society of Toxicology’s Annual Meeting</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1482,6 +1776,7 @@
             <a href="https://www.epa.gov/chemicals-under-tsca/epa-proposes-updates-formaldehyde-emission-standards-adding-new-quality" target="_blank">EPA Proposes Updates to Formaldehyde Emission Standards, Adding New Quality Control Test Method for Composite Wood Products</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1505,6 +1800,7 @@
             <a href="https://www.epa.gov/chemicals-under-tsca/icymi-epa-requests-nominations-panel-members-and-ad-hoc-reviewers-science" target="_blank">ICYMI: EPA Requests Nominations for Panel Members and Ad Hoc Reviewers for the Science Advisory Committee on Chemicals</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1528,6 +1824,7 @@
             <a href="https://www.epa.gov/tsca-inventory" target="_blank">TSCA Chemical Substance Inventory</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1551,6 +1848,7 @@
             <a href="https://www.epa.gov/chemicals-under-tsca/forms/contact-us-about-chemicals-under-toxic-substance-control-act-tsca" target="_blank">Contact Us about Chemicals under the Toxic Substance Control Act (TSCA)</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>EPA</span>
@@ -1574,6 +1872,7 @@
             <a href="https://www.saferstates.org/insights/250-groups-urge-congress-to-reject-chemical-lobby-push-to-weaken-tsca/" target="_blank">250+ groups urge Congress to reject chemical lobby push to weaken TSCA</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Safer States</span>
@@ -1597,6 +1896,7 @@
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05584/certain-new-chemicals-or-significant-new-uses-statements-of-findings-january-2026" target="_blank">Certain New Chemicals or Significant New Uses; Statements of Findings-January 2026</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1620,6 +1920,7 @@
             <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04651/certain-new-chemicals-receipt-and-status-information-for-september-december-2025" target="_blank">Certain New Chemicals; Receipt and Status Information for September-December 2025</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1643,6 +1944,7 @@
             <a href="https://www.federalregister.gov/documents/2026/03/06/2026-04479/developing-specifications-for-in-home-disposal-systems-for-opioid-analgesics-dispensed-in-an" target="_blank">Developing Specifications for In-Home Disposal Systems for Opioid Analgesics Dispensed in an Outpatient Setting; Establishment of a Public Docket; Request for Comments</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1666,6 +1968,7 @@
             <a href="https://www.federalregister.gov/documents/2026/03/04/2026-04301/certain-new-chemicals-or-significant-new-uses-statements-of-findings-november-2025-to-december-2025" target="_blank">Certain New Chemicals or Significant New Uses; Statements of Findings-November 2025 to December 2025</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1689,6 +1992,7 @@
             <a href="https://www.federalregister.gov/documents/2026/02/25/2026-03763/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Confidential Business Information Claims Under the Toxic Substances Control Act (TSCA)</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1712,6 +2016,7 @@
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03646/prior-notice-of-citizen-suits" target="_blank">Prior Notice of Citizen Suits</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1735,6 +2040,7 @@
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03636/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Chemical Data Reporting Under the Toxic Substances Control Act (TSCA)</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1758,6 +2064,7 @@
             <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03155/extension-of-postponement-of-effectiveness-for-certain-provisions-of-trichloroethylene-tce" target="_blank">Extension of Postponement of Effectiveness for Certain Provisions of Trichloroethylene (TCE); Regulation Under the Toxic Substances Control Act (TSCA)</a>
           </span>
           <span class="badge badge-low">LOW</span>
+          
         </div>
         <div class="article-meta">
           <span>Federal Register</span>
@@ -1854,6 +2161,260 @@
     document.getElementById('tp-count').textContent = visibleCount + ' articles';
     document.getElementById('tp-no-results').classList.toggle('visible', visibleCount === 0 && items.length > 0);
   }
+</script>
+
+<script>
+var BILL_ANALYSES = {"CA_AB1812": {"analyzed_at": "2026-03-24T16:43:27.252882", "bill_number": "AB1812", "bill_title": "Solid waste: compostable products.", "company_impact": {"direct": "Null \u2014 windows and doors are not compostable products and are not subject to compostable product certification or labeling requirements under this bill.", "supply_chain": "Marginally relevant only if your inbound or outbound packaging suppliers use compostable materials and make compostability claims in California commerce; if so, those suppliers would need to meet updated certification standards or face sales restrictions in CA. Flag your packaging suppliers under the SB 54 EPR tracking workstream to confirm none rely on compostability certifications that this bill would invalidate or modify."}, "follow_up_dates": [{"confidence": "probable", "date": "2026-04-25", "event": "Expected Natural Resources Committee hearing and vote on amended AB1812 \u2014 confirm bill advances to Assembly Appropriations or dies in committee"}, {"confidence": "possible", "date": "2026-05-30", "event": "CA Assembly Appropriations Committee deadline for fiscal bills \u2014 monitor if AB1812 clears policy committee and enters fiscal review"}, {"confidence": "possible", "date": "2026-09-15", "event": "CA Governor\u0027s bill signing deadline \u2014 if bill passes Legislature, watch for signature or veto"}], "last_action": "From committee chair, with author\u0027s amendments: Amend, and re-refer to Com. on NAT. RES. Read second time and amended.", "last_action_date": "2026-03-23", "long_term_trajectory": "This bill has a reasonable passage probability given active author engagement and committee chair involvement \u2014 California\u0027s legislative momentum on compostable product standards has been building since 2022 and this appears to be a consolidation/cleanup measure. Risk of similar bills in OR, CO, and ME is moderate given those states already have EPR packaging laws and are watching CA\u0027s compostables framework closely. Federal preemption under TSCA is not applicable here; this is a solid waste/product labeling statute with no federal analog that would preempt it.", "outlook_event": {"description": "Check whether AB1812 received a Natural Resources Committee vote and whether it advanced to the Assembly floor or Appropriations. Pull your SB 54 packaging supplier list and confirm none use compostability certifications that would be affected by updated CA standards. If any packaging suppliers are flagged, loop in your EPR/packaging lead and the relevant supplier contact. No action required unless compostable packaging is confirmed in your CA supply chain.", "reminder_days_before": 3, "suggested_date": "2026-04-28", "title": "CA AB1812 Compostable Pkg: NatRes Committee Vote Watch"}, "recent_action_analysis": "Author\u0027s amendments requested by the committee chair and re-referral to the same committee is a standard negotiating move \u2014 it signals the bill is alive but needed substantive changes to secure committee support; this is not a stall so much as a controlled revision cycle. The bill is modestly advancing with the author engaged and the committee chair invested enough to guide amendments rather than kill it. Expect a committee hearing and vote within 4-6 weeks given the March 23 amendment action and the approaching spring committee deadline.", "recommended_actions": ["Cross-check your SB 54 EPR packaging inventory to confirm whether any packaging formats used for CA-destined shipments carry compostability claims or certifications \u2014 if yes, flag those suppliers for follow-up on AB1812 compliance requirements before the bill reaches chaptered status.", "Add AB1812 to your CA legislative watch list under the EPR/packaging workstream rather than TSCA, since the bill\u0027s practical compliance surface is packaging labeling, not chemical use \u2014 ensure it doesn\u0027t fall through the cracks between your TSCA and EPR tracking buckets."], "severity": "MONITORING", "source_url": "https://legiscan.com/CA/bill/AB1812/2025", "stage": "committee", "stage_meaning": "The bill is in the Assembly Natural Resources Committee, meaning it has not yet received a committee vote and cannot advance to the Assembly floor until that committee acts. The immediate next step is a re-referred hearing before the Natural Resources Committee following the author\u0027s amendments.", "state": "CA", "synopsis": "CA AB1812 amends California\u0027s compostable product and packaging labeling/certification framework under the Public Resources Code, tightening standards for what can be marketed as compostable and how such products must be managed in the solid waste stream. For a windows/doors manufacturer, this bill has no direct product relevance \u2014 your core products are not compostable goods \u2014 but it intersects marginally with packaging compliance obligations if any shipping or protective packaging claims compostability under CA SB 54 or related EPR frameworks.", "topic": "TSCA"}, "CA_AB2549": {"analyzed_at": "2026-03-24T16:45:15.191626", "bill_number": "AB2549", "bill_title": "Electronic Waste Recycling Act of 2003: manufacturer notices.", "company_impact": {"direct": "Null \u2014 windows and doors are not covered electronic devices under California\u0027s e-waste statute; no manufacturer notice obligations attach to your finished goods.", "severity": "MONITORING", "supply_chain": "Low residual risk only: if any purchased electronic subcomponents (e.g., motorized blind controllers, smart window sensors, integrated lighting systems) are independently classified as CEDs by their manufacturers, those upstream suppliers bear the notice burden, not you. Confirm with your smart/electronic component suppliers whether they have existing CEWEA compliance programs."}, "follow_up_dates": [{"confidence": "probable", "date": "2026-04-25", "event": "Deadline window for E.S. \u0026 T.M. committee hearing \u2014 CA Assembly policy committees must hear bills by the last Friday in April for bills introduced in the current session; watch for a posted hearing date and committee vote outcome."}, {"confidence": "possible", "date": "2026-05-09", "event": "Assembly Appropriations Committee referral likely if bill passes E.S. \u0026 T.M. and carries any fiscal impact; monitor for fiscal note publication."}, {"confidence": "known", "date": "2026-06-05", "event": "Assembly floor deadline \u2014 bills must pass their house of origin by this date or die for the session; confirms passage or failure trajectory."}], "last_action": "Re-referred to Com. on E.S \u0026 T.M.", "last_action_date": "2026-03-23", "long_term_trajectory": "AB2549 addresses a narrow procedural gap in an established 2003 statute and faces no evident ideological opposition; passage probability is moderate-to-high if the author maintains committee support through the amendment process. No meaningful risk of cross-state replication since most states either mirror federal e-waste frameworks or have their own distinct statutes already in place. Federal preemption is not a live issue here \u2014 TSCA does not preempt state e-waste producer responsibility schemes of this type.", "outlook_event": {"description": "Check the CA Legislative Information site for a posted E.S. \u0026 T.M. hearing date and confirm whether the bill advanced out of committee. Pull any amended bill text to verify no scope expansion that could touch electronically integrated window or door products. If bill passes committee, loop in your smart-product component suppliers to verify their CEWEA registration status and document in the supplier compliance file.", "reminder_days_before": 3, "suggested_date": "2026-04-22", "title": "CA AB2549 E-Waste: Committee Vote Watch"}, "recent_action_analysis": "The March 19 author\u0027s amendments triggered a re-referral back to E.S. \u0026 T.M., which is a routine procedural reset following substantive text changes \u2014 not a sign of opposition or stalling. The rapid amendment-and-re-referral cycle within days of introduction suggests the author is actively managing the bill and responding to early committee feedback, indicating forward momentum. The bill is advancing, not stalling.", "recommended_actions": ["Pull your bill of materials for any smart or electronically integrated window/door product lines (motorized operators, sensors, integrated controls) and confirm with those component suppliers in writing whether they hold active CEWEA manufacturer registrations \u2014 document responses in your supplier compliance file.", "Flag AB2549 as MONITORING in your legislative tracker with a 90-day check-in; no internal escalation or legal review is warranted at this stage unless your product portfolio expands into embedded electronic devices."], "source_url": "https://legiscan.com/CA/bill/AB2549/2025", "stage": "committee", "stage_meaning": "The bill is in the Assembly Committee on Environmental Safety and Toxic Materials, where it must receive a hearing, pass a committee vote, and be referred to any additional policy or fiscal committees before reaching the Assembly floor. The immediate next step is a scheduled committee hearing where the bill will be heard on its merits, voted on, and either advanced, held, or killed.", "state": "CA", "synopsis": "CA AB2549 amends the Electronic Waste Recycling Act of 2003 to modify manufacturer notice requirements under California\u0027s e-waste framework (Public Resources Code Sections 42463, 42466.2, 42467). As a windows and doors manufacturer, your products do not fall within California\u0027s covered electronic device (CED) categories, making this bill structurally inapplicable to your core manufactured goods.", "topic": "TSCA"}, "IL_HB5553": {"analyzed_at": "2026-03-24T16:43:01.572675", "bill_number": "HB5553", "bill_title": "END TEAR GAS EXPOSURES ACT", "company_impact": {"direct": "No impact. The bill regulates lachrymatory agent deployment by law enforcement and personal defense use; it imposes no obligations on window/door manufacturers, product chemistries, coatings, or labeling.", "severity": "MONITORING", "supply_chain": "No impact. No purchased component categories \u2014 hardware, glass, coatings, weatherstripping, or sealants \u2014 involve lachrymatory agents subject to this bill\u0027s scope."}, "follow_up_dates": [{"confidence": "probable", "date": "2026-04-18", "event": "Check Illinois Judiciary - Civil Committee hearing schedule for HB5553; if no hearing posted by this date, bill is almost certainly dead for the session."}, {"confidence": "known", "date": "2026-05-31", "event": "Illinois General Assembly spring session adjournment \u2014 confirm bill status and close tracking record if not passed."}], "last_action": "Added Co-Sponsor Rep. Kelly M. Cassidy", "last_action_date": "2026-03-23", "long_term_trajectory": "Passage probability in the current session is low \u2014 no hearing is scheduled, the spring window closes in approximately 8 weeks, and the bill faces law enforcement opposition that typically stalls similar legislation in committee. If it dies this session, sponsors are likely to refile in 2027 as part of a broader policing-reform agenda. No material risk of copycat bills in other states creating compliance obligations for this company, and TSCA federal preemption is irrelevant here since the bill does not regulate industrial chemicals.", "outlook_event": {"description": "Confirm IL HB5553 (End Tear Gas Exposures Act) died in Judiciary - Civil Committee with no further action. Pull the ILGA bill status page and verify no floor vote occurred. No product, supplier, or reporting action is required \u2014 this bill does not affect manufacturing operations or chemical compliance obligations. If bill somehow advanced, escalate to legal for a 15-minute triage call.", "reminder_days_before": 3, "suggested_date": "2026-05-28", "title": "IL HB5553 End-of-Session Status Check"}, "recent_action_analysis": "Adding Kelly Cassidy as co-sponsor is a minor momentum signal \u2014 she is a progressive Chicago-area legislator aligned with the bill\u0027s civil liberties framing \u2014 but a single co-sponsorship addition does not indicate imminent committee action. The bill has no hearing date scheduled as of 2026-03-24, and the Illinois General Assembly\u0027s spring adjournment target is typically late May, leaving a narrow window. This bill reads as advocacy positioning rather than a near-term enactment threat.", "recommended_actions": ["Log HB5553 in the compliance tracking register as MONITORING/No Action Required, with a note that the TSCA topic tag is a misclassification \u2014 this bill has zero operational relevance to manufacturing or supply chain obligations.", "Set a single end-of-session check for late May 2026 to confirm the bill died in committee and close the tracking item; no supplier outreach, legal review, or product assessment is warranted."], "source_url": "https://legiscan.com/IL/bill/HB5553/2025", "stage": "committee", "stage_meaning": "The bill is in the Judiciary - Civil Committee in the Illinois House, meaning it must receive a committee hearing, pass a vote, and be reported to the full House floor before any further progress. Without a scheduled hearing, bills routinely die in committee at session end.", "state": "IL", "synopsis": "IL HB5553 prohibits possession and deployment of lachrymatory agents (tear gas, pepper spray) in Illinois, with limited exceptions, and establishes a Chemical Agent Review Board within the Department of Public Health to regulate approved pepper spray formulations. Despite the TSCA topic tag, this bill operates entirely under state public health and law enforcement authority and has no nexus to chemical manufacturing, product coatings, packaging, or supply chain chemical reporting obligations.", "topic": "TSCA"}, "KY_HB767": {"analyzed_at": "2026-03-24T16:50:44.107760", "bill_number": "HB767", "bill_title": "AN ACT relating to emergency management and declaring an emergency.", "company_impact": {"direct": null, "severity": "MONITORING", "supply_chain": null}, "follow_up_dates": [{"confidence": "probable", "date": "2026-03-31", "event": "Check whether Senate Committee on Committees has assigned HB767 to a substantive Senate committee; if assigned, confirm bill remains non-substantive and close tracking."}, {"confidence": "probable", "date": "2026-04-15", "event": "Kentucky legislative session typically targets adjournment in mid-April; confirm HB767 has passed or died \u2014 either way, no compliance action is triggered."}], "last_action": "to Committee on Committees (S)", "last_action_date": "2026-03-20", "long_term_trajectory": "This bill will almost certainly pass the Senate and be signed into law given its unanimous House vote and emergency designation, likely within weeks. It creates zero compliance obligations for a windows/doors manufacturer \u2014 it governs state emergency responder credentialing, not chemical management, product content, or supply chain requirements. No sister-bill risk in other states is relevant to your compliance program; this is a state administrative housekeeping measure.", "outlook_event": {"description": "Verify KY HB767 has received its Senate committee assignment and confirm there has been no amendment adding chemical or product-related provisions. Pull the enrolled bill text if signed into law to validate no compliance hooks were added late. No action is expected \u2014 this checkpoint exists solely to formally close the file. Loop in the bill-tagging team to correct the TSCA misclassification in your tracking workflow.", "reminder_days_before": 3, "suggested_date": "2026-03-31", "title": "KY HB767 Senate Final Check \u2014 Close or Confirm No Impact"}, "recent_action_analysis": "Referral to Committee on Committees (S) is a standard Senate intake step in Kentucky \u2014 it is not a stall signal. The 93-0 House passage and emergency clause designation suggest strong bipartisan support and legislative priority, meaning Senate floor passage before session end is highly probable. Expect a substantive Senate committee referral within days given the emergency designation.", "recommended_actions": ["Flag this bill in your tracking system as \u0027No Action Required \u2014 Misclassified as TSCA\u0027 and close it; confirm with your bill-tagging workflow why a KRS 39A emergency management amendment was routed as a TSCA item so the classification logic can be corrected.", "No further compliance action warranted \u2014 reassign monitoring bandwidth to the MN PRISM supplier registration deadlines and CA SB 54 EPR packaging milestones."], "source_url": "https://legiscan.com/KY/bill/HB767/2026", "stage": "passed_one", "stage_meaning": "Passed One means the bill has cleared the Kentucky House on a 93-0 vote and been transmitted to the Senate. The immediate next step is Senate committee assignment beyond the procedural Committee on Committees, followed by a substantive Senate committee hearing.", "state": "KY", "synopsis": "KY HB767 amends KRS 39A.050 to require the Kentucky Division of Emergency Management to establish and maintain the Kentucky Qualification System, a credentialing/resource-tracking framework for emergency response personnel and assets. Despite being tagged under TSCA in this analysis queue, the bill has no chemical regulatory content \u2014 it is purely an emergency management administrative measure with no bearing on chemical use, reporting, or product compliance obligations.", "topic": "TSCA"}, "PA_HB2229": {"analyzed_at": "2026-03-24T16:44:15.990599", "bill_number": "HB2229", "bill_title": "In general provisions, further providing for powers and duties of the department.", "company_impact": {"direct": "Without bill text confirming specific chemical waste or PFAS solid waste provisions, direct operational impact on our PA manufacturing facilities is unclear but low probability \u2014 SWMA amendments rarely impose new obligations on manufacturers unless they address industrial solid waste classification or disposal requirements directly.", "supply_chain": null}, "follow_up_dates": [{"confidence": "probable", "date": "2026-06-30", "event": "PA House session recess check \u2014 confirm whether HB2229 was called off the table or remains dormant before summer recess; bills not advanced by this point are effectively dead for the session."}, {"confidence": "known", "date": "2026-11-30", "event": "End of 2025-2026 PA legislative session \u2014 bill expires if not enacted; assess whether sponsors signal reintroduction for 2027 session."}], "last_action": "Laid on the table", "last_action_date": "2026-03-23", "long_term_trajectory": "Given the tabling on the same day as first consideration, passage in the current session is unlikely \u2014 probability under 15%. If the bill contains substantive chemical waste provisions, sponsors could reintroduce in the 2027 session or attach language as an amendment to a larger environmental bill. No strong pattern of similar SWMA-TSCA hybrid bills in other states at this time, and federal TSCA preemption would limit PA\u0027s authority if the bill attempted to regulate chemicals directly rather than waste management procedures.", "outlook_event": {"description": "Review PA Legislature docket to confirm HB2229 remains tabled and has not been called off the table or attached as an amendment to another active bill. Pull bill text if not already retrieved and confirm whether SWMA department authority changes create any solid waste or chemical waste obligations for PA manufacturing operations. Loop in PA regulatory counsel if text reveals PFAS waste stream or chemical disposal provisions. No action needed if bill remains dormant.", "reminder_days_before": 3, "suggested_date": "2026-06-27", "title": "PA HB2229 SWMA Monitor \u2014 90-Day Dormancy Check"}, "recent_action_analysis": "\u0027Laid on the table\u0027 in the PA House is effectively a procedural pause \u2014 it removes the bill from active floor consideration without killing it outright, but in practice it signals leadership is not prioritizing advancement. Bills tabled at this stage frequently die without further action in the current session, particularly when tabled immediately after first consideration with no floor debate. This bill is stalling, not advancing.", "recommended_actions": ["Pull the actual bill text from the PA Legislature website (legis.state.pa.us) and confirm whether HB2229 amends SWMA provisions that touch chemical waste classification, PFAS-containing waste streams, or disposal obligations affecting PA manufacturing sites \u2014 the topic tag of TSCA does not align with SWMA and needs verification.", "Flag to your PA regulatory counsel to confirm whether any tabled SWMA amendment language could resurface as a floor amendment to another active PA environmental bill this session, given the bill\u0027s bipartisan sponsorship including ranking member Freeman.", "Log in your legislative tracker as MONITORING with a 90-day dormancy review; no immediate compliance action required unless bill text reveals direct manufacturing waste obligations."], "source_url": "https://legiscan.com/PA/bill/HB2229/2025", "stage": "committee", "stage_meaning": "The bill cleared committee on 2026-03-23 (\u0027Reported as committed\u0027) and received first consideration on the House floor the same day, meaning it has formally left committee and entered the full House legislative process. The next step would be second consideration, then third consideration and a floor vote.", "state": "PA", "synopsis": "PA HB2229 amends Pennsylvania\u0027s Solid Waste Management Act to modify department powers and duties, tagged under TSCA topic area but operating at the state solid waste regulatory level. The bill\u0027s text is sparse on specifics, but amendments to SWMA department authority could affect how PA DEP regulates chemical-containing solid waste streams \u2014 potentially relevant to manufacturing scrap, PFAS-laden packaging, or chemical waste disposal from our PA operations.", "topic": "TSCA"}};
+var DEADLINE_ANALYSES = {"240": {"analyzed_at": "2026-03-24T17:12:30.068051", "company_impact": {"direct": "If we manufacture or import any TSCA-listed chemical substances (e.g., fluoropolymer coating precursors, solvents, or specialty chemicals) above CDR thresholds at a single facility, we will have a CDR filing obligation in the 2027 cycle \u2014 this renewal notice is our early warning to verify readiness. As a fabricator of windows and doors, most chemical inputs are likely incorporated into articles, which generally exempts them from CDR, but our fluoropolymer coating operations warrant specific legal review.", "severity": "MONITORING", "supply_chain": "CDR obligations rest with chemical manufacturers and importers, not downstream fabricators, so our component suppliers\u0027 CDR compliance does not create direct legal exposure for us. However, if a key chemical supplier loses TSCA standing due to CDR non-compliance, it could disrupt our supply of specialty coatings or adhesives \u2014 worth flagging in supplier risk monitoring."}, "deadline_date": "2026-10-31", "deadline_id": 240, "description": "Current TSCA Chemical Data Reporting approval expires; EPA seeking comment on renewal of ICR No. 1884.17.", "jurisdiction": "Federal", "outlook_event": {"description": "Review internal CDR applicability analysis and confirm whether a public comment will be submitted to EPA on ICR No. 1884.17 renewal. Verify threshold calculations for all manufacturing sites covering 2023\u20132026. Confirm fluoropolymer/PFAS operations have been assessed separately from TSCA Section 8(a)(7) PFAS reporting. EHS lead, regulatory counsel, and operations managers at chemical-handling facilities should be present.", "reminder_days_before": 7, "suggested_date": "2026-10-01", "title": "Federal TSCA CDR ICR Renewal \u2013 Comment \u0026 Review Checkpoint"}, "penalties": "Missing the comment deadline has no direct legal penalty \u2014 it is a voluntary public participation opportunity, not a compliance filing. However, failure to submit CDR reports in the actual 2027 reporting cycle (the underlying obligation this ICR renewal supports) can result in civil penalties up to $46,989 per day per violation under TSCA Section 15/16.", "preparation_timeline": [{"action": "Conduct internal CDR applicability review: identify all chemical substances manufactured or imported by the company, cross-reference against TSCA Inventory, and confirm whether any sites exceed 25,000 lb (or 2,500 lb) thresholds for the 2023\u20132026 reporting period. Loop in EHS/operations leads at each manufacturing facility.", "days_before": 90}, {"action": "Determine whether the company has substantive comments to submit on ICR renewal \u2014 e.g., concerns about reporting burden, data confidentiality claims for fluoropolymer chemistry, or scope of the renewed collection. If yes, draft comment language and route for legal/management review.", "days_before": 60}, {"action": "Finalize and submit any public comment to EPA docket (if applicable). Simultaneously, document CDR applicability conclusions with supporting threshold calculations and retain for 2027 CDR cycle readiness file.", "days_before": 30}, {"action": "Confirm comment submission (if filed) is on record in the Federal docket. Archive applicability analysis and set a calendar reminder for the 2027 CDR submission window (expected to open early 2027 with a June 2027 deadline).", "days_before": 0}], "recommended_actions": ["Assign EHS counsel or regulatory lead to conduct a formal CDR threshold applicability analysis for all company sites by August 2026, specifically examining fluoropolymer coating operations and any chemical substance imports to determine if CDR filing obligations exist for the 2027 cycle.", "Review the Federal Register notice (Docket No. EPA-HQ-OPPT-2025-XXXX at federalregister.gov) to assess whether EPA is proposing any scope changes in the renewed ICR that could affect reporting burden or confidentiality treatment of our fluoropolymer chemistry data, and prepare a comment if warranted.", "Add a forward-looking calendar entry for Q1 2027 CDR submission window and link it to this renewal review, ensuring the applicability conclusions documented now are handed off to the team responsible for the actual CDR filing."], "related_context": "This ICR renewal is administrative housekeeping for OMB Paperwork Reduction Act compliance and does not change CDR substantive obligations; the operative deadline to watch is the 2027 CDR reporting cycle (40 CFR 711), which will require submission of 2023\u20132026 manufacturing/import data. Our PFAS/fluoropolymer work also intersects with EPA\u0027s ongoing TSCA Section 8(a)(7) PFAS reporting rule (separate from CDR), which had its own data collection in 2025 \u2014 teams should ensure those two obligations are tracked distinctly.", "source_url": "https://www.federalregister.gov/documents/2026/02/24/2026-03636/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment", "title": "EPA TSCA Chemical Data Reporting Collection Renewal", "topic": "TSCA", "urgency": "MEDIUM", "what_is_required": "This is an EPA notice seeking public comment on the proposed renewal of the Information Collection Request (ICR No. 1884.17) that underlies the TSCA Chemical Data Reporting (CDR) rule (40 CFR Part 711). The October 31, 2026 date is the expiration of the current OMB paperwork approval \u2014 EPA must obtain renewed OMB authorization to continue collecting CDR data. No substantive regulatory change is triggered by this renewal itself; the underlying CDR reporting obligation (next full cycle expected 2027, covering calendar years 2023\u20132026) remains independently operative.", "what_we_must_do": "Our compliance team should evaluate whether to submit a public comment by October 31, 2026 \u2014 particularly if our fluoropolymer coatings operations, chemical inputs, or supplier data gaps create CDR reporting concerns we want EPA to address in the renewed ICR scope or burden estimates. Separately and more urgently, we should use this renewal notice as a trigger to audit our CDR reporting status: confirm which chemical substances we manufacture or import exceed CDR thresholds, so we are fully prepared for the 2027 CDR submission cycle covering 2023\u20132026 data. Supply chain relevance is indirect \u2014 CDR is a manufacturer/importer obligation, so our component suppliers with chemical manufacturing operations may carry their own CDR obligations, but those do not flow to us as a downstream fabricator.", "who_must_comply": "The comment opportunity is open to any stakeholder, but the underlying CDR rule applies to manufacturers (including importers) of chemical substances listed on the TSCA Chemical Substance Inventory who meet threshold triggers: generally 25,000 lbs manufactured or imported at a single site in any year of the 4-year reporting period, with a 2,500 lb threshold for chemicals subject to certain TSCA actions. Small manufacturers as defined by EPA may qualify for reduced reporting or exemptions."}};
+</script>
+
+<script>
+(function() {
+  'use strict';
+
+  var _SEVERITY_STYLES = {
+    HIGH:       { bg: '#fee2e2', color: '#991b1b' },
+    MEDIUM:     { bg: '#fef3c7', color: '#92400e' },
+    LOW:        { bg: '#d1fae5', color: '#065f46' },
+    MONITORING: { bg: '#f1f5f9', color: '#475569' },
+  };
+
+  function _escHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function _buildIcsDataUrl(ev, billLabel) {
+    if (!ev || !ev.suggested_date) return null;
+    try {
+      var d = ev.suggested_date.replace(/-/g,'');
+      var uid = 'bill-' + billLabel.replace(/\s/g,'-') + '-' + d + '@compliance-monitor';
+      var desc = (ev.description || '').replace(/\n/g,'\\n');
+      var title = (ev.title || billLabel + ' — Review').slice(0, 60);
+      var reminderMin = ((ev.reminder_days_before || 3) * 24 * 60);
+      var ics = [
+        'BEGIN:VCALENDAR','VERSION:2.0',
+        'PRODID:-//Compliance Monitor//Bill Analyst//EN',
+        'BEGIN:VEVENT','UID:' + uid,
+        'DTSTART;VALUE=DATE:' + d,'DTEND;VALUE=DATE:' + d,
+        'SUMMARY:' + title,'DESCRIPTION:' + desc,
+        'BEGIN:VALARM','TRIGGER:-PT' + reminderMin + 'M',
+        'ACTION:DISPLAY','DESCRIPTION:Reminder: ' + title,
+        'END:VALARM','END:VEVENT','END:VCALENDAR',
+      ].join('\r\n');
+      return 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    } catch(e) { return null; }
+  }
+
+  function _renderAnalysis(a) {
+    var impact = a.company_impact || {};
+    var sev = (impact.severity || 'MONITORING').toUpperCase();
+    var sevStyle = _SEVERITY_STYLES[sev] || _SEVERITY_STYLES.MONITORING;
+    document.getElementById('bd-bill-label').textContent = (a.state || '') + ' ' + (a.bill_number || a.bill_title || '');
+    var topicBadge = document.getElementById('bd-topic-badge');
+    topicBadge.textContent = a.topic || '';
+    var sevBadge = document.getElementById('bd-severity-badge');
+    sevBadge.textContent = sev;
+    sevBadge.style.background = sevStyle.bg;
+    sevBadge.style.color = sevStyle.color;
+    var sections = '';
+    sections += '<div class="bd-section">';
+    if (a.bill_title) {
+      sections += '<div class="bd-section-title">Bill Title</div>';
+      sections += '<div class="bd-section-body" style="font-weight:600;margin-bottom:8px;">' + _escHtml(a.bill_title) + '</div>';
+    }
+    if (a.source_url) {
+      sections += '<a class="bd-source-link" href="' + _escHtml(a.source_url) + '" target="_blank">View on LegiScan / State Legislature &rarr;</a>';
+    }
+    sections += '</div>';
+    if (a.synopsis) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Synopsis</div><div class="bd-section-body">' + _escHtml(a.synopsis) + '</div></div>';
+    }
+    sections += '<div class="bd-two-col">';
+    if (a.stage_meaning) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Current Stage — ' + _escHtml((a.stage||'').replace(/_/g,' ')) + '</div><div class="bd-section-body">' + _escHtml(a.stage_meaning) + '</div></div>';
+    }
+    if (a.recent_action_analysis) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Recent Action Analysis</div>';
+      if (a.last_action_date || a.last_action) {
+        sections += '<div style="font-size:11px;font-family:var(--mono);color:var(--text-tertiary);margin-bottom:4px;">' + _escHtml(a.last_action_date || '') + (a.last_action ? ' — ' + _escHtml(a.last_action) : '') + '</div>';
+      }
+      sections += '<div class="bd-section-body">' + _escHtml(a.recent_action_analysis) + '</div></div>';
+    }
+    sections += '</div>';
+    if (impact.direct || impact.supply_chain) {
+      sections += '<div class="bd-section" style="background:' + sevStyle.bg + '10;"><div class="bd-section-title" style="color:' + sevStyle.color + ';">Company Impact — ' + sev + '</div>';
+      if (impact.direct) sections += '<div style="margin-bottom:6px;"><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-tertiary);display:block;margin-bottom:2px;">DIRECT PRODUCTS</span><div class="bd-section-body">' + _escHtml(impact.direct) + '</div></div>';
+      if (impact.supply_chain) sections += '<div><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-tertiary);display:block;margin-bottom:2px;">SUPPLY CHAIN</span><div class="bd-section-body">' + _escHtml(impact.supply_chain) + '</div></div>';
+      sections += '</div>';
+    }
+    if (a.long_term_trajectory) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Long-Term Trajectory</div><div class="bd-section-body">' + _escHtml(a.long_term_trajectory) + '</div></div>';
+    }
+    if (a.recommended_actions && a.recommended_actions.length) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Recommended Actions</div><ul class="bd-action-list">';
+      a.recommended_actions.forEach(function(act) { sections += '<li>' + _escHtml(act) + '</li>'; });
+      sections += '</ul></div>';
+    }
+    var hasDates = a.follow_up_dates && a.follow_up_dates.length;
+    var hasOutlook = a.outlook_event && a.outlook_event.suggested_date;
+    if (hasDates || hasOutlook) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Follow-Up Dates</div>';
+      if (hasDates) {
+        a.follow_up_dates.forEach(function(fu) {
+          var conf = (fu.confidence || 'possible').toLowerCase();
+          sections += '<div class="bd-follow-up-item"><div class="bd-fu-date">' + _escHtml(fu.date || 'TBD') + '</div><span class="bd-fu-conf ' + conf + '">' + conf + '</span><div style="font-size:12px;color:var(--text-primary);flex:1;">' + _escHtml(fu.event || '') + '</div></div>';
+        });
+      }
+      if (hasOutlook) {
+        var icsUrl = _buildIcsDataUrl(a.outlook_event, (a.state || '') + ' ' + (a.bill_number || ''));
+        if (icsUrl) {
+          sections += '<a class="bd-ics-btn" href="' + icsUrl + '" download="' + _escHtml((a.outlook_event.title || 'Bill Review').replace(/[^\w\s-]/g,'')) + '.ics">&#128197; Add to Outlook / Calendar</a>';
+        }
+      }
+      sections += '</div>';
+    }
+    document.getElementById('bd-body').innerHTML = sections;
+  }
+
+  window.openBillDetailFromEl = function(el) {
+    openBillDetail(el.dataset.state || '', el.dataset.bill || '');
+  };
+
+  window.openBillDetail = function(stateCode, billNumber) {
+    var key = stateCode + '_' + billNumber.replace(/\s+/g, '_');
+    var overlay = document.getElementById('bd-overlay');
+    var body = document.getElementById('bd-body');
+    var analysis = (typeof BILL_ANALYSES !== 'undefined') ? BILL_ANALYSES[key] : null;
+    if (analysis && analysis.synopsis) {
+      _renderAnalysis(analysis);
+    } else {
+      document.getElementById('bd-bill-label').textContent = stateCode + ' ' + billNumber.replace(/_/g,' ');
+      document.getElementById('bd-topic-badge').textContent = '';
+      var sevBadge = document.getElementById('bd-severity-badge');
+      sevBadge.textContent = 'PENDING'; sevBadge.style.background = '#f1f5f9'; sevBadge.style.color = '#64748b';
+      body.innerHTML = '<div class="bd-pending"><div class="bd-pending-title">' + stateCode + ' ' + billNumber.replace(/_/g,' ') + '</div><p>Deep analysis not yet generated for this bill.</p><p style="font-size:12px;color:var(--text-tertiary);">Analysis runs automatically for active bills during each pipeline run.</p></div>';
+    }
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeBillDetail = function(e) {
+    if (e && e.target !== document.getElementById('bd-overlay')) return;
+    document.getElementById('bd-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.openDeadlineDetailFromEl = function(el) {
+    openDeadlineDetail(el.dataset.deadlineId || '');
+  };
+
+  window.openDeadlineDetail = function(deadlineId) {
+    var overlay = document.getElementById('dd-overlay');
+    var body = document.getElementById('dd-body');
+    var key = String(deadlineId);
+    var analysis = (typeof DEADLINE_ANALYSES !== 'undefined') ? DEADLINE_ANALYSES[key] : null;
+    if (analysis && analysis.what_is_required) {
+      _renderDeadlineAnalysis(analysis);
+    } else {
+      document.getElementById('dd-title-label').textContent = 'Deadline #' + deadlineId;
+      document.getElementById('dd-topic-badge').textContent = '';
+      var sevBadge = document.getElementById('dd-severity-badge');
+      sevBadge.textContent = 'PENDING'; sevBadge.style.background = '#f1f5f9'; sevBadge.style.color = '#64748b';
+      document.getElementById('dd-countdown').textContent = '';
+      body.innerHTML = '<div class="bd-pending"><div class="bd-pending-title">Analysis Pending</div><p>Deep analysis has not yet been generated for this deadline.</p><p style="font-size:12px;color:var(--text-tertiary);">Analysis runs automatically for HIGH/MEDIUM deadlines during each pipeline run.</p></div>';
+    }
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeDeadlineDetail = function(e) {
+    if (e && e.target !== document.getElementById('dd-overlay')) return;
+    document.getElementById('dd-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  function _renderDeadlineAnalysis(a) {
+    var impact = a.company_impact || {};
+    var sev = (impact.severity || 'MONITORING').toUpperCase();
+    var sevStyle = _SEVERITY_STYLES[sev] || _SEVERITY_STYLES.MONITORING;
+    var today = new Date();
+    document.getElementById('dd-title-label').textContent = a.title || 'Deadline';
+    document.getElementById('dd-topic-badge').textContent = a.topic || '';
+    var sevBadge = document.getElementById('dd-severity-badge');
+    sevBadge.textContent = sev; sevBadge.style.background = sevStyle.bg; sevBadge.style.color = sevStyle.color;
+    var cdEl = document.getElementById('dd-countdown');
+    if (a.deadline_date) {
+      var ddDate = new Date(a.deadline_date);
+      var diffDays = Math.ceil((ddDate - today) / (1000 * 60 * 60 * 24));
+      if (diffDays < 0) { cdEl.textContent = Math.abs(diffDays) + 'd overdue'; cdEl.style.background = 'var(--red-bg)'; cdEl.style.color = 'var(--red)'; }
+      else if (diffDays === 0) { cdEl.textContent = 'TODAY'; cdEl.style.background = 'var(--red-bg)'; cdEl.style.color = 'var(--red)'; }
+      else if (diffDays <= 14) { cdEl.textContent = diffDays + ' days'; cdEl.style.background = 'var(--red-bg)'; cdEl.style.color = 'var(--red)'; }
+      else if (diffDays <= 90) { cdEl.textContent = diffDays + ' days'; cdEl.style.background = 'var(--amber-bg)'; cdEl.style.color = 'var(--amber)'; }
+      else { cdEl.textContent = a.deadline_date; cdEl.style.background = 'var(--surface-sunken)'; cdEl.style.color = 'var(--text-secondary)'; }
+    } else { cdEl.textContent = ''; }
+    var sections = '';
+    sections += '<div class="bd-two-col">';
+    if (a.what_is_required) {
+      sections += '<div class="bd-section"><div class="bd-section-title">What Is Required</div><div class="bd-section-body">' + _escHtml(a.what_is_required) + '</div>';
+      if (a.jurisdiction) sections += '<div style="font-size:11px;font-family:var(--mono);color:var(--text-tertiary);margin-top:6px;">' + _escHtml(a.jurisdiction) + (a.urgency ? ' · ' + a.urgency : '') + '</div>';
+      if (a.source_url) sections += '<a class="bd-source-link" href="' + _escHtml(a.source_url) + '" target="_blank" style="display:block;margin-top:6px;">View Source &rarr;</a>';
+      sections += '</div>';
+    }
+    if (a.who_must_comply) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Who Must Comply</div><div class="bd-section-body">' + _escHtml(a.who_must_comply) + '</div></div>';
+    }
+    sections += '</div>';
+    if (a.what_we_must_do) {
+      sections += '<div class="bd-section" style="background:' + sevStyle.bg + '10;"><div class="bd-section-title" style="color:' + sevStyle.color + ';">What We Must Do</div><div class="bd-section-body">' + _escHtml(a.what_we_must_do) + '</div></div>';
+    }
+    if (impact.direct || impact.supply_chain) {
+      sections += '<div class="bd-section" style="background:' + sevStyle.bg + '10;"><div class="bd-section-title" style="color:' + sevStyle.color + ';">Company Impact — ' + sev + '</div><div class="bd-two-col" style="margin: 0 -18px;">';
+      if (impact.direct) sections += '<div style="padding: 8px 18px; border-right: 1px solid var(--border-light);"><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-tertiary);display:block;margin-bottom:2px;">DIRECT PRODUCTS</span><div class="bd-section-body">' + _escHtml(impact.direct) + '</div></div>';
+      if (impact.supply_chain) sections += '<div style="padding: 8px 18px;"><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-tertiary);display:block;margin-bottom:2px;">SUPPLY CHAIN</span><div class="bd-section-body">' + _escHtml(impact.supply_chain) + '</div></div>';
+      sections += '</div></div>';
+    }
+    if (a.penalties) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Penalties for Non-Compliance</div><div class="bd-section-body">' + _escHtml(a.penalties) + '</div></div>';
+    }
+    if (a.preparation_timeline && a.preparation_timeline.length) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Preparation Timeline</div><div class="dd-prep-row">';
+      a.preparation_timeline.forEach(function(step) {
+        var daysLabel = step.days_before === 0 ? 'Deadline Day' : step.days_before + ' days before';
+        var isPast = false;
+        if (a.deadline_date) { var sd = new Date(a.deadline_date); sd.setDate(sd.getDate() - step.days_before); isPast = sd < today; }
+        sections += '<div class="dd-prep-step' + (isPast ? ' dd-prep-past' : '') + '"><div class="dd-prep-label">' + _escHtml(daysLabel) + (isPast ? ' (past)' : '') + '</div><div style="font-size:12px;color:var(--text-primary);line-height:1.45;">' + _escHtml(step.action) + '</div></div>';
+      });
+      sections += '</div></div>';
+    }
+    if (a.related_context) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Related Context</div><div class="bd-section-body">' + _escHtml(a.related_context) + '</div></div>';
+    }
+    if (a.recommended_actions && a.recommended_actions.length) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Recommended Actions Now</div><ul class="bd-action-list">';
+      a.recommended_actions.forEach(function(act) { sections += '<li>' + _escHtml(act) + '</li>'; });
+      sections += '</ul></div>';
+    }
+    if (a.outlook_event && a.outlook_event.suggested_date) {
+      var icsUrl = _buildIcsDataUrl(a.outlook_event, a.title || 'Deadline');
+      if (icsUrl) {
+        sections += '<div class="bd-section"><div class="bd-section-title">Calendar Reminder</div>';
+        if (a.outlook_event.description) sections += '<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;line-height:1.5;">' + _escHtml(a.outlook_event.description) + '</div>';
+        sections += '<a class="bd-ics-btn" href="' + icsUrl + '" download="' + _escHtml((a.outlook_event.title || 'Deadline').replace(/[^\w\s-]/g,'')) + '.ics">&#128197; Add to Outlook / Calendar</a></div>';
+      }
+    }
+    document.getElementById('dd-body').innerHTML = sections;
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('bd-overlay').classList.remove('open');
+      document.getElementById('dd-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+})();
 </script>
 </body>
 </html>
