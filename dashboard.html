@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
     :root {
       --bg: #F4F5F7;
@@ -189,6 +190,94 @@
       opacity: 1;
       transition: opacity 0.15s;
     }
+
+    /* ── Rail accordion groups ── */
+    .rail-group-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-inverse-dim);
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+      transition: color 0.12s, background 0.12s;
+    }
+    .rail-group-header:hover { color: var(--text-inverse); background: var(--surface-dark-2); }
+    .rail-group-header.active { color: var(--text-inverse); }
+    .rail-group-label { transition: opacity 0.15s; white-space: nowrap; flex: 1; min-width: 0; overflow: hidden; }
+    .rail-group-chevron {
+      font-size: 9px;
+      opacity: 0.35;
+      transition: transform 0.15s, opacity 0.15s;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .rail-group-header.open .rail-group-chevron { transform: rotate(90deg); opacity: 0.7; }
+
+    .rail-group-sub {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.2s ease;
+    }
+    .rail-group-sub.open { max-height: 400px; }
+
+    .rail-sub-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px 5px 38px;
+      font-size: 11.5px;
+      font-weight: 400;
+      color: #5A6374;
+      cursor: pointer;
+      white-space: nowrap;
+      border-left: 3px solid transparent;
+      text-decoration: none;
+      transition: color 0.1s, background 0.1s;
+    }
+    .rail-sub-link:hover { color: #C0C8D8; background: rgba(255,255,255,0.03); text-decoration: none; }
+
+    .rail-sub-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Special pinned items: Glossary (amber) and Director Review (purple) */
+    .rail-link-amber {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 14px 8px 16px;
+      font-size: 12px; font-weight: 500;
+      color: #7A6640;
+      border-left: 3px solid transparent;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.12s, background 0.12s;
+    }
+    .rail-link-amber:hover { color: #FBBF24; background: rgba(217,119,6,0.06); text-decoration: none; }
+
+    .rail-link-purple {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 14px 8px 16px;
+      font-size: 12px; font-weight: 500;
+      color: #6B5A85;
+      border-left: 3px solid transparent;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.12s, background 0.12s;
+    }
+    .rail-link-purple:hover { color: #C084FC; background: rgba(192,132,252,0.06); text-decoration: none; }
+
+    /* Collapsed rail: hide labels, sub-items */
+    body.sidebar-collapsed .rail-group-sub { max-height: 0 !important; }
+    body.sidebar-collapsed .rail-group-label { opacity: 0; }
+    body.sidebar-collapsed .rail-group-chevron { opacity: 0; }
+    body.sidebar-collapsed .rail-link-amber .rail-label { opacity: 0; }
+    body.sidebar-collapsed .rail-link-purple .rail-label { opacity: 0; }
 
     /* ============================================================
        TOP BAR
@@ -2102,84 +2191,202 @@
   </div>
 
   <div class="rail-nav">
-    <a class="rail-link active" data-target="section-dashboard" onclick="scrollToSection('section-dashboard')">
-      <span class="rail-dot" style="background:var(--teal);"></span>
-      <span class="rail-label">Overview</span>
-    </a>
 
-    
-    <a class="rail-link" data-target="section-pfas" onclick="scrollToSection('section-pfas')">
-      <span class="rail-dot" style="background:#C0392B;"></span>
-      <span class="rail-label">PFAS</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-epr" onclick="scrollToSection('section-epr')">
-      <span class="rail-dot" style="background:#27AE60;"></span>
-      <span class="rail-label">EPR</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-reach" onclick="scrollToSection('section-reach')">
-      <span class="rail-dot" style="background:#2980B9;"></span>
-      <span class="rail-label">REACH</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-tsca" onclick="scrollToSection('section-tsca')">
-      <span class="rail-dot" style="background:#8E44AD;"></span>
-      <span class="rail-label">TSCA</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-prop65" onclick="scrollToSection('section-prop65')">
-      <span class="rail-dot" style="background:#E67E22;"></span>
-      <span class="rail-label">Prop65</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-conflictminerals" onclick="scrollToSection('section-conflictminerals')">
-      <span class="rail-dot" style="background:#1A7A87;"></span>
-      <span class="rail-label">ConflictMinerals</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-forcedlabor" onclick="scrollToSection('section-forcedlabor')">
-      <span class="rail-dot" style="background:#7B241C;"></span>
-      <span class="rail-label">ForcedLabor</span>
-    </a>
-    
+    <!-- ── Always-visible flat links ── -->
+    <div style="padding:6px 0 4px;">
+      <a class="rail-link active" id="rail-overview" data-target="section-dashboard" onclick="scrollToSection('section-dashboard')">
+        <i data-lucide="layout-dashboard" style="width:16px;height:16px;color:#0F766E;flex-shrink:0;"></i>
+        <span class="rail-label">Overview</span>
+      </a>
+      <a class="rail-link" id="rail-calendar-pin" data-target="section-calendar" onclick="scrollToSection('section-calendar')">
+        <i data-lucide="calendar" style="width:16px;height:16px;color:#D97706;flex-shrink:0;"></i>
+        <span class="rail-label">Reg. Calendar</span>
+      </a>
+    </div>
 
     <div class="rail-divider"></div>
 
-    
-    <a class="rail-link" data-target="section-maps" onclick="scrollToSection('section-maps')">
-      <span class="rail-dot" style="background:var(--blue);"></span>
-      <span class="rail-label">Maps & Data</span>
-    </a>
-    <a class="rail-link" href="glossary.html">
-      <span class="rail-dot" style="background:var(--blue);"></span>
+    <!-- ── 1. Dashboards ── -->
+    <div class="rail-group-header" id="rail-grp-dashboards" data-group="dashboards" onclick="toggleRailGroup('dashboards', event)">
+      <i data-lucide="layers" style="width:16px;height:16px;color:#0D9488;flex-shrink:0;"></i>
+      <span class="rail-group-label">Dashboards</span>
+      <span class="rail-group-chevron">&#9654;</span>
+    </div>
+    <div class="rail-group-sub" id="rail-sub-dashboards">
+      
+      <a class="rail-sub-link" href="pfas.html" target="_blank" rel="noopener">
+        <span class="rail-sub-dot" style="background:#C0392B;"></span>PFAS
+      </a>
+      
+      <a class="rail-sub-link" href="epr.html" target="_blank" rel="noopener">
+        <span class="rail-sub-dot" style="background:#27AE60;"></span>EPR
+      </a>
+      
+      <a class="rail-sub-link" href="reach.html" target="_blank" rel="noopener">
+        <span class="rail-sub-dot" style="background:#2980B9;"></span>REACH
+      </a>
+      
+      <a class="rail-sub-link" href="tsca.html" target="_blank" rel="noopener">
+        <span class="rail-sub-dot" style="background:#8E44AD;"></span>TSCA
+      </a>
+      
+      <a class="rail-sub-link" href="prop65.html" target="_blank" rel="noopener">
+        <span class="rail-sub-dot" style="background:#E67E22;"></span>Prop65
+      </a>
+      
+      <a class="rail-sub-link" href="conflictminerals.html" target="_blank" rel="noopener">
+        <span class="rail-sub-dot" style="background:#1A7A87;"></span>ConflictMinerals
+      </a>
+      
+      <a class="rail-sub-link" href="forcedlabor.html" target="_blank" rel="noopener">
+        <span class="rail-sub-dot" style="background:#7B241C;"></span>ForcedLabor
+      </a>
+      
+    </div>
+
+    <!-- ── 2. News & Articles ── -->
+    <div class="rail-group-header" id="rail-grp-news" data-group="news" onclick="toggleRailGroup('news', event)">
+      <i data-lucide="newspaper" style="width:16px;height:16px;color:#60A5FA;flex-shrink:0;"></i>
+      <span class="rail-group-label">News &amp; Articles</span>
+      <span class="rail-group-chevron">&#9654;</span>
+    </div>
+    <div class="rail-group-sub" id="rail-sub-news">
+      
+      <a class="rail-sub-link" onclick="expandTopic('pfas')">
+        <span class="rail-sub-dot" style="background:#C0392B;"></span>PFAS
+      </a>
+      
+      <a class="rail-sub-link" onclick="expandTopic('epr')">
+        <span class="rail-sub-dot" style="background:#27AE60;"></span>EPR
+      </a>
+      
+      <a class="rail-sub-link" onclick="expandTopic('reach')">
+        <span class="rail-sub-dot" style="background:#2980B9;"></span>REACH
+      </a>
+      
+      <a class="rail-sub-link" onclick="expandTopic('tsca')">
+        <span class="rail-sub-dot" style="background:#8E44AD;"></span>TSCA
+      </a>
+      
+      <a class="rail-sub-link" onclick="expandTopic('prop65')">
+        <span class="rail-sub-dot" style="background:#E67E22;"></span>Prop65
+      </a>
+      
+      <a class="rail-sub-link" onclick="expandTopic('conflictminerals')">
+        <span class="rail-sub-dot" style="background:#1A7A87;"></span>ConflictMinerals
+      </a>
+      
+      <a class="rail-sub-link" onclick="expandTopic('forcedlabor')">
+        <span class="rail-sub-dot" style="background:#7B241C;"></span>ForcedLabor
+      </a>
+      
+    </div>
+
+    <!-- ── 3. Deadlines ── -->
+    <div class="rail-group-header" id="rail-grp-deadlines" data-group="deadlines" data-sections="section-deadlines,section-calendar" onclick="toggleRailGroup('deadlines', event)">
+      <i data-lucide="triangle-alert" style="width:16px;height:16px;color:#D97706;flex-shrink:0;"></i>
+      <span class="rail-group-label">Deadlines</span>
+      <span class="rail-group-chevron">&#9654;</span>
+    </div>
+    <div class="rail-group-sub" id="rail-sub-deadlines">
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines')">All Deadlines</a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines');filterDeadlinesByTopic('pfas')">
+        <span class="rail-sub-dot" style="background:#C0392B;"></span>PFAS
+      </a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines');filterDeadlinesByTopic('epr')">
+        <span class="rail-sub-dot" style="background:#27AE60;"></span>EPR
+      </a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines');filterDeadlinesByTopic('reach')">
+        <span class="rail-sub-dot" style="background:#2980B9;"></span>REACH
+      </a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines');filterDeadlinesByTopic('tsca')">
+        <span class="rail-sub-dot" style="background:#8E44AD;"></span>TSCA
+      </a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines');filterDeadlinesByTopic('prop65')">
+        <span class="rail-sub-dot" style="background:#E67E22;"></span>Prop65
+      </a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines');filterDeadlinesByTopic('conflictminerals')">
+        <span class="rail-sub-dot" style="background:#1A7A87;"></span>ConflictMinerals
+      </a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-deadlines');filterDeadlinesByTopic('forcedlabor')">
+        <span class="rail-sub-dot" style="background:#7B241C;"></span>ForcedLabor
+      </a>
+      
+      <a class="rail-sub-link" onclick="scrollToSection('section-calendar')">Reg. Calendar</a>
+    </div>
+
+    <!-- ── 4. Maps ── -->
+    <div class="rail-group-header" id="rail-grp-maps" data-group="maps" onclick="toggleRailGroup('maps', event)">
+      <i data-lucide="globe" style="width:16px;height:16px;color:#7C3AED;flex-shrink:0;"></i>
+      <span class="rail-group-label">Maps</span>
+      <span class="rail-group-chevron">&#9654;</span>
+    </div>
+    <div class="rail-group-sub" id="rail-sub-maps">
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/pfas-map.html" target="_blank" rel="noopener">PFAS State Map</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/pfas-legislative-intel.html" target="_blank" rel="noopener">PFAS Intel Map</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/epr-map.html" target="_blank" rel="noopener">EPR Map</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/reach-map.html" target="_blank" rel="noopener">REACH Map</a>
+    </div>
+
+    <!-- ── 5. Timelines ── -->
+    <div class="rail-group-header" id="rail-grp-timelines" data-group="timelines" onclick="toggleRailGroup('timelines', event)">
+      <i data-lucide="gantt-chart" style="width:16px;height:16px;color:#0369A1;flex-shrink:0;"></i>
+      <span class="rail-group-label">Timelines</span>
+      <span class="rail-group-chevron">&#9654;</span>
+    </div>
+    <div class="rail-group-sub" id="rail-sub-timelines">
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/deadline-timeline.html" target="_blank" rel="noopener">All Topics</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/pfas-timeline.html" target="_blank" rel="noopener">PFAS</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/epr-timeline.html" target="_blank" rel="noopener">EPR</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/reach-timeline.html" target="_blank" rel="noopener">REACH</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/tsca-timeline.html" target="_blank" rel="noopener">TSCA</a>
+    </div>
+
+    <!-- ── 6. Legislative ── -->
+    <div class="rail-group-header" id="rail-grp-legislative" data-group="legislative" data-sections="section-leg-activity,section-cross-state,section-changes" onclick="toggleRailGroup('legislative', event)">
+      <i data-lucide="landmark" style="width:16px;height:16px;color:#BE185D;flex-shrink:0;"></i>
+      <span class="rail-group-label">Legislative</span>
+      <span class="rail-group-chevron">&#9654;</span>
+    </div>
+    <div class="rail-group-sub" id="rail-sub-legislative">
+      <a class="rail-sub-link" onclick="scrollToSection('section-leg-activity')">Bill Activity</a>
+      <a class="rail-sub-link" onclick="scrollToSection('section-cross-state')">Cross-State Intel</a>
+      
+    </div>
+
+    <!-- ── 7. Downloads & Archive ── -->
+    <div class="rail-group-header" id="rail-grp-downloads" data-group="downloads" data-sections="section-archive" onclick="toggleRailGroup('downloads', event)">
+      <i data-lucide="archive" style="width:16px;height:16px;color:#4B5563;flex-shrink:0;"></i>
+      <span class="rail-group-label">Downloads &amp; Archive</span>
+      <span class="rail-group-chevron">&#9654;</span>
+    </div>
+    <div class="rail-group-sub" id="rail-sub-downloads">
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/pfas-tracker.xlsx" target="_blank" rel="noopener">PFAS Tracker (.xlsx)</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/epr-tracker.xlsx" target="_blank" rel="noopener">EPR Tracker (.xlsx)</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/reach-tracker.xlsx" target="_blank" rel="noopener">REACH Tracker (.xlsx)</a>
+      <a class="rail-sub-link" href="https://ryan-jenkinson.github.io/compliance-maps/deadlines.ics">Calendar (.ics)</a>
+      <a class="rail-sub-link" onclick="scrollToSection('section-archive')">Archive</a>
+    </div>
+
+    <div class="rail-divider"></div>
+
+    <!-- ── Special pinned items ── -->
+    <a class="rail-link-amber" href="glossary.html" target="_blank" rel="noopener">
+      <i data-lucide="book-open" style="width:16px;height:16px;flex-shrink:0;"></i>
       <span class="rail-label">Glossary</span>
     </a>
-    <a class="rail-link" data-target="section-deadlines" onclick="scrollToSection('section-deadlines')">
-      <span class="rail-dot" style="background:var(--amber);"></span>
-      <span class="rail-label">Deadlines</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-leg-activity" onclick="scrollToSection('section-leg-activity')">
-      <span class="rail-dot" style="background:var(--blue);"></span>
-      <span class="rail-label">Leg. Activity</span>
-    </a>
-    
-    
-    <a class="rail-link" data-target="section-calendar" onclick="scrollToSection('section-calendar')">
-      <span class="rail-dot" style="background:var(--teal);"></span>
-      <span class="rail-label">Calendar</span>
-    </a>
-    
-    <a class="rail-link" data-target="section-archive" onclick="scrollToSection('section-archive')">
-      <span class="rail-dot" style="background:var(--text-tertiary);"></span>
-      <span class="rail-label">Archive</span>
+    <a class="rail-link-purple" href="director_review.html" target="_blank" rel="noopener">
+      <i data-lucide="eye" style="width:16px;height:16px;flex-shrink:0;"></i>
+      <span class="rail-label">Director Review</span>
     </a>
 
-    
-    <div class="rail-divider"></div>
-    <a class="rail-link" href="https://ryan-jenkinson.github.io/compliance-maps/deadline-timeline.html" title="All regulatory deadline timelines"><span class="rail-dot" style="background:var(--text-inverse-dim);"></span><span class="rail-label">All Timelines</span></a>
-    
   </div>
 
   <div class="rail-footer">
@@ -2189,7 +2396,7 @@
       <span class="rail-label">Calendar .ics</span>
     </a>
     
-    <div class="rail-footer-text">Updated 2026-03-26 10:52:39</div>
+    <div class="rail-footer-text">Updated 2026-03-26 11:27:30</div>
     <button class="rail-toggle-btn" onclick="toggleSidebarPersist()" title="Collapse sidebar">
       <span class="toggle-open">&#171;</span>
       <span class="toggle-close">&#187;</span>
@@ -4134,7 +4341,7 @@
             
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="492" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="492" data-topic="prop65" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4165,7 +4372,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="493" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="493" data-topic="prop65" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4196,7 +4403,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="546" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="546" data-topic="prop65" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4227,7 +4434,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="547" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="547" data-topic="prop65" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4258,7 +4465,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="480" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="480" data-topic="tsca" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4289,7 +4496,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="490" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="490" data-topic="tsca" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4320,7 +4527,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="543" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="543" data-topic="tsca" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4351,7 +4558,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="491" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="491" data-topic="prop65" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4382,7 +4589,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="545" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="545" data-topic="prop65" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -4413,7 +4620,7 @@
               </div>
               
               
-              <div class="dl-item dl-item-clickable" data-deadline-id="544" onclick="openDeadlineDetailFromEl(this)">
+              <div class="dl-item dl-item-clickable" data-deadline-id="544" data-topic="prop65" onclick="openDeadlineDetailFromEl(this)">
               
                 <div style="text-align:right;min-width:56px;">
                   
@@ -11418,7 +11625,7 @@
 
   <!-- ── Dev Tools Footer ── -->
   <div style="border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:16px;font-size: 13px;color:var(--text-tertiary);">
-    <span>Last updated: 2026-03-26 10:52:39</span>
+    <span>Last updated: 2026-03-26 11:27:30</span>
     <span style="flex:1;"></span>
     <a href="director_review.html"       style="color:var(--text-tertiary);text-decoration:none;border:1px solid var(--border);padding:4px 10px;border-radius:4px;font-family:var(--mono);font-size: 12px;font-weight:600;letter-spacing:.04em;"
        title="Latest director critique">Director Review</a>
@@ -11451,42 +11658,130 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
     allTopics: ["pfas", "epr", "reach", "tsca", "prop65", "conflictminerals", "forcedlabor"]
   };
 
+  /* ── Mobile sidebar toggle ── */
   window.toggleSidebar = function() {
     document.getElementById('sidebar').classList.toggle('open');
   };
 
+  /* ── Right-panel hide/show ── */
   window.toggleSidebarPanel = function() {
     var gridMain = document.querySelector('.grid-main');
     if (!gridMain) return;
     var hidden = gridMain.classList.toggle('sidebar-hidden');
     var btn = document.getElementById('sidebar-collapse-btn');
-    if (btn) {
-      btn.style.cssText = hidden ? 'display:none' : '';
-    }
+    if (btn) btn.style.cssText = hidden ? 'display:none' : '';
     var showBtn = document.getElementById('sidebar-show-btn');
     if (showBtn) showBtn.style.display = hidden ? 'block' : 'none';
   };
 
+  /* ── Smooth scroll to section ── */
   window.scrollToSection = function(id) {
     var anchor = document.getElementById('anchor-' + id) || document.getElementById(id);
     if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  /* ── Sidebar active tracking ── */
-  function updateActiveRailLink() {
-    var links = document.querySelectorAll('.rail-link[data-target]');
-    var sections = [];
-    links.forEach(function(link) {
-      var target = document.getElementById(link.dataset.target);
-      if (target) sections.push({ link: link, el: target });
+  /* ── Filter deadline list to a topic (called from sidebar Deadlines sub-links) ── */
+  window.filterDeadlinesByTopic = function(topicName) {
+    document.querySelectorAll('.dl-item[data-topic]').forEach(function(card) {
+      var t = (card.dataset.topic || '').toLowerCase();
+      card.style.display = (!topicName || t === topicName) ? '' : 'none';
     });
-    var active = sections[0];
-    var scrollY = window.scrollY + 80;
-    for (var i = sections.length - 1; i >= 0; i--) {
-      if (sections[i].el.offsetTop <= scrollY) { active = sections[i]; break; }
+  };
+
+  /* ── Accordion: default open groups ── */
+  var ACCORDION_DEFAULTS = { dashboards: true, news: true };
+
+  function loadAccordionState() {
+    try {
+      var saved = JSON.parse(localStorage.getItem('sidebarAccordion') || '{}');
+      return Object.assign({}, ACCORDION_DEFAULTS, saved);
+    } catch(e) { return Object.assign({}, ACCORDION_DEFAULTS); }
+  }
+
+  function saveAccordionState(state) {
+    try { localStorage.setItem('sidebarAccordion', JSON.stringify(state)); } catch(e) {}
+  }
+
+  function applyAccordionState(state) {
+    Object.keys(state).forEach(function(groupId) {
+      var hdr = document.getElementById('rail-grp-' + groupId);
+      var sub = document.getElementById('rail-sub-' + groupId);
+      if (!hdr || !sub) return;
+      if (state[groupId]) {
+        hdr.classList.add('open');
+        sub.classList.add('open');
+      } else {
+        hdr.classList.remove('open');
+        sub.classList.remove('open');
+      }
+    });
+  }
+
+  window.toggleRailGroup = function(groupId, e) {
+    /* If rail is collapsed, expand it first then open the group */
+    if (document.body.classList.contains('sidebar-collapsed')) {
+      document.body.classList.remove('sidebar-collapsed');
+      localStorage.setItem('sidebarCollapsed', '0');
     }
-    links.forEach(function(l) { l.classList.remove('active'); });
-    if (active) active.link.classList.add('active');
+    var hdr = document.getElementById('rail-grp-' + groupId);
+    var sub = document.getElementById('rail-sub-' + groupId);
+    if (!hdr || !sub) return;
+    var nowOpen = hdr.classList.toggle('open');
+    sub.classList.toggle('open', nowOpen);
+    var state = loadAccordionState();
+    state[groupId] = nowOpen;
+    saveAccordionState(state);
+  };
+
+  /* Restore accordion state on load */
+  (function() {
+    applyAccordionState(loadAccordionState());
+  })();
+
+  /* ── Active group tracking on scroll ── */
+  /* Maps group IDs to the section IDs they track (external-only groups omitted) */
+  var RAIL_GROUP_SECTIONS = {
+    'news':        ["pfas", "epr", "reach", "tsca", "prop65", "conflictminerals", "forcedlabor"].map(function(t){ return 'section-' + t; }),
+    'deadlines':   ['section-deadlines'],
+    'legislative': ['section-leg-activity', 'section-cross-state', 'section-changes'],
+    'downloads':   ['section-archive']
+  };
+
+  function updateActiveRailLink() {
+    var scrollY = window.scrollY + 80;
+
+    /* Collect all trackable section positions */
+    var candidates = [];
+
+    /* Flat links */
+    document.querySelectorAll('.rail-link[data-target]').forEach(function(link) {
+      var el = document.getElementById(link.dataset.target);
+      if (el) candidates.push({ type: 'link', el: el, node: link, top: el.offsetTop });
+    });
+
+    /* Group headers */
+    Object.keys(RAIL_GROUP_SECTIONS).forEach(function(groupId) {
+      RAIL_GROUP_SECTIONS[groupId].forEach(function(sectionId) {
+        var el = document.getElementById(sectionId);
+        if (el) candidates.push({ type: 'group', el: el, node: document.getElementById('rail-grp-' + groupId), top: el.offsetTop });
+      });
+    });
+
+    /* Sort by top position */
+    candidates.sort(function(a, b) { return a.top - b.top; });
+
+    /* Find active candidate */
+    var active = candidates[0];
+    for (var i = candidates.length - 1; i >= 0; i--) {
+      if (candidates[i].top <= scrollY) { active = candidates[i]; break; }
+    }
+
+    /* Clear all active states */
+    document.querySelectorAll('.rail-link.active').forEach(function(l) { l.classList.remove('active'); });
+    document.querySelectorAll('.rail-group-header.active').forEach(function(h) { h.classList.remove('active'); });
+
+    /* Apply active to winning candidate */
+    if (active && active.node) active.node.classList.add('active');
   }
 
   var scrollTick = false;
@@ -11496,13 +11791,13 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
       scrollTick = true;
     }
   });
+  updateActiveRailLink();
 
-  /* ── Sidebar toggle (persisted) ── */
+  /* ── Rail width collapse (persisted) ── */
   window.toggleSidebarPersist = function() {
     document.body.classList.toggle('sidebar-collapsed');
     localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-collapsed') ? '1' : '0');
   };
-  // Restore sidebar state on load
   (function() {
     if (localStorage.getItem('sidebarCollapsed') === '1') {
       document.body.classList.add('sidebar-collapsed');
@@ -12564,7 +12859,11 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
       dls.forEach(function(dl) {
         var color = dotColor(dl);
         var titleHtml = dl.title;
-        html += '<div class="cal-detail-item">' +
+        var isClickable = dl.id && dl._source !== 'milestone';
+        var itemAttrs = isClickable
+          ? ' style="cursor:pointer;" onclick="openDeadlineDetail(' + dl.id + ')"'
+          : '';
+        html += '<div class="cal-detail-item"' + itemAttrs + '>' +
           '<span class="cal-detail-dot" style="background:' + color + ';"></span>' +
           '<div class="cal-detail-body">' +
             '<div class="cal-detail-title">' + titleHtml + '</div>' +
@@ -12572,6 +12871,7 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
               (dl.jurisdiction ? dl.jurisdiction + ' &middot; ' : '') +
               (dl.topic || '') +
               (dl.days_until !== undefined && dl.days_until !== null ? ' &middot; <strong>' + dl.days_until + 'd</strong>' : '') +
+              (isClickable ? ' &middot; <span style="color:var(--teal);font-size:11px;">AI analysis &rarr;</span>' : '') +
             '</div>' +
           '</div></div>';
       });
@@ -12946,6 +13246,7 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
     if (panel) panel.classList.add('active');
     if (tab) tab.classList.add('active');
   }
+  lucide.createIcons();
 </script>
 
 </body>
