@@ -342,6 +342,36 @@
     .badge-low { background: var(--green-bg); color: var(--green); }
     .badge-indirect { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
     .badge-monitor  { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-direct   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-impact { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 2px; border: 1px solid transparent; }
+    .badge-impact.hi  { background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
+    .badge-impact.mid { background:#fef9c3; color:#713f12; border-color:#fde047; }
+    .badge-impact.lo  { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
+
+    /* Priority badges */
+    .priority-action { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; font-weight: 700; }
+    .priority-timely { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .priority-watch  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .priority-info   { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); font-weight: 400; }
+    .article-item.article-action { border-left: 3px solid #dc2626; padding-left: 11px; }
+    .article-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+    /* Sticky column header */
+    .article-feed-hdr {
+      position: sticky; top: var(--topbar-h); z-index: 10;
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 14px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      border-top: 1px solid var(--border-light);
+    }
+    .article-feed-hdr-spacer { flex: 1; }
+    .article-feed-hdr-label {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      color: var(--text-muted); white-space: nowrap;
+      min-width: 52px; text-align: center;
+    }
+    .article-feed-hdr-label.imp { min-width: 22px; }
 
     /* MONITOR articles: visually muted */
     .article-item[data-relevance="MONITOR"] { opacity: 0.45; }
@@ -2028,6 +2058,12 @@
 
     <div class="article-list-scroll" id="tp-article-list">
       <div class="no-results" id="tp-no-results">No articles match your filters.</div>
+      <div class="article-feed-hdr" aria-hidden="true">
+        <div class="article-feed-hdr-spacer"></div>
+        <span class="article-feed-hdr-label rel">Relevance</span>
+        <span class="article-feed-hdr-label urg">Priority</span>
+        <span class="article-feed-hdr-label imp">Impact</span>
+      </div>
       
       <div class="month-divider" data-month-divider>2026-03</div><div class="article-item"
            data-headline="oregon packaging epr for producers"
@@ -2036,14 +2072,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://productstewardship.us/webinar/webinar-series-preparing-producers-for-oregon-packaging-epr/" target="_blank">Oregon Packaging EPR for Producers</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2064,14 +2101,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          <span class="badge badge-new">New</span>
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/25/2026-05809/standard-steel-welded-wire-mesh-from-mexico-final-affirmative-determination-of-circumvention" target="_blank">Standard Steel Welded Wire Mesh From Mexico: Final Affirmative Determination of Circumvention</a>
           </span>
-          
-          
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2092,14 +2130,15 @@
            data-date="2026-03-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05678/endangered-and-threatened-wildlife-and-plants-designation-of-critical-habitat-for-22-species-in-the" target="_blank">Endangered and Threatened Wildlife and Plants; Designation of Critical Habitat for 22 Species in the Commonwealth of the Northern Mariana Islands and the Territory of Guam</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2120,14 +2159,15 @@
            data-date="2026-03-23"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05598/national-organic-program-national-list-of-allowed-and-prohibited-substances-per-october-2021-october" target="_blank">National Organic Program: National List of Allowed and Prohibited Substances per October 2021, October 2022, and October 2024 Recommendations (Crops and Livestock)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2148,14 +2188,15 @@
            data-date="2026-03-23"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05600/agency-information-collection-activities-proposed-request-and-comment-request" target="_blank">Agency Information Collection Activities: Proposed Request and Comment Request</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2174,14 +2215,15 @@
            data-date="2026-03-19"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05441/certain-uncoated-paper-from-portugal-final-results-of-antidumping-duty-administrative-review" target="_blank">Certain Uncoated Paper From Portugal: Final Results of Antidumping Duty Administrative Review; 2023-2024</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2202,14 +2244,15 @@
            data-date="2026-03-19"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05440/certain-new-pneumatic-off-the-road-tires-from-india-final-results-of-countervailing-duty" target="_blank">Certain New Pneumatic Off-the-Road Tires From India: Final Results of Countervailing Duty Administrative Review; 2023</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2230,14 +2273,15 @@
            data-date="2026-03-16"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/16/2026-04995/oil-country-tubular-goods-from-socialist-republic-of-vietnam-preliminary-results-and-rescission-in" target="_blank">Oil Country Tubular Goods From Socialist Republic of Vietnam: Preliminary Results and Rescission, in Part, of Antidumping Duty Administrative Review; 2023-2024</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2258,14 +2302,15 @@
            data-date="2026-03-13"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/13/2026-04943/wooden-cabinets-and-vanities-and-components-thereof-from-the-peoples-republic-of-china-final-results" target="_blank">Wooden Cabinets and Vanities and Components Thereof From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2286,14 +2331,15 @@
            data-date="2026-03-12"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/12/2026-04877/certain-corrosion-inhibitors-from-the-peoples-republic-of-china-final-results-of-countervailing-duty" target="_blank">Certain Corrosion Inhibitors From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2314,14 +2360,15 @@
            data-date="2026-03-10"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04611/diffusion-annealed-nickel-plated-flat-rolled-steel-products-from-japan-final-results-of-antidumping" target="_blank">Diffusion-Annealed, Nickel-Plated Flat-Rolled Steel Products From Japan: Final Results of Antidumping Duty Administrative Review; 2023-2024</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2342,14 +2389,15 @@
            data-date="2026-03-10"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04610/common-alloy-aluminum-sheet-from-india-final-results-of-countervailing-duty-administrative-review" target="_blank">Common Alloy Aluminum Sheet From India: Final Results of Countervailing Duty Administrative Review; 2023</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2370,14 +2418,15 @@
            data-date="2026-03-09"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/09/2026-04586/christmas-tree-promotion-research-and-information-order" target="_blank">Christmas Tree Promotion, Research, and Information Order</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2398,14 +2447,15 @@
            data-date="2026-03-09"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/09/2026-04573/almonds-grown-in-california-extension-of-inedible-disposition-obligation-deadline" target="_blank">Almonds Grown in California; Extension of Inedible Disposition Obligation Deadline</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2426,14 +2476,15 @@
            data-date="2026-03-06"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/06/2026-04405/certain-cold-rolled-steel-flat-products-from-the-republic-of-korea-preliminary-results-and" target="_blank">Certain Cold-Rolled Steel Flat Products From the Republic of Korea: Preliminary Results and Rescission, in Part, of Antidumping Administrative Review; 2023-2024</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">

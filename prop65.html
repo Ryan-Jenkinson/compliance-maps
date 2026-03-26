@@ -342,6 +342,36 @@
     .badge-low { background: var(--green-bg); color: var(--green); }
     .badge-indirect { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
     .badge-monitor  { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-direct   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-impact { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 2px; border: 1px solid transparent; }
+    .badge-impact.hi  { background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
+    .badge-impact.mid { background:#fef9c3; color:#713f12; border-color:#fde047; }
+    .badge-impact.lo  { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
+
+    /* Priority badges */
+    .priority-action { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; font-weight: 700; }
+    .priority-timely { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .priority-watch  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .priority-info   { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); font-weight: 400; }
+    .article-item.article-action { border-left: 3px solid #dc2626; padding-left: 11px; }
+    .article-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+    /* Sticky column header */
+    .article-feed-hdr {
+      position: sticky; top: var(--topbar-h); z-index: 10;
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 14px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      border-top: 1px solid var(--border-light);
+    }
+    .article-feed-hdr-spacer { flex: 1; }
+    .article-feed-hdr-label {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      color: var(--text-muted); white-space: nowrap;
+      min-width: 52px; text-align: center;
+    }
+    .article-feed-hdr-label.imp { min-width: 22px; }
 
     /* MONITOR articles: visually muted */
     .article-item[data-relevance="MONITOR"] { opacity: 0.45; }
@@ -1373,6 +1403,12 @@
 
     <div class="article-list-scroll" id="tp-article-list">
       <div class="no-results" id="tp-no-results">No articles match your filters.</div>
+      <div class="article-feed-hdr" aria-hidden="true">
+        <div class="article-feed-hdr-spacer"></div>
+        <span class="article-feed-hdr-label rel">Relevance</span>
+        <span class="article-feed-hdr-label urg">Priority</span>
+        <span class="article-feed-hdr-label imp">Impact</span>
+      </div>
       
       <div class="month-divider" data-month-divider>2026-03</div><div class="article-item is-new"
            data-headline="ag number 2026-01357 (view details) notice pdf: 2026-01357.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
@@ -1381,14 +1417,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          <span class="badge badge-new">New</span>
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01357" target="_blank">AG Number 2026-01357 (View Details) Notice PDF: 2026-01357.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
           </span>
-          
-          
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1409,14 +1446,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01356" target="_blank">AG Number 2026-01356 (View Details) Notice PDF: 2026-01356.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1437,14 +1475,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01355" target="_blank">AG Number 2026-01355 (View Details) Notice PDF: 2026-01355.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1465,14 +1504,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01354" target="_blank">AG Number 2026-01354 (View Details) Notice PDF: 2026-01354.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1493,14 +1533,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01353" target="_blank">AG Number 2026-01353 (View Details) Notice PDF: 2026-01353.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1521,14 +1562,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01352" target="_blank">AG Number 2026-01352 (View Details) Notice PDF: 2026-01352.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1549,14 +1591,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01351" target="_blank">AG Number 2026-01351 (View Details) Notice PDF: 2026-01351.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1577,14 +1620,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01346" target="_blank">AG Number 2026-01346 (View Details) Notice PDF: 2026-01346.pdf Date Filed: 03/24/2026 Noticing Party: Calsafe Research C</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1605,14 +1649,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01345" target="_blank">AG Number 2026-01345 (View Details) Notice PDF: 2026-01345.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1633,14 +1678,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01344" target="_blank">AG Number 2026-01344 (View Details) Notice PDF: 2026-01344.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1661,14 +1707,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01343" target="_blank">AG Number 2026-01343 (View Details) Notice PDF: 2026-01343.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1689,14 +1736,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01341" target="_blank">AG Number 2026-01341 (View Details) Notice PDF: 2026-01341.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1717,14 +1765,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01340" target="_blank">AG Number 2026-01340 (View Details) Notice PDF: 2026-01340.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1745,14 +1794,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01339" target="_blank">AG Number 2026-01339 (View Details) Notice PDF: 2026-01339.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1773,14 +1823,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01338" target="_blank">AG Number 2026-01338 (View Details) Notice PDF: 2026-01338.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1801,14 +1852,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          <span class="badge badge-new">New</span>
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01348" target="_blank">AG Number 2026-01348 (View Details) Notice PDF: 2026-01348.pdf Date Filed: 03/24/2026 Noticing Party: Gabriel Espinoza P</a>
           </span>
-          
-          
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1829,14 +1881,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          <span class="badge badge-new">New</span>
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01350" target="_blank">AG Number 2026-01350 (View Details) Notice PDF: 2026-01350.pdf Date Filed: 03/25/2026 Noticing Party: Ema Bell Plaintiff</a>
           </span>
-          
-          
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1857,14 +1910,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          <span class="badge badge-new">New</span>
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01349" target="_blank">AG Number 2026-01349 (View Details) Notice PDF: 2026-01349.pdf Date Filed: 03/24/2026 Noticing Party: Clean Product Advo</a>
           </span>
-          
-          
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1885,14 +1939,15 @@
            data-date="2026-03-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01347" target="_blank">AG Number 2026-01347 (View Details) Notice PDF: 2026-01347.pdf Date Filed: 03/24/2026 Noticing Party: Calsafe Research C</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1913,14 +1968,15 @@
            data-date="2026-03-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01342" target="_blank">AG Number 2026-01342 (View Details) Notice PDF: 2026-01342.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1941,14 +1997,15 @@
            data-date="2026-03-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01336" target="_blank">AG Number 2026-01336 (View Details) Notice PDF: 2026-01336.pdf Date Filed: 03/23/2026 Noticing Party: Clean Product Advo</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1969,14 +2026,15 @@
            data-date="2026-03-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01330" target="_blank">AG Number 2026-01330 (View Details) Notice PDF: 2026-01330.pdf Date Filed: 03/22/2026 Noticing Party: Clean Product Advo</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1997,14 +2055,15 @@
            data-date="2026-03-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01328" target="_blank">AG Number 2026-01328 (View Details) Notice PDF: 2026-01328.pdf Date Filed: 03/21/2026 Noticing Party: Clean Product Advo</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">

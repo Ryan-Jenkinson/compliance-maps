@@ -342,6 +342,36 @@
     .badge-low { background: var(--green-bg); color: var(--green); }
     .badge-indirect { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
     .badge-monitor  { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-direct   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-impact { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 2px; border: 1px solid transparent; }
+    .badge-impact.hi  { background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
+    .badge-impact.mid { background:#fef9c3; color:#713f12; border-color:#fde047; }
+    .badge-impact.lo  { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
+
+    /* Priority badges */
+    .priority-action { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; font-weight: 700; }
+    .priority-timely { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .priority-watch  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .priority-info   { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); font-weight: 400; }
+    .article-item.article-action { border-left: 3px solid #dc2626; padding-left: 11px; }
+    .article-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+    /* Sticky column header */
+    .article-feed-hdr {
+      position: sticky; top: var(--topbar-h); z-index: 10;
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 14px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      border-top: 1px solid var(--border-light);
+    }
+    .article-feed-hdr-spacer { flex: 1; }
+    .article-feed-hdr-label {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      color: var(--text-muted); white-space: nowrap;
+      min-width: 52px; text-align: center;
+    }
+    .article-feed-hdr-label.imp { min-width: 22px; }
 
     /* MONITOR articles: visually muted */
     .article-item[data-relevance="MONITOR"] { opacity: 0.45; }
@@ -2106,6 +2136,12 @@
 
     <div class="article-list-scroll" id="tp-article-list">
       <div class="no-results" id="tp-no-results">No articles match your filters.</div>
+      <div class="article-feed-hdr" aria-hidden="true">
+        <div class="article-feed-hdr-spacer"></div>
+        <span class="article-feed-hdr-label rel">Relevance</span>
+        <span class="article-feed-hdr-label urg">Priority</span>
+        <span class="article-feed-hdr-label imp">Impact</span>
+      </div>
       
       <div class="month-divider" data-month-divider>2026-03</div><div class="article-item is-new"
            data-headline="agency information collection activities; submission to the office of management and budget for review and approval; comment request; access to tsca confidential business information (renewal)"
@@ -2114,14 +2150,15 @@
            data-date="2026-03-26"
            data-relevance="None">
         <div class="article-head">
-          <span class="badge badge-new">New</span>
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/26/2026-05874/agency-information-collection-activities-submission-to-the-office-of-management-and-budget-for" target="_blank">Agency Information Collection Activities; Submission to the Office of Management and Budget for Review and Approval; Comment Request; Access to TSCA Confidential Business Information (Renewal)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2142,14 +2179,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/chemicals-under-tsca/pollution-prevention-and-toxics-news-stories" target="_blank">recent actions on pollution prevention and toxic chemicals</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2170,14 +2208,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/assessing-and-managing-chemicals-under-tsca/frank-r-lautenberg-chemical-safety-21st-century-act" target="_blank">Frank R. Lautenberg Chemical Safety for the 21st Century Act</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2198,14 +2237,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/chemicals-under-tsca/epa-extends-compliance-dates-perchloroethylene-and-carbon-tetrachloride-tsca" target="_blank">EPA Extends Compliance Dates for Perchloroethylene and Carbon Tetrachloride TSCA Rules</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2226,14 +2266,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/chemicals-under-tsca/epa-showcase-gold-standard-science-2026-society-toxicologys-annual-meeting" target="_blank">EPA to Showcase Gold Standard Science at 2026 Society of Toxicology’s Annual Meeting</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2254,14 +2295,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/chemicals-under-tsca/epa-proposes-updates-formaldehyde-emission-standards-adding-new-quality" target="_blank">EPA Proposes Updates to Formaldehyde Emission Standards, Adding New Quality Control Test Method for Composite Wood Products</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2282,14 +2324,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/chemicals-under-tsca/icymi-epa-requests-nominations-panel-members-and-ad-hoc-reviewers-science" target="_blank">ICYMI: EPA Requests Nominations for Panel Members and Ad Hoc Reviewers for the Science Advisory Committee on Chemicals</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2310,14 +2353,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/tsca-inventory" target="_blank">TSCA Chemical Substance Inventory</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2338,14 +2382,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.epa.gov/chemicals-under-tsca/forms/contact-us-about-chemicals-under-toxic-substance-control-act-tsca" target="_blank">Contact Us about Chemicals under the Toxic Substance Control Act (TSCA)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2366,14 +2411,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.saferstates.org/insights/250-groups-urge-congress-to-reject-chemical-lobby-push-to-weaken-tsca/" target="_blank">250+ groups urge Congress to reject chemical lobby push to weaken TSCA</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2394,14 +2440,15 @@
            data-date="2026-03-23"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05584/certain-new-chemicals-or-significant-new-uses-statements-of-findings-january-2026" target="_blank">Certain New Chemicals or Significant New Uses; Statements of Findings-January 2026</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2422,14 +2469,15 @@
            data-date="2026-03-10"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04651/certain-new-chemicals-receipt-and-status-information-for-september-december-2025" target="_blank">Certain New Chemicals; Receipt and Status Information for September-December 2025</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2450,14 +2498,15 @@
            data-date="2026-03-06"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/06/2026-04479/developing-specifications-for-in-home-disposal-systems-for-opioid-analgesics-dispensed-in-an" target="_blank">Developing Specifications for In-Home Disposal Systems for Opioid Analgesics Dispensed in an Outpatient Setting; Establishment of a Public Docket; Request for Comments</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2478,14 +2527,15 @@
            data-date="2026-03-04"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/04/2026-04301/certain-new-chemicals-or-significant-new-uses-statements-of-findings-november-2025-to-december-2025" target="_blank">Certain New Chemicals or Significant New Uses; Statements of Findings-November 2025 to December 2025</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2506,14 +2556,15 @@
            data-date="2026-02-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/25/2026-03763/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Confidential Business Information Claims Under the Toxic Substances Control Act (TSCA)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2534,14 +2585,15 @@
            data-date="2026-02-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03646/prior-notice-of-citizen-suits" target="_blank">Prior Notice of Citizen Suits</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2562,14 +2614,15 @@
            data-date="2026-02-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03636/agency-information-collection-activities-proposed-renewal-collection-and-request-for-comment" target="_blank">Agency Information Collection Activities; Proposed Renewal Collection and Request for Comment; Chemical Data Reporting Under the Toxic Substances Control Act (TSCA)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -2590,14 +2643,15 @@
            data-date="2026-02-18"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03155/extension-of-postponement-of-effectiveness-for-certain-provisions-of-trichloroethylene-tce" target="_blank">Extension of Postponement of Effectiveness for Certain Provisions of Trichloroethylene (TCE); Regulation Under the Toxic Substances Control Act (TSCA)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">

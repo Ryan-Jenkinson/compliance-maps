@@ -342,6 +342,36 @@
     .badge-low { background: var(--green-bg); color: var(--green); }
     .badge-indirect { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
     .badge-monitor  { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-direct   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-impact { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 2px; border: 1px solid transparent; }
+    .badge-impact.hi  { background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
+    .badge-impact.mid { background:#fef9c3; color:#713f12; border-color:#fde047; }
+    .badge-impact.lo  { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
+
+    /* Priority badges */
+    .priority-action { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; font-weight: 700; }
+    .priority-timely { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .priority-watch  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .priority-info   { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); font-weight: 400; }
+    .article-item.article-action { border-left: 3px solid #dc2626; padding-left: 11px; }
+    .article-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+    /* Sticky column header */
+    .article-feed-hdr {
+      position: sticky; top: var(--topbar-h); z-index: 10;
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 14px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      border-top: 1px solid var(--border-light);
+    }
+    .article-feed-hdr-spacer { flex: 1; }
+    .article-feed-hdr-label {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      color: var(--text-muted); white-space: nowrap;
+      min-width: 52px; text-align: center;
+    }
+    .article-feed-hdr-label.imp { min-width: 22px; }
 
     /* MONITOR articles: visually muted */
     .article-item[data-relevance="MONITOR"] { opacity: 0.45; }
@@ -1469,6 +1499,12 @@
 
     <div class="article-list-scroll" id="tp-article-list">
       <div class="no-results" id="tp-no-results">No articles match your filters.</div>
+      <div class="article-feed-hdr" aria-hidden="true">
+        <div class="article-feed-hdr-spacer"></div>
+        <span class="article-feed-hdr-label rel">Relevance</span>
+        <span class="article-feed-hdr-label urg">Priority</span>
+        <span class="article-feed-hdr-label imp">Impact</span>
+      </div>
       
       <div class="month-divider" data-month-divider>2026-03</div><div class="article-item is-new"
            data-headline="definition of a ski area"
@@ -1477,14 +1513,15 @@
            data-date="2026-03-25"
            data-relevance="None">
         <div class="article-head">
-          <span class="badge badge-new">New</span>
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area" target="_blank">Definition of a Ski Area</a>
           </span>
-          
-          
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1505,14 +1542,15 @@
            data-date="2026-03-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada" target="_blank">Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1533,14 +1571,15 @@
            data-date="2026-03-23"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and" target="_blank">Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1561,14 +1600,15 @@
            data-date="2026-03-23"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm" target="_blank">OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1589,14 +1629,15 @@
            data-date="2026-03-19"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses" target="_blank">Land Uses; Special Uses</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1617,14 +1658,15 @@
            data-date="2026-02-27"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm" target="_blank">ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1645,14 +1687,15 @@
            data-date="2026-02-26"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of" target="_blank">Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1673,14 +1716,15 @@
            data-date="2026-02-25"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended" target="_blank">Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1701,14 +1745,15 @@
            data-date="2026-02-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations" target="_blank">National Environmental Policy Act Implementing Regulations</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1729,14 +1774,15 @@
            data-date="2026-02-24"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the" target="_blank">Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1757,14 +1803,15 @@
            data-date="2026-02-20"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program" target="_blank">West Virginia Regulatory Program</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1785,14 +1832,15 @@
            data-date="2026-02-20"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals" target="_blank">Locatable Minerals</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1813,14 +1861,15 @@
            data-date="2026-02-19"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule" target="_blank">Rescission of the “Ten-Day Notices and Corrective Action for State Regulatory Program Issues” Rule, Issued April 9, 2024</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1841,14 +1890,15 @@
            data-date="2026-02-18"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision" target="_blank">Tongass National Forest; Alaska; Land Management Plan Revision</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
@@ -1869,14 +1919,15 @@
            data-date="2026-02-18"
            data-relevance="None">
         <div class="article-head">
-          
-          
-          
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement" target="_blank">United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement</a>
           </span>
-          
-          
+          <div class="article-badges">
+            
+            
+            <span class="badge priority-info" title="Priority:  urgency · None">INFO</span>
+            
+          </div>
         </div>
         
         <div class="article-meta">
