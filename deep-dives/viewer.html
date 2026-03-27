@@ -459,7 +459,7 @@
     })
     .catch(function(err) {
       var msg = err.message || String(err);
-      if (msg.toLowerCase().indexOf('auth') !== -1 || msg.toLowerCase().indexOf('invalid') !== -1 || msg.toLowerCase().indexOf('api_key') !== -1) {
+      if (!useProxy && (msg.toLowerCase().indexOf('authentication') !== -1 || msg.toLowerCase().indexOf('invalid_api_key') !== -1 || msg.toLowerCase().indexOf('api_key') !== -1)) {
         try { localStorage.removeItem('compliance_anthropic_key'); localStorage.removeItem('anthropic_api_key'); } catch(e) {}
         showKeyPrompt('Invalid API key — please re-enter.');
       } else {
