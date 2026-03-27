@@ -304,9 +304,8 @@
     .dl-title {
       font-size: 11px;
       font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      word-break: break-word;
       letter-spacing: 0.2px;
       padding-right: 8px;
     }
@@ -413,7 +412,7 @@
       <div class="hdr-title">REACH Regulatory Deadline Timeline</div>
     </div>
   </div>
-  <div class="hdr-sub">Generated March 24, 2026 &nbsp;&middot;&nbsp; 2 deadlines across 1 jurisdiction</div>
+  <div class="hdr-sub">Generated March 27, 2026 &nbsp;&middot;&nbsp; 4 deadlines across 1 jurisdiction</div>
 </div>
 
 <!-- Site nav -->
@@ -433,7 +432,7 @@
     <div class="tl-axis">
       <div class="axis-jx-col">Jurisdiction</div>
       <div class="axis-chart-col" id="axisChart">
-        <div class="q-lbl" style="left:0.00%">Q1 2026</div><div class="q-lbl" style="left:1.33%">Q2 2026</div><div class="q-lbl" style="left:16.50%">Q3 2026</div><div class="q-lbl" style="left:31.83%">Q4 2026</div><div class="q-lbl" style="left:47.17%">Q1 2027</div><div class="q-lbl" style="left:62.17%">Q2 2027</div><div class="q-lbl" style="left:77.33%">Q3 2027</div><div class="q-lbl" style="left:92.67%">Q4 2027</div>
+        <div class="q-lbl" style="left:0.00%">Q1 2026</div><div class="q-lbl" style="left:0.83%">Q2 2026</div><div class="q-lbl" style="left:16.00%">Q3 2026</div><div class="q-lbl" style="left:31.33%">Q4 2026</div><div class="q-lbl" style="left:46.67%">Q1 2027</div><div class="q-lbl" style="left:61.67%">Q2 2027</div><div class="q-lbl" style="left:76.83%">Q3 2027</div><div class="q-lbl" style="left:92.17%">Q4 2027</div>
       </div>
     </div>
 
@@ -445,6 +444,32 @@
         
       </div>
       <div class="jx-rows">
+      <div class="dl-row" title="ECHA DBDPE SVHC Article 33 Notification&#10;Due: Nov 05, 2025&#10;Notify recipients of articles containing DBDPE brominated flame retardant per REACH Article 33.">
+        <div class="dl-chart-area">
+          <div class="dl-bar urg-high" style="width:0.00%;">
+            <span class="dl-end-pip pip-high"></span>
+            <span class="dl-title title-high">ECHA DBDPE SVHC Article 33 Notification</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Nov 05, 2025</span>
+            <span class="dl-badge" style="color:#9E8540;border-color:#9E854080;">REACH</span>
+            <span class="dl-urg urg-txt-high">HIGH</span>
+          </div>
+        </div>
+      </div>
+      <div class="dl-row" title="n-Hexane SVHC Article 33 Notification&#10;Due: Feb 04, 2026&#10;Article 33 REACH notification obligations for n-hexane are active immediately upon its SVHC Candidate List addition.">
+        <div class="dl-chart-area">
+          <div class="dl-bar urg-high" style="width:0.00%;">
+            <span class="dl-end-pip pip-high"></span>
+            <span class="dl-title title-high">n-Hexane SVHC Article 33 Notification</span>
+          </div>
+          <div class="dl-meta">
+            <span class="dl-date">Feb 04, 2026</span>
+            <span class="dl-badge" style="color:#9E8540;border-color:#9E854080;">REACH</span>
+            <span class="dl-urg urg-txt-high">HIGH</span>
+          </div>
+        </div>
+      </div>
       <div class="dl-row" title="SVHC Bisphenol AF Article 33 Disclosure Active&#10;Due: Mar 21, 2026&#10;45-day SVHC disclosure obligation now active for Fluorinated Bisphenol AF added to ECHA Candidate List on February 4, 2026.">
         <div class="dl-chart-area">
           <div class="dl-bar urg-high" style="width:0.00%;">
@@ -455,7 +480,6 @@
             <span class="dl-date">Mar 21, 2026</span>
             <span class="dl-badge" style="color:#9E8540;border-color:#9E854080;">REACH</span>
             <span class="dl-urg urg-txt-high">HIGH</span>
-            <a class="dl-src" href="https://echa.europa.eu/substance-information/-/substanceinfo/100.510.847" target="_blank">source ↗</a>
           </div>
         </div>
       </div>
@@ -469,7 +493,6 @@
             <span class="dl-date">Mar 21, 2026</span>
             <span class="dl-badge" style="color:#9E8540;border-color:#9E854080;">REACH</span>
             <span class="dl-urg urg-txt-high">HIGH</span>
-            <a class="dl-src" href="https://echa.europa.eu/substance-information/-/substanceinfo/100.003.435" target="_blank">source ↗</a>
           </div>
         </div>
       </div></div>
@@ -493,7 +516,7 @@
 (function() {
   var axisChart = document.getElementById('axisChart');
   if (!axisChart) return;
-  var ticks = [0.0, 1.3333333333333335, 16.5, 31.833333333333336, 47.16666666666667, 62.16666666666667, 77.33333333333333, 92.66666666666666];
+  var ticks = [0.0, 0.8333333333333334, 16.0, 31.333333333333336, 46.666666666666664, 61.66666666666667, 76.83333333333333, 92.16666666666666];
   ticks.forEach(function(p) {
     var t = document.createElement('div');
     t.className = 'q-tick';
