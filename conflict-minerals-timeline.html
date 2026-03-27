@@ -304,9 +304,8 @@
     .dl-title {
       font-size: 11px;
       font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      word-break: break-word;
       letter-spacing: 0.2px;
       padding-right: 8px;
     }
@@ -413,7 +412,7 @@
       <div class="hdr-title">Conflict Minerals Compliance Timeline</div>
     </div>
   </div>
-  <div class="hdr-sub">Generated March 24, 2026 &nbsp;&middot;&nbsp; 0 deadlines across 0 jurisdictions</div>
+  <div class="hdr-sub">Generated March 27, 2026 &nbsp;&middot;&nbsp; 0 deadlines across 0 jurisdictions</div>
 </div>
 
 <!-- Site nav -->
@@ -433,7 +432,7 @@
     <div class="tl-axis">
       <div class="axis-jx-col">Jurisdiction</div>
       <div class="axis-chart-col" id="axisChart">
-        <div class="q-lbl" style="left:0.00%">Q1 2026</div><div class="q-lbl" style="left:1.33%">Q2 2026</div><div class="q-lbl" style="left:16.50%">Q3 2026</div><div class="q-lbl" style="left:31.83%">Q4 2026</div><div class="q-lbl" style="left:47.17%">Q1 2027</div><div class="q-lbl" style="left:62.17%">Q2 2027</div><div class="q-lbl" style="left:77.33%">Q3 2027</div><div class="q-lbl" style="left:92.67%">Q4 2027</div>
+        <div class="q-lbl" style="left:0.00%">Q1 2026</div><div class="q-lbl" style="left:0.83%">Q2 2026</div><div class="q-lbl" style="left:16.00%">Q3 2026</div><div class="q-lbl" style="left:31.33%">Q4 2026</div><div class="q-lbl" style="left:46.67%">Q1 2027</div><div class="q-lbl" style="left:61.67%">Q2 2027</div><div class="q-lbl" style="left:76.83%">Q3 2027</div><div class="q-lbl" style="left:92.17%">Q4 2027</div>
       </div>
     </div>
 
@@ -458,7 +457,7 @@
 (function() {
   var axisChart = document.getElementById('axisChart');
   if (!axisChart) return;
-  var ticks = [0.0, 1.3333333333333335, 16.5, 31.833333333333336, 47.16666666666667, 62.16666666666667, 77.33333333333333, 92.66666666666666];
+  var ticks = [0.0, 0.8333333333333334, 16.0, 31.333333333333336, 46.666666666666664, 61.66666666666667, 76.83333333333333, 92.16666666666666];
   ticks.forEach(function(p) {
     var t = document.createElement('div');
     t.className = 'q-tick';
