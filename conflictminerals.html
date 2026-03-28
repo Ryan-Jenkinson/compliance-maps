@@ -7,965 +7,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --topic-color: #1A7A87;
-      --bg: #F4F5F7;
-      --surface: #FFFFFF;
-      --surface-dark: #1A1D23;
-      --border: #D8DBE0;
-      --border-light: #E8EAED;
-      --text-primary: #111318;
-      --text-secondary: #4A4F5C;
-      --text-muted: #7A8194;
-      --red: #D63031;
-      --red-bg: #FEF0F0;
-      --red-border: #FACACA;
-      --amber: #CB7B0A;
-      --amber-bg: #FEF6E8;
-      --green: #0F7B3F;
-      --green-bg: #EEFAF3;
-      --green-border: #B2E0C7;
-      --blue: #1565C0;
-      --blue-bg: #EBF3FD;
-      --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
-      --surface-sunken: #EBEDF0;
-      --text-tertiary: #7A8194;
-      --accent: var(--topic-color);
-      --article-sidebar-w: 616px;
-      --topbar-h: 52px;
-      --radius: 6px;
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { font-size: clamp(14px, 1.1vw, 16px); }
-    body {
-      background: var(--bg);
-      font-family: var(--sans);
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--text-primary);
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: var(--blue); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    /* ── TOPBAR ─────────────────────────────────────────────────── */
-    .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--topbar-h);
-      background: var(--surface-dark);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 20px;
-      z-index: 200;
-      border-bottom: 3px solid var(--topic-color);
-    }
-    .topbar-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: rgba(255,255,255,0.85);
-      font-size: 12px;
-      font-family: var(--mono);
-      text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.30);
-      border-radius: 4px;
-      padding: 4px 10px;
-      transition: color 0.15s, border-color 0.15s, background 0.15s;
-    }
-    .topbar-back:hover { color: #fff; border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.08); text-decoration: none; }
-    .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.20); }
-    .topbar-topic {
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: -0.01em;
-      color: var(--topic-color);
-    }
-    .topbar-label { color: rgba(255,255,255,0.70); font-size: 12px; font-family: var(--mono); }
-    .topbar-spacer { flex: 1; }
-    .topbar-date { color: rgba(255,255,255,0.55); font-size: 11px; font-family: var(--mono); white-space: nowrap; }
-    .topbar-search-wrap {
-      flex: 1 0 180px;
-      max-width: 280px;
-      min-width: 160px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .topbar-search-input {
-      flex: 1;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 4px;
-      padding: 5px 10px;
-      font-size: 12px;
-      font-family: var(--sans);
-      color: #fff;
-      outline: none;
-      transition: all 0.12s;
-      min-width: 0;
-    }
-    .topbar-search-input::placeholder { color: rgba(255,255,255,0.38); }
-    .topbar-search-input:focus {
-      background: rgba(255,255,255,0.16);
-      border-color: var(--topic-color);
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.08);
-    }
-    .topbar-search-count-tp {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(255,255,255,0.45);
-      white-space: nowrap;
-    }
-    .search-highlight {
-      background: #FFF176;
-      color: #111318;
-      border-radius: 2px;
-      padding: 0 1px;
-    }
-    .search-highlight.search-current {
-      background: #FF8F00;
-      color: #fff;
-    }
-
-    /* ── LAYOUT: main content + fixed right article sidebar ─────── */
-    .layout {
-      display: flex;
-      margin-top: var(--topbar-h);
-      min-height: calc(100vh - var(--topbar-h));
-    }
-
-    /* ── MAIN CONTENT (center, scrollable) ──────────────────────── */
-    .main {
-      flex: 1;
-      min-width: 0;
-      margin-right: var(--article-sidebar-w);
-      padding: 24px 28px 60px;
-      overflow-y: auto;
-    }
-
-    /* ── ARTICLE SIDEBAR (fixed right) ──────────────────────────── */
-    .article-sidebar {
-      position: fixed;
-      top: var(--topbar-h);
-      right: 0;
-      width: var(--article-sidebar-w);
-      height: calc(100vh - var(--topbar-h));
-      background: var(--surface);
-      border-left: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      z-index: 100;
-      min-width: 280px;
-      max-width: 80vw;
-    }
-
-    /* Drag handle — sits on the left border of the sidebar */
-    .sidebar-resize-handle {
-      position: absolute;
-      top: 0;
-      left: -4px;
-      width: 8px;
-      height: 100%;
-      cursor: col-resize;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .sidebar-resize-handle::before {
-      content: '';
-      display: block;
-      width: 3px;
-      height: 40px;
-      border-radius: 2px;
-      background: var(--border);
-      transition: background 0.15s, height 0.15s;
-    }
-    .sidebar-resize-handle:hover::before,
-    .sidebar-resize-handle.dragging::before {
-      background: var(--topic-color);
-      height: 60px;
-    }
-    body.resizing { cursor: col-resize !important; user-select: none; }
-    .article-sidebar-head {
-      padding: 14px 16px 10px;
-      border-bottom: 1px solid var(--border-light);
-      flex-shrink: 0;
-    }
-    .article-sidebar-title {
-      font-size: 11px;
-      font-weight: 700;
-      font-family: var(--mono);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .article-sidebar-title::before {
-      content: '';
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--topic-color);
-    }
-    .filter-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .filter-search {
-      flex: 1;
-      min-width: 120px;
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text-primary);
-      outline: none;
-    }
-    .filter-search:focus { border-color: var(--topic-color); background: var(--surface); }
-    .filter-select {
-      padding: 5px 8px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 11px;
-      font-family: var(--mono);
-      background: var(--bg);
-      color: var(--text-primary);
-      cursor: pointer;
-      outline: none;
-    }
-    .filter-select:focus { border-color: var(--topic-color); }
-    .filter-count {
-      font-size: 11px;
-      font-family: var(--mono);
-      color: var(--text-muted);
-      margin-top: 6px;
-    }
-
-    .article-list-scroll {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 0;
-    }
-    .article-list-scroll::-webkit-scrollbar { width: 4px; }
-    .article-list-scroll::-webkit-scrollbar-track { background: transparent; }
-    .article-list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    .month-divider {
-      font-size: 10px;
-      font-family: var(--mono);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-muted);
-      padding: 10px 16px 3px;
-    }
-
-    .article-item {
-      padding: 9px 16px;
-      border-left: 2px solid transparent;
-      transition: border-color 0.1s, background 0.1s;
-    }
-    .article-item:hover { background: var(--bg); }
-    .article-item.is-new { border-left-color: var(--topic-color); }
-    .article-head {
-      display: flex;
-      align-items: flex-start;
-      gap: 5px;
-      margin-bottom: 3px;
-      flex-wrap: wrap;
-    }
-    .article-headline {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1.35;
-      flex: 1;
-      min-width: 0;
-    }
-    .article-headline a { color: var(--text-primary); }
-    .article-headline a:hover { color: var(--topic-color); text-decoration: none; }
-    .article-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .article-snippet {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 3px;
-      line-height: 1.55;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .no-results {
-      display: none;
-      padding: 24px 16px;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 12px;
-    }
-    .no-results.visible { display: block; }
-
-    /* ── BADGES ─────────────────────────────────────────────────── */
-    .badge {
-      display: inline-block;
-      font-size: 9px;
-      font-family: var(--mono);
-      font-weight: 700;
-      letter-spacing: .05em;
-      border-radius: 2px;
-      padding: 1px 4px;
-      flex-shrink: 0;
-    }
-    .badge-new { background: var(--topic-color); color: #fff; }
-    .badge-high { background: var(--red-bg); color: var(--red); }
-    .badge-medium { background: var(--amber-bg); color: var(--amber); }
-    .badge-low { background: var(--green-bg); color: var(--green); }
-    .badge-indirect { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
-    .badge-monitor  { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
-    .badge-direct   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-impact { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 2px; border: 1px solid transparent; }
-    .badge-impact.hi  { background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
-    .badge-impact.mid { background:#fef9c3; color:#713f12; border-color:#fde047; }
-    .badge-impact.lo  { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
-
-    /* Priority badges */
-    .priority-action { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; font-weight: 700; }
-    .priority-timely { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
-    .priority-watch  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
-    .priority-info   { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); font-weight: 400; }
-    .article-item.article-action { border-left: 3px solid #dc2626; padding-left: 11px; }
-    .article-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-
-    /* Sticky column header */
-    .article-feed-hdr {
-      position: sticky; top: var(--topbar-h); z-index: 10;
-      display: flex; align-items: center; gap: 6px;
-      padding: 4px 14px; background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      border-top: 1px solid var(--border-light);
-    }
-    .article-feed-hdr-spacer { flex: 1; }
-    .article-feed-hdr-label {
-      font-family: var(--mono); font-size: 10px; font-weight: 700;
-      letter-spacing: .07em; text-transform: uppercase;
-      color: var(--text-muted); white-space: nowrap;
-      min-width: 52px; text-align: center;
-    }
-    .article-feed-hdr-label.imp { min-width: 22px; }
-
-    /* MONITOR articles: visually muted */
-    .article-item[data-relevance="MONITOR"] { opacity: 0.45; }
-    .article-item[data-relevance="MONITOR"]:hover { opacity: 0.75; transition: opacity 0.15s; }
-    .article-item[data-relevance="MONITOR"] .badge-high,
-    .article-item[data-relevance="MONITOR"] .badge-medium,
-    .article-item[data-relevance="MONITOR"] .badge-low { display: none; }
-    /* INDIRECT articles: urgency de-emphasized */
-    .article-item[data-relevance="INDIRECT"] .badge-high,
-    .article-item[data-relevance="INDIRECT"] .badge-medium,
-    .article-item[data-relevance="INDIRECT"] .badge-low { opacity: 0.5; font-size: 8px; }
-    .relevance-reason { font-size: 11px; color: #F57F17; font-style: italic; margin-top: 3px; }
-    .article-item.hidden-by-relevance { display: none !important; }
-
-    /* Compact badge legend for sidebar header */
-    .sidebar-legend {
-      background: var(--bg);
-      border: 1px solid var(--border-light);
-      border-radius: 6px;
-      padding: 10px 12px;
-      margin-bottom: 12px;
-      font-size: 11px;
-    }
-    .sidebar-legend-title {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--text-muted);
-      margin-bottom: 7px;
-    }
-    .sidebar-legend-row {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 3px;
-      color: var(--text-secondary);
-    }
-    .sidebar-legend-sep { border-top: 1px solid var(--border-light); margin: 5px 0; }
-
-    /* ── MAIN CONTENT WIDGETS ───────────────────────────────────── */
-
-    /* Section header row */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .section-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--topic-color);
-      flex-shrink: 0;
-    }
-    .section-title {
-      font-size: 11px;
-      font-weight: 700;
-      font-family: var(--mono);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--text-muted);
-    }
-    .section-title-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border-light);
-    }
-
-    /* Panel card */
-    .panel {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-sm);
-    }
-    .panel-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .panel-title-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--topic-color);
-    }
-
-    /* KPI row */
-    .kpi-row {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-    .kpi-card {
-      flex: 1;
-      min-width: 100px;
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      box-shadow: var(--shadow-sm);
-      border-top: 3px solid var(--topic-color);
-    }
-    .kpi-value {
-      font-size: 26px;
-      font-weight: 700;
-      font-family: var(--mono);
-      color: var(--topic-color);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .kpi-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: var(--mono);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    /* Insight blocks */
-    .insight-block {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-    .insight-block + .insight-block { margin-top: 12px; border-top: 1px solid var(--border-light); padding-top: 12px; }
-    .insight-label {
-      font-size: 10px;
-      font-family: var(--mono);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--topic-color);
-      margin-bottom: 4px;
-    }
-    .insight-bullets {
-      list-style: none;
-      margin-top: 6px;
-    }
-    .insight-bullets li {
-      font-size: 14px;
-      color: var(--text-secondary);
-      padding: 3px 0 3px 14px;
-      position: relative;
-      line-height: 1.5;
-    }
-    .insight-bullets li::before {
-      content: '›';
-      position: absolute;
-      left: 2px;
-      color: var(--topic-color);
-      font-weight: 700;
-    }
-    .insight-badge {
-      display: inline-block;
-      font-size: 10px;
-      font-family: var(--mono);
-      font-weight: 700;
-      letter-spacing: .04em;
-      border-radius: 3px;
-      padding: 2px 6px;
-      margin: 4px 3px 0 0;
-    }
-    .insight-badge.hi { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
-    .insight-badge.med { background: var(--amber-bg); color: var(--amber); border: 1px solid #F5DFA6; }
-    .insight-badge.lo { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-    .insight-badge-neutral { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
-
-    /* Breaking news alert */
-    .breaking-alert {
-      background: var(--red-bg);
-      border: 1px solid var(--red-border);
-      border-radius: var(--radius);
-      padding: 10px 14px;
-      margin-bottom: 12px;
-      font-size: 13.5px;
-      color: #8B1A1A;
-    }
-    .breaking-alert-label {
-      font-size: 10px;
-      font-family: var(--mono);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--red);
-      margin-bottom: 3px;
-    }
-
-    /* Trend chart */
-    .trend-chart-wrap { margin: 4px 0 6px; }
-    .trend-chart-axis {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      font-family: var(--mono);
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    /* Summary text */
-    .summary-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    /* Impact rows */
-    .impact-grid {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 8px 12px;
-    }
-    .impact-label {
-      font-size: 10px;
-      font-family: var(--mono);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: var(--text-muted);
-      padding-top: 2px;
-      line-height: 1.4;
-    }
-    .impact-text { font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; }
-    .impact-list {
-      list-style: none;
-      margin: 0;
-    }
-    .impact-list li {
-      font-size: 13.5px;
-      color: var(--text-secondary);
-      padding: 2px 0 2px 12px;
-      position: relative;
-    }
-    .impact-list li::before {
-      content: '›';
-      position: absolute; left: 1px;
-      color: var(--topic-color); font-weight: 700;
-    }
-
-    /* Strategy block */
-    .strategy-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      border-left: 3px solid var(--topic-color);
-      padding-left: 12px;
-    }
-
-    /* Deadline list */
-    .dl-list { display: flex; flex-direction: column; gap: 0; }
-    .dl-item {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .dl-item:last-child { border-bottom: none; }
-    .dl-days {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      min-width: 52px;
-      text-align: right;
-      flex-shrink: 0;
-      padding-top: 1px;
-    }
-    .dl-days.urgent { color: var(--red); }
-    .dl-days.soon { color: var(--amber); }
-    .dl-days.normal { color: var(--text-muted); }
-    .dl-pipe {
-      width: 2px;
-      min-height: 38px;
-      border-radius: 1px;
-      flex-shrink: 0;
-      background: var(--border);
-      align-self: stretch;
-    }
-    .dl-body { flex: 1; min-width: 0; }
-    .dl-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; line-height: 1.35; }
-    .dl-meta { font-size: 12px; color: var(--text-muted); font-family: var(--mono); }
-
-    /* Bills table */
-    .bill-grid { display: flex; flex-direction: column; gap: 0; }
-    .bill-row {
-      display: flex;
-      gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border-light);
-      align-items: flex-start;
-    }
-    .bill-row:last-child { border-bottom: none; }
-    .bill-id {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--topic-color);
-      min-width: 68px;
-      flex-shrink: 0;
-      padding-top: 1px;
-    }
-    .bill-body { flex: 1; min-width: 0; }
-    .bill-title-text { font-size: 14px; font-weight: 500; color: var(--text-primary); line-height: 1.35; margin-bottom: 2px; }
-    .bill-action-text { font-size: 12px; color: var(--text-muted); }
-    .bill-stage-tag {
-      display: inline-block;
-      font-size: 9px;
-      font-family: var(--mono);
-      font-weight: 700;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      padding: 1px 4px;
-      flex-shrink: 0;
-      background: var(--bg);
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      margin-top: 1px;
-    }
-    .bill-stage-tag.enacted_watching { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
-    .bill-stage-tag.passed_one, .bill-stage-tag.advanced { background: var(--amber-bg); color: var(--amber); border-color: #F5DFA6; }
-
-    /* ── RESOURCE STRIP (top of page, quick-access links) ───────── */
-    .resource-strip {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .resource-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px 8px 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--border);
-      border-radius: var(--radius);
-      text-decoration: none;
-      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-      cursor: pointer;
-    }
-    .resource-chip:hover {
-      border-left-color: var(--topic-color);
-      border-color: var(--topic-color);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      text-decoration: none;
-      background: var(--bg);
-    }
-    .resource-chip-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      color: var(--text-muted);
-      transition: color 0.15s;
-    }
-    .resource-chip:hover .resource-chip-icon { color: var(--topic-color); }
-    .resource-chip-label {
-      font-size: 12px;
-      font-weight: 600;
-      font-family: var(--sans);
-      color: var(--text-secondary);
-      white-space: nowrap;
-      transition: color 0.15s;
-    }
-    .resource-chip:hover .resource-chip-label { color: var(--text-primary); }
-    .resource-chip-ext {
-      width: 11px;
-      height: 11px;
-      flex-shrink: 0;
-      color: var(--border);
-      margin-left: 2px;
-      transition: color 0.15s, transform 0.15s;
-    }
-    .resource-chip:hover .resource-chip-ext {
-      color: var(--topic-color);
-      transform: translate(1px, -1px);
-    }
-
-    /* ── Cross-State Intelligence section ───────────────────────── */
-    .csi-summary-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-left: 4px solid var(--amber);
-      border-radius: 0 var(--radius) var(--radius) 0;
-      padding: 14px 16px; margin-bottom: 14px;
-    }
-    .csi-summary-text { font-size: 14px; line-height: 1.7; color: var(--text-secondary); }
-    .csi-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-    .csi-panel { background: var(--surface); border: 1px solid var(--border);
-                 border-radius: var(--radius); overflow: hidden; }
-    .csi-panel-title { font-family: var(--mono); font-size: 10px; font-weight: 700;
-      letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted);
-      padding: 8px 12px; border-bottom: 1px solid var(--border-light); background: var(--bg); }
-    .csi-watch-item { display: flex; align-items: flex-start; gap: 8px;
-      padding: 8px 12px; border-bottom: 1px solid var(--border-light); }
-    .csi-watch-item:last-child { border-bottom: none; }
-    .csi-state-chip {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 30px; height: 22px; padding: 0 4px;
-      background: var(--red-bg); color: var(--red);
-      font-family: var(--mono); font-size: 10px; font-weight: 700;
-      border-radius: 3px; flex-shrink: 0; border: 1px solid var(--red-border);
-    }
-    .csi-watch-text { font-size: 14px; color: var(--text-secondary); line-height: 1.45; flex: 1; }
-    .csi-watch-action { font-size: 13px; color: var(--blue); margin-top: 2px; font-style: italic; }
-    .csi-mover-row { display: flex; align-items: flex-start; gap: 7px;
-      padding: 7px 12px; border-bottom: 1px solid var(--border-light); }
-    .csi-mover-row:last-child { border-bottom: none; }
-    .csi-urgency { display: inline-block; padding: 1px 5px; font-family: var(--mono);
-      font-size: 9px; font-weight: 700; border-radius: 2px; letter-spacing: .04em;
-      text-transform: uppercase; flex-shrink: 0; margin-top: 1px; }
-    .csi-urgency.high { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
-    .csi-urgency.medium { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
-    .csi-urgency.low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-    .csi-mover-state { font-family: var(--mono); font-size: 11px; font-weight: 700;
-      color: var(--text-primary); min-width: 24px; flex-shrink: 0; }
-    .csi-mover-text { font-size: 14px; color: var(--text-secondary); line-height: 1.4; flex: 1; }
-    .csi-campaign-card { background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden; margin-bottom: 8px; }
-    .csi-campaign-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px;
-      cursor: pointer; background: var(--blue-bg); border-bottom: 1px solid var(--border-light);
-      transition: background 0.12s; }
-    .csi-campaign-header:hover { background: #dce8fb; }
-    .csi-campaign-chips { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
-    .csi-chip { padding: 2px 6px; background: var(--blue-bg); color: var(--blue);
-      font-family: var(--mono); font-size: 10px; font-weight: 700;
-      border: 1px solid rgba(21,101,192,0.2); border-radius: 3px; }
-    .csi-campaign-body-text { padding: 10px 12px; font-size: 14px; color: var(--text-secondary);
-      line-height: 1.55; }
-    .csi-campaign-relevance { padding: 8px 12px; font-size: 14px; color: var(--text-secondary);
-      background: var(--amber-bg); border-top: 1px solid var(--amber-border); line-height: 1.5; }
-    .csi-footer { display: flex; align-items: center; justify-content: space-between;
-      margin-top: 8px; font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
-    .csi-footer a { color: var(--blue); }
-    @media (max-width: 700px) { .csi-two-col { grid-template-columns: 1fr; } }
-
-    /* ── Impact badge ───────────────────────────────────────────── */
-    .badge-impact { font-size: 9px; font-weight: 700; font-family: var(--mono);
-      letter-spacing: .03em; border-radius: 2px; padding: 1px 4px; }
-    .badge-impact.hi { background: var(--red-bg); color: var(--red); }
-    .badge-impact.mid { background: var(--amber-bg); color: var(--amber); }
-    .badge-impact.lo { background: var(--green-bg); color: var(--green); }
-
-    /* ── Deadline clickable ──────────────────────────────────────── */
-    .dl-item-clickable { cursor: pointer; transition: background .12s; }
-    .dl-item-clickable:hover { background: var(--surface-sunken, #EBEDF0); }
-    .dl-click-hint { font-size: 11px; color: var(--blue); font-family: var(--mono);
-      margin-top: 3px; font-weight: 600; opacity: 0; transition: opacity .15s; }
-    .dl-item-clickable:hover .dl-click-hint { opacity: 1; }
-
-    /* ── Bill row clickable ──────────────────────────────────────── */
-    .bill-row-clickable { cursor: pointer; transition: background .12s; }
-    .bill-row-clickable:hover { background: var(--surface-sunken, #EBEDF0); }
-
-    /* ── Bill Detail Modal ───────────────────────────────────────── */
-    .bd-overlay {
-      display: none; position: fixed; inset: 0; z-index: 2100;
-      background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
-      align-items: flex-start; justify-content: center;
-      padding: 32px 16px; overflow-y: auto;
-    }
-    .bd-overlay.open { display: flex; }
-    .bd-modal {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; box-shadow: 0 24px 80px rgba(0,0,0,.35);
-      width: min(820px, 96vw); max-height: none;
-      display: flex; flex-direction: column;
-    }
-    .bd-header {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-    }
-    .bd-header-left { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
-    .bd-bill-label { font-size: 14px; font-weight: 700; font-family: var(--mono);
-      color: var(--text-primary); letter-spacing: -.01em; }
-    .bd-topic-badge { font-size: 11px; font-weight: 700; font-family: var(--mono);
-      letter-spacing: .05em; padding: 2px 6px; border-radius: 3px;
-      background: var(--surface-sunken, #EBEDF0); color: var(--text-secondary); }
-    .bd-severity-badge { font-size: 11px; font-weight: 700; font-family: var(--mono);
-      letter-spacing: .05em; padding: 2px 6px; border-radius: 3px; }
-    .bd-close-btn {
-      background: none; border: 1px solid var(--border); border-radius: 4px;
-      padding: 4px 12px; font-size: 12px; font-weight: 600; font-family: var(--mono);
-      color: var(--text-secondary); cursor: pointer; letter-spacing: .04em;
-      transition: border-color .15s, color .15s;
-    }
-    .bd-close-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
-    .bd-body { padding: 0; overflow-y: visible; }
-    .bd-section { padding: 14px 18px; border-bottom: 1px solid var(--border-light); }
-    .bd-section:last-child { border-bottom: none; }
-    .bd-section-title { font-size: 10px; font-weight: 700; font-family: var(--mono);
-      letter-spacing: .08em; color: var(--text-tertiary, #7A8194);
-      text-transform: uppercase; margin-bottom: 6px; }
-    .bd-section-body { font-size: 13px; color: var(--text-primary); line-height: 1.55; }
-    .bd-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-    .bd-two-col .bd-section { border-right: 1px solid var(--border-light); }
-    .bd-two-col .bd-section:last-child { border-right: none; }
-    .bd-action-list { margin: 0; padding: 0 0 0 16px;
-      font-size: 13px; color: var(--text-primary); line-height: 1.6; }
-    .bd-action-list li { margin-bottom: 4px; }
-    .bd-follow-up-item { display: flex; align-items: flex-start; gap: 10px;
-      padding: 6px 0; border-bottom: 1px solid var(--border-light); }
-    .bd-follow-up-item:last-child { border-bottom: none; }
-    .bd-fu-date { min-width: 80px; font-size: 12px; font-family: var(--mono);
-      font-weight: 700; color: var(--text-secondary); }
-    .bd-fu-conf { font-size: 10px; font-family: var(--mono); font-weight: 600;
-      padding: 1px 4px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; }
-    .bd-fu-conf.known { background:#d1fae5;color:#065f46; }
-    .bd-fu-conf.probable { background:#fef3c7;color:#92400e; }
-    .bd-fu-conf.possible { background:#f1f5f9;color:#64748b; }
-    .bd-ics-btn { display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 8px; padding: 6px 14px;
-      background: var(--topic-color); color: #fff;
-      border: none; border-radius: 5px; font-size: 12px;
-      font-weight: 700; font-family: var(--mono); cursor: pointer;
-      text-decoration: none; letter-spacing: .03em; }
-    .bd-ics-btn:hover { opacity: .9; }
-    .bd-pending { padding: 32px 18px; text-align: center;
-      color: var(--text-secondary); font-size: 13px; }
-    .bd-pending-title { font-size: 14px; font-weight: 700; color: var(--text-primary);
-      margin-bottom: 8px; font-family: var(--mono); }
-    .bd-source-link { font-size: 12px; font-family: var(--mono); color: var(--blue);
-      text-decoration: none; padding: 4px 0; }
-    .bd-source-link:hover { text-decoration: underline; }
-    @media (max-width: 600px) {
-      .bd-two-col { grid-template-columns: 1fr; }
-      .bd-two-col .bd-section { border-right: none; }
-    }
-
-    /* ── Deadline Detail Modal ───────────────────────────────────── */
-    .dd-overlay {
-      display: none; position: fixed; inset: 0; z-index: 2200;
-      background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
-      align-items: flex-start; justify-content: center;
-      padding: 32px 16px; overflow-y: auto;
-    }
-    .dd-overlay.open { display: flex; }
-    .dd-modal { background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; box-shadow: 0 24px 80px rgba(0,0,0,.35);
-      width: min(860px, 96vw); display: flex; flex-direction: column; }
-    .dd-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      padding: 14px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .dd-header-left { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
-    .dd-title-label { font-size: 14px; font-weight: 700; color: var(--text-primary);
-      line-height: 1.3; flex: 1; }
-    .dd-countdown { font-size: 13px; font-family: var(--mono); font-weight: 700;
-      padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
-    .dd-body { padding: 0; overflow-y: visible; }
-    .dd-prep-row { display: flex; gap: 0; overflow: hidden;
-      border-bottom: 1px solid var(--border-light); }
-    .dd-prep-step { flex: 1; padding: 10px 14px; border-right: 1px solid var(--border-light);
-      font-size: 12px; }
-    .dd-prep-step:last-child { border-right: none; }
-    .dd-prep-label { font-size: 10px; font-weight: 700; font-family: var(--mono);
-      letter-spacing: .07em; color: var(--text-tertiary, #7A8194);
-      text-transform: uppercase; margin-bottom: 4px; }
-    .dd-prep-past { opacity: .45; }
-    @media (max-width: 600px) {
-      .dd-prep-row { flex-direction: column; }
-      .dd-prep-step { border-right: none; border-bottom: 1px solid var(--border-light); }
-    }
-
-    /* Two-column grid for panels */
-    .panel-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .panel-grid-2 .panel { margin-bottom: 0; }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .article-sidebar {
-        position: static;
-        width: 100%;
-        height: 500px;
-        border-left: none;
-        border-top: 1px solid var(--border);
-      }
-      .main { margin-right: 0; }
-      .layout { flex-direction: column; }
-      .panel-grid-2 { grid-template-columns: 1fr; }
-    }
-  </style>
+  <link rel="stylesheet" href="static/css/topic.css">
+  <style>:root { --topic-color: #1A7A87; }</style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.SUPABASE_URL = "https://oramnktatlppjjzhtiat.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_-HbSii9IjY1ZqDM5eIvZjQ_WNUzVaoI";
+  </script>
+  <script src="static/js/auth.js"></script>
+  <script src="static/js/favorites.js"></script>
   <script src="static/js/article_modal.js"></script>
 </head>
 <body>
+<!-- Auth overlay — covers page until session confirmed -->
+<div id="auth-overlay" style="position:fixed;inset:0;background:#0f1117;
+     z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <span style="font-family:monospace;font-size:12px;color:#444;letter-spacing:3px;">LOADING</span>
+</div>
+<script>
+(async function() {
+  var result = await checkAuth();
+  if (!result) return;
+  populateTopbar();
+  document.getElementById('auth-overlay').style.display = 'none';
+  initFavorites();
+})();
+</script>
 
 <!-- TOPBAR -->
 <div class="topbar">
@@ -1009,10 +76,10 @@
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
         <span class="bd-topic-badge" id="ad-topic-badge"></span>
         <span class="bd-severity-badge" id="ad-urgency-badge"></span>
-        <button class="expand-modal-close" onclick="closeArticleDetail()">Close</button>
+        <button class="bd-close-btn" onclick="closeArticleDetail()">Close</button>
       </div>
     </div>
-    <div class="bd-body" id="ad-body"></div>
+    <div class="bd-body" id="ad-body"><!-- rendered by JS --></div>
   </div>
 </div>
 
@@ -1139,44 +206,9 @@
     <!-- Company Impact -->
     
     
-    <div class="section-header">
-      <div class="section-dot"></div>
-      <span class="section-title">Company Impact</span>
-      <div class="section-title-line"></div>
-    </div>
-    <div class="panel">
-      <div class="impact-grid">
-        
-        <span class="impact-label">Products</span>
-        <span class="impact-text">If the company is a public issuer, the May 31, 2026 Form SD deadline is active now — tin in solder/hardware coatings, tantalum in automation electronics, tungsten in wear-resistant coatings, and gold in electronics contacts all trigger 3TG reporting obligations requiring documented RCOI and CMRT collection.</span>
-        
-        
-        <span class="impact-label">Supply Chain</span>
-        <span class="impact-text">Electronics and automation component suppliers (sensors, motor drives, control boards, power semiconductors) are actively filing Form SDs, confirming 3TG is present — the company must collect CMRTs from these suppliers to satisfy its own RCOI obligations or customer vendor compliance requirements.</span>
-        
-        
-        <span class="impact-label">Actions</span>
-        <ul class="impact-list"><li>Confirm whether the company is an SEC-reporting issuer subject to Form SD; if yes, initiate or finalize the Conflict Minerals Report for calendar year 2025 with RCOI documentation covering tin, tantalum, tungsten, and gold — deadline is May 31, 2026.</li><li>If privately held, audit current customer vendor compliance program requirements to identify which major customers require CMRT submission and confirm the company&#39;s CMRT is complete and current for 2025.</li></ul>
-        
-        
-        <span class="impact-label">Supplier</span>
-        <ul class="impact-list"><li>Issue CMRT collection requests immediately to all electronics, automation component, semiconductor, and hardware suppliers (hinges, fasteners, locks) — request completed CMRT v6.2+ covering the 2025 calendar year and set a receipt deadline of April 30, 2026 to allow consolidation.</li><li>Flag non-responding suppliers — particularly those providing sensors, motor control boards, and power semiconductors analogous to Alpha &amp; Omega Semiconductor&#39;s product lines — for escalation to account managers, as missing CMRTs create RCOI documentation gaps.</li></ul>
-        
-      </div>
-    </div>
-    
 
     <!-- Strategy Note -->
     
-    
-    <div class="section-header">
-      <div class="section-dot"></div>
-      <span class="section-title">Strategy Note</span>
-      <div class="section-title-line"></div>
-    </div>
-    <div class="panel">
-      <div class="strategy-text">The Form SD filing season is actively underway — DRDGOLD, OSI Systems, and Alpha &amp; Omega Semiconductor have all filed, confirming SEC enforcement expectations are live for 2025 reporting. This week, the compliance team must determine the company&#39;s SEC issuer status and either finalize the internal Form SD/Conflict Minerals Report or document that customer CMRT obligations have been met. Simultaneously, CMRT collection from the electronics and automation hardware supply base must be treated as urgent — the April 30 internal receipt deadline is the only buffer before any May 31 reporting or customer submission deadline.</div>
-    </div>
     
 
     <!-- Upcoming Deadlines -->
@@ -1207,7 +239,7 @@
           </div>
         </div>
         <div class="dl-item dl-item-clickable"
-             data-deadline-id="580" onclick="openDeadlineDetailFromEl(this)">
+             data-deadline-id="583" onclick="openDeadlineDetailFromEl(this)">
           <div class="dl-days soon">
             
               65d
@@ -1215,11 +247,11 @@
           </div>
           <div class="dl-pipe" style="background:var(--amber);"></div>
           <div class="dl-body">
-            <div class="dl-title">Form SD conflict minerals disclosure filing deadline</div>
+            <div class="dl-title">SEC Form SD Conflict Minerals Annual Filing</div>
             <div class="dl-meta">
               Federal
                · 2026-05-31
-               · <span style="font-weight:600;">HIGH</span>
+               · <span style="font-weight:600;">MEDIUM</span>
             </div>
             <div class="dl-click-hint">Click for AI analysis →</div>
           </div>
@@ -1541,24 +573,34 @@
       </div>
       
       <div class="month-divider" data-month-divider>2026-03</div><div class="article-item is-new"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="drdgold ltd  (drd, drdgf)  (cik 0001023512) — form sd conflict minerals report (2026-03)"
            data-snippet="sec form sd annual conflict minerals disclosure under dodd-frank section 1502. company: drdgold ltd  (drd, drdgf)  (cik 0001023512). filed: 2026-03-27. accession: 0001628280-26-021569."
            data-urgency="medium"
            data-date="2026-03-27"
            data-relevance="MONITOR"
-           data-topic="conflictminerals"
+           data-source="SEC EDGAR — Form SD"
            data-ad-title="DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) — Form SD Conflict Minerals Report (2026-03)"
-           data-ad-summary="DRDGOLD LTD, a South African gold mining company, filed its annual Form SD conflict minerals disclosure under Dodd-Frank Section 1502 on March 27, 2026. As a gold producer filing with the SEC, this disclosure reflects upstream reporting obligations that flow through global supply chains to downstream manufacturers using gold in electronics contacts and connections. The filing is informational but signals active SEC enforcement calendar for the 2025 reporting year."
+           data-ad-summary="DRDGOLD LTD, a gold mining company, filed its annual Form SD conflict minerals disclosure with the SEC on March 27, 2026, under Dodd-Frank Section 1502. As a gold producer, DRDGOLD&#39;s filing is relevant context for downstream manufacturers tracking gold smelter/refiner (SOR) lists and country-of-origin documentation. This filing reflects continued SEC Form SD activity in the 2026 reporting cycle."
            data-ad-relevance-reason=""
            data-ad-impact="1.0"
-           data-source="SEC EDGAR — Form SD"
-           data-url="https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm" target="_blank">DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) — Form SD Conflict Minerals Report (2026-03)</a>
+            <a href="https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm" target="_blank" rel="noopener">DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) — Form SD Conflict Minerals Report (2026-03)</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm"
+                    onclick='openFolderPicker("https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm","DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) \u2014 Form SD Conflict Minerals Report (2026-03)","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm","DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) \u2014 Form SD Conflict Minerals Report (2026-03)",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
             <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
@@ -1577,28 +619,38 @@
           
         </div>
         
-        <div class="article-snippet">DRDGOLD LTD, a South African gold mining company, filed its annual Form SD conflict minerals disclosure under Dodd-Frank Section 1502 on March 27, 2026. As a gold producer filing with the SEC, this disclosure reflects upstream reporting obligations that flow through global supply chains to downstream manufacturers using gold in electronics contacts and connections. The filing is informational but signals active SEC enforcement calendar for the 2025 reporting year.</div>
+        <div class="article-snippet">DRDGOLD LTD, a gold mining company, filed its annual Form SD conflict minerals disclosure with the SEC on March 27, 2026, under Dodd-Frank Section 1502. As a gold producer, DRDGOLD&#39;s filing is relevant context for downstream manufacturers tracking gold smelter/refiner (SOR) lists and country-of-origin documentation. This filing reflects continued SEC Form SD activity in the 2026 reporting cycle.</div>
         
       </div>
       <div class="article-item is-new"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="definition of a ski area"
            data-snippet="the united states department of agriculture, forest service (forest service or agency) is issuing a final rule revising the definition of a ski area in its special use regulations. the revised definition aligns more closely with the forest service&#39;s statutory authority for ski area administration and reduces burden on the agency and special use permit holders."
            data-urgency="low"
            data-date="2026-03-25"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Definition of a Ski Area"
            data-ad-summary="The United States Department of Agriculture, Forest Service (Forest Service or Agency) is issuing a final rule revising the definition of a ski area in its special use regulations. The revised definition aligns more closely with the Forest Service&#39;s statutory authority for ski area administration and reduces burden on the agency and special use permit holders."
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area" target="_blank">Definition of a Ski Area</a>
+            <a href="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area" target="_blank" rel="noopener">Definition of a Ski Area</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area","Definition of a Ski Area","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area","Definition of a Ski Area",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -1620,24 +672,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="direct sale of public land for affordable housing purposes in the city of henderson, nevada"
            data-snippet="the bureau of land management (blm) proposes to sell an 18.59- acre parcel of public land located in the west portion of henderson, nevada, under the authority of section 203 of the federal land policy and management act of 1976, as amended (flpma); applicable blm land sale regulations; and the southern nevada public land management act of 1998, as amended (snplma). the blm intends to conduct a direct sale of the parcel to the city of henderson, a political subdivision of the state of nevada, at"
            data-urgency="low"
            data-date="2026-03-24"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada"
            data-ad-summary="The Bureau of Land Management (BLM) proposes to sell an 18.59- acre parcel of public land located in the west portion of Henderson, Nevada, under the authority of section 203 of the Federal Land Policy and Management Act of 1976, as amended (FLPMA); applicable BLM land sale regulations; and the Southern Nevada Public Land Management Act of 1998, as amended (SNPLMA). The BLM intends to conduct a direct sale of the parcel to the City of Henderson, a political subdivision of the State of Nevada, at"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada" target="_blank">Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada</a>
+            <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada" target="_blank" rel="noopener">Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada","Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada","Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -1659,24 +721,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="deep seabed mining: notice of receipt of applications for deep seabed mining exploration licenses and announcement of public comment period and virtual public hearings"
            data-snippet="noaa has received two applications for licenses to conduct seabed mining exploration activities that are fully compliant with the applicable information requirements of the deep seabed hard mineral resources act (dshmra or the act) and the act&#39;s implementing regulations. as part of the application review process, noaa will hold one virtual public hearing on american metal resources, llc&#39;s (amr) application and one virtual public hearing on seax, inc.&#39;s (seax) application, and will accept written"
            data-urgency="low"
            data-date="2026-03-23"
            data-relevance="MONITOR"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings"
-           data-ad-summary="NOAA received applications from American Metal Resources LLC and SeaX Inc. for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act and announced virtual public hearings. Deep seabed mineral deposits are rich in cobalt, manganese, nickel, and rare earth elements — not 3TG — but this development signals a potential future diversification of mineral sourcing away from conflict-affected regions. This is a long-horizon watch item for conflict minerals supply chain risk reduction."
+           data-ad-summary="NOAA received two applications for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act, covering minerals that include cobalt, nickel, and potentially conflict-adjacent metals. While not directly 3TG-related, this signals emerging alternative sourcing pathways for critical minerals that could affect long-term supply chain due diligence frameworks. Companies should monitor whether seabed-sourced minerals enter future OECD guidance on responsible mineral sourcing."
            data-ad-relevance-reason=""
            data-ad-impact="1.0"
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and" target="_blank">Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings</a>
+            <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and" target="_blank" rel="noopener">Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and","Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and","Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
@@ -1695,37 +767,50 @@
           
         </div>
         
-        <div class="article-snippet">NOAA received applications from American Metal Resources LLC and SeaX Inc. for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act and announced virtual public hearings. Deep seabed mineral deposits are rich in cobalt, manganese, nickel, and rare earth elements — not 3TG — but this development signals a potential future diversification of mineral sourcing away from conflict-affected regions. This is a long-horizon watch item for conflict minerals supply chain risk reduction.</div>
+        <div class="article-snippet">NOAA received two applications for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act, covering minerals that include cobalt, nickel, and potentially conflict-adjacent metals. While not directly 3TG-related, this signals emerging alternative sourcing pathways for critical minerals that could affect long-term supply chain due diligence frameworks. Companies should monitor whether seabed-sourced minerals enter future OECD guidance on responsible mineral sourcing.</div>
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="osi systems inc  (osis)  (cik 0001039065) — form sd conflict minerals report (2026-03)"
            data-snippet="sec form sd annual conflict minerals disclosure under dodd-frank section 1502. company: osi systems inc  (osis)  (cik 0001039065). filed: 2026-03-23. accession: 0001104659-26-033292."
            data-urgency="medium"
            data-date="2026-03-23"
-           data-relevance="MONITOR"
-           data-topic="conflictminerals"
-           data-ad-title="OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)"
-           data-ad-summary="OSI Systems Inc., a security and inspection equipment manufacturer, filed its annual Form SD conflict minerals disclosure on March 23, 2026, covering calendar year 2025. OSI&#39;s products overlap significantly with the company&#39;s automation electronics supply chain — sensors, control boards, and imaging systems — making their CMRT methodology a useful benchmark for RCOI scope and smelter lists. This filing confirms that complex electronics manufacturers are actively completing 3TG due diligence."
-           data-ad-relevance-reason="OSI Systems manufactures electronics; our motors and electronics components may originate from suppliers using conflict minerals, creating future supply chain transparency obligations."
-           data-ad-impact="1.2"
+           data-relevance="INDIRECT"
            data-source="SEC EDGAR — Form SD"
-           data-url="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm">
+           data-ad-title="OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)"
+           data-ad-summary="OSI Systems, a manufacturer of security and inspection systems with complex electronics supply chains, filed its Form SD on March 23, 2026. This is directly comparable to the company&#39;s own situation — an electronics-intensive manufacturer conducting RCOI and CMRT collection across a global supplier base. OSI&#39;s filing marks the active start of the 2026 Form SD season."
+           data-ad-relevance-reason="OSI Systems&#39; electronics supply chain disclosure indicates regulatory compliance standards for suppliers we may purchase from (motors, electronics, control systems); signals SEC enforcement momentum on conflict minerals reporting that could extend to our supply chain if we have indirect exposure to 3TG minerals."
+           data-ad-impact="3.1"
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm" target="_blank">OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)</a>
+            <a href="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm" target="_blank" rel="noopener">OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm"
+                    onclick='openFolderPicker("https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm","OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) \u2014 Form SD Conflict Minerals Report (2026-03)","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm","OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) \u2014 Form SD Conflict Minerals Report (2026-03)",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
-            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            <span class="badge badge-indirect" title="OSI Systems&#39; electronics supply chain disclosure indicates regulatory compliance standards for suppliers we may purchase from (motors, electronics, control systems); signals SEC enforcement momentum on conflict minerals reporting that could extend to our supply chain if we have indirect exposure to 3TG minerals.">Indirect</span>
             
             
-            <span class="badge badge-impact lo" title="Company impact score">1.2</span>
+            
+            <span class="badge badge-impact lo" title="Company impact score">3.1</span>
             
           </div>
         </div>
+        
+        <div class="relevance-reason">&#x2197; OSI Systems&#39; electronics supply chain disclosure indicates regulatory compliance standards for suppliers we may purchase from (motors, electronics, control systems); signals SEC enforcement momentum on conflict minerals reporting that could extend to our supply chain if we have indirect exposure to 3TG minerals.</div>
         
         <div class="article-meta">
           <span>SEC EDGAR — Form SD</span>
@@ -1735,28 +820,38 @@
           
         </div>
         
-        <div class="article-snippet">OSI Systems Inc., a security and inspection equipment manufacturer, filed its annual Form SD conflict minerals disclosure on March 23, 2026, covering calendar year 2025. OSI&#39;s products overlap significantly with the company&#39;s automation electronics supply chain — sensors, control boards, and imaging systems — making their CMRT methodology a useful benchmark for RCOI scope and smelter lists. This filing confirms that complex electronics manufacturers are actively completing 3TG due diligence.</div>
+        <div class="article-snippet">OSI Systems, a manufacturer of security and inspection systems with complex electronics supply chains, filed its Form SD on March 23, 2026. This is directly comparable to the company&#39;s own situation — an electronics-intensive manufacturer conducting RCOI and CMRT collection across a global supplier base. OSI&#39;s filing marks the active start of the 2026 Form SD season.</div>
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="land uses; special uses"
            data-snippet="the united states department of agriculture (department), forest service (forest service or agency), is issuing this final rule to update its special uses regulations on filming and still photography to be consistent with the new requirements in the expanding public lands outdoor recreation experiences act (explore act or act). the technical revisions include adding a statutory reference to the explore act and updating terminology and definitions to be consistent with the act."
            data-urgency="low"
            data-date="2026-03-19"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Land Uses; Special Uses"
            data-ad-summary="The United States Department of Agriculture (Department), Forest Service (Forest Service or Agency), is issuing this final rule to update its special uses regulations on filming and still photography to be consistent with the new requirements in the Expanding Public Lands Outdoor Recreation Experiences Act (EXPLORE Act or Act). The technical revisions include adding a statutory reference to the EXPLORE Act and updating terminology and definitions to be consistent with the Act."
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses" target="_blank">Land Uses; Special Uses</a>
+            <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses" target="_blank" rel="noopener">Land Uses; Special Uses</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses","Land Uses; Special Uses","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses","Land Uses; Special Uses",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -1778,36 +873,46 @@
         
       </div>
       <div class="month-divider" data-month-divider>2026-02</div><div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="alpha &amp; omega semiconductor ltd  (aosl)  (cik 0001387467) — form sd conflict minerals report (2026-02)"
            data-snippet="sec form sd annual conflict minerals disclosure under dodd-frank section 1502. company: alpha &amp; omega semiconductor ltd  (aosl)  (cik 0001387467). filed: 2026-02-27. accession: 0001387467-26-000015."
            data-urgency="medium"
            data-date="2026-02-27"
            data-relevance="INDIRECT"
-           data-topic="conflictminerals"
-           data-ad-title="ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)"
-           data-ad-summary="Alpha &amp; Omega Semiconductor filed its Form SD on February 27, 2026, disclosing conflict minerals due diligence for tantalum, tin, tungsten, and gold used in its power semiconductor products. As a direct supplier category analog — power semiconductors are used in automation motor drives and control boards — this filing underscores that the company&#39;s electronics component suppliers are expected to have CMRTs ready. Collecting CMRTs from semiconductor suppliers like this is a direct supply chain obligation for the company."
-           data-ad-relevance-reason="Semiconductor manufacturers&#39; conflict minerals diligence sets precedent for downstream supply chain transparency expectations that may eventually extend to electronics components purchased by windows/doors manufacturers."
-           data-ad-impact="1.9"
            data-source="SEC EDGAR — Form SD"
-           data-url="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm">
+           data-ad-title="ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)"
+           data-ad-summary="Alpha &amp; Omega Semiconductor filed its Form SD on February 27, 2026, covering conflict minerals in its semiconductor manufacturing operations. Semiconductor and passive component suppliers in the company&#39;s automation electronics supply chain will be filing similar disclosures, making this a reference point for what CMRT data should be flowing upstream. AOSL&#39;s filing reinforces that semiconductor-tier suppliers are active in the 2026 reporting cycle."
+           data-ad-relevance-reason="Semiconductor supply chain conflict minerals compliance is a reference point for understanding supplier disclosure obligations; signals that passive component and electronics suppliers we purchase from face Form SD reporting requirements, but not directly material to our PFAS risk profile."
+           data-ad-impact="1.7"
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm" target="_blank">ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)</a>
+            <a href="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm" target="_blank" rel="noopener">ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm"
+                    onclick='openFolderPicker("https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm","ALPHA \u0026 OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) \u2014 Form SD Conflict Minerals Report (2026-02)","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm","ALPHA \u0026 OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) \u2014 Form SD Conflict Minerals Report (2026-02)",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
-            <span class="badge badge-indirect" title="Semiconductor manufacturers&#39; conflict minerals diligence sets precedent for downstream supply chain transparency expectations that may eventually extend to electronics components purchased by windows/doors manufacturers.">Indirect</span>
+            <span class="badge badge-indirect" title="Semiconductor supply chain conflict minerals compliance is a reference point for understanding supplier disclosure obligations; signals that passive component and electronics suppliers we purchase from face Form SD reporting requirements, but not directly material to our PFAS risk profile.">Indirect</span>
             
             
             
-            <span class="badge badge-impact lo" title="Company impact score">1.9</span>
+            <span class="badge badge-impact lo" title="Company impact score">1.7</span>
             
           </div>
         </div>
         
-        <div class="relevance-reason">&#x2197; Semiconductor manufacturers&#39; conflict minerals diligence sets precedent for downstream supply chain transparency expectations that may eventually extend to electronics components purchased by windows/doors manufacturers.</div>
+        <div class="relevance-reason">&#x2197; Semiconductor supply chain conflict minerals compliance is a reference point for understanding supplier disclosure obligations; signals that passive component and electronics suppliers we purchase from face Form SD reporting requirements, but not directly material to our PFAS risk profile.</div>
         
         <div class="article-meta">
           <span>SEC EDGAR — Form SD</span>
@@ -1817,28 +922,38 @@
           
         </div>
         
-        <div class="article-snippet">Alpha &amp; Omega Semiconductor filed its Form SD on February 27, 2026, disclosing conflict minerals due diligence for tantalum, tin, tungsten, and gold used in its power semiconductor products. As a direct supplier category analog — power semiconductors are used in automation motor drives and control boards — this filing underscores that the company&#39;s electronics component suppliers are expected to have CMRTs ready. Collecting CMRTs from semiconductor suppliers like this is a direct supply chain obligation for the company.</div>
+        <div class="article-snippet">Alpha &amp; Omega Semiconductor filed its Form SD on February 27, 2026, covering conflict minerals in its semiconductor manufacturing operations. Semiconductor and passive component suppliers in the company&#39;s automation electronics supply chain will be filing similar disclosures, making this a reference point for what CMRT data should be flowing upstream. AOSL&#39;s filing reinforces that semiconductor-tier suppliers are active in the 2026 reporting cycle.</div>
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="endangered and threatened wildlife and plants; removal of geocarpon minimum from the list of endangered and threatened plants"
            data-snippet="we, the u.s. fish and wildlife service (service), propose to remove geocarpon minimum from the federal list of endangered and threatened plants. our review indicates that the threats to geocarpon minimum have been eliminated or reduced to the point that the species no longer meets the definition of an endangered or threatened species under the endangered species act of 1973, as amended (act). accordingly, we propose to delist geocarpon minimum. this proposed rule completes the 5-year status revi"
            data-urgency="low"
            data-date="2026-02-26"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants"
            data-ad-summary="We, the U.S. Fish and Wildlife Service (Service), propose to remove Geocarpon minimum from the Federal List of Endangered and Threatened Plants. Our review indicates that the threats to Geocarpon minimum have been eliminated or reduced to the point that the species no longer meets the definition of an endangered or threatened species under the Endangered Species Act of 1973, as amended (Act). Accordingly, we propose to delist Geocarpon minimum. This proposed rule completes the 5-year status revi"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of" target="_blank">Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of" target="_blank" rel="noopener">Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of","Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of","Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -1860,24 +975,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="public land order no. 7966; partial revocation of public land order nos. 5150 and 5180, as amended, modified, or corrected; alaska"
            data-snippet="this order partially revokes two public land orders (plos) insofar as they affect approximately 2,127,845 acres of public land reserved for use as the dalton utility corridor and for study and classification, as appropriate, by the department of the interior. revocation of the plos within the dalton utility corridor opens these lands to mineral and resource development opportunity. the bureau of land management (blm) analyzed partial revocation of these plos in the final environmental impact sta"
            data-urgency="low"
            data-date="2026-02-25"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska"
            data-ad-summary="This order partially revokes two Public Land Orders (PLOs) insofar as they affect approximately 2,127,845 acres of public land reserved for use as the Dalton Utility Corridor and for study and classification, as appropriate, by the Department of the Interior. Revocation of the PLOs within the Dalton Utility Corridor opens these lands to mineral and resource development opportunity. The Bureau of Land Management (BLM) analyzed partial revocation of these PLOs in the Final Environmental Impact Sta"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended" target="_blank">Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended" target="_blank" rel="noopener">Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended","Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended","Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -1899,24 +1024,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="national environmental policy act implementing regulations"
            data-snippet="the department of the interior (department or doi) is adopting the interim final rule (ifr) published on july 3, 2025, with minor changes, as final. in the ifr, doi provided a 30-day comment period for the public to review and make comments. this final rule addresses public comments and adopts as final the ifr, with certain substantive changes as explained herein. the ifr partially rescinded doi&#39;s regulations implementing the national environmental policy act (nepa) and made necessary targeted u"
            data-urgency="low"
            data-date="2026-02-24"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="National Environmental Policy Act Implementing Regulations"
            data-ad-summary="The Department of the Interior (Department or DOI) is adopting the interim final rule (IFR) published on July 3, 2025, with minor changes, as final. In the IFR, DOI provided a 30-day comment period for the public to review and make comments. This final rule addresses public comments and adopts as final the IFR, with certain substantive changes as explained herein. The IFR partially rescinded DOI&#39;s regulations implementing the National Environmental Policy Act (NEPA) and made necessary targeted u"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations" target="_blank">National Environmental Policy Act Implementing Regulations</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations" target="_blank" rel="noopener">National Environmental Policy Act Implementing Regulations</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations","National Environmental Policy Act Implementing Regulations","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations","National Environmental Policy Act Implementing Regulations",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -1938,24 +1073,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="taking and importing marine mammals; taking marine mammals incidental to geophysical surveys in the gulf of america"
            data-snippet="nmfs has received a request for the reimplementation of incidental take regulations (itr) governing the incidental taking of marine mammals during geophysical survey activity conducted in the gulf of america (goa). pursuant to the marine mammal protection act (mmpa), nmfs is requesting comments on its proposed rule and will consider public comments relevant to this proposed rule prior to issuing any final rule."
            data-urgency="low"
            data-date="2026-02-24"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America"
            data-ad-summary="NMFS has received a request for the reimplementation of incidental take regulations (ITR) governing the incidental taking of marine mammals during geophysical survey activity conducted in the Gulf of America (GOA). Pursuant to the Marine Mammal Protection Act (MMPA), NMFS is requesting comments on its proposed rule and will consider public comments relevant to this proposed rule prior to issuing any final rule."
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the" target="_blank">Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the" target="_blank" rel="noopener">Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the","Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the","Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -1977,24 +1122,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="west virginia regulatory program"
            data-snippet="we, the office of surface mining reclamation and enforcement (osmre), are publishing this final rule to amend the existing federal lands cooperative agreement between west virginia and the u.s. department of the interior (department). the surface mining control and reclamation act of 1977 (smcra or the act) and the federal regulations authorize a state with an approved permanent regulatory program to enter into an agreement for the state regulation of surface coal mining and reclamation operatio"
            data-urgency="low"
            data-date="2026-02-20"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="West Virginia Regulatory Program"
            data-ad-summary="We, the Office of Surface Mining Reclamation and Enforcement (OSMRE), are publishing this final rule to amend the existing Federal Lands Cooperative Agreement between West Virginia and the U.S. Department of the Interior (Department). The Surface Mining Control and Reclamation Act of 1977 (SMCRA or the Act) and the Federal regulations authorize a State with an approved permanent regulatory program to enter into an agreement for the State regulation of surface coal mining and reclamation operatio"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program" target="_blank">West Virginia Regulatory Program</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program" target="_blank" rel="noopener">West Virginia Regulatory Program</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program","West Virginia Regulatory Program","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program","West Virginia Regulatory Program",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -2016,24 +1171,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="locatable minerals"
            data-snippet="the u.s. department of agriculture, forest service (agency), is proposing to revise its regulations governing occupancy and use of the surface of national forest system lands in connection with prospecting, exploration, development, mining, processing, and reclamation and reasonably incident uses authorized by u.s. mining laws and the organic administration act of 1897. regulatory revisions are needed to improve the efficiency and transparency of forest service regulation of locatable mineral op"
            data-urgency="low"
            data-date="2026-02-20"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Locatable Minerals"
            data-ad-summary="The U.S. Department of Agriculture, Forest Service (Agency), is proposing to revise its regulations governing occupancy and use of the surface of National Forest System lands in connection with prospecting, exploration, development, mining, processing, and reclamation and reasonably incident uses authorized by U.S. mining laws and the Organic Administration Act of 1897. Regulatory revisions are needed to improve the efficiency and transparency of Forest Service regulation of locatable mineral op"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals" target="_blank">Locatable Minerals</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals" target="_blank" rel="noopener">Locatable Minerals</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals","Locatable Minerals","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals","Locatable Minerals",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -2055,24 +1220,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="rescission of the “ten-day notices and corrective action for state regulatory program issues” rule, issued april 9, 2024"
            data-snippet="the office of surface mining reclamation and enforcement (&#34;osmre&#34; or &#34;osm&#34;) is rescinding the &#34;ten-day notices and corrective action for state regulatory program issues&#34; rule adopted on april 9, 2024 (the &#34;2024 rule&#34;), and replacing it, in large part, with the rule titled, &#34;clarification of provisions related to the issuance of ten-day notices to state regulatory authorities and enhancement of corrective action for state regulatory program issues,&#34; which was first adopted on november 24, 2020 (t"
            data-urgency="low"
            data-date="2026-02-19"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Rescission of the “Ten-Day Notices and Corrective Action for State Regulatory Program Issues” Rule, Issued April 9, 2024"
            data-ad-summary="The Office of Surface Mining Reclamation and Enforcement (&#34;OSMRE&#34; or &#34;OSM&#34;) is rescinding the &#34;Ten-Day Notices and Corrective Action for State Regulatory Program Issues&#34; rule adopted on April 9, 2024 (the &#34;2024 Rule&#34;), and replacing it, in large part, with the rule titled, &#34;Clarification of Provisions Related to the Issuance of Ten-Day Notices to State Regulatory Authorities and Enhancement of Corrective Action for State Regulatory Program Issues,&#34; which was first adopted on November 24, 2020 (t"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule" target="_blank">Rescission of the “Ten-Day Notices and Corrective Action for State Regulatory Program Issues” Rule, Issued April 9, 2024</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule" target="_blank" rel="noopener">Rescission of the “Ten-Day Notices and Corrective Action for State Regulatory Program Issues” Rule, Issued April 9, 2024</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule","Rescission of the \u201cTen-Day Notices and Corrective Action for State Regulatory Program Issues\u201d Rule, Issued April 9, 2024","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule","Rescission of the \u201cTen-Day Notices and Corrective Action for State Regulatory Program Issues\u201d Rule, Issued April 9, 2024",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -2094,24 +1269,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="tongass national forest; alaska; land management plan revision"
            data-snippet="the u.s. department of agriculture, forest service is revising the land management plan for the tongass national forest. this notice announces the forest service&#39;s initiation of the development of a revised land management plan (revised plan) and intent to prepare an environmental impact statement (eis) to evaluate the effects of revising the current plan. this notice initiates the scoping period on the development of the proposed action and eis. this notice also describes the documents and back"
            data-urgency="low"
            data-date="2026-02-18"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="Tongass National Forest; Alaska; Land Management Plan Revision"
            data-ad-summary="The U.S. Department of Agriculture, Forest Service is revising the land management plan for the Tongass National Forest. This notice announces the Forest Service&#39;s initiation of the development of a revised land management plan (revised plan) and intent to prepare an environmental impact statement (EIS) to evaluate the effects of revising the current plan. This notice initiates the scoping period on the development of the proposed action and EIS. This notice also describes the documents and back"
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision" target="_blank">Tongass National Forest; Alaska; Land Management Plan Revision</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision" target="_blank" rel="noopener">Tongass National Forest; Alaska; Land Management Plan Revision</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision","Tongass National Forest; Alaska; Land Management Plan Revision","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision","Tongass National Forest; Alaska; Land Management Plan Revision",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -2133,24 +1318,34 @@
         
       </div>
       <div class="article-item"
-           style="cursor:pointer;"
-           onclick="openArticleDetailFromEl(event, this)"
            data-headline="united states v. reddy ice llc, et al. proposed final judgment and competitive impact statement"
            data-snippet=""
            data-urgency="low"
            data-date="2026-02-18"
            data-relevance="DIRECT"
-           data-topic="conflictminerals"
+           data-source="Federal Register"
            data-ad-title="United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement"
            data-ad-summary=""
            data-ad-relevance-reason=""
            data-ad-impact=""
-           data-source="Federal Register"
-           data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement">
+           onclick="openArticleDetailFromEl(event, this)"
+           style="cursor:pointer;">
         <div class="article-head">
           <span class="article-headline">
-            <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement" target="_blank">United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement</a>
+            <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement" target="_blank" rel="noopener">United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement</a>
           </span>
+          <div class="article-actions">
+            <button class="fav-btn" data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement"
+                    onclick='openFolderPicker("https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement","United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement","ConflictMinerals",this)'
+                    title="Save article" aria-label="Bookmark">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="send-btn"
+                    onclick='openSendPanel("https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement","United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement",this)'
+                    title="Send to colleague" aria-label="Send">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
           <div class="article-badges">
             
             <span class="badge badge-direct" title="Direct company relevance">Direct</span>
@@ -2364,7 +1559,7 @@
 
 <script>
 var BILL_ANALYSES = {"US_HB7085": {"analyzed_at": "2026-03-24T17:06:43.012238", "bill_number": "HB7085", "bill_title": "To amend the Securities Exchange Act of 1934 to repeal certain disclosure requirements related to conflict minerals, and for other purposes.", "company_impact": {"direct": "If the company is publicly traded and currently files Form SD, repeal eliminates that federal filing obligation \u2014 reducing annual compliance cost and SEC enforcement exposure tied to conflict minerals disclosures. If not publicly traded, direct regulatory impact is nil since Section 1502 only applies to SEC registrants.", "supply_chain": "The real downstream risk is supplier behavior: if Dodd-Frank reporting is repealed, tier-1 and tier-2 suppliers of hardware, mechanical components, and coatings containing tin (solder), tungsten (hardware), and gold (electronic actuators/sensors) will likely stop maintaining smelter-level traceability data, degrading the supply chain visibility the company currently relies on for customer and export compliance inquiries."}, "follow_up_dates": [{"confidence": "probable", "date": "2026-04-30", "event": "Check House floor schedule \u2014 leadership typically schedules Union Calendar bills within 4-8 weeks of reporting; if no floor vote scheduled by end of April, bill may be deprioritized before Memorial Day recess."}, {"confidence": "possible", "date": "2026-05-15", "event": "Watch for Senate companion bill introduction; absence by mid-May significantly reduces bicameral passage probability in this Congress."}, {"confidence": "probable", "date": "2026-07-01", "event": "Mid-year congressional recess begins \u2014 if House has not passed HB7085 by this point, probability of enactment in 119th Congress drops materially."}], "last_action": "Placed on the Union Calendar, Calendar No. 481.", "last_action_date": "2026-03-19", "long_term_trajectory": "Passage probability in the House is plausible given Republican majority control and leadership support for deregulation, but Senate passage faces significant headwinds \u2014 no companion bill has been identified and bipartisan support for conflict minerals accountability has historically been stronger in the Senate. Over the next 6-12 months, expect a House floor vote possible by Q2-Q3 2026 but Senate action uncertain; the most likely outcome is House passage with Senate stall or amendment. Even if it passes, the administration could use rulemaking to effectively neuter Section 1502 enforcement without full repeal, which is already a parallel risk to monitor.", "outlook_event": {"description": "Check House Majority Leader\u0027s floor schedule for HB7085 listing and any Senate companion bill activity. Pull current supplier conflict minerals declaration inventory to identify which declarations are SEC-driven vs. contract-driven. Loop in procurement and legal to assess supplier contract language adequacy if federal mandate is removed. Decision point: whether to proactively amend supplier agreements to require continued 3TG disclosure independent of Dodd-Frank.", "reminder_days_before": 3, "suggested_date": "2026-04-28", "title": "HB7085 Conflict Minerals Repeal \u2014 House Floor Vote Watch"}, "recent_action_analysis": "Placement on the Union Calendar five weeks after introduction, following a narrow 30-24 party-line committee vote, signals the bill is advancing but with meaningful opposition. House leadership controls floor scheduling and has not yet calendared a floor vote, which is the critical bottleneck \u2014 bills can sit on Union Calendar for weeks to months. The narrow committee margin and likely Senate resistance (no companion bill identified) suggest this is advancing but not assured.", "recommended_actions": ["Audit current conflict minerals program now: document which supplier declarations, smelter lists, and RCOI data are held solely because of Form SD obligations versus customer contract requirements \u2014 if repeal passes, contractual obligations survive and you need to know the gap.", "Contact your top 10 hardware and electronics component suppliers this month to understand whether their conflict minerals data collection is driven by their own SEC obligations or yours \u2014 if it\u0027s yours, flag the risk that their data pipelines may go dark post-repeal and build contract language requiring continued disclosure regardless of federal mandate.", "Monitor for Senate companion bill introduction through April 2026; if none appears by May, downgrade active tracking and shift to a quarterly legislative scan posture while keeping supplier contract language in place."], "severity": "MEDIUM", "source_url": "https://legiscan.com/US/bill/HB7085/2025", "stage": "committee", "stage_meaning": "The bill has cleared committee markup and been reported to the full House, placing it on the Union Calendar \u2014 the queue for non-controversial or majority-supported bills awaiting floor scheduling by House leadership. The next step is House floor scheduling by the Majority Leader, followed by a full House vote.", "state": "US", "synopsis": "HB7085 would repeal Section 1502 of Dodd-Frank (codified in the Securities Exchange Act), eliminating the SEC\u0027s mandatory conflict minerals disclosure and due diligence reporting requirement for 3TG minerals (tin, tantalum, tungsten, gold). If enacted, publicly traded companies would no longer be required to file annual Conflict Minerals Reports (Form SD) or conduct RCOI/due diligence on their supply chains for DRC-linked sourcing \u2014 removing the federal regulatory backbone that currently drives supplier disclosure requests across the industry.", "topic": "CONFLICTMINERALS"}};
-var DEADLINE_ANALYSES = {"483": {"analyzed_at": "2026-03-25T00:23:25.015983", "company_impact": {"direct": "If we are an SEC registrant, we have a direct filing obligation and must ensure our Form SD accurately reflects our 2025 RCOI results for all product lines containing 3TG \u2014 particularly hardware-intensive window and door products with metal components. If we are not an SEC registrant, no direct filing obligation exists, but we must still respond to customer conflict minerals inquiries.", "severity": "HIGH", "supply_chain": "Hardware suppliers (hinges, locks, handles, multi-point locking systems), glass coating suppliers, and any electronic/motorized component suppliers are the highest-risk tiers for 3TG presence and require current, completed conflict minerals declarations \u2014 gaps in supplier responses will impair our ability to complete an RCOI or CMR. Tier-2 smelter/refiner data obtained through the Responsible Minerals Initiative (RMI) CMRT process is the industry-standard evidence base."}, "deadline_date": "2026-05-31", "deadline_id": 483, "description": "File Form SD conflict minerals disclosure report with SEC for calendar-year issuers.", "jurisdiction": "Federal", "outlook_event": {"description": "30-day checkpoint before the May 31, 2026 SEC Form SD filing deadline. Review team must confirm: (1) RCOI is complete with all supplier CMRTs collected, (2) Form SD draft and any required CMR exhibit are finalized and with legal counsel, (3) EDGAR filing credentials and authorized signatory are confirmed. Compliance lead, CFO, and outside securities counsel must be present. Any unresolved supplier gaps or legal questions must be escalated immediately \u2014 there is no extension available for this deadline.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "SEC Form SD Conflict Minerals Filing Review [Federal]"}, "penalties": "Failure to file or a materially false/misleading Form SD exposes an SEC registrant to SEC enforcement action, including civil penalties and potential cease-and-desist orders; there is no private right of action, but noncompliance creates material securities law liability and reputational risk with investors and customers. Non-SEC issuers face no direct SEC penalty, but downstream customers who are SEC issuers may reject components without adequate conflict minerals documentation, creating commercial market-access risk.", "preparation_timeline": [{"action": "Chase down all outstanding supplier Conflict Minerals Reporting Template (CMRT) responses; escalate non-responders to procurement leads for contract leverage. Compile complete 3TG necessity determination for all product lines and document the RCOI methodology. Engage outside securities counsel to review Form SD draft structure and determine whether a full CMR exhibit is required based on RCOI results.", "days_before": 60}, {"action": "Finalize RCOI findings and complete draft Form SD (and CMR if applicable); submit to legal and executive sign-off. Verify EDGAR filing credentials are current and the authorized officer (CEO/CFO typically signs Form SD) is available and briefed. Conduct final review of smelter/refiner lists against RMI\u0027s conformant smelter database to support any DRC-free or due-diligence claims.", "days_before": 30}, {"action": "File completed Form SD (and CMR exhibit if required) via SEC EDGAR no later than May 31, 2026. Retain all underlying RCOI documentation, supplier CMRTs, and due diligence records for a minimum of five years to support any future SEC inquiry or customer audit. Confirm filing acceptance receipt from EDGAR and archive confirmation internally.", "days_before": 0}], "recommended_actions": ["Immediately confirm with legal/finance whether the company is an SEC Exchange Act registrant \u2014 if yes, escalate Form SD preparation to HIGH priority and confirm outside securities counsel is engaged; if no, document that determination and pivot to customer-facing CMRT response readiness only.", "Pull the current CMRT response log from your conflict minerals tracking system and identify all hardware, coating, and electronic component suppliers who have not returned a completed CMRT for 2025 \u2014 send final escalation notices to procurement this week with a response deadline of April 15 to allow RCOI completion time.", "Schedule a Form SD legal review meeting for the week of April 20 with securities counsel, the compliance lead, and the CFO/signing officer to review draft disclosures, confirm the DRC-sourcing risk determination, and lock the filing narrative before the May 31 deadline."], "related_context": "The Conflict Minerals rule operates in parallel with UFLPA forced labor due diligence \u2014 both programs require supply chain transparency into high-risk sourcing regions, and supplier engagement efforts can be coordinated to reduce duplication. Additionally, several customers and OEMs independently require annual CMRT submissions regardless of SEC registrant status, so maintaining a live conflict minerals program has commercial value beyond the SEC filing itself.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "SEC Form SD Conflict Minerals Annual Filing", "topic": "CONFLICTMINERALS", "urgency": "HIGH", "what_is_required": "SEC-reporting companies that manufacture or contract to manufacture products must file Form SD (Specialized Disclosure Report) with the SEC by May 31, 2026 for the calendar year 2025, disclosing whether conflict minerals (tin, tantalum, tungsten, gold \u2014 3TG) are necessary to the functionality or production of their products. If 3TG are present, the issuer must conduct a reasonable country-of-origin inquiry (RCOI) and, if sourcing from covered countries cannot be ruled out, perform due diligence per an internationally recognized framework (e.g., OECD Due Diligence Guidance) and potentially file a Conflict Minerals Report (CMR) as an exhibit. The regulatory basis is Dodd-Frank Wall Street Reform Act Section 1502 and the SEC\u0027s implementing rule at 17 CFR \u00a7240.13p-1.", "what_we_must_do": "First, confirm whether our company is an SEC reporting issuer (Exchange Act registrant); if we are privately held and not SEC-registered, this filing obligation does not apply and no Form SD is required. If we are SEC-registered, we must determine whether tin, tantalum, tungsten, or gold are necessary to the functionality or production of our windows and doors \u2014 common exposure points include hardware (hinges, locks, latches containing tin-solder or tungsten), glass coatings, and electronic components in smart/automated products. If 3TG are necessary, we must complete our RCOI using supplier declarations collected via our Conflict Minerals program, assess DRC-region sourcing risk, prepare the Form SD (and CMR if required), have legal/external counsel review it, and file via EDGAR no later than May 31, 2026.", "who_must_comply": "This requirement applies exclusively to companies that are SEC reporting issuers (i.e., registered under the Securities Exchange Act of 1934 and required to file annual reports) AND that manufacture or contract to manufacture products for which 3TG are necessary to functionality or production. There are no revenue or employee size thresholds \u2014 any qualifying SEC registrant must comply, regardless of company size."}, "494": {"analyzed_at": "2026-03-25T00:25:05.403403", "company_impact": {"direct": "If we are an SEC-reporting issuer, we have a hard May 31 EDGAR filing deadline with no extension mechanism; a missed filing is an immediate public violation. Even if we are a private company, many of our OEM and retail customers (who are SEC filers) will require our CMRT data to satisfy their own filings, creating a commercial obligation with equivalent urgency.", "severity": "HIGH", "supply_chain": "Metal hardware components (hinges, locks, window operators, fasteners), any PCB-based or sensor assemblies, and plated or soldered components are the highest-risk purchased categories for 3TG content; suppliers of these parts \u2014 especially those sourcing from Asian smelters \u2014 must provide current CMRTs to support our RCOI before we can finalize the filing."}, "deadline_date": "2026-05-31", "deadline_id": 494, "description": "File Form SD conflict minerals report with SEC for calendar year 2025 3TG usage.", "jurisdiction": "Federal", "outlook_event": {"description": "Review checkpoint for the May 31, 2026 Form SD filing covering CY2025 3TG usage. Verify that all CMRT supplier responses have been received and reconciled, RCOI conclusion is documented, and the Form SD draft (plus Conflict Minerals Report exhibit if required) has been reviewed by legal counsel. Confirm EDGAR account credentials are active and website publication process is ready. Attendees: Compliance Lead, General Counsel, CFO or designated executive signatory.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "SEC Form SD Conflict Minerals Filing \u2014 Final Review [Federal]"}, "penalties": "Failure to file Form SD is a violation of the Securities Exchange Act and SEC rules, exposing the company to SEC enforcement action including cease-and-desist orders, civil monetary penalties, and reputational damage from public enforcement proceedings. There is no private right of action under Section 1502, but a missed or materially deficient filing creates securities disclosure liability risk and can trigger investor and customer scrutiny, particularly from ESG-focused stakeholders.", "preparation_timeline": [{"action": "TODAY IS 67 DAYS OUT \u2014 treat this as the 60-day milestone: confirm whether the company is an SEC reporting issuer obligated to file; simultaneously blast CMRT data requests to all direct suppliers of metal-containing components with a 21-day response deadline; pull prior-year CMRTs from supplier portal and identify gaps.", "days_before": 60}, {"action": "By May 1: complete RCOI \u2014 compile all CMRT responses, flag any Covered Country smelters identified, and make a preliminary determination (not from covered countries / undeterminable / conflict-free). Draft Form SD and, if a Conflict Minerals Report is required, draft that exhibit with due diligence findings and steps taken. Route draft to legal counsel and executive signatory for review.", "days_before": 30}, {"action": "By May 31: obtain final executive sign-off, submit Form SD (with any required Conflict Minerals Report exhibit) via EDGAR, and simultaneously publish the filing on the company\u0027s public-facing website. Retain all CMRT source data, RCOI documentation, and due diligence records for at least five years.", "days_before": 0}], "recommended_actions": ["Within 48 hours: confirm SEC reporting status with corporate counsel and CFO; if confirmed, formally open the Form SD project in your compliance tracking system, assign an executive signatory, and issue CMRT 6.0 data requests immediately to all direct suppliers of hardware, fasteners, coatings, and electronic subassemblies \u2014 deadline for supplier response: April 15.", "By April 10: conduct an internal product-scope review to produce a written list of product lines where 3TG are \u0027necessary to functionality or production,\u0027 documenting the analysis \u2014 this is the foundation of the RCOI and will be reviewed by SEC staff if the filing is ever examined.", "By May 1: complete gap-chase on any non-responding suppliers (escalate to procurement/commercial leads for leverage), finalize RCOI conclusion, and deliver full draft Form SD plus any required Conflict Minerals Report exhibit to legal counsel for review, leaving a 30-day buffer for revisions before the hard May 31 deadline."], "related_context": "Form SD is an annual obligation tied to the calendar year; the May 31 deadline is fixed by Rule 13p-1 with no provision for extension, making it harder than most SEC filings. This filing feeds directly into customer supply chain compliance programs (many large window/door buyers are themselves SEC filers who need our CMRT data weeks before their own May 31 deadline), and the data infrastructure built here \u2014 supplier CMRT collection, smelter mapping \u2014 overlaps substantially with the REACH SVHC and forced labor (UFLPA) supply chain traceability work already underway on our Assent platform.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "Form SD Conflict Minerals Filing Deadline", "topic": "CONFLICTMINERALS", "urgency": "HIGH", "what_is_required": "SEC-reporting issuers that manufacture or contract to manufacture products must file Form SD (and, if required, a Conflict Minerals Report as an exhibit) with the SEC by May 31, 2026, covering calendar year 2025 use of tin, tantalum, tungsten, and gold (3TG). The obligation arises under Dodd-Frank Act Section 1502 and SEC Rule 13p-1 (17 CFR 240.13p-1), which require a reasonable country-of-origin inquiry (RCOI) and, where 3TG may originate from Covered Countries (DRC and adjoining nations), a supply chain due diligence exercise conforming to an internationally recognized framework (e.g., OECD Due Diligence Guidance). The filing must be publicly posted on the company\u0027s website on the same day it is submitted to EDGAR.", "what_we_must_do": "As a manufacturer of windows and doors that is (or may be) an SEC reporting issuer, we must determine whether 3TG are necessary to the functionality or production of any of our products \u2014 focusing specifically on hardware components (hinges, locks, latches, operators), coatings, solder, and electronic control or sensor assemblies, all of which are plausible 3TG vectors. If our RCOI concludes 3TG are used and may originate from Covered Countries, we must complete supply chain due diligence, prepare a Conflict Minerals Report, and file both Form SD and the report (or Form SD alone with a \u0027DRC conflict undeterminable\u0027 or \u0027not from covered countries\u0027 conclusion) on EDGAR by May 31, 2026, and simultaneously publish on our website. On the procurement side, we must collect supplier-level 3TG declarations (ideally via the CMRT \u2014 Responsible Minerals Initiative template) from all direct material suppliers of metal-containing components to support our RCOI.", "who_must_comply": "Any issuer registered under Exchange Act Sections 12 or 15(d) that manufactures, or contracts to manufacture, products for which 3TG are necessary to the functionality or production of those products must comply \u2014 there is no revenue or employee-size exemption. The rule applies regardless of where manufacturing occurs; a US-listed company contracting overseas production is equally covered."}, "548": {"analyzed_at": "2026-03-26T06:26:34.713107", "company_impact": {"direct": "If the company is privately held, there is no direct Form SD filing obligation; however, if it is publicly traded or planning an IPO/SPAC, the May 31 deadline is a hard SEC filing date with legal exposure for non-compliance.", "severity": "MONITORING", "supply_chain": "Hardware components (hinges, locks, handles), electronic sub-assemblies, and any soldered or plated metal parts in windows and doors are the primary 3TG risk categories; suppliers of these components should have current CMRT declarations on file to support customer and investor due diligence requests regardless of the company\u0027s own filing status."}, "deadline_date": "2026-05-31", "deadline_id": 548, "description": "Calendar-year issuers must file annual Form SD with SEC disclosing 3TG conflict minerals usage and sourcing practices.", "jurisdiction": "Federal", "outlook_event": {"description": "Review and confirm the company\u0027s SEC reporting issuer status to determine whether a Form SD filing is required by May 31, 2026. If public, verify that the Conflict Minerals Report draft is complete and under securities counsel review. Confirm supplier CMRT database is current for hardware, metal, and electronics component categories. Involve legal counsel, the supply chain/procurement team, and the CFO or SEC reporting function.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "Federal | Form SD Conflict Minerals Filing \u2013 Review Checkpoint"}, "penalties": "Non-compliant public issuers face SEC enforcement action including civil monetary penalties and potential reputational/investor relations damage from a deficient or missing filing. There is no private right of action, but failure to file or materially false disclosures can trigger SEC investigation under the Exchange Act\u0027s anti-fraud provisions.", "preparation_timeline": [{"action": "Confirm the company\u0027s SEC reporting issuer status with legal counsel. If public, immediately inventory all product lines to identify which contain 3TG-containing components and scope the RCOI. If private, document the determination and retain it to respond to customer or acquirer requests.", "days_before": 60}, {"action": "If a public issuer: complete supplier RCOI outreach using RMI CMRT templates, consolidate responses, and draft the Form SD and Conflict Minerals Report (if required). Engage securities counsel to review the draft filing. If private: ensure supplier CMRT database is current and accessible for customer audits.", "days_before": 30}, {"action": "If a public issuer: file completed Form SD (and CMR attachment if required) on EDGAR by 11:59 PM ET on May 31, 2026. Retain all supporting documentation \u2014 supplier responses, RCOI methodology, due diligence records \u2014 for at least five years. If private: confirm supplier declaration archive is updated and accessible.", "days_before": 0}], "recommended_actions": ["Confirm with legal counsel today whether the company is an SEC reporting issuer subject to Form SD; document the conclusion and store it in the compliance record to close out this deadline definitively as either active or monitoring.", "Regardless of SEC status, run a gap check on your supplier CMRT database \u2014 identify any hardware, electronics, or metal component suppliers without a current (2024 or 2025 reporting year) CMRT on file and issue a collection request now, since this data will be demanded by publicly traded customers and in any M\u0026A due diligence.", "Flag this deadline for re-evaluation if the company undergoes an IPO, SPAC transaction, or is acquired by a public company, as any such event would immediately create a retroactive Form SD compliance obligation requiring historical 3TG supply chain documentation."], "related_context": "Form SD is an annual obligation tied to the calendar year; the 2026 filing covers fiscal year 2025 supply chain activity. Companies that identify smelters/refiners of unknown origin may need to escalate to a full OECD-aligned due diligence program, which would also feed into customer-facing ESG reporting and any future EU Conflict Minerals Regulation obligations for products exported to Europe.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "Form SD Conflict Minerals Annual Filing", "topic": "CONFLICTMINERALS", "urgency": "MEDIUM", "what_is_required": "Calendar-year SEC reporting issuers must file Form SD (Specialized Disclosure Report) with the SEC by May 31, 2026, disclosing whether tin, tantalum, tungsten, or gold (3TG) are necessary to the functionality or production of their manufactured or contracted products. If 3TG are present, the issuer must attach a Conflict Minerals Report (CMR) describing the reasonable country of origin inquiry (RCOI) and, if warranted, a due diligence program conforming to an internationally recognized framework such as the OECD Due Diligence Guidance. The regulatory basis is Section 1502 of the Dodd-Frank Wall Street Reform and Consumer Protection Act and SEC Release No. 34-67716.", "what_we_must_do": "First, confirm whether the company is an SEC-registered reporting issuer; if it is privately held, Form SD does not apply directly, and this deadline is MONITORING-only for our direct filing obligations. If the company is or becomes a public reporting issuer, it must conduct an RCOI across its product lines \u2014 windows and doors \u2014 to determine whether 3TG (e.g., tungsten in hardware/fasteners, tin in solder or coatings, gold in electronic components, tantalum in capacitors) are necessary to functionality or production. On the supply chain side, the company should maintain supplier 3TG declarations (e.g., via CMRT templates from the Responsible Minerals Initiative) because publicly traded customers or acquirers will request this data, and having it current protects future M\u0026A and customer audit scenarios.", "who_must_comply": "Public companies (SEC reporting issuers) that manufacture or contract to manufacture products for which 3TG are necessary to the functionality or production of those products must comply \u2014 there is no revenue or employee size threshold exemption. Private companies are not subject to Form SD, but their publicly traded customers may impose supply chain due diligence obligations on them."}, "580": {"analyzed_at": "2026-03-27T06:23:09.968150", "company_impact": {"direct": "If we are an SEC registrant, we have a hard May 31 EDGAR filing deadline for Form SD covering CY2025 \u2014 missing it constitutes a reporting violation. The disclosure also becomes part of our permanent public record, so accuracy and completeness of the RCOI and any accompanying Conflict Minerals Report are material to our regulatory and reputational standing.", "severity": "HIGH", "supply_chain": "Window and door components most at risk for 3TG content include hardware (hinges, locks, handles \u2014 potential tin/tungsten in alloys or coatings), motors and sensors in powered products (tantalum capacitors, tungsten contacts), and any electronic control boards (all four minerals plausible). Suppliers in these categories must have returned CY2025 CMRTs before we can complete our RCOI."}, "deadline_date": "2026-05-31", "deadline_id": 580, "description": "Companies must file Form SD conflict minerals reports with the SEC for calendar year 2025 by this date.", "jurisdiction": "Federal", "outlook_event": {"description": "Review and finalize draft Form SD (and Conflict Minerals Report exhibit if required) for CY2025 conflict minerals disclosure due May 31 on EDGAR. Verify all supplier CMRTs have been received and RCOI analysis is complete. Confirm no Covered Country sourcing flags remain unresolved. Attendees: compliance lead, legal counsel, CFO/disclosure committee representative.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "SEC Form SD CY2025 Filing \u2014 30-Day Review Checkpoint"}, "penalties": "The SEC can bring enforcement actions for failure to file or materially false/misleading disclosures, potentially resulting in civil monetary penalties and reputational damage from public enforcement proceedings. Beyond formal penalties, failure to file or filing an inadequate Form SD exposes the company to investor, NGO, and media scrutiny, and activist shareholder actions, particularly given the heightened ESG disclosure environment.", "preparation_timeline": [{"action": "Today (65 days out) through this milestone: confirm all hardware, electronics, and mechanical component suppliers have returned CY2025 CMRTs; escalate outstanding requests immediately with a hard response deadline of April 10. Simultaneously confirm SEC registrant status with legal/finance to lock scope.", "days_before": 60}, {"action": "By May 1: complete RCOI analysis against all received CMRTs; identify any suppliers indicating DRC or adjoining country sourcing; prepare initial draft of Form SD and, if required, the Conflict Minerals Report exhibit. Route to legal counsel and CFO/disclosure committee for review.", "days_before": 30}, {"action": "By May 31: finalize Form SD (and Conflict Minerals Report if applicable), obtain all required certifications and sign-offs, and file on EDGAR. Confirm EDGAR receipt/acceptance and archive the complete filing package with supporting RCOI documentation for audit readiness.", "days_before": 0}], "recommended_actions": ["Immediately audit CMRT response status for all CY2025 open requests \u2014 identify every hardware, electronics, and mechanical supplier who has not responded and send escalation notices today with an April 10 hard deadline, flagging that non-response may result in sourcing review.", "Confirm with legal and finance by April 4 whether the company is an SEC Exchange Act reporting issuer; if yes, assign Form SD drafting responsibility and schedule a May 1 disclosure committee review checkpoint now.", "Pull all CY2025 CMRT responses received to date into the RCOI analysis tool, flag any Covered Country indications, and prepare a preliminary risk summary by April 15 so counsel has adequate time to determine whether a full Conflict Minerals Report exhibit is required before drafting begins."], "related_context": "Form SD is an annual obligation tied to the SEC\u0027s Exchange Act reporting calendar \u2014 CY2025 data is due May 31, 2026, and the same cycle will repeat for CY2026 data due May 31, 2027. This filing is downstream of the OECD-aligned due diligence program that should be running year-round; any gaps in supplier CMRT collection during 2025 now create acute filing risk. EU Conflict Minerals Regulation (EU 2017/821) imposes parallel due diligence obligations on EU importers of 3TG and may affect suppliers or customers in our European distribution chain.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "Form SD conflict minerals disclosure filing deadline", "topic": "CONFLICTMINERALS", "urgency": "HIGH", "what_is_required": "SEC-registered companies that manufacture or contract-manufacture products for which conflict minerals (tin, tantalum, tungsten, gold \u2014 \u00273TG\u0027) are necessary to the functionality or production must file Form SD (and, where required, a Conflict Minerals Report as an exhibit) with the SEC by May 31, 2026, covering calendar year 2025 activity. This obligation arises under Dodd-Frank Act Section 1502 and SEC Rule 13p-1 (17 CFR 240.13p-1). The filing must describe the company\u0027s reasonable country-of-origin inquiry (RCOI) and, if minerals may originate from Covered Countries (DRC and adjoining nations), a supply chain due diligence program conforming to an internationally recognized framework such as the OECD Due Diligence Guidance.", "what_we_must_do": "First, confirm whether the company is an SEC reporting issuer \u2014 if it is privately held and not an SEC registrant, this filing obligation does not apply and the severity should be treated as monitoring only. If we are an SEC registrant, we must complete our CY2025 RCOI for all products where 3TG may be necessary, compile supplier-level 3TG sourcing data (leveraging CMRT responses already collected through our Dodd-Frank supplier outreach), assess whether any minerals may originate from Covered Countries, and file a compliant Form SD (with or without a full Conflict Minerals Report as an exhibit depending on RCOI findings) on EDGAR by May 31. On the supply chain side, we must ensure all component suppliers \u2014 particularly those providing hardware, fasteners, sensors, motors, and coated glass components where 3TG are plausible \u2014 have returned completed CMRTs for CY2025 so our due diligence documentation is defensible.", "who_must_comply": "Any SEC reporting company (i.e., subject to Exchange Act reporting obligations) that manufactures or contracts to manufacture products for which 3TG are necessary to functionality or production must comply. There is no size or revenue threshold exemption; the determining factors are SEC registrant status and whether 3TG are necessary to the product."}};
+var DEADLINE_ANALYSES = {"483": {"analyzed_at": "2026-03-25T00:23:25.015983", "company_impact": {"direct": "If we are an SEC registrant, we have a direct filing obligation and must ensure our Form SD accurately reflects our 2025 RCOI results for all product lines containing 3TG \u2014 particularly hardware-intensive window and door products with metal components. If we are not an SEC registrant, no direct filing obligation exists, but we must still respond to customer conflict minerals inquiries.", "severity": "HIGH", "supply_chain": "Hardware suppliers (hinges, locks, handles, multi-point locking systems), glass coating suppliers, and any electronic/motorized component suppliers are the highest-risk tiers for 3TG presence and require current, completed conflict minerals declarations \u2014 gaps in supplier responses will impair our ability to complete an RCOI or CMR. Tier-2 smelter/refiner data obtained through the Responsible Minerals Initiative (RMI) CMRT process is the industry-standard evidence base."}, "deadline_date": "2026-05-31", "deadline_id": 483, "description": "File Form SD conflict minerals disclosure report with SEC for calendar-year issuers.", "jurisdiction": "Federal", "outlook_event": {"description": "30-day checkpoint before the May 31, 2026 SEC Form SD filing deadline. Review team must confirm: (1) RCOI is complete with all supplier CMRTs collected, (2) Form SD draft and any required CMR exhibit are finalized and with legal counsel, (3) EDGAR filing credentials and authorized signatory are confirmed. Compliance lead, CFO, and outside securities counsel must be present. Any unresolved supplier gaps or legal questions must be escalated immediately \u2014 there is no extension available for this deadline.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "SEC Form SD Conflict Minerals Filing Review [Federal]"}, "penalties": "Failure to file or a materially false/misleading Form SD exposes an SEC registrant to SEC enforcement action, including civil penalties and potential cease-and-desist orders; there is no private right of action, but noncompliance creates material securities law liability and reputational risk with investors and customers. Non-SEC issuers face no direct SEC penalty, but downstream customers who are SEC issuers may reject components without adequate conflict minerals documentation, creating commercial market-access risk.", "preparation_timeline": [{"action": "Chase down all outstanding supplier Conflict Minerals Reporting Template (CMRT) responses; escalate non-responders to procurement leads for contract leverage. Compile complete 3TG necessity determination for all product lines and document the RCOI methodology. Engage outside securities counsel to review Form SD draft structure and determine whether a full CMR exhibit is required based on RCOI results.", "days_before": 60}, {"action": "Finalize RCOI findings and complete draft Form SD (and CMR if applicable); submit to legal and executive sign-off. Verify EDGAR filing credentials are current and the authorized officer (CEO/CFO typically signs Form SD) is available and briefed. Conduct final review of smelter/refiner lists against RMI\u0027s conformant smelter database to support any DRC-free or due-diligence claims.", "days_before": 30}, {"action": "File completed Form SD (and CMR exhibit if required) via SEC EDGAR no later than May 31, 2026. Retain all underlying RCOI documentation, supplier CMRTs, and due diligence records for a minimum of five years to support any future SEC inquiry or customer audit. Confirm filing acceptance receipt from EDGAR and archive confirmation internally.", "days_before": 0}], "recommended_actions": ["Immediately confirm with legal/finance whether the company is an SEC Exchange Act registrant \u2014 if yes, escalate Form SD preparation to HIGH priority and confirm outside securities counsel is engaged; if no, document that determination and pivot to customer-facing CMRT response readiness only.", "Pull the current CMRT response log from your conflict minerals tracking system and identify all hardware, coating, and electronic component suppliers who have not returned a completed CMRT for 2025 \u2014 send final escalation notices to procurement this week with a response deadline of April 15 to allow RCOI completion time.", "Schedule a Form SD legal review meeting for the week of April 20 with securities counsel, the compliance lead, and the CFO/signing officer to review draft disclosures, confirm the DRC-sourcing risk determination, and lock the filing narrative before the May 31 deadline."], "related_context": "The Conflict Minerals rule operates in parallel with UFLPA forced labor due diligence \u2014 both programs require supply chain transparency into high-risk sourcing regions, and supplier engagement efforts can be coordinated to reduce duplication. Additionally, several customers and OEMs independently require annual CMRT submissions regardless of SEC registrant status, so maintaining a live conflict minerals program has commercial value beyond the SEC filing itself.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "SEC Form SD Conflict Minerals Annual Filing", "topic": "CONFLICTMINERALS", "urgency": "HIGH", "what_is_required": "SEC-reporting companies that manufacture or contract to manufacture products must file Form SD (Specialized Disclosure Report) with the SEC by May 31, 2026 for the calendar year 2025, disclosing whether conflict minerals (tin, tantalum, tungsten, gold \u2014 3TG) are necessary to the functionality or production of their products. If 3TG are present, the issuer must conduct a reasonable country-of-origin inquiry (RCOI) and, if sourcing from covered countries cannot be ruled out, perform due diligence per an internationally recognized framework (e.g., OECD Due Diligence Guidance) and potentially file a Conflict Minerals Report (CMR) as an exhibit. The regulatory basis is Dodd-Frank Wall Street Reform Act Section 1502 and the SEC\u0027s implementing rule at 17 CFR \u00a7240.13p-1.", "what_we_must_do": "First, confirm whether our company is an SEC reporting issuer (Exchange Act registrant); if we are privately held and not SEC-registered, this filing obligation does not apply and no Form SD is required. If we are SEC-registered, we must determine whether tin, tantalum, tungsten, or gold are necessary to the functionality or production of our windows and doors \u2014 common exposure points include hardware (hinges, locks, latches containing tin-solder or tungsten), glass coatings, and electronic components in smart/automated products. If 3TG are necessary, we must complete our RCOI using supplier declarations collected via our Conflict Minerals program, assess DRC-region sourcing risk, prepare the Form SD (and CMR if required), have legal/external counsel review it, and file via EDGAR no later than May 31, 2026.", "who_must_comply": "This requirement applies exclusively to companies that are SEC reporting issuers (i.e., registered under the Securities Exchange Act of 1934 and required to file annual reports) AND that manufacture or contract to manufacture products for which 3TG are necessary to functionality or production. There are no revenue or employee size thresholds \u2014 any qualifying SEC registrant must comply, regardless of company size."}, "494": {"analyzed_at": "2026-03-25T00:25:05.403403", "company_impact": {"direct": "If we are an SEC-reporting issuer, we have a hard May 31 EDGAR filing deadline with no extension mechanism; a missed filing is an immediate public violation. Even if we are a private company, many of our OEM and retail customers (who are SEC filers) will require our CMRT data to satisfy their own filings, creating a commercial obligation with equivalent urgency.", "severity": "HIGH", "supply_chain": "Metal hardware components (hinges, locks, window operators, fasteners), any PCB-based or sensor assemblies, and plated or soldered components are the highest-risk purchased categories for 3TG content; suppliers of these parts \u2014 especially those sourcing from Asian smelters \u2014 must provide current CMRTs to support our RCOI before we can finalize the filing."}, "deadline_date": "2026-05-31", "deadline_id": 494, "description": "File Form SD conflict minerals report with SEC for calendar year 2025 3TG usage.", "jurisdiction": "Federal", "outlook_event": {"description": "Review checkpoint for the May 31, 2026 Form SD filing covering CY2025 3TG usage. Verify that all CMRT supplier responses have been received and reconciled, RCOI conclusion is documented, and the Form SD draft (plus Conflict Minerals Report exhibit if required) has been reviewed by legal counsel. Confirm EDGAR account credentials are active and website publication process is ready. Attendees: Compliance Lead, General Counsel, CFO or designated executive signatory.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "SEC Form SD Conflict Minerals Filing \u2014 Final Review [Federal]"}, "penalties": "Failure to file Form SD is a violation of the Securities Exchange Act and SEC rules, exposing the company to SEC enforcement action including cease-and-desist orders, civil monetary penalties, and reputational damage from public enforcement proceedings. There is no private right of action under Section 1502, but a missed or materially deficient filing creates securities disclosure liability risk and can trigger investor and customer scrutiny, particularly from ESG-focused stakeholders.", "preparation_timeline": [{"action": "TODAY IS 67 DAYS OUT \u2014 treat this as the 60-day milestone: confirm whether the company is an SEC reporting issuer obligated to file; simultaneously blast CMRT data requests to all direct suppliers of metal-containing components with a 21-day response deadline; pull prior-year CMRTs from supplier portal and identify gaps.", "days_before": 60}, {"action": "By May 1: complete RCOI \u2014 compile all CMRT responses, flag any Covered Country smelters identified, and make a preliminary determination (not from covered countries / undeterminable / conflict-free). Draft Form SD and, if a Conflict Minerals Report is required, draft that exhibit with due diligence findings and steps taken. Route draft to legal counsel and executive signatory for review.", "days_before": 30}, {"action": "By May 31: obtain final executive sign-off, submit Form SD (with any required Conflict Minerals Report exhibit) via EDGAR, and simultaneously publish the filing on the company\u0027s public-facing website. Retain all CMRT source data, RCOI documentation, and due diligence records for at least five years.", "days_before": 0}], "recommended_actions": ["Within 48 hours: confirm SEC reporting status with corporate counsel and CFO; if confirmed, formally open the Form SD project in your compliance tracking system, assign an executive signatory, and issue CMRT 6.0 data requests immediately to all direct suppliers of hardware, fasteners, coatings, and electronic subassemblies \u2014 deadline for supplier response: April 15.", "By April 10: conduct an internal product-scope review to produce a written list of product lines where 3TG are \u0027necessary to functionality or production,\u0027 documenting the analysis \u2014 this is the foundation of the RCOI and will be reviewed by SEC staff if the filing is ever examined.", "By May 1: complete gap-chase on any non-responding suppliers (escalate to procurement/commercial leads for leverage), finalize RCOI conclusion, and deliver full draft Form SD plus any required Conflict Minerals Report exhibit to legal counsel for review, leaving a 30-day buffer for revisions before the hard May 31 deadline."], "related_context": "Form SD is an annual obligation tied to the calendar year; the May 31 deadline is fixed by Rule 13p-1 with no provision for extension, making it harder than most SEC filings. This filing feeds directly into customer supply chain compliance programs (many large window/door buyers are themselves SEC filers who need our CMRT data weeks before their own May 31 deadline), and the data infrastructure built here \u2014 supplier CMRT collection, smelter mapping \u2014 overlaps substantially with the REACH SVHC and forced labor (UFLPA) supply chain traceability work already underway on our Assent platform.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "Form SD Conflict Minerals Filing Deadline", "topic": "CONFLICTMINERALS", "urgency": "HIGH", "what_is_required": "SEC-reporting issuers that manufacture or contract to manufacture products must file Form SD (and, if required, a Conflict Minerals Report as an exhibit) with the SEC by May 31, 2026, covering calendar year 2025 use of tin, tantalum, tungsten, and gold (3TG). The obligation arises under Dodd-Frank Act Section 1502 and SEC Rule 13p-1 (17 CFR 240.13p-1), which require a reasonable country-of-origin inquiry (RCOI) and, where 3TG may originate from Covered Countries (DRC and adjoining nations), a supply chain due diligence exercise conforming to an internationally recognized framework (e.g., OECD Due Diligence Guidance). The filing must be publicly posted on the company\u0027s website on the same day it is submitted to EDGAR.", "what_we_must_do": "As a manufacturer of windows and doors that is (or may be) an SEC reporting issuer, we must determine whether 3TG are necessary to the functionality or production of any of our products \u2014 focusing specifically on hardware components (hinges, locks, latches, operators), coatings, solder, and electronic control or sensor assemblies, all of which are plausible 3TG vectors. If our RCOI concludes 3TG are used and may originate from Covered Countries, we must complete supply chain due diligence, prepare a Conflict Minerals Report, and file both Form SD and the report (or Form SD alone with a \u0027DRC conflict undeterminable\u0027 or \u0027not from covered countries\u0027 conclusion) on EDGAR by May 31, 2026, and simultaneously publish on our website. On the procurement side, we must collect supplier-level 3TG declarations (ideally via the CMRT \u2014 Responsible Minerals Initiative template) from all direct material suppliers of metal-containing components to support our RCOI.", "who_must_comply": "Any issuer registered under Exchange Act Sections 12 or 15(d) that manufactures, or contracts to manufacture, products for which 3TG are necessary to the functionality or production of those products must comply \u2014 there is no revenue or employee-size exemption. The rule applies regardless of where manufacturing occurs; a US-listed company contracting overseas production is equally covered."}, "548": {"analyzed_at": "2026-03-26T06:26:34.713107", "company_impact": {"direct": "If the company is privately held, there is no direct Form SD filing obligation; however, if it is publicly traded or planning an IPO/SPAC, the May 31 deadline is a hard SEC filing date with legal exposure for non-compliance.", "severity": "MONITORING", "supply_chain": "Hardware components (hinges, locks, handles), electronic sub-assemblies, and any soldered or plated metal parts in windows and doors are the primary 3TG risk categories; suppliers of these components should have current CMRT declarations on file to support customer and investor due diligence requests regardless of the company\u0027s own filing status."}, "deadline_date": "2026-05-31", "deadline_id": 548, "description": "Calendar-year issuers must file annual Form SD with SEC disclosing 3TG conflict minerals usage and sourcing practices.", "jurisdiction": "Federal", "outlook_event": {"description": "Review and confirm the company\u0027s SEC reporting issuer status to determine whether a Form SD filing is required by May 31, 2026. If public, verify that the Conflict Minerals Report draft is complete and under securities counsel review. Confirm supplier CMRT database is current for hardware, metal, and electronics component categories. Involve legal counsel, the supply chain/procurement team, and the CFO or SEC reporting function.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "Federal | Form SD Conflict Minerals Filing \u2013 Review Checkpoint"}, "penalties": "Non-compliant public issuers face SEC enforcement action including civil monetary penalties and potential reputational/investor relations damage from a deficient or missing filing. There is no private right of action, but failure to file or materially false disclosures can trigger SEC investigation under the Exchange Act\u0027s anti-fraud provisions.", "preparation_timeline": [{"action": "Confirm the company\u0027s SEC reporting issuer status with legal counsel. If public, immediately inventory all product lines to identify which contain 3TG-containing components and scope the RCOI. If private, document the determination and retain it to respond to customer or acquirer requests.", "days_before": 60}, {"action": "If a public issuer: complete supplier RCOI outreach using RMI CMRT templates, consolidate responses, and draft the Form SD and Conflict Minerals Report (if required). Engage securities counsel to review the draft filing. If private: ensure supplier CMRT database is current and accessible for customer audits.", "days_before": 30}, {"action": "If a public issuer: file completed Form SD (and CMR attachment if required) on EDGAR by 11:59 PM ET on May 31, 2026. Retain all supporting documentation \u2014 supplier responses, RCOI methodology, due diligence records \u2014 for at least five years. If private: confirm supplier declaration archive is updated and accessible.", "days_before": 0}], "recommended_actions": ["Confirm with legal counsel today whether the company is an SEC reporting issuer subject to Form SD; document the conclusion and store it in the compliance record to close out this deadline definitively as either active or monitoring.", "Regardless of SEC status, run a gap check on your supplier CMRT database \u2014 identify any hardware, electronics, or metal component suppliers without a current (2024 or 2025 reporting year) CMRT on file and issue a collection request now, since this data will be demanded by publicly traded customers and in any M\u0026A due diligence.", "Flag this deadline for re-evaluation if the company undergoes an IPO, SPAC transaction, or is acquired by a public company, as any such event would immediately create a retroactive Form SD compliance obligation requiring historical 3TG supply chain documentation."], "related_context": "Form SD is an annual obligation tied to the calendar year; the 2026 filing covers fiscal year 2025 supply chain activity. Companies that identify smelters/refiners of unknown origin may need to escalate to a full OECD-aligned due diligence program, which would also feed into customer-facing ESG reporting and any future EU Conflict Minerals Regulation obligations for products exported to Europe.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "Form SD Conflict Minerals Annual Filing", "topic": "CONFLICTMINERALS", "urgency": "MEDIUM", "what_is_required": "Calendar-year SEC reporting issuers must file Form SD (Specialized Disclosure Report) with the SEC by May 31, 2026, disclosing whether tin, tantalum, tungsten, or gold (3TG) are necessary to the functionality or production of their manufactured or contracted products. If 3TG are present, the issuer must attach a Conflict Minerals Report (CMR) describing the reasonable country of origin inquiry (RCOI) and, if warranted, a due diligence program conforming to an internationally recognized framework such as the OECD Due Diligence Guidance. The regulatory basis is Section 1502 of the Dodd-Frank Wall Street Reform and Consumer Protection Act and SEC Release No. 34-67716.", "what_we_must_do": "First, confirm whether the company is an SEC-registered reporting issuer; if it is privately held, Form SD does not apply directly, and this deadline is MONITORING-only for our direct filing obligations. If the company is or becomes a public reporting issuer, it must conduct an RCOI across its product lines \u2014 windows and doors \u2014 to determine whether 3TG (e.g., tungsten in hardware/fasteners, tin in solder or coatings, gold in electronic components, tantalum in capacitors) are necessary to functionality or production. On the supply chain side, the company should maintain supplier 3TG declarations (e.g., via CMRT templates from the Responsible Minerals Initiative) because publicly traded customers or acquirers will request this data, and having it current protects future M\u0026A and customer audit scenarios.", "who_must_comply": "Public companies (SEC reporting issuers) that manufacture or contract to manufacture products for which 3TG are necessary to the functionality or production of those products must comply \u2014 there is no revenue or employee size threshold exemption. Private companies are not subject to Form SD, but their publicly traded customers may impose supply chain due diligence obligations on them."}, "583": {"analyzed_at": "2026-03-27T01:29:36.591076", "company_impact": {"direct": "If the company is a privately held manufacturer, there is no direct SEC Form SD filing obligation; however, the company\u0027s window and door hardware components (locks, hinges, operators, electronic actuators) almost certainly contain tin, tungsten, or gold, creating downstream data obligations to public-company customers.", "severity": "MONITORING", "supply_chain": "Hardware, fastener, and electronic/smart-operator suppliers are the highest-risk tiers \u2014 specifically any supplier providing solder-joined assemblies (tin), electromechanical operators or sensors (gold, tungsten), or capacitor-containing circuit boards (tantalum); these suppliers must be capable of providing completed CMRT declarations on request."}, "deadline_date": "2026-05-31", "deadline_id": 583, "description": "SEC issuers must file annual Form SD conflict minerals disclosure covering tantalum, tin, tungsten, and gold.", "jurisdiction": "Federal", "outlook_event": {"description": "Review and confirm company SEC issuer status determination. If public, verify RCOI completion, CMR necessity determination, and Form SD draft is in legal review. If private, confirm all outstanding customer CMRT data requests have been fulfilled and supplier declaration files are current. Involve compliance lead, securities/regulatory counsel, and procurement manager.", "reminder_days_before": 7, "suggested_date": "2026-05-01", "title": "SEC Form SD Conflict Minerals \u2014 Review Checkpoint [Federal]"}, "penalties": "Failure to file or a materially false Form SD exposes a public company to SEC enforcement action including civil monetary penalties, cease-and-desist orders, and reputational damage from public disclosure of non-compliance. There is no private right of action, but chronic non-filers face heightened SEC scrutiny and potential securities fraud liability if omissions are deemed material misstatements.", "preparation_timeline": [{"action": "Confirm whether the company is an SEC-registered issuer. If yes, escalate immediately to securities counsel and begin formal RCOI. If private, document that determination and shift to customer-facing CMRT readiness: pull all outstanding CMRT requests from public-company customers and identify which component suppliers have not returned completed declarations.", "days_before": 60}, {"action": "If a public issuer: complete RCOI, determine whether a full CMR is required, draft Form SD and any CMR exhibit, and circulate to legal, finance, and executive sign-off. If private: compile completed supplier CMRTs into a consolidated 3TG response package that can be sent to any customer requesting data, and flag suppliers who have not responded for escalation or sourcing review.", "days_before": 30}, {"action": "If a public issuer: file Form SD (and CMR if required) via EDGAR by May 31, 2026, and retain all supporting due diligence documentation for at least five years. If private: ensure all pending customer CMRT requests are answered and supplier declaration files are archived in the compliance document management system.", "days_before": 0}], "recommended_actions": ["Within the next 5 business days, confirm with finance/legal whether the company is an SEC-registered issuer subject to Form SD; document this determination in writing so compliance resources are allocated correctly \u2014 either to a formal RCOI process (if public) or to customer-response readiness (if private).", "Audit the supplier master list for all hardware, fastener, and electronic component suppliers and identify which ones have not returned a current (2024 or 2025 reporting year) CMRT; issue a targeted outreach wave demanding responses within 21 days, using non-response as a sourcing risk flag.", "Establish a standing annual calendar entry to initiate CMRT collection from suppliers each January and consolidate declarations by March 31, ensuring the company can respond to public-company customer Form SD data requests well ahead of the May 31 filing window."], "related_context": "Form SD filings are an annual recurring obligation tied to the calendar year (covering the prior calendar year); the 2026 filing covers calendar year 2025 activity. This obligation intersects with UFLPA supply chain due diligence \u2014 suppliers in high-risk mineral regions flagged through CMRT reviews may also warrant UFLPA forced labor screening, and the RMI Responsible Minerals Assurance Process (RMAP) audit program provides smelter-level validation that satisfies both frameworks.", "source_url": "https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm", "title": "SEC Form SD Conflict Minerals Annual Filing", "topic": "CONFLICTMINERALS", "urgency": "MEDIUM", "what_is_required": "SEC-reporting issuers (public companies) must file Form SD with the SEC by May 31, 2026, disclosing whether tantalum, tin, tungsten, or gold (3TG) are necessary to the functionality or production of their manufactured or contracted products. If 3TG are present and sourced from the DRC or adjoining countries, the issuer must conduct reasonable country-of-origin inquiry (RCOI) and, if warranted, supply chain due diligence, and attach a Conflict Minerals Report (CMR) as an exhibit. The regulatory basis is Section 1502 of the Dodd-Frank Wall Street Reform and Consumer Protection Act, implemented by 17 CFR 240.13p-1.", "what_we_must_do": "Determine first whether the company is an SEC-registered issuer; if privately held, no Form SD filing is required and severity drops to monitoring. If the company is public, it must complete an RCOI covering all product lines containing hardware components (hinges, operators, locks, fasteners, screens) that plausibly contain tin (solder, coatings), tungsten (hardware), gold (electronic sensors/operators), or tantalum (capacitors in smart/electronic products), document the inquiry, and file Form SD by May 31, 2026. On the supply chain side, the company should still maintain supplier 3TG declarations (via CMRT templates from the Responsible Minerals Initiative) because customers who are public companies will request this data to satisfy their own filings.", "who_must_comply": "Only SEC-registered issuers (publicly traded companies listed on U.S. exchanges) that manufacture or contract to manufacture products for which 3TG are necessary to functionality or production must file Form SD. Private companies \u2014 regardless of size \u2014 have no direct SEC filing obligation, though they face indirect compliance pressure as tier-1 or tier-2 suppliers to public customers."}};
 </script>
 
 <script>
