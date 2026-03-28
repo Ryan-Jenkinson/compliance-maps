@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Intelligence — Tunvara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.SUPABASE_URL = "https://oramnktatlppjjzhtiat.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_-HbSii9IjY1ZqDM5eIvZjQ_WNUzVaoI";
+  </script>
+  <script src="static/js/auth.js"></script>
+  <style>
+    :root {
+      --bg:#0f1117;--surface:#161b26;--border:#232b3a;
+      --text-primary:#e2e8f0;--text-secondary:#8b95a7;--text-muted:#4a5568;
+      --accent:#d64045;--hover:rgba(255,255,255,0.04);
+      --mono:'IBM Plex Mono',monospace;--sans:'Instrument Sans',sans-serif;
+      --green:#38a169;--red:#d64045;--amber:#F59E0B;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text-primary);font-family:var(--sans);min-height:100vh;}
+    .page-header{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 24px;display:flex;align-items:center;gap:16px;}
+    .page-header a{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:1px;}
+    .page-header a:hover{color:var(--text-secondary);}
+    .page-title{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text-primary);letter-spacing:2px;}
+    .container{max-width:640px;margin:40px auto;padding:0 24px 60px;}
+    h2{font-size:20px;font-weight:600;margin-bottom:8px;}
+    .subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:32px;line-height:1.6;}
+    .tab-row{display:flex;gap:0;border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:28px;}
+    .tab-btn{flex:1;padding:9px 16px;background:none;border:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--text-secondary);font-family:var(--sans);transition:background 0.1s,color 0.1s;}
+    .tab-btn.active{background:var(--accent);color:#fff;}
+    .tab-btn:not(.active):hover{background:var(--hover);color:var(--text-primary);}
+    .form-group{margin-bottom:18px;}
+    label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;font-family:var(--mono);letter-spacing:0.5px;text-transform:uppercase;}
+    input[type=text],input[type=url],select,textarea{width:100%;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-size:13px;font-family:var(--sans);}
+    input[type=text]:focus,input[type=url]:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);}
+    textarea{resize:vertical;min-height:80px;}
+    .file-drop{border:2px dashed var(--border);border-radius:8px;padding:32px 20px;text-align:center;cursor:pointer;transition:border-color 0.15s;}
+    .file-drop:hover,.file-drop.drag-over{border-color:var(--accent);}
+    .file-drop-label{font-size:13px;color:var(--text-muted);margin-bottom:8px;}
+    .file-drop-sub{font-size:11px;color:var(--text-muted);}
+    input[type=file]{display:none;}
+    .file-selected{font-size:12px;color:var(--green);margin-top:8px;}
+    .submit-btn{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans);margin-top:8px;}
+    .submit-btn:hover{opacity:0.9;}
+    .submit-btn:disabled{opacity:0.4;cursor:not-allowed;}
+    .status-msg{margin-top:14px;padding:10px 14px;border-radius:6px;font-size:13px;display:none;}
+    .status-success{background:rgba(56,161,105,0.12);border:1px solid var(--green);color:var(--green);}
+    .status-error{background:rgba(214,64,69,0.1);border:1px solid var(--red);color:var(--red);}
+    .my-submissions{margin-top:48px;}
+    .my-submissions h3{font-size:15px;font-weight:600;margin-bottom:14px;}
+    .sub-item{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:12px 16px;margin-bottom:10px;}
+    .sub-item-head{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+    .sub-type-tag{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;background:var(--border);color:var(--text-secondary);text-transform:uppercase;}
+    .sub-topic-tag{font-family:var(--mono);font-size:10px;color:var(--accent);}
+    .sub-title{font-size:13px;font-weight:500;color:var(--text-primary);}
+    .sub-title a{color:var(--accent);text-decoration:none;}
+    .sub-title a:hover{text-decoration:underline;}
+    .sub-note{font-size:12px;color:var(--text-muted);margin-top:3px;}
+    .sub-time{font-size:11px;color:var(--text-muted);font-family:var(--mono);margin-left:auto;}
+    .sub-empty{font-size:13px;color:var(--text-muted);padding:12px 0;}
+  </style>
+</head>
+<body>
+<div id="auth-overlay" style="position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="text-align:center;color:var(--text-muted);font-family:var(--mono);font-size:13px;">Checking access…</div>
+</div>
+
+<div class="page-header">
+  <a href="dashboard.html">← Dashboard</a>
+  <span class="page-title">SUBMIT INTELLIGENCE</span>
+</div>
+
+<div class="container">
+  <h2>Share a source</h2>
+  <p class="subtitle">Found a relevant article, report, or document that the pipeline missed? Submit it here. The compliance lead will review and import anything useful.</p>
+
+  <!-- Tab toggle -->
+  <div class="tab-row">
+    <button class="tab-btn active" id="tab-url" onclick="switchTab('url')">URL</button>
+    <button class="tab-btn" id="tab-doc" onclick="switchTab('doc')">Document</button>
+  </div>
+
+  <!-- URL form -->
+  <div id="form-url">
+    <div class="form-group">
+      <label>URL</label>
+      <input type="url" id="sub-url" placeholder="https://…">
+    </div>
+    <div class="form-group">
+      <label>Title <span style="font-weight:400;color:var(--text-muted)">(optional — we'll scrape it if blank)</span></label>
+      <input type="text" id="sub-title" placeholder="Article or document title">
+    </div>
+    <div class="form-group">
+      <label>Topic</label>
+      <select id="sub-topic-url">
+        <option value="">Select topic…</option>
+        <option>PFAS</option><option>EPR</option><option>REACH</option>
+        <option>TSCA</option><option>Prop65</option><option>ConflictMinerals</option><option>ForcedLabor</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Context note <span style="font-weight:400;color:var(--text-muted)">(optional)</span></label>
+      <textarea id="sub-note-url" placeholder="Why is this relevant? Any context that would help the pipeline operator."></textarea>
+    </div>
+    <button class="submit-btn" id="submit-url-btn" onclick="submitUrl()">Submit URL</button>
+  </div>
+
+  <!-- Document form -->
+  <div id="form-doc" style="display:none">
+    <div class="form-group">
+      <label>File</label>
+      <div class="file-drop" id="file-drop" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+        <div class="file-drop-label">Drop a file here or click to browse</div>
+        <div class="file-drop-sub">PDF, Word, Excel — max 20 MB</div>
+        <div class="file-selected" id="file-selected" style="display:none"></div>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv" onchange="handleFileSelect(event)">
+    </div>
+    <div class="form-group">
+      <label>Topic</label>
+      <select id="sub-topic-doc">
+        <option value="">Select topic…</option>
+        <option>PFAS</option><option>EPR</option><option>REACH</option>
+        <option>TSCA</option><option>Prop65</option><option>ConflictMinerals</option><option>ForcedLabor</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Context note <span style="font-weight:400;color:var(--text-muted)">(optional)</span></label>
+      <textarea id="sub-note-doc" placeholder="What is this document? Why is it relevant?"></textarea>
+    </div>
+    <button class="submit-btn" id="submit-doc-btn" onclick="submitDoc()">Upload &amp; Submit</button>
+  </div>
+
+  <div class="status-msg" id="status-msg"></div>
+
+  <!-- My past submissions -->
+  <div class="my-submissions">
+    <h3>My submissions</h3>
+    <div id="my-submissions-list"><div class="sub-empty">Loading…</div></div>
+  </div>
+</div>
+
+<script>
+(async () => {
+  await checkAuth();
+  document.getElementById('auth-overlay').style.display = 'none';
+  loadMySubmissions();
+})();
+
+const _sb = window._client;
+let _me = window._currentUser;
+let _selectedFile = null;
+let _activeTab = 'url';
+
+function switchTab(tab) {
+  _activeTab = tab;
+  document.getElementById('form-url').style.display = tab === 'url' ? 'block' : 'none';
+  document.getElementById('form-doc').style.display = tab === 'doc' ? 'block' : 'none';
+  document.getElementById('tab-url').classList.toggle('active', tab === 'url');
+  document.getElementById('tab-doc').classList.toggle('active', tab === 'doc');
+}
+
+// ── URL submission ────────────────────────────────────────────────────────────
+
+async function submitUrl() {
+  const url = document.getElementById('sub-url').value.trim();
+  const title = document.getElementById('sub-title').value.trim();
+  const topic = document.getElementById('sub-topic-url').value;
+  const note = document.getElementById('sub-note-url').value.trim();
+  if (!url) { showStatus('Please enter a URL.', false); return; }
+  if (!topic) { showStatus('Please select a topic.', false); return; }
+  const btn = document.getElementById('submit-url-btn');
+  btn.disabled = true;
+  const { error } = await _sb.from('user_submissions').insert({
+    submitted_by: _me.id, type: 'url', topic, url,
+    title: title || null, context_note: note || null,
+  });
+  btn.disabled = false;
+  if (error) { showStatus('Submission failed — ' + error.message, false); return; }
+  showStatus('Submitted! The compliance lead will review it.', true);
+  document.getElementById('sub-url').value = '';
+  document.getElementById('sub-title').value = '';
+  document.getElementById('sub-topic-url').value = '';
+  document.getElementById('sub-note-url').value = '';
+  loadMySubmissions();
+}
+
+// ── Document submission ───────────────────────────────────────────────────────
+
+function handleFileSelect(e) {
+  _selectedFile = e.target.files[0];
+  if (_selectedFile) showFileSelected(_selectedFile.name);
+}
+function handleDragOver(e) { e.preventDefault(); document.getElementById('file-drop').classList.add('drag-over'); }
+function handleDragLeave() { document.getElementById('file-drop').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('file-drop').classList.remove('drag-over');
+  _selectedFile = e.dataTransfer.files[0];
+  if (_selectedFile) showFileSelected(_selectedFile.name);
+}
+function showFileSelected(name) {
+  const el = document.getElementById('file-selected');
+  el.textContent = '✓ ' + name; el.style.display = 'block';
+}
+
+async function submitDoc() {
+  const topic = document.getElementById('sub-topic-doc').value;
+  const note = document.getElementById('sub-note-doc').value.trim();
+  if (!_selectedFile) { showStatus('Please select a file.', false); return; }
+  if (!topic) { showStatus('Please select a topic.', false); return; }
+  if (_selectedFile.size > 20 * 1024 * 1024) { showStatus('File too large — max 20 MB.', false); return; }
+  const btn = document.getElementById('submit-doc-btn');
+  btn.disabled = true; btn.textContent = 'Uploading…';
+
+  const ext = _selectedFile.name.split('.').pop();
+  const path = `submissions/${_me.id}/${Date.now()}.${ext}`;
+  const { error: uploadError } = await _sb.storage.from('user-documents').upload(path, _selectedFile);
+  if (uploadError) { btn.disabled = false; btn.textContent = 'Upload & Submit'; showStatus('Upload failed — ' + uploadError.message, false); return; }
+
+  const { error } = await _sb.from('user_submissions').insert({
+    submitted_by: _me.id, type: 'document', topic,
+    storage_path: path, title: _selectedFile.name, context_note: note || null,
+  });
+  btn.disabled = false; btn.textContent = 'Upload & Submit';
+  if (error) { showStatus('Submission failed — ' + error.message, false); return; }
+  showStatus('Uploaded and submitted!', true);
+  _selectedFile = null;
+  document.getElementById('file-selected').style.display = 'none';
+  document.getElementById('sub-topic-doc').value = '';
+  document.getElementById('sub-note-doc').value = '';
+  loadMySubmissions();
+}
+
+// ── My submissions ────────────────────────────────────────────────────────────
+
+async function loadMySubmissions() {
+  const { data, error } = await _sb.from('user_submissions')
+    .select('*').eq('submitted_by', _me.id)
+    .order('submitted_at', { ascending: false }).limit(20);
+  const el = document.getElementById('my-submissions-list');
+  if (error || !data?.length) { el.innerHTML = '<div class="sub-empty">No submissions yet.</div>'; return; }
+  el.innerHTML = data.map(s => `
+    <div class="sub-item">
+      <div class="sub-item-head">
+        <span class="sub-type-tag">${s.type}</span>
+        <span class="sub-topic-tag">${esc(s.topic)}</span>
+        <span class="sub-time">${timeAgo(s.submitted_at)}</span>
+      </div>
+      <div class="sub-title">${s.url ? `<a href="${esc(s.url)}" target="_blank">${esc(s.title || s.url)}</a>` : esc(s.title || s.storage_path || '—')}</div>
+      ${s.context_note ? `<div class="sub-note">${esc(s.context_note)}</div>` : ''}
+    </div>`).join('');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function showStatus(msg, ok) {
+  const el = document.getElementById('status-msg');
+  el.textContent = msg;
+  el.className = 'status-msg ' + (ok ? 'status-success' : 'status-error');
+  el.style.display = 'block';
+  if (ok) setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function timeAgo(iso) {
+  const m = Math.floor((Date.now() - new Date(iso)) / 60000);
+  if (m < 1) return 'just now'; if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60); if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+</script>
+</body>
+</html>
