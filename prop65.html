@@ -998,6 +998,23 @@
   </div>
 </div>
 
+<!-- ═══ ARTICLE DETAIL MODAL ═══ -->
+<div class="bd-overlay" id="ad-overlay" onclick="closeArticleDetail(event)">
+  <div class="bd-modal" onclick="event.stopPropagation()">
+    <div class="bd-header">
+      <div class="bd-header-left">
+        <span class="bd-bill-label" id="ad-title" style="font-size:13px;font-weight:600;max-width:580px;white-space:normal;line-height:1.3;">—</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <span class="bd-topic-badge" id="ad-topic-badge"></span>
+        <span class="bd-severity-badge" id="ad-urgency-badge"></span>
+        <button class="expand-modal-close" onclick="closeArticleDetail()">Close</button>
+      </div>
+    </div>
+    <div class="bd-body" id="ad-body"></div>
+  </div>
+</div>
+
 <!-- ═══ DEADLINE DETAIL MODAL ═══ -->
 <div class="dd-overlay" id="dd-overlay" onclick="closeDeadlineDetail(event)">
   <div class="dd-modal" onclick="event.stopPropagation()">
@@ -1021,16 +1038,16 @@
 
     <!-- KPI Row --><div class="kpi-row">
       <div class="kpi-card">
-        <div class="kpi-value">28</div>
+        <div class="kpi-value">33</div>
         <div class="kpi-label">Articles / 6 mo</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-value">8</div>
+        <div class="kpi-value">10</div>
         <div class="kpi-label">New This Week</div>
       </div>
       
       <div class="kpi-card" style="border-top-color: var(--red);">
-        <div class="kpi-value" style="color: var(--red);">5</div>
+        <div class="kpi-value" style="color: var(--red);">3</div>
         <div class="kpi-label">High Urgency</div>
       </div>
       
@@ -1112,12 +1129,12 @@
               <stop offset="0%" stop-color="#E67E22" stop-opacity="0.2"/>
               <stop offset="100%" stop-color="#E67E22" stop-opacity="0.02"/>
             </linearGradient>
-          </defs><polygon points="0.0,64 0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,60.0 394.5,60.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,60.0 466.2,60.0 466.2,44.2 484.1,44.2 484.1,50.5 502.1,50.5 502.1,56.8 520.0,56.8 520.0,0.0 520.0,64" fill="url(#chart-fill)"/>
-          <polyline points="0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,60.0 394.5,60.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,60.0 466.2,60.0 466.2,44.2 484.1,44.2 484.1,50.5 502.1,50.5 502.1,56.8 520.0,56.8 520.0,0.0 " fill="none" stroke="#E67E22" stroke-width="2" stroke-linejoin="round"/>
+          </defs><polygon points="0.0,64 0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,60.0 394.5,60.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,60.0 466.2,60.0 466.2,0.0 484.1,0.0 484.1,24.0 502.1,24.0 502.1,48.0 520.0,48.0 520.0,12.0 520.0,64" fill="url(#chart-fill)"/>
+          <polyline points="0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,60.0 394.5,60.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,60.0 466.2,60.0 466.2,0.0 484.1,0.0 484.1,24.0 502.1,24.0 502.1,48.0 520.0,48.0 520.0,12.0 " fill="none" stroke="#E67E22" stroke-width="2" stroke-linejoin="round"/>
         </svg>
         <div class="trend-chart-axis">
           <span>30 days ago</span>
-          <span style="font-weight:700;color:var(--text-primary);">28 articles in 30 days</span>
+          <span style="font-weight:700;color:var(--text-primary);">13 articles in 30 days</span>
           <span>Today</span>
         </div>
       </div>
@@ -1135,19 +1152,19 @@
       <div class="impact-grid">
         
         <span class="impact-label">Products</span>
-        <span class="impact-text">Fluoropolymer-coated components sold in California face active PFOA enforcement (notice 2026-01367 confirms PFOA is being litigated), requiring current Prop 65 warning compliance or demonstrated safe harbor clearance for all CA-sold products containing PFAS coatings.</span>
+        <span class="impact-text">The DEHP-in-PVC enforcement wave is directly relevant: if any company products sold in California incorporate clear PVC packaging, vinyl profiles, or PVC accessory components, they must be tested against the DEHP safe harbor level (MADL: 8.2 µg/day) immediately.</span>
         
         
         <span class="impact-label">Supply Chain</span>
-        <span class="impact-text">Vinyl profiles (DEHP, DBP, DINP), brass hardware and fasteners (lead), and plated or coated components (cadmium) purchased from suppliers are the highest-risk purchased categories based on this enforcement cluster.</span>
+        <span class="impact-text">PVC profiles, vinyl components, adhesives, and any packaging materials with clear PVC sourced from suppliers are at elevated risk — the current enforcement wave shows bounty hunters are actively testing PVC accessories and clear bags at retail, making supplier DEHP declarations non-negotiable.</span>
         
         
         <span class="impact-label">Actions</span>
-        <ul class="impact-list"><li>Audit all CA-sold products containing vinyl profiles against DEHP, DBP, and DINP safe harbor thresholds (0.1 µg/day DEHP/DBP; 3,600 µg/day DINP); if threshold data is absent, commission third-party testing immediately.</li><li>Confirm that PFOA-containing fluoropolymer coatings on CA-sold products either carry compliant Prop 65 warnings or have documented safe harbor clearance on file; escalate any gaps to legal before next CA shipment.</li></ul>
+        <ul class="impact-list"><li>Pull all CA-sold products containing vinyl profiles, clear PVC components, or PVC-adjacent packaging from the BOM and verify DEHP/DINP concentrations against Prop 65 safe harbor levels (DEHP MADL: 8.2 µg/day); initiate testing on any items lacking current test data.</li><li>Confirm existing Prop 65 warning label program covers lead and cadmium in all hardware, coatings, and fasteners on CA-destined products — cross-check against current listed substance concentrations and update labels or reformulate where exposures exceed NSRL/MADL thresholds.</li></ul>
         
         
         <span class="impact-label">Supplier</span>
-        <ul class="impact-list"><li>Issue targeted Prop 65 declaration requests via Assent to all brass hardware, vinyl profile, and cadmium-plated component suppliers, requiring chemical content data and confirmation of Prop 65 warning compliance for CA-bound goods.</li><li>Add Prop 65 compliance language to supplier qualification requirements for vinyl, brass, and plated component categories, requiring signed declarations of conformity as a condition of continued approved-supplier status.</li></ul>
+        <ul class="impact-list"><li>Send targeted Prop 65 data request to all suppliers of vinyl profiles, PVC components, and clear PVC packaging requiring DEHP test results and confirmation that concentrations are below safe harbor; escalate to alternative sourcing if suppliers cannot provide documentation within 30 days.</li><li>Include a Prop 65 DEHP/lead/cadmium section in the ongoing supplier education campaign, citing the March 2026 enforcement notices as evidence of active bounty hunter testing — frame as a shared commercial risk to CA market access.</li></ul>
         
       </div>
     </div>
@@ -1162,7 +1179,7 @@
       <div class="section-title-line"></div>
     </div>
     <div class="panel">
-      <div class="strategy-text">This week, the compliance team should cross-reference the six brass/lead notices and the vinyl phthalate cluster against the active bill of materials for CA-sold products, prioritizing any brass hardware or vinyl-coated components that lack Prop 65 safe harbor documentation. Simultaneously, the Assent supplier outreach should flag vinyl and brass component suppliers for urgent Prop 65 declaration refresh, given that retailers (Amazon, Ross, Dick&#39;s) are being named as co-defendants — meaning the company faces exposure both as manufacturer and as a downstream buyer reselling into CA. The PFOA enforcement action (notice 2026-01367) reinforces that PFAS Prop 65 warnings must be in place on all CA product lines before the next distribution cycle.</div>
+      <div class="strategy-text">This week, the compliance team should treat the DEHP-in-PVC enforcement cluster (three notices in one day targeting clear PVC accessories at major retailers) as a trigger event: immediately cross-reference the company&#39;s CA product BOM for any clear PVC or vinyl components and pull DEHP test data or commission testing where none exists. Simultaneously, issue a Prop 65-specific data request to all vinyl and PVC component suppliers through the Assent platform, requiring DEHP/DINP test results within 30 days. The cadmium and lead food notices are lower relevance to this company&#39;s product lines but reinforce that bounty hunter activity is elevated in Q1 2026 — maintain current label program rigor for lead and cadmium in hardware and coatings sold in California.</div>
     </div>
     
 
@@ -1391,7 +1408,7 @@
           <option value="90">90 days</option>
         </select>
       </div>
-      <div class="filter-count" id="tp-count">28 articles</div>
+      <div class="filter-count" id="tp-count">33 articles</div>
       <!-- Compact badge legend -->
       <div class="sidebar-legend">
         <div class="sidebar-legend-title">&#x25A6; Badge Guide</div>
@@ -1414,11 +1431,805 @@
       </div>
       
       <div class="month-divider" data-month-divider>2026-03</div><div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01432 (view details) notice pdf: 2026-01432.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01432 (view details) notice pdf: 2026-01432.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: sia licis-93; zip international group llc; b&amp;i overseas trading inc.; valley marketplace; valley product market co. dba valley marketplace chemical: lead and lead compounds source: fried sprats in tomato sauce "
+           data-urgency="medium"
+           data-date="2026-03-28"
+           data-relevance="MONITOR"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01432 (View Details) Notice PDF: 2026-01432.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="Six 60-day notices filed March 23, 2026 allege lead and/or cadmium violations in imported food products sold through Walmart, Amazon, Grocery Outlet, and specialty grocery chains. Notices name both foreign manufacturers and domestic distributors, confirming that importers of record bear Prop 65 compliance liability. These patterns confirm enforcement attention on supply chains involving foreign-origin goods with heavy metal contamination."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.2"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01432">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01432" target="_blank">AG Number 2026-01432 (View Details) Notice PDF: 2026-01432.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            
+            
+            <span class="badge badge-impact lo" title="Company impact score">1.2</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">Six 60-day notices filed March 23, 2026 allege lead and/or cadmium violations in imported food products sold through Walmart, Amazon, Grocery Outlet, and specialty grocery chains. Notices name both foreign manufacturers and domestic distributors, confirming that importers of record bear Prop 65 compliance liability. These patterns confirm enforcement attention on supply chains involving foreign-origin goods with heavy metal contamination.</div>
+        
+      </div>
+      <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01422 (view details) notice pdf: 2026-01422.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01422 (view details) notice pdf: 2026-01422.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: dr. o. solutions chemical: lead and lead compounds source: dr. o solutions, green detox mix, upc#600607582987, dr. o solutions, super greens-5 (organic juice powder), upc#600607582963 complaint (0)   settlement "
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01422 (View Details) Notice PDF: 2026-01422.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01422 (View Details) Notice PDF: 2026-01422.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Dr. O. Solutions Chemical: Lead and lead compounds Source: Dr. O Solutions, Green Detox Mix, UPC#600607582987, Dr. O Solutions, Super Greens-5 (Organic Juice Powder), UPC#600607582963 Complaint (0)   Settlement "
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01422">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01422" target="_blank">AG Number 2026-01422 (View Details) Notice PDF: 2026-01422.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01422 (View Details) Notice PDF: 2026-01422.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Dr. O. Solutions Chemical: Lead and lead compounds Source: Dr. O Solutions, Green Detox Mix, UPC#600607582987, Dr. O Solutions, Super Greens-5 (Organic Juice Powder), UPC#600607582963 Complaint (0)   Settlement </div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01431 (view details) notice pdf: 2026-01431.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01431 (view details) notice pdf: 2026-01431.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: sweet apparel inc.; marshalls of ma, inc.; marshalls of ca, llc; the tjx companies, inc.; marshalls chemical: di(2-ethylhexyl)phthalate (dehp) source: hoodie with clear pvc carrying case complaint (0)   settlem"
+           data-urgency="medium"
+           data-date="2026-03-28"
+           data-relevance="MONITOR"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01431 (View Details) Notice PDF: 2026-01431.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="Three 60-day notices filed March 23, 2026 allege DEHP violations in clear PVC carrying cases, PVC bags, and plush journal products sold at Marshalls, Ross, and Five Below. The notices name both importers/brands and major retail distributors as alleged violators. DEHP in PVC accessories and packaging remains an active enforcement target by serial noticing parties."
+           data-ad-relevance-reason=""
+           data-ad-impact="2.4"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01431">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01431" target="_blank">AG Number 2026-01431 (View Details) Notice PDF: 2026-01431.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            
+            
+            <span class="badge badge-impact lo" title="Company impact score">2.4</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">Three 60-day notices filed March 23, 2026 allege DEHP violations in clear PVC carrying cases, PVC bags, and plush journal products sold at Marshalls, Ross, and Five Below. The notices name both importers/brands and major retail distributors as alleged violators. DEHP in PVC accessories and packaging remains an active enforcement target by serial noticing parties.</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01430 (view details) notice pdf: 2026-01430.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01430 (view details) notice pdf: 2026-01430.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: arco distributors, inc.; seasnax, inc.; seasnax llc; lassens natural foods &amp; vitamins, llc; lassens natural foods &amp; vitamins chemical: cadmium and cadmium compounds, lead and lead compounds source: seaweed sala"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01430 (View Details) Notice PDF: 2026-01430.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="AG Number 2026-01430 (View Details) Notice PDF: 2026-01430.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Arco Distributors, Inc.; Seasnax, Inc.; Seasnax LLC; Lassens Natural Foods &amp; Vitamins, LLC; Lassens Natural Foods &amp; Vitamins Chemical: Cadmium and cadmium compounds, Lead and lead compounds Source: Seaweed Sala"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01430">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01430" target="_blank">AG Number 2026-01430 (View Details) Notice PDF: 2026-01430.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01430 (View Details) Notice PDF: 2026-01430.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Arco Distributors, Inc.; Seasnax, Inc.; Seasnax LLC; Lassens Natural Foods &amp; Vitamins, LLC; Lassens Natural Foods &amp; Vitamins Chemical: Cadmium and cadmium compounds, Lead and lead compounds Source: Seaweed Sala</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01429 (view details) notice pdf: 2026-01429.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01429 (view details) notice pdf: 2026-01429.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: rsc food products corp. dba gold carp chicharon; seafood city supermarket; sfc marketplace, inc. chemical: lead and lead compounds source: fish crackers complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01429 (View Details) Notice PDF: 2026-01429.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="AG Number 2026-01429 (View Details) Notice PDF: 2026-01429.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: RSC Food Products Corp. DBA Gold Carp Chicharon; Seafood City Supermarket; SFC Marketplace, Inc. Chemical: Lead and lead compounds Source: Fish Crackers Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01429">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01429" target="_blank">AG Number 2026-01429 (View Details) Notice PDF: 2026-01429.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01429 (View Details) Notice PDF: 2026-01429.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: RSC Food Products Corp. DBA Gold Carp Chicharon; Seafood City Supermarket; SFC Marketplace, Inc. Chemical: Lead and lead compounds Source: Fish Crackers Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01428 (view details) notice pdf: 2026-01428.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01428 (view details) notice pdf: 2026-01428.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: royal food import corporation; grocery outlet inc.; grocery outlet store #512 chemical: cadmium and cadmium compounds, lead and lead compounds source: sardines in tomato sauce complaint (0)   settlement (0)   j"
+           data-urgency="medium"
+           data-date="2026-03-28"
+           data-relevance="MONITOR"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01428 (View Details) Notice PDF: 2026-01428.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="Nine 60-day notices filed March 23, 2026 (AG# 2026-01425 through 2026-01430, 2026-01432) target lead and cadmium in imported seafood, fish crackers, dried seaweed, and spicy squid sold at Walmart, Amazon, Grocery Outlet, and Seafood City. Retailers and importers are named as co-defendants alongside manufacturers. While food products, the enforcement pattern confirms that cadmium/lead in imported goods with Chinese or Asian supply chains is an active bounty hunter focus."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.0"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01428">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01428" target="_blank">AG Number 2026-01428 (View Details) Notice PDF: 2026-01428.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            
+            
+            <span class="badge badge-impact lo" title="Company impact score">1.0</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">Nine 60-day notices filed March 23, 2026 (AG# 2026-01425 through 2026-01430, 2026-01432) target lead and cadmium in imported seafood, fish crackers, dried seaweed, and spicy squid sold at Walmart, Amazon, Grocery Outlet, and Seafood City. Retailers and importers are named as co-defendants alongside manufacturers. While food products, the enforcement pattern confirms that cadmium/lead in imported goods with Chinese or Asian supply chains is an active bounty hunter focus.</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01427 (view details) notice pdf: 2026-01427.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01427 (view details) notice pdf: 2026-01427.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: kmf ip holdings llc; ross dress for less, inc.; ross dress for less store #1683 chemical: di(2-ethylhexyl)phthalate (dehp) source: cuticle oil trio with clear pvc bag complaint (0)   settlement (0)   judgment ("
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01427 (View Details) Notice PDF: 2026-01427.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="AG Number 2026-01427 (View Details) Notice PDF: 2026-01427.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: KMF IP Holdings LLC; Ross Dress for Less, Inc.; Ross Dress for Less Store #1683 Chemical: Di(2-ethylhexyl)phthalate (DEHP) Source: Cuticle Oil Trio with Clear PVC Bag Complaint (0)   Settlement (0)   Judgment ("
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01427">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01427" target="_blank">AG Number 2026-01427 (View Details) Notice PDF: 2026-01427.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01427 (View Details) Notice PDF: 2026-01427.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: KMF IP Holdings LLC; Ross Dress for Less, Inc.; Ross Dress for Less Store #1683 Chemical: Di(2-ethylhexyl)phthalate (DEHP) Source: Cuticle Oil Trio with Clear PVC Bag Complaint (0)   Settlement (0)   Judgment (</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01426 (view details) notice pdf: 2026-01426.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01426 (view details) notice pdf: 2026-01426.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: kaneyama trading llc; kaneyama usa; kaneyama trading, inc.; amazon.com, inc.; amazon.com services, llc; amazon.com sales, inc. chemical: lead and lead compounds source: dried seaweed complaint (0)   settlement "
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01426 (View Details) Notice PDF: 2026-01426.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="AG Number 2026-01426 (View Details) Notice PDF: 2026-01426.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Kaneyama Trading LLC; Kaneyama USA; Kaneyama Trading, Inc.; Amazon.com, Inc.; Amazon.com Services, LLC; Amazon.com Sales, Inc. Chemical: Lead and lead compounds Source: Dried Seaweed Complaint (0)   Settlement "
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01426">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01426" target="_blank">AG Number 2026-01426 (View Details) Notice PDF: 2026-01426.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01426 (View Details) Notice PDF: 2026-01426.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Kaneyama Trading LLC; Kaneyama USA; Kaneyama Trading, Inc.; Amazon.com, Inc.; Amazon.com Services, LLC; Amazon.com Sales, Inc. Chemical: Lead and lead compounds Source: Dried Seaweed Complaint (0)   Settlement </div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01425 (view details) notice pdf: 2026-01425.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01425 (view details) notice pdf: 2026-01425.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: d.e. chung hua foods co., ltd.; walmart, inc.; wal-mart.com usa, llc chemical: cadmium and cadmium compounds, lead and lead compounds source: spicy squid complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01425 (View Details) Notice PDF: 2026-01425.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="AG Number 2026-01425 (View Details) Notice PDF: 2026-01425.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: D.E. Chung Hua Foods Co., Ltd.; Walmart, Inc.; Wal-Mart.com USA, LLC Chemical: Cadmium and cadmium compounds, Lead and lead compounds Source: Spicy Squid Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01425">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01425" target="_blank">AG Number 2026-01425 (View Details) Notice PDF: 2026-01425.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01425 (View Details) Notice PDF: 2026-01425.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: D.E. Chung Hua Foods Co., Ltd.; Walmart, Inc.; Wal-Mart.com USA, LLC Chemical: Cadmium and cadmium compounds, Lead and lead compounds Source: Spicy Squid Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01424 (view details) notice pdf: 2026-01424.pdf date filed: 03/23/2026 noticing party: consumer advocacy"
+           data-snippet="ag number 2026-01424 (view details) notice pdf: 2026-01424.pdf date filed: 03/23/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: 1616 holdings inc.; five below, inc.; five below store #1432 chemical: di(2-ethylhexyl)phthalate (dehp) source: plush journal complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01424 (View Details) Notice PDF: 2026-01424.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="AG Number 2026-01424 (View Details) Notice PDF: 2026-01424.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: 1616 Holdings Inc.; Five Below, Inc.; Five Below Store #1432 Chemical: Di(2-ethylhexyl)phthalate (DEHP) Source: Plush Journal Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01424">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01424" target="_blank">AG Number 2026-01424 (View Details) Notice PDF: 2026-01424.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01424 (View Details) Notice PDF: 2026-01424.pdf Date Filed: 03/23/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: 1616 Holdings Inc.; Five Below, Inc.; Five Below Store #1432 Chemical: Di(2-ethylhexyl)phthalate (DEHP) Source: Plush Journal Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01423 (view details) notice pdf: 2026-01423.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01423 (view details) notice pdf: 2026-01423.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: health genesis corporation chemical: lead and lead compounds source: biophix, phytoberry greens - berry, upc#849440004281 complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="MONITOR"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01423 (View Details) Notice PDF: 2026-01423.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="Eleven 60-day notices filed March 27, 2026 by Calsafe Research Center target manufacturers of greens powders, spirulina, turmeric, moringa, coral calcium, and protein supplements for lead contamination. This cluster confirms that lead in plant-based and mineral-derived ingredients continues to be systematically tested and enforced. The breadth of products — spanning supplements, spice blends, and health powders — indicates broad raw material contamination risk."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.2"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01423">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01423" target="_blank">AG Number 2026-01423 (View Details) Notice PDF: 2026-01423.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            
+            
+            <span class="badge badge-impact lo" title="Company impact score">1.2</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">Eleven 60-day notices filed March 27, 2026 by Calsafe Research Center target manufacturers of greens powders, spirulina, turmeric, moringa, coral calcium, and protein supplements for lead contamination. This cluster confirms that lead in plant-based and mineral-derived ingredients continues to be systematically tested and enforced. The breadth of products — spanning supplements, spice blends, and health powders — indicates broad raw material contamination risk.</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01421 (view details) notice pdf: 2026-01421.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01421 (view details) notice pdf: 2026-01421.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: savory spice shop, inc. chemical: lead and lead compounds source: savory spice, golden milk chai spice, upc#na, savory spice, ground turmeric, upc#n/a complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01421 (View Details) Notice PDF: 2026-01421.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01421 (View Details) Notice PDF: 2026-01421.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Savory Spice Shop, Inc. Chemical: Lead and lead compounds Source: Savory Spice, Golden Milk Chai Spice, UPC#NA, Savory Spice, Ground Turmeric, UPC#N/A Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01421">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01421" target="_blank">AG Number 2026-01421 (View Details) Notice PDF: 2026-01421.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01421 (View Details) Notice PDF: 2026-01421.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Savory Spice Shop, Inc. Chemical: Lead and lead compounds Source: Savory Spice, Golden Milk Chai Spice, UPC#NA, Savory Spice, Ground Turmeric, UPC#N/A Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01420 (view details) notice pdf: 2026-01420.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01420 (view details) notice pdf: 2026-01420.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: nedley health llc chemical: lead and lead compounds source: nedley health, calm (stress balance and support), upc#860003370124 complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01420 (View Details) Notice PDF: 2026-01420.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01420 (View Details) Notice PDF: 2026-01420.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Nedley Health LLC Chemical: Lead and lead compounds Source: Nedley Health, Calm (Stress Balance and Support), UPC#860003370124 Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01420">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01420" target="_blank">AG Number 2026-01420 (View Details) Notice PDF: 2026-01420.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01420 (View Details) Notice PDF: 2026-01420.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Nedley Health LLC Chemical: Lead and lead compounds Source: Nedley Health, Calm (Stress Balance and Support), UPC#860003370124 Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01419 (view details) notice pdf: 2026-01419.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01419 (view details) notice pdf: 2026-01419.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: wellness resources, inc. chemical: lead and lead compounds source: wellness resources, coral calcium (absorbable calcium, magnesium, and trace minerals), upc#501024 complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01419 (View Details) Notice PDF: 2026-01419.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01419 (View Details) Notice PDF: 2026-01419.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Wellness Resources, Inc. Chemical: Lead and lead compounds Source: Wellness Resources, Coral Calcium (Absorbable Calcium, Magnesium, and Trace Minerals), UPC#501024 Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01419">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01419" target="_blank">AG Number 2026-01419 (View Details) Notice PDF: 2026-01419.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01419 (View Details) Notice PDF: 2026-01419.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Wellness Resources, Inc. Chemical: Lead and lead compounds Source: Wellness Resources, Coral Calcium (Absorbable Calcium, Magnesium, and Trace Minerals), UPC#501024 Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01418 (view details) notice pdf: 2026-01418.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01418 (view details) notice pdf: 2026-01418.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: glanbia performance nutrition (na), inc.; grass advantage, llc chemical: lead and lead compounds source: amazing grass, amazing trio (barley grass, wheat grass &amp; alfalfa), upc#829835000753, amazing grass, organi"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01418 (View Details) Notice PDF: 2026-01418.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01418 (View Details) Notice PDF: 2026-01418.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Glanbia Performance Nutrition (NA), Inc.; Grass Advantage, LLC Chemical: Lead and lead compounds Source: Amazing Grass, Amazing Trio (Barley Grass, Wheat Grass &amp; Alfalfa), UPC#829835000753, Amazing Grass, Organi"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01418">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01418" target="_blank">AG Number 2026-01418 (View Details) Notice PDF: 2026-01418.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01418 (View Details) Notice PDF: 2026-01418.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Glanbia Performance Nutrition (NA), Inc.; Grass Advantage, LLC Chemical: Lead and lead compounds Source: Amazing Grass, Amazing Trio (Barley Grass, Wheat Grass &amp; Alfalfa), UPC#829835000753, Amazing Grass, Organi</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01417 (view details) notice pdf: 2026-01417.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01417 (view details) notice pdf: 2026-01417.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: larbi inc. chemical: lead and lead compounds source: herb to body, spirulina powder (spirulina platensis), upc#3433764142070, herb to body, ashwagandha root powder (withania somnifera), upc#3433764122409, herb t"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01417 (View Details) Notice PDF: 2026-01417.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01417 (View Details) Notice PDF: 2026-01417.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Larbi Inc. Chemical: Lead and lead compounds Source: Herb To Body, Spirulina Powder (Spirulina Platensis), UPC#3433764142070, Herb To Body, Ashwagandha Root Powder (Withania Somnifera), UPC#3433764122409, Herb T"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01417">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01417" target="_blank">AG Number 2026-01417 (View Details) Notice PDF: 2026-01417.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01417 (View Details) Notice PDF: 2026-01417.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Larbi Inc. Chemical: Lead and lead compounds Source: Herb To Body, Spirulina Powder (Spirulina Platensis), UPC#3433764142070, Herb To Body, Ashwagandha Root Powder (Withania Somnifera), UPC#3433764122409, Herb T</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01416 (view details) notice pdf: 2026-01416.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01416 (view details) notice pdf: 2026-01416.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: sovereign traders inc. chemical: lead and lead compounds source: ancient choice, butterfly pea flower powder, upc#860002567013, ancient choice, organic freeze-dried wild blueberry powder, upc#860002567082, ancie"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01416 (View Details) Notice PDF: 2026-01416.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01416 (View Details) Notice PDF: 2026-01416.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Sovereign Traders Inc. Chemical: Lead and lead compounds Source: Ancient Choice, Butterfly Pea Flower Powder, UPC#860002567013, Ancient Choice, Organic Freeze-Dried Wild Blueberry Powder, UPC#860002567082, Ancie"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01416">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01416" target="_blank">AG Number 2026-01416 (View Details) Notice PDF: 2026-01416.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01416 (View Details) Notice PDF: 2026-01416.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Sovereign Traders Inc. Chemical: Lead and lead compounds Source: Ancient Choice, Butterfly Pea Flower Powder, UPC#860002567013, Ancient Choice, Organic Freeze-Dried Wild Blueberry Powder, UPC#860002567082, Ancie</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01415 (view details) notice pdf: 2026-01415.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01415 (view details) notice pdf: 2026-01415.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: sugarpod naturals chemical: lead and lead compounds source: go-lacta, premium organic moringa capsules, upc#b0090q4jzw complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01415 (View Details) Notice PDF: 2026-01415.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01415 (View Details) Notice PDF: 2026-01415.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Sugarpod Naturals Chemical: Lead and lead compounds Source: Go-Lacta, Premium Organic Moringa Capsules, UPC#B0090Q4JZW Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01415">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01415" target="_blank">AG Number 2026-01415 (View Details) Notice PDF: 2026-01415.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01415 (View Details) Notice PDF: 2026-01415.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Sugarpod Naturals Chemical: Lead and lead compounds Source: Go-Lacta, Premium Organic Moringa Capsules, UPC#B0090Q4JZW Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01414 (view details) notice pdf: 2026-01414.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01414 (view details) notice pdf: 2026-01414.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: greens first llc chemical: lead and lead compounds source: greens first, menosolve greens powder (plus probiotics) - mint, upc#819354001201 complaint (0)   settlement (0)   judgment (0)"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01414 (View Details) Notice PDF: 2026-01414.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01414 (View Details) Notice PDF: 2026-01414.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Greens First LLC Chemical: Lead and lead compounds Source: Greens First, Menosolve Greens Powder (Plus Probiotics) - Mint, UPC#819354001201 Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01414">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01414" target="_blank">AG Number 2026-01414 (View Details) Notice PDF: 2026-01414.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">AG Number 2026-01414 (View Details) Notice PDF: 2026-01414.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: Greens First LLC Chemical: Lead and lead compounds Source: Greens First, Menosolve Greens Powder (Plus Probiotics) - Mint, UPC#819354001201 Complaint (0)   Settlement (0)   Judgment (0)</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="ag number 2026-01413 (view details) notice pdf: 2026-01413.pdf date filed: 03/27/2026 noticing party: calsafe research c"
+           data-snippet="ag number 2026-01413 (view details) notice pdf: 2026-01413.pdf date filed: 03/27/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: vega us llc chemical: lead and lead compounds source: vega, premium all-in-one nutrition - berry, upc#838766004815, vega, premium protein + supergreens - creamy vanilla, upc#838766001425 complaint (0)   settleme"
+           data-urgency="low"
+           data-date="2026-03-28"
+           data-relevance="MONITOR"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01413 (View Details) Notice PDF: 2026-01413.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="Ten 60-day notices filed March 27, 2026 (AG# 2026-01413 through 2026-01423) by Calsafe Research Center via Manning Law target lead in spirulina, moringa, wheatgrass, protein powders, turmeric, and botanical supplements. Violators include Vega, Glanbia, Savory Spice Shop, and multiple natural health brands. The pattern confirms that naturally-occurring lead in plant-based and mineral-derived products is a sustained Calsafe enforcement focus, distinct from industrial product enforcement but relevant to any company selling botanical or mineral-containing products in CA."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.0"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01413">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01413" target="_blank">AG Number 2026-01413 (View Details) Notice PDF: 2026-01413.pdf Date Filed: 03/27/2026 Noticing Party: Calsafe Research C</a>
+          </span>
+          <div class="article-badges">
+            
+            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            
+            
+            <span class="badge badge-impact lo" title="Company impact score">1.0</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>CA AG — Prop 65 60-Day Notices</span>
+          
+          <span>·</span>
+          <span>2026-03-28</span>
+          
+        </div>
+        
+        <div class="article-snippet">Ten 60-day notices filed March 27, 2026 (AG# 2026-01413 through 2026-01423) by Calsafe Research Center via Manning Law target lead in spirulina, moringa, wheatgrass, protein powders, turmeric, and botanical supplements. Violators include Vega, Glanbia, Savory Spice Shop, and multiple natural health brands. The pattern confirms that naturally-occurring lead in plant-based and mineral-derived products is a sustained Calsafe enforcement focus, distinct from industrial product enforcement but relevant to any company selling botanical or mineral-containing products in CA.</div>
+        
+      </div>
+      <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01370 (view details) notice pdf: 2026-01370.pdf date filed: 03/26/2026 noticing party: mothers oversight"
            data-snippet="ag number 2026-01370 (view details) notice pdf: 2026-01370.pdf date filed: 03/26/2026 noticing party: mothers oversight network for actionable response to contaminant harm [monarch], llc plaintiff attorney: daniel n. greenbaum alleged violators: machrus inc dba swingan; dick’s sporting goods, inc. chemical: di(2-ethylhexyl)phthalate (dehp) source: swingan vinyl coated chains complaint (0)   settle"
            data-urgency="high"
            data-date="2026-03-27"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01370 (View Details) Notice PDF: 2026-01370.pdf Date Filed: 03/26/2026 Noticing Party: Mothers Oversight"
+           data-ad-summary="60-day notice filed March 26, 2026 alleges DEHP violations in vinyl-coated chains sold by Machrus Inc dba Swingan and Dick&#39;s Sporting Goods. This directly implicates vinyl-coated hardware and chain products sold in California. MONARCH LLC is an active serial filer targeting vinyl-coated consumer goods."
+           data-ad-relevance-reason=""
+           data-ad-impact="4.7"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01370">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01370" target="_blank">AG Number 2026-01370 (View Details) Notice PDF: 2026-01370.pdf Date Filed: 03/26/2026 Noticing Party: Mothers Oversight</a>
@@ -1446,11 +2257,20 @@
         
       </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01367 (view details) notice pdf: 2026-01367.pdf date filed: 03/26/2026 noticing party: environmental rese"
            data-snippet="ag number 2026-01367 (view details) notice pdf: 2026-01367.pdf date filed: 03/26/2026 noticing party: environmental research center, inc. plaintiff attorney: lozeau drury llp alleged violators: urban remedy, inc. chemical: lead and lead compounds, perfluorooctanoic acid (pfoa) source: urban remedy organic green berry meal shake, urban remedy organic golden turmeric coconut cashew milk, urban remed"
            data-urgency="high"
            data-date="2026-03-27"
-           data-relevance="INDIRECT">
+           data-relevance="INDIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01367 (View Details) Notice PDF: 2026-01367.pdf Date Filed: 03/26/2026 Noticing Party: Environmental Rese"
+           data-ad-summary="60-day notice filed March 26, 2026 against Urban Remedy alleges both lead and PFOA violations in organic meal shake and beverage products, confirming enforcement appetite for PFAS (specifically PFOA) combined with lead in finished goods. PFOA&#39;s listing under Prop 65 is being actively enforced by Environmental Research Center."
+           data-ad-relevance-reason="PFOA enforcement signal confirms aggressive Prop 65 enforcement appetite for PFAS substances; precedent for dual-chemical notices may expand to building materials and coatings sectors."
+           data-ad-impact="5.5"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01367">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01367" target="_blank">AG Number 2026-01367 (View Details) Notice PDF: 2026-01367.pdf Date Filed: 03/26/2026 Noticing Party: Environmental Rese</a>
@@ -1480,11 +2300,20 @@
         
       </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01365 (view details) notice pdf: 2026-01365.pdf date filed: 03/25/2026 noticing party: ca citizen protect"
            data-snippet="ag number 2026-01365 (view details) notice pdf: 2026-01365.pdf date filed: 03/25/2026 noticing party: ca citizen protection group, llc plaintiff attorney: khansari law corporation alleged violators: bloom nu llc; ross stores, inc.; ross dress for less, inc. chemical: lead, lead and lead compounds source: bloom kids greens &amp; superfoods + multivitamin, upc: 810137460826 complaint (0)   settlement (0"
            data-urgency="medium"
            data-date="2026-03-27"
-           data-relevance="MONITOR">
+           data-relevance="MONITOR"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01365 (View Details) Notice PDF: 2026-01365.pdf Date Filed: 03/25/2026 Noticing Party: CA Citizen Protect"
+           data-ad-summary="CA Citizen Protection Group filed a March 25, 2026 notice against Bloom Nu LLC and Ross Stores for lead in a children&#39;s greens and multivitamin product. Ross Stores is named as a retail co-defendant, consistent with the enforcement trend of holding distributors jointly liable. Products with lead at levels exceeding the 0.5 µg/day NSRL without a warning are the primary target."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.6"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01365">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01365" target="_blank">AG Number 2026-01365 (View Details) Notice PDF: 2026-01365.pdf Date Filed: 03/25/2026 Noticing Party: CA Citizen Protect</a>
@@ -1511,11 +2340,20 @@
         
       </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01363 (view details) notice pdf: 2026-01363.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
            data-snippet="ag number 2026-01363 (view details) notice pdf: 2026-01363.pdf date filed: 03/18/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: rhee bros., inc.; rhee bros., llc; korean farm, llc; korean farm, inc.; gaju market corporation dba california market chemical: cadmium and cadmium compounds source: seasoned seaweed complaint (0)   settlement "
            data-urgency="medium"
            data-date="2026-03-27"
-           data-relevance="MONITOR">
+           data-relevance="MONITOR"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01363 (View Details) Notice PDF: 2026-01363.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="Consumer Advocacy Group filed multiple cadmium notices on March 18, 2026, targeting Rhee Bros. for seasoned seaweed and Herbal Vineyards for sea moss, consistent with the ongoing cadmium enforcement campaign against marine-derived and natural products. These notices confirm cadmium as an active enforcement priority in Q1 2026."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.6"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01363">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01363" target="_blank">AG Number 2026-01363 (View Details) Notice PDF: 2026-01363.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy</a>
@@ -1541,466 +2379,21 @@
         <div class="article-snippet">Consumer Advocacy Group filed multiple cadmium notices on March 18, 2026, targeting Rhee Bros. for seasoned seaweed and Herbal Vineyards for sea moss, consistent with the ongoing cadmium enforcement campaign against marine-derived and natural products. These notices confirm cadmium as an active enforcement priority in Q1 2026.</div>
         
       </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01369 (view details) notice pdf: 2026-01369.pdf date filed: 03/26/2026 noticing party: mothers oversight"
-           data-snippet="ag number 2026-01369 (view details) notice pdf: 2026-01369.pdf date filed: 03/26/2026 noticing party: mothers oversight network for actionable response to contaminant harm [monarch], llc plaintiff attorney: daniel n. greenbaum alleged violators: oriental trading company, inc. chemical: di-n-butyl phthalate (dbp) source: 7 ft. glitter vinyl jump ropes complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="high"
-           data-date="2026-03-27"
-           data-relevance="MONITOR">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01369" target="_blank">AG Number 2026-01369 (View Details) Notice PDF: 2026-01369.pdf Date Filed: 03/26/2026 Noticing Party: Mothers Oversight</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
-            
-            
-            <span class="badge badge-impact lo" title="Company impact score">2.2</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">60-day notice filed March 26, 2026 targets Oriental Trading Company for Di-n-butyl phthalate (DBP) in vinyl glitter jump ropes. DBP is a listed phthalate with reproductive toxicity designation. This reinforces that plasticized vinyl products face active enforcement across multiple phthalate variants.</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01368 (view details) notice pdf: 2026-01368.pdf date filed: 03/26/2026 noticing party: mothers oversight"
-           data-snippet="ag number 2026-01368 (view details) notice pdf: 2026-01368.pdf date filed: 03/26/2026 noticing party: mothers oversight network for actionable response to contaminant harm [monarch], llc plaintiff attorney: daniel n. greenbaum alleged violators: alliance international venture inc chemical: di(2-ethylhexyl)phthalate (dehp) source: cocomelody oriental ceramic kung fu tea gift set with zippered trave"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01368" target="_blank">AG Number 2026-01368 (View Details) Notice PDF: 2026-01368.pdf Date Filed: 03/26/2026 Noticing Party: Mothers Oversight</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01368 (View Details) Notice PDF: 2026-01368.pdf Date Filed: 03/26/2026 Noticing Party: Mothers Oversight Network for Actionable Response to Contaminant Harm [MONARCH], LLC Plaintiff Attorney: Daniel N. Greenbaum Alleged Violators: Alliance International Venture Inc Chemical: Di(2-ethylhexyl)phthalate (DEHP) Source: Cocomelody Oriental Ceramic Kung Fu Tea Gift Set with Zippered Trave</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01366 (view details) notice pdf: 2026-01366.pdf date filed: 03/26/2026 noticing party: environmental rese"
-           data-snippet="ag number 2026-01366 (view details) notice pdf: 2026-01366.pdf date filed: 03/26/2026 noticing party: environmental research center, inc. plaintiff attorney: environmental research center alleged violators: biomic sciences llc, individually and dba ion* intelligence of nature; seraphic group, inc., individually and dba ion* intelligence of nature chemical: lead and lead compounds source: ion intel"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01366" target="_blank">AG Number 2026-01366 (View Details) Notice PDF: 2026-01366.pdf Date Filed: 03/26/2026 Noticing Party: Environmental Rese</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01366 (View Details) Notice PDF: 2026-01366.pdf Date Filed: 03/26/2026 Noticing Party: Environmental Research Center, Inc. Plaintiff Attorney: Environmental Research Center Alleged Violators: Biomic Sciences LLC, individually and dba ION* Intelligence of Nature; Seraphic Group, Inc., individually and dba ION* Intelligence of Nature Chemical: Lead and lead compounds Source: ION Intel</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01364 (view details) notice pdf: 2026-01364.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
-           data-snippet="ag number 2026-01364 (view details) notice pdf: 2026-01364.pdf date filed: 03/18/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: trader joe&#39;s company; trader joe&#39;s store #0206 chemical: cadmium and cadmium compounds source: calamari complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="medium"
-           data-date="2026-03-27"
-           data-relevance="MONITOR">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01364" target="_blank">AG Number 2026-01364 (View Details) Notice PDF: 2026-01364.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
-            
-            
-            <span class="badge badge-impact lo" title="Company impact score">1.9</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">Multiple 60-day notices filed March 18, 2026 allege cadmium violations in sea moss, seasoned seaweed, shrimp fry, and calamari products. While food-category, the cadmium enforcement trend is relevant context for monitoring cadmium in industrial coatings and plated hardware components. Consumer Advocacy Group Inc. and Trader Joe&#39;s are named as co-defendants.</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01362 (view details) notice pdf: 2026-01362.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
-           data-snippet="ag number 2026-01362 (view details) notice pdf: 2026-01362.pdf date filed: 03/18/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: glanbia performance nutrition (na), inc.; glanbia performance nutrition (manufacturing), inc.; the isopure company, llc; amazon.com sales, inc.; amazon.com services, llc; amazon.com, inc. chemical: lead and lea"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01362" target="_blank">AG Number 2026-01362 (View Details) Notice PDF: 2026-01362.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01362 (View Details) Notice PDF: 2026-01362.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Glanbia Performance Nutrition (NA), Inc.; Glanbia Performance Nutrition (Manufacturing), Inc.; The Isopure Company, LLC; Amazon.com Sales, Inc.; Amazon.com Services, LLC; Amazon.com, Inc. Chemical: Lead and lea</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01361 (view details) notice pdf: 2026-01361.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
-           data-snippet="ag number 2026-01361 (view details) notice pdf: 2026-01361.pdf date filed: 03/18/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: herbal vineyards, llc chemical: cadmium and cadmium compounds source: sea moss complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01361" target="_blank">AG Number 2026-01361 (View Details) Notice PDF: 2026-01361.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01361 (View Details) Notice PDF: 2026-01361.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Herbal Vineyards, LLC Chemical: Cadmium and cadmium compounds Source: Sea Moss Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01360 (view details) notice pdf: 2026-01360.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
-           data-snippet="ag number 2026-01360 (view details) notice pdf: 2026-01360.pdf date filed: 03/18/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: exprom; manarthon; kartago america inc.; walmart, inc.; wal-mart.com usa, llc chemical: lead and lead compounds source: mediterranean sardines complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01360" target="_blank">AG Number 2026-01360 (View Details) Notice PDF: 2026-01360.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01360 (View Details) Notice PDF: 2026-01360.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Exprom; Manarthon; Kartago America Inc.; Walmart, Inc.; Wal-Mart.com USA, LLC Chemical: Lead and lead compounds Source: Mediterranean Sardines Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01359 (view details) notice pdf: 2026-01359.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
-           data-snippet="ag number 2026-01359 (view details) notice pdf: 2026-01359.pdf date filed: 03/18/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: cotton valley llc; ross stores, inc.; ross stores inc. dba dd&#39;s discounts; dd&#39;s discounts chemical: diisononyl phthalate (dinp) source: plastic tablecloth protector complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="high"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01359" target="_blank">AG Number 2026-01359 (View Details) Notice PDF: 2026-01359.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-timely" title="Priority: HIGH urgency · DIRECT · impact 5.9">TIMELY</span>
-            
-            <span class="badge badge-impact mid" title="Company impact score">5.9</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">60-day notice filed March 18, 2026 alleges DINP violations in a plastic tablecloth protector sold through Ross Stores. DINP is the phthalate most directly relevant to PVC and vinyl profiles used in industrial and consumer products. The retailer (Ross) is named alongside the manufacturer, confirming joint liability exposure.</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01358 (view details) notice pdf: 2026-01358.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
-           data-snippet="ag number 2026-01358 (view details) notice pdf: 2026-01358.pdf date filed: 03/18/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: amor nino foods, inc.; seafood city supermarket; sfc marketplace, inc. chemical: cadmium and cadmium compounds, lead and lead compounds source: shrimp fry complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01358" target="_blank">AG Number 2026-01358 (View Details) Notice PDF: 2026-01358.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01358 (View Details) Notice PDF: 2026-01358.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Amor Nino Foods, Inc.; Seafood City Supermarket; SFC Marketplace, Inc. Chemical: Cadmium and cadmium compounds, Lead and lead compounds Source: Shrimp Fry Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01356 (view details) notice pdf: 2026-01356.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
-           data-snippet="ag number 2026-01356 (view details) notice pdf: 2026-01356.pdf date filed: 03/25/2026 noticing party: susan davia plaintiff attorney: sheffer law firm alleged violators: amazon.com, inc.; leitee/fjadeyin chemical: lead source: leitee brass top complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01356" target="_blank">AG Number 2026-01356 (View Details) Notice PDF: 2026-01356.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01356 (View Details) Notice PDF: 2026-01356.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaintiff Attorney: Sheffer Law Firm Alleged Violators: Amazon.com, Inc.; Leitee/Fjadeyin Chemical: Lead Source: Leitee Brass Top Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01355 (view details) notice pdf: 2026-01355.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
-           data-snippet="ag number 2026-01355 (view details) notice pdf: 2026-01355.pdf date filed: 03/25/2026 noticing party: susan davia plaintiff attorney: sheffer law firm alleged violators: amazon.com, inc.; dilidou/dilijie chemical: lead source: dilidou brass keychain complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01355" target="_blank">AG Number 2026-01355 (View Details) Notice PDF: 2026-01355.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01355 (View Details) Notice PDF: 2026-01355.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaintiff Attorney: Sheffer Law Firm Alleged Violators: Amazon.com, Inc.; Dilidou/Dilijie Chemical: Lead Source: Dilidou Brass Keychain Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01354 (view details) notice pdf: 2026-01354.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
-           data-snippet="ag number 2026-01354 (view details) notice pdf: 2026-01354.pdf date filed: 03/25/2026 noticing party: susan davia plaintiff attorney: sheffer law firm alleged violators: amazon.com, inc.; djuiinostar chemical: lead source: djuiinostar brass top complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01354" target="_blank">AG Number 2026-01354 (View Details) Notice PDF: 2026-01354.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01354 (View Details) Notice PDF: 2026-01354.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaintiff Attorney: Sheffer Law Firm Alleged Violators: Amazon.com, Inc.; DjuiinoStar Chemical: Lead Source: DjuiinoStar Brass Top Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01353 (view details) notice pdf: 2026-01353.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
-           data-snippet="ag number 2026-01353 (view details) notice pdf: 2026-01353.pdf date filed: 03/25/2026 noticing party: susan davia plaintiff attorney: sheffer law firm alleged violators: amazon.com, inc.; bitopbi/wewinn chemical: lead source: bitopbi brass gear cube complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01353" target="_blank">AG Number 2026-01353 (View Details) Notice PDF: 2026-01353.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01353 (View Details) Notice PDF: 2026-01353.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaintiff Attorney: Sheffer Law Firm Alleged Violators: Amazon.com, Inc.; Bitopbi/Wewinn Chemical: Lead Source: Bitopbi Brass Gear Cube Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01352 (view details) notice pdf: 2026-01352.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
-           data-snippet="ag number 2026-01352 (view details) notice pdf: 2026-01352.pdf date filed: 03/25/2026 noticing party: susan davia plaintiff attorney: sheffer law firm alleged violators: amazon.com, inc.; besportble/uwitstar chemical: lead source: besportble brass dice complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01352" target="_blank">AG Number 2026-01352 (View Details) Notice PDF: 2026-01352.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01352 (View Details) Notice PDF: 2026-01352.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaintiff Attorney: Sheffer Law Firm Alleged Violators: Amazon.com, Inc.; Besportble/Uwitstar Chemical: Lead Source: Besportble Brass Dice Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
-      <div class="article-item"
-           data-headline="ag number 2026-01351 (view details) notice pdf: 2026-01351.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
-           data-snippet="ag number 2026-01351 (view details) notice pdf: 2026-01351.pdf date filed: 03/25/2026 noticing party: susan davia plaintiff attorney: sheffer law firm alleged violators: amazon.com, inc.; artibetter/longyuntong chemical: lead source: artibetter brass dice complaint (0)   settlement (0)   judgment (0)"
-           data-urgency="low"
-           data-date="2026-03-27"
-           data-relevance="DIRECT">
-        <div class="article-head">
-          <span class="article-headline">
-            <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01351" target="_blank">AG Number 2026-01351 (View Details) Notice PDF: 2026-01351.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
-          </span>
-          <div class="article-badges">
-            
-            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
-            
-            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
-            
-          </div>
-        </div>
-        
-        <div class="article-meta">
-          <span>CA AG — Prop 65 60-Day Notices</span>
-          
-          <span>·</span>
-          <span>2026-03-27</span>
-          
-        </div>
-        
-        <div class="article-snippet">AG Number 2026-01351 (View Details) Notice PDF: 2026-01351.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaintiff Attorney: Sheffer Law Firm Alleged Violators: Amazon.com, Inc.; Artibetter/Longyuntong Chemical: Lead Source: Artibetter brass dice Complaint (0)   Settlement (0)   Judgment (0)</div>
-        
-      </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01357 (view details) notice pdf: 2026-01357.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
            data-snippet="ag number 2026-01357 (view details) notice pdf: 2026-01357.pdf date filed: 03/25/2026 noticing party: susan davia plaintiff attorney: sheffer law firm alleged violators: amazon.com, inc.; papuka/pengshun business chemical: lead source: papuka brass gear cube complaint (0)   settlement (0)   judgment (0)"
            data-urgency="high"
            data-date="2026-03-26"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01357 (View Details) Notice PDF: 2026-01357.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint"
+           data-ad-summary="Six 60-day notices filed March 25, 2026 by Susan Davia/Sheffer Law Firm target brass gear cubes, tops, keychains, and dice sold on Amazon for lead content. Multiple Chinese-origin brass component brands are named alongside Amazon as a retail co-defendant. This enforcement pattern directly maps to brass hardware and fasteners in industrial bills of materials."
+           data-ad-relevance-reason=""
+           data-ad-impact="4.3"
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01357">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01357" target="_blank">AG Number 2026-01357 (View Details) Notice PDF: 2026-01357.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint</a>
@@ -2028,11 +2421,20 @@
         
       </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01348 (view details) notice pdf: 2026-01348.pdf date filed: 03/24/2026 noticing party: gabriel espinoza p"
            data-snippet="ag number 2026-01348 (view details) notice pdf: 2026-01348.pdf date filed: 03/24/2026 noticing party: gabriel espinoza plaintiff attorney: evan smith alleged violators: bestbuy.com, llc; best buy co., inc.; best buy stores, l.p.; bby solutions, inc.; best buy enterprise services, inc.; dapper styles, inc. chemical: di(2-ethylhexyl)phthalate (dehp) source: dapper styles 5 pack cases comments: this "
            data-urgency="low"
            data-date="2026-03-25"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01348 (View Details) Notice PDF: 2026-01348.pdf Date Filed: 03/24/2026 Noticing Party: Gabriel Espinoza P"
+           data-ad-summary="AG Number 2026-01348 (View Details) Notice PDF: 2026-01348.pdf Date Filed: 03/24/2026 Noticing Party: Gabriel Espinoza Plaintiff Attorney: Evan Smith Alleged Violators: BestBuy.com, LLC; Best Buy Co., Inc.; Best Buy Stores, L.P.; BBY Solutions, Inc.; Best Buy Enterprise Services, Inc.; Dapper Styles, Inc. Chemical: Di(2-ethylhexyl)phthalate (DEHP) Source: Dapper Styles 5 Pack Cases Comments: This "
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01348">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01348" target="_blank">AG Number 2026-01348 (View Details) Notice PDF: 2026-01348.pdf Date Filed: 03/24/2026 Noticing Party: Gabriel Espinoza P</a>
@@ -2058,11 +2460,20 @@
         
       </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01350 (view details) notice pdf: 2026-01350.pdf date filed: 03/25/2026 noticing party: ema bell plaintiff"
            data-snippet="ag number 2026-01350 (view details) notice pdf: 2026-01350.pdf date filed: 03/25/2026 noticing party: ema bell plaintiff attorney: evan smith alleged violators: nutrient foods, llc; nutrient foods management, llc; sierra trading post, inc.; the tjx companies, inc. chemical: lead source: brain care apple almond crisp omega 3 bar complaint (0)   settlement (0)   judgment (0)"
            data-urgency="low"
            data-date="2026-03-25"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01350 (View Details) Notice PDF: 2026-01350.pdf Date Filed: 03/25/2026 Noticing Party: Ema Bell Plaintiff"
+           data-ad-summary="AG Number 2026-01350 (View Details) Notice PDF: 2026-01350.pdf Date Filed: 03/25/2026 Noticing Party: Ema Bell Plaintiff Attorney: Evan Smith Alleged Violators: Nutrient Foods, LLC; Nutrient Foods Management, LLC; Sierra Trading Post, Inc.; The TJX Companies, Inc. Chemical: Lead Source: Brain Care Apple Almond Crisp Omega 3 Bar Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01350">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01350" target="_blank">AG Number 2026-01350 (View Details) Notice PDF: 2026-01350.pdf Date Filed: 03/25/2026 Noticing Party: Ema Bell Plaintiff</a>
@@ -2088,11 +2499,20 @@
         
       </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01349 (view details) notice pdf: 2026-01349.pdf date filed: 03/24/2026 noticing party: clean product advo"
            data-snippet="ag number 2026-01349 (view details) notice pdf: 2026-01349.pdf date filed: 03/24/2026 noticing party: clean product advocates, llc plaintiff attorney: cliffwood law firm, pc alleged violators: abbot&#39;s butcher, inc.; sprouts farmers market, llc chemical: lead source: abbot&#39;s protein veggie burger classic smokehouse complaint (0)   settlement (0)   judgment (0)"
            data-urgency="low"
            data-date="2026-03-25"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01349 (View Details) Notice PDF: 2026-01349.pdf Date Filed: 03/24/2026 Noticing Party: Clean Product Advo"
+           data-ad-summary="AG Number 2026-01349 (View Details) Notice PDF: 2026-01349.pdf Date Filed: 03/24/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Abbot&#39;s Butcher, Inc.; Sprouts Farmers Market, LLC Chemical: Lead Source: Abbot&#39;s Protein Veggie Burger Classic Smokehouse Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01349">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01349" target="_blank">AG Number 2026-01349 (View Details) Notice PDF: 2026-01349.pdf Date Filed: 03/24/2026 Noticing Party: Clean Product Advo</a>
@@ -2118,11 +2538,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01347 (view details) notice pdf: 2026-01347.pdf date filed: 03/24/2026 noticing party: calsafe research c"
            data-snippet="ag number 2026-01347 (view details) notice pdf: 2026-01347.pdf date filed: 03/24/2026 noticing party: calsafe research center, inc. plaintiff attorney: manning law, apc. alleged violators: nutrasky, llc chemical: lead and lead compounds source: ninja supplements, guardian (reds and greens) - mango crush, upc#748515976464, ninja supplements, zen (sleep aid) - mango ginger tea, upc#748515976570, nin"
            data-urgency="low"
            data-date="2026-03-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01347 (View Details) Notice PDF: 2026-01347.pdf Date Filed: 03/24/2026 Noticing Party: Calsafe Research C"
+           data-ad-summary="AG Number 2026-01347 (View Details) Notice PDF: 2026-01347.pdf Date Filed: 03/24/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: NutraSky, LLC Chemical: Lead and lead compounds Source: Ninja Supplements, Guardian (Reds and Greens) - Mango Crush, UPC#748515976464, Ninja Supplements, Zen (Sleep Aid) - Mango Ginger Tea, UPC#748515976570, Nin"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01347">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01347" target="_blank">AG Number 2026-01347 (View Details) Notice PDF: 2026-01347.pdf Date Filed: 03/24/2026 Noticing Party: Calsafe Research C</a>
@@ -2148,11 +2577,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01342 (view details) notice pdf: 2026-01342.pdf date filed: 03/16/2026 noticing party: consumer advocacy"
            data-snippet="ag number 2026-01342 (view details) notice pdf: 2026-01342.pdf date filed: 03/16/2026 noticing party: consumer advocacy group, inc. plaintiff attorney: reuben yeroushalmi alleged violators: seapoint farms, llc; seaside farms, inc.; iherb holdings, llc; iherb, llc chemical: cadmium and cadmium compounds, lead and lead compounds source: seaweed crisps pumpkin sesame complaint (0)   settlement (0)   "
            data-urgency="low"
            data-date="2026-03-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01342 (View Details) Notice PDF: 2026-01342.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy"
+           data-ad-summary="AG Number 2026-01342 (View Details) Notice PDF: 2026-01342.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Seapoint Farms, LLC; Seaside Farms, Inc.; iHerb Holdings, LLC; iHerb, LLC Chemical: Cadmium and cadmium compounds, Lead and lead compounds Source: Seaweed Crisps Pumpkin Sesame Complaint (0)   Settlement (0)   "
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01342">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01342" target="_blank">AG Number 2026-01342 (View Details) Notice PDF: 2026-01342.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy</a>
@@ -2178,11 +2616,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01336 (view details) notice pdf: 2026-01336.pdf date filed: 03/23/2026 noticing party: clean product advo"
            data-snippet="ag number 2026-01336 (view details) notice pdf: 2026-01336.pdf date filed: 03/23/2026 noticing party: clean product advocates, llc plaintiff attorney: cliffwood law firm, pc alleged violators: cucina and amore inc.; marshalls of ca, llc; the tjx companies, inc. dba marshalls chemical: lead source: cucina &amp; amore bruschetta tapenade comments: this first amendment amends nov 2026-01221, filed on 03/"
            data-urgency="low"
            data-date="2026-03-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01336 (View Details) Notice PDF: 2026-01336.pdf Date Filed: 03/23/2026 Noticing Party: Clean Product Advo"
+           data-ad-summary="AG Number 2026-01336 (View Details) Notice PDF: 2026-01336.pdf Date Filed: 03/23/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Cucina and Amore Inc.; Marshalls of CA, LLC; The TJX Companies, Inc. dba Marshalls Chemical: Lead Source: Cucina &amp; Amore Bruschetta Tapenade Comments: This first amendment amends NOV 2026-01221, filed on 03/"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01336">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01336" target="_blank">AG Number 2026-01336 (View Details) Notice PDF: 2026-01336.pdf Date Filed: 03/23/2026 Noticing Party: Clean Product Advo</a>
@@ -2208,11 +2655,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01330 (view details) notice pdf: 2026-01330.pdf date filed: 03/22/2026 noticing party: clean product advo"
            data-snippet="ag number 2026-01330 (view details) notice pdf: 2026-01330.pdf date filed: 03/22/2026 noticing party: clean product advocates, llc plaintiff attorney: cliffwood law firm, pc alleged violators: michael angelo’s gourmet foods; bottom line food processors, inc.; smart &amp; final stores llc chemical: cadmium, lead source: michael angelo&#39;s eggplant parmigiana complaint (0)   settlement (0)   judgment (0)"
            data-urgency="low"
            data-date="2026-03-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01330 (View Details) Notice PDF: 2026-01330.pdf Date Filed: 03/22/2026 Noticing Party: Clean Product Advo"
+           data-ad-summary="AG Number 2026-01330 (View Details) Notice PDF: 2026-01330.pdf Date Filed: 03/22/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Michael Angelo’s Gourmet Foods; Bottom Line Food Processors, Inc.; Smart &amp; Final Stores LLC Chemical: Cadmium, Lead Source: Michael Angelo&#39;s Eggplant Parmigiana Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01330">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01330" target="_blank">AG Number 2026-01330 (View Details) Notice PDF: 2026-01330.pdf Date Filed: 03/22/2026 Noticing Party: Clean Product Advo</a>
@@ -2238,11 +2694,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="ag number 2026-01328 (view details) notice pdf: 2026-01328.pdf date filed: 03/21/2026 noticing party: clean product advo"
            data-snippet="ag number 2026-01328 (view details) notice pdf: 2026-01328.pdf date filed: 03/21/2026 noticing party: clean product advocates, llc plaintiff attorney: cliffwood law firm, pc alleged violators: salad savoy corporation; smart &amp; final stores llc chemical: cadmium, lead source: tasty tuscany lacinato green kale complaint (0)   settlement (0)   judgment (0)"
            data-urgency="low"
            data-date="2026-03-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="prop65"
+           data-ad-title="AG Number 2026-01328 (View Details) Notice PDF: 2026-01328.pdf Date Filed: 03/21/2026 Noticing Party: Clean Product Advo"
+           data-ad-summary="AG Number 2026-01328 (View Details) Notice PDF: 2026-01328.pdf Date Filed: 03/21/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Salad Savoy Corporation; Smart &amp; Final Stores LLC Chemical: Cadmium, Lead Source: Tasty Tuscany Lacinato green Kale Complaint (0)   Settlement (0)   Judgment (0)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="CA AG — Prop 65 60-Day Notices"
+           data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01328">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://oag.ca.gov/prop65/60-Day-Notice-2026-01328" target="_blank">AG Number 2026-01328 (View Details) Notice PDF: 2026-01328.pdf Date Filed: 03/21/2026 Noticing Party: Clean Product Advo</a>
@@ -2603,6 +3068,153 @@ var DEADLINE_ANALYSES = {"491": {"analyzed_at": "2026-03-25T00:24:23.783896", "c
     document.body.style.overflow = '';
   };
 
+  // ── Article Detail Modal ───────────────────────────────────────────────────
+
+  var _WORKER_URL = 'https://andersencompliance.workers.dev';
+  var _SEVERITY_COLORS = { HIGH: '#fee2e2', MEDIUM: '#fef3c7', LOW: '#d1fae5', MONITORING: '#f1f5f9' };
+  var _SEVERITY_TEXT = { HIGH: '#991b1b', MEDIUM: '#92400e', LOW: '#065f46', MONITORING: '#475569' };
+
+  window.openArticleDetailFromEl = function(e, el) {
+    if (e.target.closest('a') || e.target.closest('.fav-btn') || e.target.closest('.send-btn')) return;
+    var favBtn = el.querySelector('.fav-btn');
+    var data = {
+      url:    favBtn ? favBtn.dataset.url : (el.dataset.url || ''),
+      title:  el.dataset.adTitle || el.dataset.headline || '',
+      topic:  el.dataset.topic || '',
+      source: el.dataset.source || '',
+      summary: el.dataset.adSummary || '',
+      urgency: (el.dataset.urgency || 'LOW').toUpperCase(),
+      relevance: el.dataset.relevance || '',
+      relevanceReason: el.dataset.adRelevanceReason || '',
+      impact: el.dataset.adImpact || '',
+    };
+    openArticleDetail(data);
+  };
+
+  window.openArticleDetail = function(data) {
+    var overlay = document.getElementById('ad-overlay');
+    var titleEl = document.getElementById('ad-title');
+    var topicBadge = document.getElementById('ad-topic-badge');
+    var urgencyBadge = document.getElementById('ad-urgency-badge');
+    var body = document.getElementById('ad-body');
+
+    titleEl.textContent = data.title || 'Article';
+    topicBadge.textContent = data.topic || '';
+    urgencyBadge.textContent = data.urgency || '';
+    urgencyBadge.style.background = _SEVERITY_COLORS[data.urgency] || _SEVERITY_COLORS.MONITORING;
+    urgencyBadge.style.color = _SEVERITY_TEXT[data.urgency] || _SEVERITY_TEXT.MONITORING;
+
+    body.innerHTML = _buildArticleModalInitial(data);
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    _fetchArticleAI(data);
+  };
+
+  window.closeArticleDetail = function(e) {
+    if (e && e.target !== document.getElementById('ad-overlay')) return;
+    document.getElementById('ad-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  function _buildArticleModalInitial(data) {
+    var sections = '';
+    sections += '<div class="bd-section">';
+    sections += '<div class="bd-section-title">Source</div>';
+    sections += '<div class="bd-section-body" style="display:flex;align-items:center;gap:12px;">';
+    sections += '<span>' + _escHtml(data.source) + '</span>';
+    if (data.url) sections += '<a class="bd-source-link" href="' + _escHtml(data.url) + '" target="_blank" rel="noopener">Read full article &rarr;</a>';
+    sections += '</div></div>';
+
+    if (data.summary) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Summary</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(data.summary) + '</div></div>';
+    }
+
+    var hasRelevance = data.relevance || data.relevanceReason;
+    var hasImpact = data.impact;
+    if (hasRelevance || hasImpact) {
+      if (hasRelevance && hasImpact) sections += '<div class="bd-two-col">';
+      if (hasRelevance) {
+        sections += '<div class="bd-section"><div class="bd-section-title">Relevance — ' + _escHtml(data.relevance) + '</div>';
+        sections += '<div class="bd-section-body">' + _escHtml(data.relevanceReason || data.relevance) + '</div></div>';
+      }
+      if (hasImpact) {
+        var score = parseFloat(data.impact);
+        var scoreColor = score >= 7 ? '#991b1b' : score >= 4 ? '#92400e' : '#065f46';
+        sections += '<div class="bd-section"><div class="bd-section-title">Impact Score</div>';
+        sections += '<div class="bd-section-body"><span style="font-size:24px;font-weight:700;font-family:var(--mono);color:' + scoreColor + ';">' + data.impact + '</span>';
+        sections += '<span style="font-size:12px;color:var(--text-muted);margin-left:4px;">/ 10</span></div></div>';
+      }
+      if (hasRelevance && hasImpact) sections += '</div>';
+    }
+
+    sections += '<div id="ad-ai-section"><div class="bd-section"><div class="bd-pending">';
+    sections += '<div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:2px;">ANALYZING…</div>';
+    sections += '</div></div></div>';
+    return sections;
+  }
+
+  function _fetchArticleAI(data) {
+    var prompt = 'You are a regulatory compliance analyst for a US windows/doors manufacturer (Andersen Corporation). '
+      + 'They have PFAS exposure from fluoropolymer coatings and a large supply chain of components (electronics, o-rings, gaskets, vinyl, hardware, lubricants, PPE).\n\n'
+      + 'Analyze this regulatory article:\nTopic: ' + data.topic + '\nSource: ' + data.source + '\nTitle: ' + data.title + '\n'
+      + (data.summary ? 'Summary: ' + data.summary + '\n' : '')
+      + '\nReturn ONLY valid JSON:\n'
+      + '{"broader_context":"2-3 sentences on where this fits in the broader regulatory landscape",'
+      + '"company_impact":{"direct":"Impact on manufactured products/coatings","supply_chain":"Impact on purchased components/suppliers","severity":"HIGH|MEDIUM|LOW|MONITORING"},'
+      + '"recommended_actions":["action1","action2","action3"],'
+      + '"key_implication":"The single most important takeaway for this company"}';
+
+    fetch(_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+      if (!resp.content || !resp.content[0]) { _renderArticleAIError(); return; }
+      var text = resp.content[0].text.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'');
+      try { _renderArticleAIResult(data, JSON.parse(text)); } catch(e) { _renderArticleAIError(); }
+    })
+    .catch(function() { _renderArticleAIError(); });
+  }
+
+  function _renderArticleAIResult(data, ai) {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    var sections = '';
+    if (ai.key_implication) {
+      sections += '<div class="bd-section" style="background:var(--surface-sunken,#1a2033);">';
+      sections += '<div class="bd-section-title" style="color:var(--accent);">Key Implication</div>';
+      sections += '<div class="bd-section-body" style="font-weight:500;">' + _escHtml(ai.key_implication) + '</div></div>';
+    }
+    if (ai.broader_context) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Broader Context</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(ai.broader_context) + '</div></div>';
+    }
+    if (ai.company_impact) {
+      var impact = ai.company_impact;
+      var sev = (impact.severity || 'MONITORING').toUpperCase();
+      sections += '<div class="bd-section" style="background:' + (_SEVERITY_COLORS[sev]||_SEVERITY_COLORS.MONITORING) + '18;">';
+      sections += '<div class="bd-section-title" style="color:' + (_SEVERITY_TEXT[sev]||_SEVERITY_TEXT.MONITORING) + ';">Company Impact — ' + sev + '</div>';
+      if (impact.direct) sections += '<div style="margin-bottom:6px;"><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">DIRECT PRODUCTS</span><div class="bd-section-body">' + _escHtml(impact.direct) + '</div></div>';
+      if (impact.supply_chain) sections += '<div><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">SUPPLY CHAIN</span><div class="bd-section-body">' + _escHtml(impact.supply_chain) + '</div></div>';
+      sections += '</div>';
+    }
+    if (ai.recommended_actions && ai.recommended_actions.length) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Recommended Actions</div><ul class="bd-action-list">';
+      ai.recommended_actions.forEach(function(act) { sections += '<li>' + _escHtml(act) + '</li>'; });
+      sections += '</ul></div>';
+    }
+    aiSection.innerHTML = sections;
+  }
+
+  function _renderArticleAIError() {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    aiSection.innerHTML = '<div class="bd-section"><div class="bd-section-body" style="color:var(--text-muted);font-size:12px;">AI enrichment unavailable.</div></div>';
+  }
+
   window.openDeadlineDetailFromEl = function(el) {
     openDeadlineDetail(el.dataset.deadlineId || '');
   };
@@ -2708,6 +3320,7 @@ var DEADLINE_ANALYSES = {"491": {"analyzed_at": "2026-03-25T00:24:23.783896", "c
     if (e.key === 'Escape') {
       document.getElementById('bd-overlay').classList.remove('open');
       document.getElementById('dd-overlay').classList.remove('open');
+      document.getElementById('ad-overlay').classList.remove('open');
       document.body.style.overflow = '';
     }
   });

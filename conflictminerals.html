@@ -998,6 +998,23 @@
   </div>
 </div>
 
+<!-- ═══ ARTICLE DETAIL MODAL ═══ -->
+<div class="bd-overlay" id="ad-overlay" onclick="closeArticleDetail(event)">
+  <div class="bd-modal" onclick="event.stopPropagation()">
+    <div class="bd-header">
+      <div class="bd-header-left">
+        <span class="bd-bill-label" id="ad-title" style="font-size:13px;font-weight:600;max-width:580px;white-space:normal;line-height:1.3;">—</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <span class="bd-topic-badge" id="ad-topic-badge"></span>
+        <span class="bd-severity-badge" id="ad-urgency-badge"></span>
+        <button class="expand-modal-close" onclick="closeArticleDetail()">Close</button>
+      </div>
+    </div>
+    <div class="bd-body" id="ad-body"></div>
+  </div>
+</div>
+
 <!-- ═══ DEADLINE DETAIL MODAL ═══ -->
 <div class="dd-overlay" id="dd-overlay" onclick="closeDeadlineDetail(event)">
   <div class="dd-modal" onclick="event.stopPropagation()">
@@ -1021,17 +1038,12 @@
 
     <!-- KPI Row --><div class="kpi-row">
       <div class="kpi-card">
-        <div class="kpi-value">15</div>
+        <div class="kpi-value">16</div>
         <div class="kpi-label">Articles / 6 mo</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-value">1</div>
+        <div class="kpi-value">2</div>
         <div class="kpi-label">New This Week</div>
-      </div>
-      
-      <div class="kpi-card" style="border-top-color: var(--red);">
-        <div class="kpi-value" style="color: var(--red);">2</div>
-        <div class="kpi-label">High Urgency</div>
       </div>
       
       <div class="kpi-card">
@@ -1112,12 +1124,12 @@
               <stop offset="0%" stop-color="#1A7A87" stop-opacity="0.2"/>
               <stop offset="100%" stop-color="#1A7A87" stop-opacity="0.02"/>
             </linearGradient>
-          </defs><polygon points="0.0,64 0.0,30.0 17.9,30.0 17.9,30.0 35.9,30.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,30.0 394.5,30.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,30.0 502.1,30.0 502.1,60.0 520.0,60.0 520.0,60.0 520.0,64" fill="url(#chart-fill)"/>
-          <polyline points="0.0,30.0 17.9,30.0 17.9,30.0 35.9,30.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,30.0 394.5,30.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,30.0 502.1,30.0 502.1,60.0 520.0,60.0 520.0,60.0 " fill="none" stroke="#1A7A87" stroke-width="2" stroke-linejoin="round"/>
+          </defs><polygon points="0.0,64 0.0,30.0 17.9,30.0 17.9,30.0 35.9,30.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,30.0 394.5,30.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,30.0 502.1,30.0 502.1,60.0 520.0,60.0 520.0,30.0 520.0,64" fill="url(#chart-fill)"/>
+          <polyline points="0.0,30.0 17.9,30.0 17.9,30.0 35.9,30.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,60.0 161.4,60.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,60.0 215.2,60.0 215.2,60.0 233.1,60.0 233.1,60.0 251.0,60.0 251.0,60.0 269.0,60.0 269.0,60.0 286.9,60.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,60.0 340.7,60.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,30.0 394.5,30.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,30.0 502.1,30.0 502.1,60.0 520.0,60.0 520.0,30.0 " fill="none" stroke="#1A7A87" stroke-width="2" stroke-linejoin="round"/>
         </svg>
         <div class="trend-chart-axis">
           <span>30 days ago</span>
-          <span style="font-weight:700;color:var(--text-primary);">7 articles in 30 days</span>
+          <span style="font-weight:700;color:var(--text-primary);">8 articles in 30 days</span>
           <span>Today</span>
         </div>
       </div>
@@ -1135,19 +1147,19 @@
       <div class="impact-grid">
         
         <span class="impact-label">Products</span>
-        <span class="impact-text">If the company is a public issuer or files with the SEC, the Form SD for calendar year 2025 is due May 31, 2026 — covering tin in solder/coatings, tantalum in capacitors, tungsten in wear-resistant coatings/tools, and gold in electronics contacts used in manufactured products.</span>
+        <span class="impact-text">If the company is a public issuer, the May 31, 2026 Form SD deadline for reporting year 2025 is now less than 65 days out, requiring immediate completion of RCOI, CMRT collection, and due diligence documentation for tin, tantalum, tungsten, and gold used in manufactured products.</span>
         
         
         <span class="impact-label">Supply Chain</span>
-        <span class="impact-text">Purchased automation electronics, sensors, control boards, and hardware (hinges, fasteners) sourced from suppliers like semiconductor manufacturers are active 3TG supply chain nodes requiring CMRT collection and RCOI completion before the May 31 filing deadline.</span>
+        <span class="impact-text">Electronics and automation components (control boards, sensors, motors) purchased from suppliers such as semiconductor manufacturers are actively being swept into CMRT collection cycles, meaning the company should expect inbound CMRT requests from its own customers as well as needing to push CMRT collection upstream.</span>
         
         
         <span class="impact-label">Actions</span>
-        <ul class="impact-list"><li>Confirm whether the company meets SEC Form SD filing thresholds (public issuer) or has customer CMRT submission requirements; if yes, compile RCOI documentation and draft the conflict minerals report now — May 31, 2026 deadline is 9 weeks out.</li><li>Review completed CMRTs from suppliers against the RMI Conformant Smelter list and flag any non-conformant or unidentified smelters in tin, tantalum, tungsten, or gold supply chains for escalation before filing.</li></ul>
+        <ul class="impact-list"><li>Confirm company&#39;s SEC filing obligation status and, if subject to Dodd-Frank Section 1502, finalize RCOI and compile CMRT data from all 3TG-relevant supply chains by April 30, 2026 to allow time for Form SD preparation and legal review before the May 31 deadline.</li><li>Review DRDGOLD&#39;s filed Form SD to assess whether any gold smelters or refiners in the company&#39;s supply chain appear in their disclosure, and cross-reference against the company&#39;s own approved smelter list for gap identification.</li></ul>
         
         
         <span class="impact-label">Supplier</span>
-        <ul class="impact-list"><li>Issue final CMRT collection deadline notices to all automation electronics, sensors, control board, and hardware suppliers — tie the request to the May 31 Form SD deadline and require RMI CMRT v6.x format with smelter-level disclosure.</li><li>For any supplier that has not responded to CMRT requests, escalate to procurement for contractual follow-up; non-response must be documented as part of the &#39;reasonable country of origin inquiry&#39; record to support the Form SD filing.</li></ul>
+        <ul class="impact-list"><li>Issue CMRT version 6.x requests immediately to all suppliers of electronics components, solder materials, hardware with tin or tungsten content, and PPE with metal components, specifying an internal return deadline of April 15, 2026.</li><li>For suppliers who are themselves SEC issuers (e.g., semiconductor manufacturers, electronics distributors), request access to their filed Form SD or underlying CMRT data directly from their compliance portals to accelerate smelter list validation.</li></ul>
         
       </div>
     </div>
@@ -1162,7 +1174,7 @@
       <div class="section-title-line"></div>
     </div>
     <div class="panel">
-      <div class="strategy-text">The Form SD filing season for calendar year 2025 is actively open — OSI Systems and Alpha &amp; Omega Semiconductor have already filed, and the May 31, 2026 deadline is approximately nine weeks away. This week, the compliance team must finalize CMRT collection from all electronics and hardware suppliers, complete the RCOI documentation package, and begin drafting the conflict minerals report (or customer-facing CMRT submission). Simultaneously, confirm the company&#39;s SEC filing obligation status and cross-check smelter lists against current RMI conformant smelter data to ensure the filing or customer submission is defensible.</div>
+      <div class="strategy-text">With DRDGOLD&#39;s Form SD filed March 27 and the May 31, 2026 reporting deadline now under 65 days away, the compliance team must treat conflict minerals as a high-urgency active workstream this week. Immediately dispatch CMRT collection requests through the Assent platform to all suppliers of 3TG-relevant components, set a hard internal return deadline of April 15, and begin aggregating smelter lists for RCOI analysis. In parallel, confirm whether any major customers have already issued CMRT requests to the company as a vendor, and prepare the company&#39;s own CMRT response to avoid being flagged as non-responsive in customers&#39; vendor compliance programs.</div>
     </div>
     
 
@@ -1505,7 +1517,7 @@
           <option value="90">90 days</option>
         </select>
       </div>
-      <div class="filter-count" id="tp-count">15 articles</div>
+      <div class="filter-count" id="tp-count">16 articles</div>
       <!-- Compact badge legend -->
       <div class="sidebar-legend">
         <div class="sidebar-legend-title">&#x25A6; Badge Guide</div>
@@ -1528,11 +1540,60 @@
       </div>
       
       <div class="month-divider" data-month-divider>2026-03</div><div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="drdgold ltd  (drd, drdgf)  (cik 0001023512) — form sd conflict minerals report (2026-03)"
+           data-snippet="sec form sd annual conflict minerals disclosure under dodd-frank section 1502. company: drdgold ltd  (drd, drdgf)  (cik 0001023512). filed: 2026-03-27. accession: 0001628280-26-021569."
+           data-urgency="medium"
+           data-date="2026-03-27"
+           data-relevance="MONITOR"
+           data-topic="conflictminerals"
+           data-ad-title="DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) — Form SD Conflict Minerals Report (2026-03)"
+           data-ad-summary="DRDGOLD LTD, a South African gold mining company, filed its annual Form SD conflict minerals disclosure under Dodd-Frank Section 1502 on March 27, 2026. As a gold producer filing with the SEC, this disclosure reflects upstream reporting obligations that flow through global supply chains to downstream manufacturers using gold in electronics contacts and connections. The filing is informational but signals active SEC enforcement calendar for the 2025 reporting year."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.0"
+           data-source="SEC EDGAR — Form SD"
+           data-url="https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm" target="_blank">DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) — Form SD Conflict Minerals Report (2026-03)</a>
+          </span>
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            
+            
+            <span class="badge badge-impact lo" title="Company impact score">1.0</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>SEC EDGAR — Form SD</span>
+          
+          <span>·</span>
+          <span>2026-03-27</span>
+          
+        </div>
+        
+        <div class="article-snippet">DRDGOLD LTD, a South African gold mining company, filed its annual Form SD conflict minerals disclosure under Dodd-Frank Section 1502 on March 27, 2026. As a gold producer filing with the SEC, this disclosure reflects upstream reporting obligations that flow through global supply chains to downstream manufacturers using gold in electronics contacts and connections. The filing is informational but signals active SEC enforcement calendar for the 2025 reporting year.</div>
+        
+      </div>
+      <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="definition of a ski area"
            data-snippet="the united states department of agriculture, forest service (forest service or agency) is issuing a final rule revising the definition of a ski area in its special use regulations. the revised definition aligns more closely with the forest service&#39;s statutory authority for ski area administration and reduces burden on the agency and special use permit holders."
            data-urgency="low"
            data-date="2026-03-25"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Definition of a Ski Area"
+           data-ad-summary="The United States Department of Agriculture, Forest Service (Forest Service or Agency) is issuing a final rule revising the definition of a ski area in its special use regulations. The revised definition aligns more closely with the Forest Service&#39;s statutory authority for ski area administration and reduces burden on the agency and special use permit holders."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area" target="_blank">Definition of a Ski Area</a>
@@ -1558,11 +1619,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="direct sale of public land for affordable housing purposes in the city of henderson, nevada"
            data-snippet="the bureau of land management (blm) proposes to sell an 18.59- acre parcel of public land located in the west portion of henderson, nevada, under the authority of section 203 of the federal land policy and management act of 1976, as amended (flpma); applicable blm land sale regulations; and the southern nevada public land management act of 1998, as amended (snplma). the blm intends to conduct a direct sale of the parcel to the city of henderson, a political subdivision of the state of nevada, at"
            data-urgency="low"
            data-date="2026-03-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada"
+           data-ad-summary="The Bureau of Land Management (BLM) proposes to sell an 18.59- acre parcel of public land located in the west portion of Henderson, Nevada, under the authority of section 203 of the Federal Land Policy and Management Act of 1976, as amended (FLPMA); applicable BLM land sale regulations; and the Southern Nevada Public Land Management Act of 1998, as amended (SNPLMA). The BLM intends to conduct a direct sale of the parcel to the City of Henderson, a political subdivision of the State of Nevada, at"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada" target="_blank">Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada</a>
@@ -1588,11 +1658,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="deep seabed mining: notice of receipt of applications for deep seabed mining exploration licenses and announcement of public comment period and virtual public hearings"
            data-snippet="noaa has received two applications for licenses to conduct seabed mining exploration activities that are fully compliant with the applicable information requirements of the deep seabed hard mineral resources act (dshmra or the act) and the act&#39;s implementing regulations. as part of the application review process, noaa will hold one virtual public hearing on american metal resources, llc&#39;s (amr) application and one virtual public hearing on seax, inc.&#39;s (seax) application, and will accept written"
            data-urgency="low"
            data-date="2026-03-23"
-           data-relevance="MONITOR">
+           data-relevance="MONITOR"
+           data-topic="conflictminerals"
+           data-ad-title="Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings"
+           data-ad-summary="NOAA received applications from American Metal Resources LLC and SeaX Inc. for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act and announced virtual public hearings. Deep seabed mineral deposits are rich in cobalt, manganese, nickel, and rare earth elements — not 3TG — but this development signals a potential future diversification of mineral sourcing away from conflict-affected regions. This is a long-horizon watch item for conflict minerals supply chain risk reduction."
+           data-ad-relevance-reason=""
+           data-ad-impact="1.0"
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and" target="_blank">Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings</a>
@@ -1615,15 +1694,24 @@
           
         </div>
         
-        <div class="article-snippet">NOAA has received two compliant applications for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act and is scheduling public hearings. Deep seabed mining targets polymetallic nodules containing cobalt, nickel, copper, and manganese — not 3TG — but signals expanding US government interest in alternative critical mineral sourcing outside conflict-affected regions. This is a long-range development with indirect relevance to diversifying mineral supply chains away from DRC-adjacent sources.</div>
+        <div class="article-snippet">NOAA received applications from American Metal Resources LLC and SeaX Inc. for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act and announced virtual public hearings. Deep seabed mineral deposits are rich in cobalt, manganese, nickel, and rare earth elements — not 3TG — but this development signals a potential future diversification of mineral sourcing away from conflict-affected regions. This is a long-horizon watch item for conflict minerals supply chain risk reduction.</div>
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="osi systems inc  (osis)  (cik 0001039065) — form sd conflict minerals report (2026-03)"
            data-snippet="sec form sd annual conflict minerals disclosure under dodd-frank section 1502. company: osi systems inc  (osis)  (cik 0001039065). filed: 2026-03-23. accession: 0001104659-26-033292."
-           data-urgency="high"
+           data-urgency="medium"
            data-date="2026-03-23"
-           data-relevance="MONITOR">
+           data-relevance="MONITOR"
+           data-topic="conflictminerals"
+           data-ad-title="OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)"
+           data-ad-summary="OSI Systems Inc., a security and inspection equipment manufacturer, filed its annual Form SD conflict minerals disclosure on March 23, 2026, covering calendar year 2025. OSI&#39;s products overlap significantly with the company&#39;s automation electronics supply chain — sensors, control boards, and imaging systems — making their CMRT methodology a useful benchmark for RCOI scope and smelter lists. This filing confirms that complex electronics manufacturers are actively completing 3TG due diligence."
+           data-ad-relevance-reason="OSI Systems manufactures electronics; our motors and electronics components may originate from suppliers using conflict minerals, creating future supply chain transparency obligations."
+           data-ad-impact="1.2"
+           data-source="SEC EDGAR — Form SD"
+           data-url="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm" target="_blank">OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)</a>
@@ -1646,15 +1734,24 @@
           
         </div>
         
-        <div class="article-snippet">OSI Systems Inc. (OSIS), a manufacturer of security and inspection systems, filed its annual Form SD conflict minerals disclosure with the SEC on March 23, 2026, covering calendar year 2025. OSI Systems manufactures electronics-intensive products containing 3TG minerals and represents a peer-company benchmark for conflict minerals due diligence practices. This filing signals the active 2026 Form SD filing season is underway for calendar-year 2025 reporting.</div>
+        <div class="article-snippet">OSI Systems Inc., a security and inspection equipment manufacturer, filed its annual Form SD conflict minerals disclosure on March 23, 2026, covering calendar year 2025. OSI&#39;s products overlap significantly with the company&#39;s automation electronics supply chain — sensors, control boards, and imaging systems — making their CMRT methodology a useful benchmark for RCOI scope and smelter lists. This filing confirms that complex electronics manufacturers are actively completing 3TG due diligence.</div>
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="land uses; special uses"
            data-snippet="the united states department of agriculture (department), forest service (forest service or agency), is issuing this final rule to update its special uses regulations on filming and still photography to be consistent with the new requirements in the expanding public lands outdoor recreation experiences act (explore act or act). the technical revisions include adding a statutory reference to the explore act and updating terminology and definitions to be consistent with the act."
            data-urgency="low"
            data-date="2026-03-19"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Land Uses; Special Uses"
+           data-ad-summary="The United States Department of Agriculture (Department), Forest Service (Forest Service or Agency), is issuing this final rule to update its special uses regulations on filming and still photography to be consistent with the new requirements in the Expanding Public Lands Outdoor Recreation Experiences Act (EXPLORE Act or Act). The technical revisions include adding a statutory reference to the EXPLORE Act and updating terminology and definitions to be consistent with the Act."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses" target="_blank">Land Uses; Special Uses</a>
@@ -1680,24 +1777,36 @@
         
       </div>
       <div class="month-divider" data-month-divider>2026-02</div><div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="alpha &amp; omega semiconductor ltd  (aosl)  (cik 0001387467) — form sd conflict minerals report (2026-02)"
            data-snippet="sec form sd annual conflict minerals disclosure under dodd-frank section 1502. company: alpha &amp; omega semiconductor ltd  (aosl)  (cik 0001387467). filed: 2026-02-27. accession: 0001387467-26-000015."
-           data-urgency="high"
+           data-urgency="medium"
            data-date="2026-02-27"
-           data-relevance="MONITOR">
+           data-relevance="INDIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)"
+           data-ad-summary="Alpha &amp; Omega Semiconductor filed its Form SD on February 27, 2026, disclosing conflict minerals due diligence for tantalum, tin, tungsten, and gold used in its power semiconductor products. As a direct supplier category analog — power semiconductors are used in automation motor drives and control boards — this filing underscores that the company&#39;s electronics component suppliers are expected to have CMRTs ready. Collecting CMRTs from semiconductor suppliers like this is a direct supply chain obligation for the company."
+           data-ad-relevance-reason="Semiconductor manufacturers&#39; conflict minerals diligence sets precedent for downstream supply chain transparency expectations that may eventually extend to electronics components purchased by windows/doors manufacturers."
+           data-ad-impact="1.9"
+           data-source="SEC EDGAR — Form SD"
+           data-url="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm" target="_blank">ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)</a>
           </span>
           <div class="article-badges">
             
-            <span class="badge badge-monitor" title="General news — no direct company impact">Monitor</span>
+            <span class="badge badge-indirect" title="Semiconductor manufacturers&#39; conflict minerals diligence sets precedent for downstream supply chain transparency expectations that may eventually extend to electronics components purchased by windows/doors manufacturers.">Indirect</span>
             
             
-            <span class="badge badge-impact lo" title="Company impact score">1.2</span>
+            
+            <span class="badge badge-impact lo" title="Company impact score">1.9</span>
             
           </div>
         </div>
+        
+        <div class="relevance-reason">&#x2197; Semiconductor manufacturers&#39; conflict minerals diligence sets precedent for downstream supply chain transparency expectations that may eventually extend to electronics components purchased by windows/doors manufacturers.</div>
         
         <div class="article-meta">
           <span>SEC EDGAR — Form SD</span>
@@ -1707,15 +1816,24 @@
           
         </div>
         
-        <div class="article-snippet">Alpha &amp; Omega Semiconductor Ltd. (AOSL), a semiconductor manufacturer, filed its annual Form SD conflict minerals report on February 27, 2026, covering calendar year 2025. Semiconductor companies like AOSL are direct upstream participants in 3TG supply chains relevant to the company&#39;s purchased automation electronics and control boards. This filing is a reference point for understanding smelter/refiner disclosure practices in the semiconductor supply chain.</div>
+        <div class="article-snippet">Alpha &amp; Omega Semiconductor filed its Form SD on February 27, 2026, disclosing conflict minerals due diligence for tantalum, tin, tungsten, and gold used in its power semiconductor products. As a direct supplier category analog — power semiconductors are used in automation motor drives and control boards — this filing underscores that the company&#39;s electronics component suppliers are expected to have CMRTs ready. Collecting CMRTs from semiconductor suppliers like this is a direct supply chain obligation for the company.</div>
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="endangered and threatened wildlife and plants; removal of geocarpon minimum from the list of endangered and threatened plants"
            data-snippet="we, the u.s. fish and wildlife service (service), propose to remove geocarpon minimum from the federal list of endangered and threatened plants. our review indicates that the threats to geocarpon minimum have been eliminated or reduced to the point that the species no longer meets the definition of an endangered or threatened species under the endangered species act of 1973, as amended (act). accordingly, we propose to delist geocarpon minimum. this proposed rule completes the 5-year status revi"
            data-urgency="low"
            data-date="2026-02-26"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants"
+           data-ad-summary="We, the U.S. Fish and Wildlife Service (Service), propose to remove Geocarpon minimum from the Federal List of Endangered and Threatened Plants. Our review indicates that the threats to Geocarpon minimum have been eliminated or reduced to the point that the species no longer meets the definition of an endangered or threatened species under the Endangered Species Act of 1973, as amended (Act). Accordingly, we propose to delist Geocarpon minimum. This proposed rule completes the 5-year status revi"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of" target="_blank">Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants</a>
@@ -1741,11 +1859,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="public land order no. 7966; partial revocation of public land order nos. 5150 and 5180, as amended, modified, or corrected; alaska"
            data-snippet="this order partially revokes two public land orders (plos) insofar as they affect approximately 2,127,845 acres of public land reserved for use as the dalton utility corridor and for study and classification, as appropriate, by the department of the interior. revocation of the plos within the dalton utility corridor opens these lands to mineral and resource development opportunity. the bureau of land management (blm) analyzed partial revocation of these plos in the final environmental impact sta"
            data-urgency="low"
            data-date="2026-02-25"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska"
+           data-ad-summary="This order partially revokes two Public Land Orders (PLOs) insofar as they affect approximately 2,127,845 acres of public land reserved for use as the Dalton Utility Corridor and for study and classification, as appropriate, by the Department of the Interior. Revocation of the PLOs within the Dalton Utility Corridor opens these lands to mineral and resource development opportunity. The Bureau of Land Management (BLM) analyzed partial revocation of these PLOs in the Final Environmental Impact Sta"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended" target="_blank">Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska</a>
@@ -1771,11 +1898,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="national environmental policy act implementing regulations"
            data-snippet="the department of the interior (department or doi) is adopting the interim final rule (ifr) published on july 3, 2025, with minor changes, as final. in the ifr, doi provided a 30-day comment period for the public to review and make comments. this final rule addresses public comments and adopts as final the ifr, with certain substantive changes as explained herein. the ifr partially rescinded doi&#39;s regulations implementing the national environmental policy act (nepa) and made necessary targeted u"
            data-urgency="low"
            data-date="2026-02-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="National Environmental Policy Act Implementing Regulations"
+           data-ad-summary="The Department of the Interior (Department or DOI) is adopting the interim final rule (IFR) published on July 3, 2025, with minor changes, as final. In the IFR, DOI provided a 30-day comment period for the public to review and make comments. This final rule addresses public comments and adopts as final the IFR, with certain substantive changes as explained herein. The IFR partially rescinded DOI&#39;s regulations implementing the National Environmental Policy Act (NEPA) and made necessary targeted u"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations" target="_blank">National Environmental Policy Act Implementing Regulations</a>
@@ -1801,11 +1937,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="taking and importing marine mammals; taking marine mammals incidental to geophysical surveys in the gulf of america"
            data-snippet="nmfs has received a request for the reimplementation of incidental take regulations (itr) governing the incidental taking of marine mammals during geophysical survey activity conducted in the gulf of america (goa). pursuant to the marine mammal protection act (mmpa), nmfs is requesting comments on its proposed rule and will consider public comments relevant to this proposed rule prior to issuing any final rule."
            data-urgency="low"
            data-date="2026-02-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America"
+           data-ad-summary="NMFS has received a request for the reimplementation of incidental take regulations (ITR) governing the incidental taking of marine mammals during geophysical survey activity conducted in the Gulf of America (GOA). Pursuant to the Marine Mammal Protection Act (MMPA), NMFS is requesting comments on its proposed rule and will consider public comments relevant to this proposed rule prior to issuing any final rule."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the" target="_blank">Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America</a>
@@ -1831,11 +1976,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="west virginia regulatory program"
            data-snippet="we, the office of surface mining reclamation and enforcement (osmre), are publishing this final rule to amend the existing federal lands cooperative agreement between west virginia and the u.s. department of the interior (department). the surface mining control and reclamation act of 1977 (smcra or the act) and the federal regulations authorize a state with an approved permanent regulatory program to enter into an agreement for the state regulation of surface coal mining and reclamation operatio"
            data-urgency="low"
            data-date="2026-02-20"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="West Virginia Regulatory Program"
+           data-ad-summary="We, the Office of Surface Mining Reclamation and Enforcement (OSMRE), are publishing this final rule to amend the existing Federal Lands Cooperative Agreement between West Virginia and the U.S. Department of the Interior (Department). The Surface Mining Control and Reclamation Act of 1977 (SMCRA or the Act) and the Federal regulations authorize a State with an approved permanent regulatory program to enter into an agreement for the State regulation of surface coal mining and reclamation operatio"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program" target="_blank">West Virginia Regulatory Program</a>
@@ -1861,11 +2015,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="locatable minerals"
            data-snippet="the u.s. department of agriculture, forest service (agency), is proposing to revise its regulations governing occupancy and use of the surface of national forest system lands in connection with prospecting, exploration, development, mining, processing, and reclamation and reasonably incident uses authorized by u.s. mining laws and the organic administration act of 1897. regulatory revisions are needed to improve the efficiency and transparency of forest service regulation of locatable mineral op"
            data-urgency="low"
            data-date="2026-02-20"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Locatable Minerals"
+           data-ad-summary="The U.S. Department of Agriculture, Forest Service (Agency), is proposing to revise its regulations governing occupancy and use of the surface of National Forest System lands in connection with prospecting, exploration, development, mining, processing, and reclamation and reasonably incident uses authorized by U.S. mining laws and the Organic Administration Act of 1897. Regulatory revisions are needed to improve the efficiency and transparency of Forest Service regulation of locatable mineral op"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals" target="_blank">Locatable Minerals</a>
@@ -1891,11 +2054,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="rescission of the “ten-day notices and corrective action for state regulatory program issues” rule, issued april 9, 2024"
            data-snippet="the office of surface mining reclamation and enforcement (&#34;osmre&#34; or &#34;osm&#34;) is rescinding the &#34;ten-day notices and corrective action for state regulatory program issues&#34; rule adopted on april 9, 2024 (the &#34;2024 rule&#34;), and replacing it, in large part, with the rule titled, &#34;clarification of provisions related to the issuance of ten-day notices to state regulatory authorities and enhancement of corrective action for state regulatory program issues,&#34; which was first adopted on november 24, 2020 (t"
            data-urgency="low"
            data-date="2026-02-19"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Rescission of the “Ten-Day Notices and Corrective Action for State Regulatory Program Issues” Rule, Issued April 9, 2024"
+           data-ad-summary="The Office of Surface Mining Reclamation and Enforcement (&#34;OSMRE&#34; or &#34;OSM&#34;) is rescinding the &#34;Ten-Day Notices and Corrective Action for State Regulatory Program Issues&#34; rule adopted on April 9, 2024 (the &#34;2024 Rule&#34;), and replacing it, in large part, with the rule titled, &#34;Clarification of Provisions Related to the Issuance of Ten-Day Notices to State Regulatory Authorities and Enhancement of Corrective Action for State Regulatory Program Issues,&#34; which was first adopted on November 24, 2020 (t"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule" target="_blank">Rescission of the “Ten-Day Notices and Corrective Action for State Regulatory Program Issues” Rule, Issued April 9, 2024</a>
@@ -1921,11 +2093,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="tongass national forest; alaska; land management plan revision"
            data-snippet="the u.s. department of agriculture, forest service is revising the land management plan for the tongass national forest. this notice announces the forest service&#39;s initiation of the development of a revised land management plan (revised plan) and intent to prepare an environmental impact statement (eis) to evaluate the effects of revising the current plan. this notice initiates the scoping period on the development of the proposed action and eis. this notice also describes the documents and back"
            data-urgency="low"
            data-date="2026-02-18"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="Tongass National Forest; Alaska; Land Management Plan Revision"
+           data-ad-summary="The U.S. Department of Agriculture, Forest Service is revising the land management plan for the Tongass National Forest. This notice announces the Forest Service&#39;s initiation of the development of a revised land management plan (revised plan) and intent to prepare an environmental impact statement (EIS) to evaluate the effects of revising the current plan. This notice initiates the scoping period on the development of the proposed action and EIS. This notice also describes the documents and back"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision" target="_blank">Tongass National Forest; Alaska; Land Management Plan Revision</a>
@@ -1951,11 +2132,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="united states v. reddy ice llc, et al. proposed final judgment and competitive impact statement"
            data-snippet=""
            data-urgency="low"
            data-date="2026-02-18"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="conflictminerals"
+           data-ad-title="United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement"
+           data-ad-summary=""
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement" target="_blank">United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement</a>
@@ -2314,6 +2504,153 @@ var DEADLINE_ANALYSES = {"483": {"analyzed_at": "2026-03-25T00:23:25.015983", "c
     document.body.style.overflow = '';
   };
 
+  // ── Article Detail Modal ───────────────────────────────────────────────────
+
+  var _WORKER_URL = 'https://andersencompliance.workers.dev';
+  var _SEVERITY_COLORS = { HIGH: '#fee2e2', MEDIUM: '#fef3c7', LOW: '#d1fae5', MONITORING: '#f1f5f9' };
+  var _SEVERITY_TEXT = { HIGH: '#991b1b', MEDIUM: '#92400e', LOW: '#065f46', MONITORING: '#475569' };
+
+  window.openArticleDetailFromEl = function(e, el) {
+    if (e.target.closest('a') || e.target.closest('.fav-btn') || e.target.closest('.send-btn')) return;
+    var favBtn = el.querySelector('.fav-btn');
+    var data = {
+      url:    favBtn ? favBtn.dataset.url : (el.dataset.url || ''),
+      title:  el.dataset.adTitle || el.dataset.headline || '',
+      topic:  el.dataset.topic || '',
+      source: el.dataset.source || '',
+      summary: el.dataset.adSummary || '',
+      urgency: (el.dataset.urgency || 'LOW').toUpperCase(),
+      relevance: el.dataset.relevance || '',
+      relevanceReason: el.dataset.adRelevanceReason || '',
+      impact: el.dataset.adImpact || '',
+    };
+    openArticleDetail(data);
+  };
+
+  window.openArticleDetail = function(data) {
+    var overlay = document.getElementById('ad-overlay');
+    var titleEl = document.getElementById('ad-title');
+    var topicBadge = document.getElementById('ad-topic-badge');
+    var urgencyBadge = document.getElementById('ad-urgency-badge');
+    var body = document.getElementById('ad-body');
+
+    titleEl.textContent = data.title || 'Article';
+    topicBadge.textContent = data.topic || '';
+    urgencyBadge.textContent = data.urgency || '';
+    urgencyBadge.style.background = _SEVERITY_COLORS[data.urgency] || _SEVERITY_COLORS.MONITORING;
+    urgencyBadge.style.color = _SEVERITY_TEXT[data.urgency] || _SEVERITY_TEXT.MONITORING;
+
+    body.innerHTML = _buildArticleModalInitial(data);
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    _fetchArticleAI(data);
+  };
+
+  window.closeArticleDetail = function(e) {
+    if (e && e.target !== document.getElementById('ad-overlay')) return;
+    document.getElementById('ad-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  function _buildArticleModalInitial(data) {
+    var sections = '';
+    sections += '<div class="bd-section">';
+    sections += '<div class="bd-section-title">Source</div>';
+    sections += '<div class="bd-section-body" style="display:flex;align-items:center;gap:12px;">';
+    sections += '<span>' + _escHtml(data.source) + '</span>';
+    if (data.url) sections += '<a class="bd-source-link" href="' + _escHtml(data.url) + '" target="_blank" rel="noopener">Read full article &rarr;</a>';
+    sections += '</div></div>';
+
+    if (data.summary) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Summary</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(data.summary) + '</div></div>';
+    }
+
+    var hasRelevance = data.relevance || data.relevanceReason;
+    var hasImpact = data.impact;
+    if (hasRelevance || hasImpact) {
+      if (hasRelevance && hasImpact) sections += '<div class="bd-two-col">';
+      if (hasRelevance) {
+        sections += '<div class="bd-section"><div class="bd-section-title">Relevance — ' + _escHtml(data.relevance) + '</div>';
+        sections += '<div class="bd-section-body">' + _escHtml(data.relevanceReason || data.relevance) + '</div></div>';
+      }
+      if (hasImpact) {
+        var score = parseFloat(data.impact);
+        var scoreColor = score >= 7 ? '#991b1b' : score >= 4 ? '#92400e' : '#065f46';
+        sections += '<div class="bd-section"><div class="bd-section-title">Impact Score</div>';
+        sections += '<div class="bd-section-body"><span style="font-size:24px;font-weight:700;font-family:var(--mono);color:' + scoreColor + ';">' + data.impact + '</span>';
+        sections += '<span style="font-size:12px;color:var(--text-muted);margin-left:4px;">/ 10</span></div></div>';
+      }
+      if (hasRelevance && hasImpact) sections += '</div>';
+    }
+
+    sections += '<div id="ad-ai-section"><div class="bd-section"><div class="bd-pending">';
+    sections += '<div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:2px;">ANALYZING…</div>';
+    sections += '</div></div></div>';
+    return sections;
+  }
+
+  function _fetchArticleAI(data) {
+    var prompt = 'You are a regulatory compliance analyst for a US windows/doors manufacturer (Andersen Corporation). '
+      + 'They have PFAS exposure from fluoropolymer coatings and a large supply chain of components (electronics, o-rings, gaskets, vinyl, hardware, lubricants, PPE).\n\n'
+      + 'Analyze this regulatory article:\nTopic: ' + data.topic + '\nSource: ' + data.source + '\nTitle: ' + data.title + '\n'
+      + (data.summary ? 'Summary: ' + data.summary + '\n' : '')
+      + '\nReturn ONLY valid JSON:\n'
+      + '{"broader_context":"2-3 sentences on where this fits in the broader regulatory landscape",'
+      + '"company_impact":{"direct":"Impact on manufactured products/coatings","supply_chain":"Impact on purchased components/suppliers","severity":"HIGH|MEDIUM|LOW|MONITORING"},'
+      + '"recommended_actions":["action1","action2","action3"],'
+      + '"key_implication":"The single most important takeaway for this company"}';
+
+    fetch(_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+      if (!resp.content || !resp.content[0]) { _renderArticleAIError(); return; }
+      var text = resp.content[0].text.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'');
+      try { _renderArticleAIResult(data, JSON.parse(text)); } catch(e) { _renderArticleAIError(); }
+    })
+    .catch(function() { _renderArticleAIError(); });
+  }
+
+  function _renderArticleAIResult(data, ai) {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    var sections = '';
+    if (ai.key_implication) {
+      sections += '<div class="bd-section" style="background:var(--surface-sunken,#1a2033);">';
+      sections += '<div class="bd-section-title" style="color:var(--accent);">Key Implication</div>';
+      sections += '<div class="bd-section-body" style="font-weight:500;">' + _escHtml(ai.key_implication) + '</div></div>';
+    }
+    if (ai.broader_context) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Broader Context</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(ai.broader_context) + '</div></div>';
+    }
+    if (ai.company_impact) {
+      var impact = ai.company_impact;
+      var sev = (impact.severity || 'MONITORING').toUpperCase();
+      sections += '<div class="bd-section" style="background:' + (_SEVERITY_COLORS[sev]||_SEVERITY_COLORS.MONITORING) + '18;">';
+      sections += '<div class="bd-section-title" style="color:' + (_SEVERITY_TEXT[sev]||_SEVERITY_TEXT.MONITORING) + ';">Company Impact — ' + sev + '</div>';
+      if (impact.direct) sections += '<div style="margin-bottom:6px;"><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">DIRECT PRODUCTS</span><div class="bd-section-body">' + _escHtml(impact.direct) + '</div></div>';
+      if (impact.supply_chain) sections += '<div><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">SUPPLY CHAIN</span><div class="bd-section-body">' + _escHtml(impact.supply_chain) + '</div></div>';
+      sections += '</div>';
+    }
+    if (ai.recommended_actions && ai.recommended_actions.length) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Recommended Actions</div><ul class="bd-action-list">';
+      ai.recommended_actions.forEach(function(act) { sections += '<li>' + _escHtml(act) + '</li>'; });
+      sections += '</ul></div>';
+    }
+    aiSection.innerHTML = sections;
+  }
+
+  function _renderArticleAIError() {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    aiSection.innerHTML = '<div class="bd-section"><div class="bd-section-body" style="color:var(--text-muted);font-size:12px;">AI enrichment unavailable.</div></div>';
+  }
+
   window.openDeadlineDetailFromEl = function(el) {
     openDeadlineDetail(el.dataset.deadlineId || '');
   };
@@ -2419,6 +2756,7 @@ var DEADLINE_ANALYSES = {"483": {"analyzed_at": "2026-03-25T00:23:25.015983", "c
     if (e.key === 'Escape') {
       document.getElementById('bd-overlay').classList.remove('open');
       document.getElementById('dd-overlay').classList.remove('open');
+      document.getElementById('ad-overlay').classList.remove('open');
       document.body.style.overflow = '';
     }
   });

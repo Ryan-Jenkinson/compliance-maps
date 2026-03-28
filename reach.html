@@ -998,6 +998,23 @@
   </div>
 </div>
 
+<!-- ═══ ARTICLE DETAIL MODAL ═══ -->
+<div class="bd-overlay" id="ad-overlay" onclick="closeArticleDetail(event)">
+  <div class="bd-modal" onclick="event.stopPropagation()">
+    <div class="bd-header">
+      <div class="bd-header-left">
+        <span class="bd-bill-label" id="ad-title" style="font-size:13px;font-weight:600;max-width:580px;white-space:normal;line-height:1.3;">—</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <span class="bd-topic-badge" id="ad-topic-badge"></span>
+        <span class="bd-severity-badge" id="ad-urgency-badge"></span>
+        <button class="expand-modal-close" onclick="closeArticleDetail()">Close</button>
+      </div>
+    </div>
+    <div class="bd-body" id="ad-body"></div>
+  </div>
+</div>
+
 <!-- ═══ DEADLINE DETAIL MODAL ═══ -->
 <div class="dd-overlay" id="dd-overlay" onclick="closeDeadlineDetail(event)">
   <div class="dd-modal" onclick="event.stopPropagation()">
@@ -1214,11 +1231,20 @@
       </div>
       
       <div class="month-divider" data-month-divider>2026-02</div><div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="svhc candidate list addition: n-hexane"
            data-snippet="substance added to echa svhc candidate list on 04-feb-2026: n-hexane"
            data-urgency="low"
            data-date="2026-02-04"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="reach"
+           data-ad-title="SVHC Candidate List addition: n-hexane"
+           data-ad-summary="Substance added to ECHA SVHC Candidate List on 04-Feb-2026: n-hexane"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="ECHA"
+           data-url="https://echa.europa.euhttps://echa.europa.eu/substance-information/-/substanceinfo/100.003.435?_disssubsinfo_WAR_disssubsinfoportlet_substanceId=100.003.435">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://echa.europa.euhttps://echa.europa.eu/substance-information/-/substanceinfo/100.003.435?_disssubsinfo_WAR_disssubsinfoportlet_substanceId=100.003.435" target="_blank">SVHC Candidate List addition: n-hexane</a>
@@ -1244,11 +1270,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="svhc candidate list addition: 4,4&#39;-[2,2,2-trifluoro-1-(trifluoromethyl)ethylidene]diphenol and its salts"
            data-snippet="substance added to echa svhc candidate list on 04-feb-2026: 4,4&#39;-[2,2,2-trifluoro-1-(trifluoromethyl)ethylidene]diphenol and its salts"
            data-urgency="low"
            data-date="2026-02-04"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="reach"
+           data-ad-title="SVHC Candidate List addition: 4,4&#39;-[2,2,2-trifluoro-1-(trifluoromethyl)ethylidene]diphenol and its salts"
+           data-ad-summary="Substance added to ECHA SVHC Candidate List on 04-Feb-2026: 4,4&#39;-[2,2,2-trifluoro-1-(trifluoromethyl)ethylidene]diphenol and its salts"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="ECHA"
+           data-url="https://echa.europa.euhttps://echa.europa.eu/substance-information/-/substanceinfo/100.510.847?_disssubsinfo_WAR_disssubsinfoportlet_substanceId=100.510.847">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://echa.europa.euhttps://echa.europa.eu/substance-information/-/substanceinfo/100.510.847?_disssubsinfo_WAR_disssubsinfoportlet_substanceId=100.510.847" target="_blank">SVHC Candidate List addition: 4,4&#39;-[2,2,2-trifluoro-1-(trifluoromethyl)ethylidene]diphenol and its salts</a>
@@ -1274,11 +1309,20 @@
         
       </div>
       <div class="month-divider" data-month-divider>2025-11</div><div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="svhc candidate list addition: 1,1&#39;-(ethane-1,2-diyl)bis[pentabromobenzene] (dbdpe)"
            data-snippet="substance added to echa svhc candidate list on 05-nov-2025: 1,1&#39;-(ethane-1,2-diyl)bis[pentabromobenzene] (dbdpe)"
            data-urgency="low"
            data-date="2025-11-05"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="reach"
+           data-ad-title="SVHC Candidate List addition: 1,1&#39;-(ethane-1,2-diyl)bis[pentabromobenzene] (DBDPE)"
+           data-ad-summary="Substance added to ECHA SVHC Candidate List on 05-Nov-2025: 1,1&#39;-(ethane-1,2-diyl)bis[pentabromobenzene] (DBDPE)"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="ECHA"
+           data-url="https://echa.europa.euhttps://echa.europa.eu/substance-information/-/substanceinfo/100.076.669?_disssubsinfo_WAR_disssubsinfoportlet_substanceId=100.076.669">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://echa.europa.euhttps://echa.europa.eu/substance-information/-/substanceinfo/100.076.669?_disssubsinfo_WAR_disssubsinfoportlet_substanceId=100.076.669" target="_blank">SVHC Candidate List addition: 1,1&#39;-(ethane-1,2-diyl)bis[pentabromobenzene] (DBDPE)</a>
@@ -1639,6 +1683,153 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
     document.body.style.overflow = '';
   };
 
+  // ── Article Detail Modal ───────────────────────────────────────────────────
+
+  var _WORKER_URL = 'https://andersencompliance.workers.dev';
+  var _SEVERITY_COLORS = { HIGH: '#fee2e2', MEDIUM: '#fef3c7', LOW: '#d1fae5', MONITORING: '#f1f5f9' };
+  var _SEVERITY_TEXT = { HIGH: '#991b1b', MEDIUM: '#92400e', LOW: '#065f46', MONITORING: '#475569' };
+
+  window.openArticleDetailFromEl = function(e, el) {
+    if (e.target.closest('a') || e.target.closest('.fav-btn') || e.target.closest('.send-btn')) return;
+    var favBtn = el.querySelector('.fav-btn');
+    var data = {
+      url:    favBtn ? favBtn.dataset.url : (el.dataset.url || ''),
+      title:  el.dataset.adTitle || el.dataset.headline || '',
+      topic:  el.dataset.topic || '',
+      source: el.dataset.source || '',
+      summary: el.dataset.adSummary || '',
+      urgency: (el.dataset.urgency || 'LOW').toUpperCase(),
+      relevance: el.dataset.relevance || '',
+      relevanceReason: el.dataset.adRelevanceReason || '',
+      impact: el.dataset.adImpact || '',
+    };
+    openArticleDetail(data);
+  };
+
+  window.openArticleDetail = function(data) {
+    var overlay = document.getElementById('ad-overlay');
+    var titleEl = document.getElementById('ad-title');
+    var topicBadge = document.getElementById('ad-topic-badge');
+    var urgencyBadge = document.getElementById('ad-urgency-badge');
+    var body = document.getElementById('ad-body');
+
+    titleEl.textContent = data.title || 'Article';
+    topicBadge.textContent = data.topic || '';
+    urgencyBadge.textContent = data.urgency || '';
+    urgencyBadge.style.background = _SEVERITY_COLORS[data.urgency] || _SEVERITY_COLORS.MONITORING;
+    urgencyBadge.style.color = _SEVERITY_TEXT[data.urgency] || _SEVERITY_TEXT.MONITORING;
+
+    body.innerHTML = _buildArticleModalInitial(data);
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    _fetchArticleAI(data);
+  };
+
+  window.closeArticleDetail = function(e) {
+    if (e && e.target !== document.getElementById('ad-overlay')) return;
+    document.getElementById('ad-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  function _buildArticleModalInitial(data) {
+    var sections = '';
+    sections += '<div class="bd-section">';
+    sections += '<div class="bd-section-title">Source</div>';
+    sections += '<div class="bd-section-body" style="display:flex;align-items:center;gap:12px;">';
+    sections += '<span>' + _escHtml(data.source) + '</span>';
+    if (data.url) sections += '<a class="bd-source-link" href="' + _escHtml(data.url) + '" target="_blank" rel="noopener">Read full article &rarr;</a>';
+    sections += '</div></div>';
+
+    if (data.summary) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Summary</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(data.summary) + '</div></div>';
+    }
+
+    var hasRelevance = data.relevance || data.relevanceReason;
+    var hasImpact = data.impact;
+    if (hasRelevance || hasImpact) {
+      if (hasRelevance && hasImpact) sections += '<div class="bd-two-col">';
+      if (hasRelevance) {
+        sections += '<div class="bd-section"><div class="bd-section-title">Relevance — ' + _escHtml(data.relevance) + '</div>';
+        sections += '<div class="bd-section-body">' + _escHtml(data.relevanceReason || data.relevance) + '</div></div>';
+      }
+      if (hasImpact) {
+        var score = parseFloat(data.impact);
+        var scoreColor = score >= 7 ? '#991b1b' : score >= 4 ? '#92400e' : '#065f46';
+        sections += '<div class="bd-section"><div class="bd-section-title">Impact Score</div>';
+        sections += '<div class="bd-section-body"><span style="font-size:24px;font-weight:700;font-family:var(--mono);color:' + scoreColor + ';">' + data.impact + '</span>';
+        sections += '<span style="font-size:12px;color:var(--text-muted);margin-left:4px;">/ 10</span></div></div>';
+      }
+      if (hasRelevance && hasImpact) sections += '</div>';
+    }
+
+    sections += '<div id="ad-ai-section"><div class="bd-section"><div class="bd-pending">';
+    sections += '<div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:2px;">ANALYZING…</div>';
+    sections += '</div></div></div>';
+    return sections;
+  }
+
+  function _fetchArticleAI(data) {
+    var prompt = 'You are a regulatory compliance analyst for a US windows/doors manufacturer (Andersen Corporation). '
+      + 'They have PFAS exposure from fluoropolymer coatings and a large supply chain of components (electronics, o-rings, gaskets, vinyl, hardware, lubricants, PPE).\n\n'
+      + 'Analyze this regulatory article:\nTopic: ' + data.topic + '\nSource: ' + data.source + '\nTitle: ' + data.title + '\n'
+      + (data.summary ? 'Summary: ' + data.summary + '\n' : '')
+      + '\nReturn ONLY valid JSON:\n'
+      + '{"broader_context":"2-3 sentences on where this fits in the broader regulatory landscape",'
+      + '"company_impact":{"direct":"Impact on manufactured products/coatings","supply_chain":"Impact on purchased components/suppliers","severity":"HIGH|MEDIUM|LOW|MONITORING"},'
+      + '"recommended_actions":["action1","action2","action3"],'
+      + '"key_implication":"The single most important takeaway for this company"}';
+
+    fetch(_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+      if (!resp.content || !resp.content[0]) { _renderArticleAIError(); return; }
+      var text = resp.content[0].text.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'');
+      try { _renderArticleAIResult(data, JSON.parse(text)); } catch(e) { _renderArticleAIError(); }
+    })
+    .catch(function() { _renderArticleAIError(); });
+  }
+
+  function _renderArticleAIResult(data, ai) {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    var sections = '';
+    if (ai.key_implication) {
+      sections += '<div class="bd-section" style="background:var(--surface-sunken,#1a2033);">';
+      sections += '<div class="bd-section-title" style="color:var(--accent);">Key Implication</div>';
+      sections += '<div class="bd-section-body" style="font-weight:500;">' + _escHtml(ai.key_implication) + '</div></div>';
+    }
+    if (ai.broader_context) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Broader Context</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(ai.broader_context) + '</div></div>';
+    }
+    if (ai.company_impact) {
+      var impact = ai.company_impact;
+      var sev = (impact.severity || 'MONITORING').toUpperCase();
+      sections += '<div class="bd-section" style="background:' + (_SEVERITY_COLORS[sev]||_SEVERITY_COLORS.MONITORING) + '18;">';
+      sections += '<div class="bd-section-title" style="color:' + (_SEVERITY_TEXT[sev]||_SEVERITY_TEXT.MONITORING) + ';">Company Impact — ' + sev + '</div>';
+      if (impact.direct) sections += '<div style="margin-bottom:6px;"><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">DIRECT PRODUCTS</span><div class="bd-section-body">' + _escHtml(impact.direct) + '</div></div>';
+      if (impact.supply_chain) sections += '<div><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">SUPPLY CHAIN</span><div class="bd-section-body">' + _escHtml(impact.supply_chain) + '</div></div>';
+      sections += '</div>';
+    }
+    if (ai.recommended_actions && ai.recommended_actions.length) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Recommended Actions</div><ul class="bd-action-list">';
+      ai.recommended_actions.forEach(function(act) { sections += '<li>' + _escHtml(act) + '</li>'; });
+      sections += '</ul></div>';
+    }
+    aiSection.innerHTML = sections;
+  }
+
+  function _renderArticleAIError() {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    aiSection.innerHTML = '<div class="bd-section"><div class="bd-section-body" style="color:var(--text-muted);font-size:12px;">AI enrichment unavailable.</div></div>';
+  }
+
   window.openDeadlineDetailFromEl = function(el) {
     openDeadlineDetail(el.dataset.deadlineId || '');
   };
@@ -1744,6 +1935,7 @@ var DEADLINE_ANALYSES = {"233": {"analyzed_at": "2026-03-24T17:08:20.981014", "c
     if (e.key === 'Escape') {
       document.getElementById('bd-overlay').classList.remove('open');
       document.getElementById('dd-overlay').classList.remove('open');
+      document.getElementById('ad-overlay').classList.remove('open');
       document.body.style.overflow = '';
     }
   });

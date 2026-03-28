@@ -998,6 +998,23 @@
   </div>
 </div>
 
+<!-- ═══ ARTICLE DETAIL MODAL ═══ -->
+<div class="bd-overlay" id="ad-overlay" onclick="closeArticleDetail(event)">
+  <div class="bd-modal" onclick="event.stopPropagation()">
+    <div class="bd-header">
+      <div class="bd-header-left">
+        <span class="bd-bill-label" id="ad-title" style="font-size:13px;font-weight:600;max-width:580px;white-space:normal;line-height:1.3;">—</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <span class="bd-topic-badge" id="ad-topic-badge"></span>
+        <span class="bd-severity-badge" id="ad-urgency-badge"></span>
+        <button class="expand-modal-close" onclick="closeArticleDetail()">Close</button>
+      </div>
+    </div>
+    <div class="bd-body" id="ad-body"></div>
+  </div>
+</div>
+
 <!-- ═══ DEADLINE DETAIL MODAL ═══ -->
 <div class="dd-overlay" id="dd-overlay" onclick="closeDeadlineDetail(event)">
   <div class="dd-modal" onclick="event.stopPropagation()">
@@ -1021,11 +1038,11 @@
 
     <!-- KPI Row --><div class="kpi-row">
       <div class="kpi-card">
-        <div class="kpi-value">15</div>
+        <div class="kpi-value">16</div>
         <div class="kpi-label">Articles / 6 mo</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-value">1</div>
+        <div class="kpi-value">2</div>
         <div class="kpi-label">New This Week</div>
       </div>
       
@@ -1135,12 +1152,12 @@
               <stop offset="0%" stop-color="#27AE60" stop-opacity="0.2"/>
               <stop offset="100%" stop-color="#27AE60" stop-opacity="0.02"/>
             </linearGradient>
-          </defs><polygon points="0.0,64 0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,30.0 161.4,30.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,0.0 215.2,0.0 215.2,0.0 233.1,0.0 233.1,60.0 251.0,60.0 251.0,30.0 269.0,30.0 269.0,30.0 286.9,30.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,30.0 340.7,30.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,0.0 394.5,0.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,0.0 502.1,0.0 502.1,60.0 520.0,60.0 520.0,60.0 520.0,64" fill="url(#chart-fill)"/>
-          <polyline points="0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,30.0 161.4,30.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,0.0 215.2,0.0 215.2,0.0 233.1,0.0 233.1,60.0 251.0,60.0 251.0,30.0 269.0,30.0 269.0,30.0 286.9,30.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,30.0 340.7,30.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,0.0 394.5,0.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,0.0 502.1,0.0 502.1,60.0 520.0,60.0 520.0,60.0 " fill="none" stroke="#27AE60" stroke-width="2" stroke-linejoin="round"/>
+          </defs><polygon points="0.0,64 0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,30.0 161.4,30.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,0.0 215.2,0.0 215.2,0.0 233.1,0.0 233.1,60.0 251.0,60.0 251.0,30.0 269.0,30.0 269.0,30.0 286.9,30.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,30.0 340.7,30.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,0.0 394.5,0.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,0.0 502.1,0.0 502.1,60.0 520.0,60.0 520.0,30.0 520.0,64" fill="url(#chart-fill)"/>
+          <polyline points="0.0,60.0 17.9,60.0 17.9,60.0 35.9,60.0 35.9,60.0 53.8,60.0 53.8,60.0 71.7,60.0 71.7,60.0 89.7,60.0 89.7,60.0 107.6,60.0 107.6,60.0 125.5,60.0 125.5,60.0 143.4,60.0 143.4,30.0 161.4,30.0 161.4,60.0 179.3,60.0 179.3,60.0 197.2,60.0 197.2,0.0 215.2,0.0 215.2,0.0 233.1,0.0 233.1,60.0 251.0,60.0 251.0,30.0 269.0,30.0 269.0,30.0 286.9,30.0 286.9,60.0 304.8,60.0 304.8,60.0 322.8,60.0 322.8,30.0 340.7,30.0 340.7,60.0 358.6,60.0 358.6,60.0 376.6,60.0 376.6,0.0 394.5,0.0 394.5,60.0 412.4,60.0 412.4,60.0 430.3,60.0 430.3,60.0 448.3,60.0 448.3,0.0 466.2,0.0 466.2,30.0 484.1,30.0 484.1,0.0 502.1,0.0 502.1,60.0 520.0,60.0 520.0,30.0 " fill="none" stroke="#27AE60" stroke-width="2" stroke-linejoin="round"/>
         </svg>
         <div class="trend-chart-axis">
           <span>30 days ago</span>
-          <span style="font-weight:700;color:var(--text-primary);">15 articles in 30 days</span>
+          <span style="font-weight:700;color:var(--text-primary);">16 articles in 30 days</span>
           <span>Today</span>
         </div>
       </div>
@@ -1984,7 +2001,7 @@
           <option value="90">90 days</option>
         </select>
       </div>
-      <div class="filter-count" id="tp-count">15 articles</div>
+      <div class="filter-count" id="tp-count">16 articles</div>
       <!-- Compact badge legend -->
       <div class="sidebar-legend">
         <div class="sidebar-legend-title">&#x25A6; Badge Guide</div>
@@ -2006,12 +2023,60 @@
         <span class="article-feed-hdr-label imp">Impact</span>
       </div>
       
-      <div class="month-divider" data-month-divider>2026-03</div><div class="article-item"
+      <div class="month-divider" data-month-divider>2026-03</div><div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
+           data-headline="regulatory capital rule: category i and ii banking organizations, banking organizations with significant trading activity, and optional adoption for other banking organizations"
+           data-snippet="the office of the comptroller of the currency, the board of governors of the federal reserve system, and the federal deposit insurance corporation are proposing to modernize the capital requirements applicable to category i and ii depository institution holding companies and depository institutions, as well as revise the market risk capital framework for banking organizations with significant trading activity (the proposal). the proposal would improve the regulatory capital framework for covered"
+           data-urgency="low"
+           data-date="2026-03-27"
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Regulatory Capital Rule: Category I and II Banking Organizations, Banking Organizations With Significant Trading Activity, and Optional Adoption for Other Banking Organizations"
+           data-ad-summary="The Office of the Comptroller of the Currency, the Board of Governors of the Federal Reserve System, and the Federal Deposit Insurance Corporation are proposing to modernize the capital requirements applicable to Category I and II depository institution holding companies and depository institutions, as well as revise the market risk capital framework for banking organizations with significant trading activity (the proposal). The proposal would improve the regulatory capital framework for covered"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/27/2026-05959/regulatory-capital-rule-category-i-and-ii-banking-organizations-banking-organizations-with">
+        <div class="article-head">
+          <span class="article-headline">
+            <a href="https://www.federalregister.gov/documents/2026/03/27/2026-05959/regulatory-capital-rule-category-i-and-ii-banking-organizations-banking-organizations-with" target="_blank">Regulatory Capital Rule: Category I and II Banking Organizations, Banking Organizations With Significant Trading Activity, and Optional Adoption for Other Banking Organizations</a>
+          </span>
+          <div class="article-badges">
+            <span class="badge badge-new">New</span>
+            <span class="badge badge-direct" title="Direct company relevance">Direct</span>
+            
+            <span class="badge priority-info" title="Priority: None urgency · DIRECT">INFO</span>
+            
+          </div>
+        </div>
+        
+        <div class="article-meta">
+          <span>Federal Register</span>
+          
+          <span>·</span>
+          <span>2026-03-27</span>
+          
+        </div>
+        
+        <div class="article-snippet">The Office of the Comptroller of the Currency, the Board of Governors of the Federal Reserve System, and the Federal Deposit Insurance Corporation are proposing to modernize the capital requirements applicable to Category I and II depository institution holding companies and depository institutions, as well as revise the market risk capital framework for banking organizations with significant trading activity (the proposal). The proposal would improve the regulatory capital framework for covered</div>
+        
+      </div>
+      <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="oregon packaging epr for producers"
            data-snippet="psi: oregon packaging epr for producers"
            data-urgency="medium"
            data-date="2026-03-25"
-           data-relevance="MONITOR">
+           data-relevance="MONITOR"
+           data-topic="epr"
+           data-ad-title="Oregon Packaging EPR for Producers"
+           data-ad-summary="The Product Stewardship Institute is running a webinar series specifically focused on preparing producers for Oregon&#39;s Packaging EPR program requirements. Oregon&#39;s program requires producers shipping packaged goods into the state to register with a Producer Responsibility Organization and meet recycled content and fees obligations. This educational series signals that Oregon&#39;s implementation is advancing and producers should be actively preparing for registration and reporting obligations."
+           data-ad-relevance-reason=""
+           data-ad-impact="2.6"
+           data-source="Product Stewardship Institute"
+           data-url="https://productstewardship.us/webinar/webinar-series-preparing-producers-for-oregon-packaging-epr/">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://productstewardship.us/webinar/webinar-series-preparing-producers-for-oregon-packaging-epr/" target="_blank">Oregon Packaging EPR for Producers</a>
@@ -2038,11 +2103,20 @@
         
       </div>
       <div class="article-item is-new"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="standard steel welded wire mesh from mexico: final affirmative determination of circumvention"
            data-snippet="the u.s. department of commerce (commerce) determines that imports of certain low-carbon steel (lcs) wire that are produced in mexico and assembled or completed into standard steel welded wire mesh (welded wire mesh) in the united states are circumventing the antidumping duty (ad) and countervailing duty (cvd) orders on welded wire mesh from mexico."
            data-urgency="low"
            data-date="2026-03-25"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Standard Steel Welded Wire Mesh From Mexico: Final Affirmative Determination of Circumvention"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) determines that imports of certain low-carbon steel (LCS) wire that are produced in Mexico and assembled or completed into standard steel welded wire mesh (welded wire mesh) in the United States are circumventing the antidumping duty (AD) and countervailing duty (CVD) orders on welded wire mesh from Mexico."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05809/standard-steel-welded-wire-mesh-from-mexico-final-affirmative-determination-of-circumvention">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/25/2026-05809/standard-steel-welded-wire-mesh-from-mexico-final-affirmative-determination-of-circumvention" target="_blank">Standard Steel Welded Wire Mesh From Mexico: Final Affirmative Determination of Circumvention</a>
@@ -2068,11 +2142,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="endangered and threatened wildlife and plants; designation of critical habitat for 22 species in the commonwealth of the northern mariana islands and the territory of guam"
            data-snippet="we, the u.s. fish and wildlife service (service), propose to designate critical habitat for 9 animal species and 13 plant species from the mariana islands (the u.s. territory of guam and the commonwealth of northern mariana islands) under the endangered species act (act). in total across both the territory and commonwealth, approximately 59,886 acres (24,235 hectares) on the islands of aguiguan, alamagan, asunci[oacute]n, guam (including the island of cocos), pagan, rota, saipan, sarigan, and ti"
            data-urgency="low"
            data-date="2026-03-24"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Endangered and Threatened Wildlife and Plants; Designation of Critical Habitat for 22 Species in the Commonwealth of the Northern Mariana Islands and the Territory of Guam"
+           data-ad-summary="We, the U.S. Fish and Wildlife Service (Service), propose to designate critical habitat for 9 animal species and 13 plant species from the Mariana Islands (the U.S. Territory of Guam and the Commonwealth of Northern Mariana Islands) under the Endangered Species Act (Act). In total across both the Territory and Commonwealth, approximately 59,886 acres (24,235 hectares) on the islands of Aguiguan, Alamagan, Asunci[oacute]n, Guam (including the island of Cocos), Pagan, Rota, Saipan, Sarigan, and Ti"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/24/2026-05678/endangered-and-threatened-wildlife-and-plants-designation-of-critical-habitat-for-22-species-in-the">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/24/2026-05678/endangered-and-threatened-wildlife-and-plants-designation-of-critical-habitat-for-22-species-in-the" target="_blank">Endangered and Threatened Wildlife and Plants; Designation of Critical Habitat for 22 Species in the Commonwealth of the Northern Mariana Islands and the Territory of Guam</a>
@@ -2098,11 +2181,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="national organic program: national list of allowed and prohibited substances per october 2021, october 2022, and october 2024 recommendations (crops and livestock)"
            data-snippet="this proposed rule would amend the u.s. department of agriculture&#39;s (usda) organic regulations related to organic crop and livestock production. the proposed rule would provide additional tools to organic producers, allowing carbon dioxide in organic crop production and meloxicam as a pain treatment in organic livestock production. additionally, this rulemaking would remove overly burdensome restrictions for methionine, an amino acid, in organic poultry feed and would affirm that sodium nitrate "
            data-urgency="low"
            data-date="2026-03-23"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="National Organic Program: National List of Allowed and Prohibited Substances per October 2021, October 2022, and October 2024 Recommendations (Crops and Livestock)"
+           data-ad-summary="This proposed rule would amend the U.S. Department of Agriculture&#39;s (USDA) organic regulations related to organic crop and livestock production. The proposed rule would provide additional tools to organic producers, allowing carbon dioxide in organic crop production and meloxicam as a pain treatment in organic livestock production. Additionally, this rulemaking would remove overly burdensome restrictions for methionine, an amino acid, in organic poultry feed and would affirm that sodium nitrate "
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05598/national-organic-program-national-list-of-allowed-and-prohibited-substances-per-october-2021-october">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05598/national-organic-program-national-list-of-allowed-and-prohibited-substances-per-october-2021-october" target="_blank">National Organic Program: National List of Allowed and Prohibited Substances per October 2021, October 2022, and October 2024 Recommendations (Crops and Livestock)</a>
@@ -2128,11 +2220,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="agency information collection activities: proposed request and comment request"
            data-snippet=""
            data-urgency="low"
            data-date="2026-03-23"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Agency Information Collection Activities: Proposed Request and Comment Request"
+           data-ad-summary=""
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05600/agency-information-collection-activities-proposed-request-and-comment-request">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/23/2026-05600/agency-information-collection-activities-proposed-request-and-comment-request" target="_blank">Agency Information Collection Activities: Proposed Request and Comment Request</a>
@@ -2156,11 +2257,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="certain uncoated paper from portugal: final results of antidumping duty administrative review; 2023-2024"
            data-snippet="the u.s. department of commerce (commerce) determines that the navigator company, s.a. (navigator), the sole producer or exporter subject to this administrative review, made sales of certain uncoated paper (uncoated paper) from portugal in the united states at prices below normal value (nv) during the period of review. the period of review (por) is march 1, 2023, through february 29, 2024."
            data-urgency="low"
            data-date="2026-03-19"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Certain Uncoated Paper From Portugal: Final Results of Antidumping Duty Administrative Review; 2023-2024"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) determines that The Navigator Company, S.A. (Navigator), the sole producer or exporter subject to this administrative review, made sales of certain uncoated paper (uncoated paper) from Portugal in the United States at prices below normal value (NV) during the period of review. The period of review (POR) is March 1, 2023, through February 29, 2024."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/19/2026-05441/certain-uncoated-paper-from-portugal-final-results-of-antidumping-duty-administrative-review">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05441/certain-uncoated-paper-from-portugal-final-results-of-antidumping-duty-administrative-review" target="_blank">Certain Uncoated Paper From Portugal: Final Results of Antidumping Duty Administrative Review; 2023-2024</a>
@@ -2186,11 +2296,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="certain new pneumatic off-the-road tires from india: final results of countervailing duty administrative review; 2023"
            data-snippet="the u.s. department of commerce (commerce) determines that countervailable subsidies were provided to producers and/or exporters of certain new pneumatic off-the-road tires (otr tires) from india, during the period of review (por) january 1, 2023, through december 31, 2023."
            data-urgency="low"
            data-date="2026-03-19"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Certain New Pneumatic Off-the-Road Tires From India: Final Results of Countervailing Duty Administrative Review; 2023"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) determines that countervailable subsidies were provided to producers and/or exporters of certain new pneumatic off-the-road tires (OTR tires) from India, during the period of review (POR) January 1, 2023, through December 31, 2023."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/19/2026-05440/certain-new-pneumatic-off-the-road-tires-from-india-final-results-of-countervailing-duty">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/19/2026-05440/certain-new-pneumatic-off-the-road-tires-from-india-final-results-of-countervailing-duty" target="_blank">Certain New Pneumatic Off-the-Road Tires From India: Final Results of Countervailing Duty Administrative Review; 2023</a>
@@ -2216,11 +2335,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="oil country tubular goods from socialist republic of vietnam: preliminary results and rescission, in part, of antidumping duty administrative review; 2023-2024"
            data-snippet="the u.s. department of commerce (commerce) preliminarily finds that producers and/or exporters subject to this administrative review made sales of subject merchandise at less than normal value (nv) during the period of review (por) september 1, 2023, through august 31, 2024. commerce is also rescinding this review, in part, with respect to two companies. interested parties are invited to comment on these preliminary results."
            data-urgency="low"
            data-date="2026-03-16"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Oil Country Tubular Goods From Socialist Republic of Vietnam: Preliminary Results and Rescission, in Part, of Antidumping Duty Administrative Review; 2023-2024"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) preliminarily finds that producers and/or exporters subject to this administrative review made sales of subject merchandise at less than normal value (NV) during the period of review (POR) September 1, 2023, through August 31, 2024. Commerce is also rescinding this review, in part, with respect to two companies. Interested parties are invited to comment on these preliminary results."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/16/2026-04995/oil-country-tubular-goods-from-socialist-republic-of-vietnam-preliminary-results-and-rescission-in">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/16/2026-04995/oil-country-tubular-goods-from-socialist-republic-of-vietnam-preliminary-results-and-rescission-in" target="_blank">Oil Country Tubular Goods From Socialist Republic of Vietnam: Preliminary Results and Rescission, in Part, of Antidumping Duty Administrative Review; 2023-2024</a>
@@ -2246,11 +2374,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="wooden cabinets and vanities and components thereof from the people&#39;s republic of china: final results of countervailing duty administrative review; 2023"
            data-snippet="the u.s. department of commerce (commerce) determines that certain producers and exporters of wooden cabinets and vanities and components thereof (wooden cabinets) from the people&#39;s republic of china (china) received countervailable subsidies during the period of review (por) january 1, 2023, through december 31, 2023."
            data-urgency="low"
            data-date="2026-03-13"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Wooden Cabinets and Vanities and Components Thereof From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) determines that certain producers and exporters of wooden cabinets and vanities and components thereof (wooden cabinets) from the People&#39;s Republic of China (China) received countervailable subsidies during the period of review (POR) January 1, 2023, through December 31, 2023."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/13/2026-04943/wooden-cabinets-and-vanities-and-components-thereof-from-the-peoples-republic-of-china-final-results">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/13/2026-04943/wooden-cabinets-and-vanities-and-components-thereof-from-the-peoples-republic-of-china-final-results" target="_blank">Wooden Cabinets and Vanities and Components Thereof From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023</a>
@@ -2276,11 +2413,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="certain corrosion inhibitors from the people&#39;s republic of china: final results of countervailing duty administrative review; 2023"
            data-snippet="the u.s. department of commerce (commerce) determines that certain producers/exporters of certain corrosion inhibitors (corrosion inhibitors) from the people&#39;s republic of china (china) received countervailable subsidies during the period of review (por) january 1, 2023, through december 31, 2023."
            data-urgency="low"
            data-date="2026-03-12"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Certain Corrosion Inhibitors From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) determines that certain producers/exporters of certain corrosion inhibitors (corrosion inhibitors) from the People&#39;s Republic of China (China) received countervailable subsidies during the period of review (POR) January 1, 2023, through December 31, 2023."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/12/2026-04877/certain-corrosion-inhibitors-from-the-peoples-republic-of-china-final-results-of-countervailing-duty">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/12/2026-04877/certain-corrosion-inhibitors-from-the-peoples-republic-of-china-final-results-of-countervailing-duty" target="_blank">Certain Corrosion Inhibitors From the People&#39;s Republic of China: Final Results of Countervailing Duty Administrative Review; 2023</a>
@@ -2306,11 +2452,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="diffusion-annealed, nickel-plated flat-rolled steel products from japan: final results of antidumping duty administrative review; 2023-2024"
            data-snippet="the u.s. department of commerce (commerce) determines that toyo kohan co., ltd. (toyo kohan), the sole producer/exporter subject to this administrative review, did not make sales of subject merchandise at less than normal value during the period of review (por) may 1, 2023, through april 30, 2024."
            data-urgency="low"
            data-date="2026-03-10"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Diffusion-Annealed, Nickel-Plated Flat-Rolled Steel Products From Japan: Final Results of Antidumping Duty Administrative Review; 2023-2024"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) determines that Toyo Kohan Co., Ltd. (Toyo Kohan), the sole producer/exporter subject to this administrative review, did not make sales of subject merchandise at less than normal value during the period of review (POR) May 1, 2023, through April 30, 2024."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/10/2026-04611/diffusion-annealed-nickel-plated-flat-rolled-steel-products-from-japan-final-results-of-antidumping">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04611/diffusion-annealed-nickel-plated-flat-rolled-steel-products-from-japan-final-results-of-antidumping" target="_blank">Diffusion-Annealed, Nickel-Plated Flat-Rolled Steel Products From Japan: Final Results of Antidumping Duty Administrative Review; 2023-2024</a>
@@ -2336,11 +2491,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="common alloy aluminum sheet from india: final results of countervailing duty administrative review; 2023"
            data-snippet="the u.s. department of commerce (commerce) determines that manaksia aluminium company limited (malco), a producer/exporter of common alloy aluminum sheet from india, received countervailable subsidies during the period of review (por), january 1, 2023, through december 31, 2023."
            data-urgency="low"
            data-date="2026-03-10"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Common Alloy Aluminum Sheet From India: Final Results of Countervailing Duty Administrative Review; 2023"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) determines that Manaksia Aluminium Company Limited (MALCO), a producer/exporter of common alloy aluminum sheet from India, received countervailable subsidies during the period of review (POR), January 1, 2023, through December 31, 2023."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/10/2026-04610/common-alloy-aluminum-sheet-from-india-final-results-of-countervailing-duty-administrative-review">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/10/2026-04610/common-alloy-aluminum-sheet-from-india-final-results-of-countervailing-duty-administrative-review" target="_blank">Common Alloy Aluminum Sheet From India: Final Results of Countervailing Duty Administrative Review; 2023</a>
@@ -2366,11 +2530,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="christmas tree promotion, research, and information order"
            data-snippet="this final rule implements changes to the christmas tree promotion, research, and information order (order). these changes include amending the board&#39;s name from &#34;christmas tree promotion board&#34; to &#34;real christmas tree board&#34;, increasing the administrative expenses cap from 10 to 15 percent, allowing importers to request refunds of assessments paid on trees that were shipped to the united states but not sold, and increasing the mandatory period to maintain books and records relating to the order"
            data-urgency="low"
            data-date="2026-03-09"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Christmas Tree Promotion, Research, and Information Order"
+           data-ad-summary="This final rule implements changes to the Christmas Tree Promotion, Research, and Information Order (Order). These changes include amending the Board&#39;s name from &#34;Christmas Tree Promotion Board&#34; to &#34;Real Christmas Tree Board&#34;, increasing the administrative expenses cap from 10 to 15 percent, allowing importers to request refunds of assessments paid on trees that were shipped to the United States but not sold, and increasing the mandatory period to maintain books and records relating to the Order"
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/09/2026-04586/christmas-tree-promotion-research-and-information-order">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/09/2026-04586/christmas-tree-promotion-research-and-information-order" target="_blank">Christmas Tree Promotion, Research, and Information Order</a>
@@ -2396,11 +2569,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="almonds grown in california; extension of inedible disposition obligation deadline"
            data-snippet="this proposed rule would implement a recommendation from the almond board of california (board) to extend the inedible disposition obligation deadline prescribed under the federal marketing order for almonds grown in california (order) from september 30 to november 30 indefinitely."
            data-urgency="low"
            data-date="2026-03-09"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Almonds Grown in California; Extension of Inedible Disposition Obligation Deadline"
+           data-ad-summary="This proposed rule would implement a recommendation from the Almond Board of California (Board) to extend the inedible disposition obligation deadline prescribed under the Federal marketing order for almonds grown in California (Order) from September 30 to November 30 indefinitely."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/09/2026-04573/almonds-grown-in-california-extension-of-inedible-disposition-obligation-deadline">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/09/2026-04573/almonds-grown-in-california-extension-of-inedible-disposition-obligation-deadline" target="_blank">Almonds Grown in California; Extension of Inedible Disposition Obligation Deadline</a>
@@ -2426,11 +2608,20 @@
         
       </div>
       <div class="article-item"
+           style="cursor:pointer;"
+           onclick="openArticleDetailFromEl(event, this)"
            data-headline="certain cold-rolled steel flat products from the republic of korea: preliminary results and rescission, in part, of antidumping administrative review; 2023-2024"
            data-snippet="the u.s. department of commerce (commerce) preliminarily determines that certain cold-rolled steel flat products (cold-rolled steel) from the republic of korea (korea) were not made at less than normal value (nv) during the period of review (por) september 1, 2023, through august 31, 2024. in addition, commerce is rescinding the review, in part, with respect to 35 companies. interested parties are invited to comment on these preliminary results."
            data-urgency="low"
            data-date="2026-03-06"
-           data-relevance="DIRECT">
+           data-relevance="DIRECT"
+           data-topic="epr"
+           data-ad-title="Certain Cold-Rolled Steel Flat Products From the Republic of Korea: Preliminary Results and Rescission, in Part, of Antidumping Administrative Review; 2023-2024"
+           data-ad-summary="The U.S. Department of Commerce (Commerce) preliminarily determines that certain cold-rolled steel flat products (cold-rolled steel) from the Republic of Korea (Korea) were not made at less than normal value (NV) during the period of review (POR) September 1, 2023, through August 31, 2024. In addition, Commerce is rescinding the review, in part, with respect to 35 companies. Interested parties are invited to comment on these preliminary results."
+           data-ad-relevance-reason=""
+           data-ad-impact=""
+           data-source="Federal Register"
+           data-url="https://www.federalregister.gov/documents/2026/03/06/2026-04405/certain-cold-rolled-steel-flat-products-from-the-republic-of-korea-preliminary-results-and">
         <div class="article-head">
           <span class="article-headline">
             <a href="https://www.federalregister.gov/documents/2026/03/06/2026-04405/certain-cold-rolled-steel-flat-products-from-the-republic-of-korea-preliminary-results-and" target="_blank">Certain Cold-Rolled Steel Flat Products From the Republic of Korea: Preliminary Results and Rescission, in Part, of Antidumping Administrative Review; 2023-2024</a>
@@ -2791,6 +2982,153 @@ var DEADLINE_ANALYSES = {"81": {"analyzed_at": "2026-03-24T17:05:19.243291", "co
     document.body.style.overflow = '';
   };
 
+  // ── Article Detail Modal ───────────────────────────────────────────────────
+
+  var _WORKER_URL = 'https://andersencompliance.workers.dev';
+  var _SEVERITY_COLORS = { HIGH: '#fee2e2', MEDIUM: '#fef3c7', LOW: '#d1fae5', MONITORING: '#f1f5f9' };
+  var _SEVERITY_TEXT = { HIGH: '#991b1b', MEDIUM: '#92400e', LOW: '#065f46', MONITORING: '#475569' };
+
+  window.openArticleDetailFromEl = function(e, el) {
+    if (e.target.closest('a') || e.target.closest('.fav-btn') || e.target.closest('.send-btn')) return;
+    var favBtn = el.querySelector('.fav-btn');
+    var data = {
+      url:    favBtn ? favBtn.dataset.url : (el.dataset.url || ''),
+      title:  el.dataset.adTitle || el.dataset.headline || '',
+      topic:  el.dataset.topic || '',
+      source: el.dataset.source || '',
+      summary: el.dataset.adSummary || '',
+      urgency: (el.dataset.urgency || 'LOW').toUpperCase(),
+      relevance: el.dataset.relevance || '',
+      relevanceReason: el.dataset.adRelevanceReason || '',
+      impact: el.dataset.adImpact || '',
+    };
+    openArticleDetail(data);
+  };
+
+  window.openArticleDetail = function(data) {
+    var overlay = document.getElementById('ad-overlay');
+    var titleEl = document.getElementById('ad-title');
+    var topicBadge = document.getElementById('ad-topic-badge');
+    var urgencyBadge = document.getElementById('ad-urgency-badge');
+    var body = document.getElementById('ad-body');
+
+    titleEl.textContent = data.title || 'Article';
+    topicBadge.textContent = data.topic || '';
+    urgencyBadge.textContent = data.urgency || '';
+    urgencyBadge.style.background = _SEVERITY_COLORS[data.urgency] || _SEVERITY_COLORS.MONITORING;
+    urgencyBadge.style.color = _SEVERITY_TEXT[data.urgency] || _SEVERITY_TEXT.MONITORING;
+
+    body.innerHTML = _buildArticleModalInitial(data);
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    _fetchArticleAI(data);
+  };
+
+  window.closeArticleDetail = function(e) {
+    if (e && e.target !== document.getElementById('ad-overlay')) return;
+    document.getElementById('ad-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  function _buildArticleModalInitial(data) {
+    var sections = '';
+    sections += '<div class="bd-section">';
+    sections += '<div class="bd-section-title">Source</div>';
+    sections += '<div class="bd-section-body" style="display:flex;align-items:center;gap:12px;">';
+    sections += '<span>' + _escHtml(data.source) + '</span>';
+    if (data.url) sections += '<a class="bd-source-link" href="' + _escHtml(data.url) + '" target="_blank" rel="noopener">Read full article &rarr;</a>';
+    sections += '</div></div>';
+
+    if (data.summary) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Summary</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(data.summary) + '</div></div>';
+    }
+
+    var hasRelevance = data.relevance || data.relevanceReason;
+    var hasImpact = data.impact;
+    if (hasRelevance || hasImpact) {
+      if (hasRelevance && hasImpact) sections += '<div class="bd-two-col">';
+      if (hasRelevance) {
+        sections += '<div class="bd-section"><div class="bd-section-title">Relevance — ' + _escHtml(data.relevance) + '</div>';
+        sections += '<div class="bd-section-body">' + _escHtml(data.relevanceReason || data.relevance) + '</div></div>';
+      }
+      if (hasImpact) {
+        var score = parseFloat(data.impact);
+        var scoreColor = score >= 7 ? '#991b1b' : score >= 4 ? '#92400e' : '#065f46';
+        sections += '<div class="bd-section"><div class="bd-section-title">Impact Score</div>';
+        sections += '<div class="bd-section-body"><span style="font-size:24px;font-weight:700;font-family:var(--mono);color:' + scoreColor + ';">' + data.impact + '</span>';
+        sections += '<span style="font-size:12px;color:var(--text-muted);margin-left:4px;">/ 10</span></div></div>';
+      }
+      if (hasRelevance && hasImpact) sections += '</div>';
+    }
+
+    sections += '<div id="ad-ai-section"><div class="bd-section"><div class="bd-pending">';
+    sections += '<div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:2px;">ANALYZING…</div>';
+    sections += '</div></div></div>';
+    return sections;
+  }
+
+  function _fetchArticleAI(data) {
+    var prompt = 'You are a regulatory compliance analyst for a US windows/doors manufacturer (Andersen Corporation). '
+      + 'They have PFAS exposure from fluoropolymer coatings and a large supply chain of components (electronics, o-rings, gaskets, vinyl, hardware, lubricants, PPE).\n\n'
+      + 'Analyze this regulatory article:\nTopic: ' + data.topic + '\nSource: ' + data.source + '\nTitle: ' + data.title + '\n'
+      + (data.summary ? 'Summary: ' + data.summary + '\n' : '')
+      + '\nReturn ONLY valid JSON:\n'
+      + '{"broader_context":"2-3 sentences on where this fits in the broader regulatory landscape",'
+      + '"company_impact":{"direct":"Impact on manufactured products/coatings","supply_chain":"Impact on purchased components/suppliers","severity":"HIGH|MEDIUM|LOW|MONITORING"},'
+      + '"recommended_actions":["action1","action2","action3"],'
+      + '"key_implication":"The single most important takeaway for this company"}';
+
+    fetch(_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+      if (!resp.content || !resp.content[0]) { _renderArticleAIError(); return; }
+      var text = resp.content[0].text.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'');
+      try { _renderArticleAIResult(data, JSON.parse(text)); } catch(e) { _renderArticleAIError(); }
+    })
+    .catch(function() { _renderArticleAIError(); });
+  }
+
+  function _renderArticleAIResult(data, ai) {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    var sections = '';
+    if (ai.key_implication) {
+      sections += '<div class="bd-section" style="background:var(--surface-sunken,#1a2033);">';
+      sections += '<div class="bd-section-title" style="color:var(--accent);">Key Implication</div>';
+      sections += '<div class="bd-section-body" style="font-weight:500;">' + _escHtml(ai.key_implication) + '</div></div>';
+    }
+    if (ai.broader_context) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Broader Context</div>';
+      sections += '<div class="bd-section-body">' + _escHtml(ai.broader_context) + '</div></div>';
+    }
+    if (ai.company_impact) {
+      var impact = ai.company_impact;
+      var sev = (impact.severity || 'MONITORING').toUpperCase();
+      sections += '<div class="bd-section" style="background:' + (_SEVERITY_COLORS[sev]||_SEVERITY_COLORS.MONITORING) + '18;">';
+      sections += '<div class="bd-section-title" style="color:' + (_SEVERITY_TEXT[sev]||_SEVERITY_TEXT.MONITORING) + ';">Company Impact — ' + sev + '</div>';
+      if (impact.direct) sections += '<div style="margin-bottom:6px;"><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">DIRECT PRODUCTS</span><div class="bd-section-body">' + _escHtml(impact.direct) + '</div></div>';
+      if (impact.supply_chain) sections += '<div><span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text-muted);display:block;margin-bottom:2px;">SUPPLY CHAIN</span><div class="bd-section-body">' + _escHtml(impact.supply_chain) + '</div></div>';
+      sections += '</div>';
+    }
+    if (ai.recommended_actions && ai.recommended_actions.length) {
+      sections += '<div class="bd-section"><div class="bd-section-title">Recommended Actions</div><ul class="bd-action-list">';
+      ai.recommended_actions.forEach(function(act) { sections += '<li>' + _escHtml(act) + '</li>'; });
+      sections += '</ul></div>';
+    }
+    aiSection.innerHTML = sections;
+  }
+
+  function _renderArticleAIError() {
+    var aiSection = document.getElementById('ad-ai-section');
+    if (!aiSection) return;
+    aiSection.innerHTML = '<div class="bd-section"><div class="bd-section-body" style="color:var(--text-muted);font-size:12px;">AI enrichment unavailable.</div></div>';
+  }
+
   window.openDeadlineDetailFromEl = function(el) {
     openDeadlineDetail(el.dataset.deadlineId || '');
   };
@@ -2896,6 +3234,7 @@ var DEADLINE_ANALYSES = {"81": {"analyzed_at": "2026-03-24T17:05:19.243291", "co
     if (e.key === 'Escape') {
       document.getElementById('bd-overlay').classList.remove('open');
       document.getElementById('dd-overlay').classList.remove('open');
+      document.getElementById('ad-overlay').classList.remove('open');
       document.body.style.overflow = '';
     }
   });
