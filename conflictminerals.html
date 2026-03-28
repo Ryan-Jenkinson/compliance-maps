@@ -31,6 +31,7 @@
   populateTopbar();
   document.getElementById('auth-overlay').style.display = 'none';
   initFavorites();
+  initComments(_client, _currentUser);
 })();
 </script>
 
@@ -600,6 +601,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.sec.gov/Archives/edgar/data/0001023512/000162828026021569/0001628280-26-021569-index.htm" data-title="DRDGOLD LTD  (DRD, DRDGF)  (CIK 0001023512) — Form SD Conflict Minerals Report (2026-03)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -621,6 +627,13 @@
         
         <div class="article-snippet">DRDGOLD LTD, a gold mining company, filed its annual Form SD conflict minerals disclosure with the SEC on March 27, 2026, under Dodd-Frank Section 1502. As a gold producer, DRDGOLD&#39;s filing is relevant context for downstream manufacturers tracking gold smelter/refiner (SOR) lists and country-of-origin documentation. This filing reflects continued SEC Form SD activity in the 2026 reporting cycle.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="definition of a ski area"
@@ -650,6 +663,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05767/definition-of-a-ski-area" data-title="Definition of a Ski Area" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -670,6 +688,13 @@
         
         <div class="article-snippet">The United States Department of Agriculture, Forest Service (Forest Service or Agency) is issuing a final rule revising the definition of a ski area in its special use regulations. The revised definition aligns more closely with the Forest Service&#39;s statutory authority for ski area administration and reduces burden on the agency and special use permit holders.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="direct sale of public land for affordable housing purposes in the city of henderson, nevada"
@@ -699,6 +724,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/24/2026-05669/direct-sale-of-public-land-for-affordable-housing-purposes-in-the-city-of-henderson-nevada" data-title="Direct Sale of Public Land for Affordable Housing Purposes in the City of Henderson, Nevada" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -719,6 +749,13 @@
         
         <div class="article-snippet">The Bureau of Land Management (BLM) proposes to sell an 18.59- acre parcel of public land located in the west portion of Henderson, Nevada, under the authority of section 203 of the Federal Land Policy and Management Act of 1976, as amended (FLPMA); applicable BLM land sale regulations; and the Southern Nevada Public Land Management Act of 1998, as amended (SNPLMA). The BLM intends to conduct a direct sale of the parcel to the City of Henderson, a political subdivision of the State of Nevada, at</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="deep seabed mining: notice of receipt of applications for deep seabed mining exploration licenses and announcement of public comment period and virtual public hearings"
@@ -748,6 +785,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05599/deep-seabed-mining-notice-of-receipt-of-applications-for-deep-seabed-mining-exploration-licenses-and" data-title="Deep Seabed Mining: Notice of Receipt of Applications for Deep Seabed Mining Exploration Licenses and Announcement of Public Comment Period and Virtual Public Hearings" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -769,6 +811,13 @@
         
         <div class="article-snippet">NOAA received two applications for deep seabed mining exploration licenses under the Deep Seabed Hard Mineral Resources Act, covering minerals that include cobalt, nickel, and potentially conflict-adjacent metals. While not directly 3TG-related, this signals emerging alternative sourcing pathways for critical minerals that could affect long-term supply chain due diligence frameworks. Companies should monitor whether seabed-sourced minerals enter future OECD guidance on responsible mineral sourcing.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="osi systems inc  (osis)  (cik 0001039065) — form sd conflict minerals report (2026-03)"
@@ -798,6 +847,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.sec.gov/Archives/edgar/data/0001039065/000110465926033292/0001104659-26-033292-index.htm" data-title="OSI SYSTEMS INC  (OSIS)  (CIK 0001039065) — Form SD Conflict Minerals Report (2026-03)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -822,6 +876,13 @@
         
         <div class="article-snippet">OSI Systems, a manufacturer of security and inspection systems with complex electronics supply chains, filed its Form SD on March 23, 2026. This is directly comparable to the company&#39;s own situation — an electronics-intensive manufacturer conducting RCOI and CMRT collection across a global supplier base. OSI&#39;s filing marks the active start of the 2026 Form SD season.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="land uses; special uses"
@@ -851,6 +912,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/19/2026-05457/land-uses-special-uses" data-title="Land Uses; Special Uses" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -871,6 +937,13 @@
         
         <div class="article-snippet">The United States Department of Agriculture (Department), Forest Service (Forest Service or Agency), is issuing this final rule to update its special uses regulations on filming and still photography to be consistent with the new requirements in the Expanding Public Lands Outdoor Recreation Experiences Act (EXPLORE Act or Act). The technical revisions include adding a statutory reference to the EXPLORE Act and updating terminology and definitions to be consistent with the Act.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="month-divider" data-month-divider>2026-02</div><div class="article-item"
            data-headline="alpha &amp; omega semiconductor ltd  (aosl)  (cik 0001387467) — form sd conflict minerals report (2026-02)"
@@ -900,6 +973,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.sec.gov/Archives/edgar/data/0001387467/000138746726000015/0001387467-26-000015-index.htm" data-title="ALPHA &amp; OMEGA SEMICONDUCTOR Ltd  (AOSL)  (CIK 0001387467) — Form SD Conflict Minerals Report (2026-02)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -924,6 +1002,13 @@
         
         <div class="article-snippet">Alpha &amp; Omega Semiconductor filed its Form SD on February 27, 2026, covering conflict minerals in its semiconductor manufacturing operations. Semiconductor and passive component suppliers in the company&#39;s automation electronics supply chain will be filing similar disclosures, making this a reference point for what CMRT data should be flowing upstream. AOSL&#39;s filing reinforces that semiconductor-tier suppliers are active in the 2026 reporting cycle.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="endangered and threatened wildlife and plants; removal of geocarpon minimum from the list of endangered and threatened plants"
@@ -953,6 +1038,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/26/2026-03831/endangered-and-threatened-wildlife-and-plants-removal-of-geocarpon-minimum-from-the-list-of" data-title="Endangered and Threatened Wildlife and Plants; Removal of Geocarpon Minimum From the List of Endangered and Threatened Plants" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -973,6 +1063,13 @@
         
         <div class="article-snippet">We, the U.S. Fish and Wildlife Service (Service), propose to remove Geocarpon minimum from the Federal List of Endangered and Threatened Plants. Our review indicates that the threats to Geocarpon minimum have been eliminated or reduced to the point that the species no longer meets the definition of an endangered or threatened species under the Endangered Species Act of 1973, as amended (Act). Accordingly, we propose to delist Geocarpon minimum. This proposed rule completes the 5-year status revi</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="public land order no. 7966; partial revocation of public land order nos. 5150 and 5180, as amended, modified, or corrected; alaska"
@@ -1002,6 +1099,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/25/2026-03777/public-land-order-no-7966-partial-revocation-of-public-land-order-nos-5150-and-5180-as-amended" data-title="Public Land Order No. 7966; Partial Revocation of Public Land Order Nos. 5150 and 5180, as Amended, Modified, or Corrected; Alaska" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1022,6 +1124,13 @@
         
         <div class="article-snippet">This order partially revokes two Public Land Orders (PLOs) insofar as they affect approximately 2,127,845 acres of public land reserved for use as the Dalton Utility Corridor and for study and classification, as appropriate, by the Department of the Interior. Revocation of the PLOs within the Dalton Utility Corridor opens these lands to mineral and resource development opportunity. The Bureau of Land Management (BLM) analyzed partial revocation of these PLOs in the Final Environmental Impact Sta</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="national environmental policy act implementing regulations"
@@ -1051,6 +1160,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03708/national-environmental-policy-act-implementing-regulations" data-title="National Environmental Policy Act Implementing Regulations" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1071,6 +1185,13 @@
         
         <div class="article-snippet">The Department of the Interior (Department or DOI) is adopting the interim final rule (IFR) published on July 3, 2025, with minor changes, as final. In the IFR, DOI provided a 30-day comment period for the public to review and make comments. This final rule addresses public comments and adopts as final the IFR, with certain substantive changes as explained herein. The IFR partially rescinded DOI&#39;s regulations implementing the National Environmental Policy Act (NEPA) and made necessary targeted u</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="taking and importing marine mammals; taking marine mammals incidental to geophysical surveys in the gulf of america"
@@ -1100,6 +1221,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03691/taking-and-importing-marine-mammals-taking-marine-mammals-incidental-to-geophysical-surveys-in-the" data-title="Taking and Importing Marine Mammals; Taking Marine Mammals Incidental to Geophysical Surveys in the Gulf of America" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1120,6 +1246,13 @@
         
         <div class="article-snippet">NMFS has received a request for the reimplementation of incidental take regulations (ITR) governing the incidental taking of marine mammals during geophysical survey activity conducted in the Gulf of America (GOA). Pursuant to the Marine Mammal Protection Act (MMPA), NMFS is requesting comments on its proposed rule and will consider public comments relevant to this proposed rule prior to issuing any final rule.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="west virginia regulatory program"
@@ -1149,6 +1282,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03413/west-virginia-regulatory-program" data-title="West Virginia Regulatory Program" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1169,6 +1307,13 @@
         
         <div class="article-snippet">We, the Office of Surface Mining Reclamation and Enforcement (OSMRE), are publishing this final rule to amend the existing Federal Lands Cooperative Agreement between West Virginia and the U.S. Department of the Interior (Department). The Surface Mining Control and Reclamation Act of 1977 (SMCRA or the Act) and the Federal regulations authorize a State with an approved permanent regulatory program to enter into an agreement for the State regulation of surface coal mining and reclamation operatio</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="locatable minerals"
@@ -1198,6 +1343,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/20/2026-03364/locatable-minerals" data-title="Locatable Minerals" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1218,6 +1368,13 @@
         
         <div class="article-snippet">The U.S. Department of Agriculture, Forest Service (Agency), is proposing to revise its regulations governing occupancy and use of the surface of National Forest System lands in connection with prospecting, exploration, development, mining, processing, and reclamation and reasonably incident uses authorized by U.S. mining laws and the Organic Administration Act of 1897. Regulatory revisions are needed to improve the efficiency and transparency of Forest Service regulation of locatable mineral op</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="rescission of the “ten-day notices and corrective action for state regulatory program issues” rule, issued april 9, 2024"
@@ -1247,6 +1404,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/19/2026-03301/rescission-of-the-ten-day-notices-and-corrective-action-for-state-regulatory-program-issues-rule" data-title="Rescission of the “Ten-Day Notices and Corrective Action for State Regulatory Program Issues” Rule, Issued April 9, 2024" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1267,6 +1429,13 @@
         
         <div class="article-snippet">The Office of Surface Mining Reclamation and Enforcement (&#34;OSMRE&#34; or &#34;OSM&#34;) is rescinding the &#34;Ten-Day Notices and Corrective Action for State Regulatory Program Issues&#34; rule adopted on April 9, 2024 (the &#34;2024 Rule&#34;), and replacing it, in large part, with the rule titled, &#34;Clarification of Provisions Related to the Issuance of Ten-Day Notices to State Regulatory Authorities and Enhancement of Corrective Action for State Regulatory Program Issues,&#34; which was first adopted on November 24, 2020 (t</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="tongass national forest; alaska; land management plan revision"
@@ -1296,6 +1465,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03197/tongass-national-forest-alaska-land-management-plan-revision" data-title="Tongass National Forest; Alaska; Land Management Plan Revision" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1316,6 +1490,13 @@
         
         <div class="article-snippet">The U.S. Department of Agriculture, Forest Service is revising the land management plan for the Tongass National Forest. This notice announces the Forest Service&#39;s initiation of the development of a revised land management plan (revised plan) and intent to prepare an environmental impact statement (EIS) to evaluate the effects of revising the current plan. This notice initiates the scoping period on the development of the proposed action and EIS. This notice also describes the documents and back</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="united states v. reddy ice llc, et al. proposed final judgment and competitive impact statement"
@@ -1345,6 +1526,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/18/2026-03102/united-states-v-reddy-ice-llc-et-al-proposed-final-judgment-and-competitive-impact-statement" data-title="United States v. Reddy Ice LLC, et al. Proposed Final Judgment and Competitive Impact Statement" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1363,6 +1549,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       
     </div>

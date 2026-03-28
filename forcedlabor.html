@@ -31,6 +31,7 @@
   populateTopbar();
   document.getElementById('auth-overlay').style.display = 'none';
   initFavorites();
+  initComments(_client, _currentUser);
 })();
 </script>
 
@@ -950,6 +951,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/27/2026-05961/regulatory-capital-rule-regulation-q-risk-based-capital-surcharges-for-global-systemically-important" data-title="Regulatory Capital Rule (Regulation Q): Risk-Based Capital Surcharges for Global Systemically Important Bank Holding Companies; Systemic Risk Report (FR Y-15)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -970,6 +976,13 @@
         
         <div class="article-snippet">The Board of Governors of the Federal Reserve System (Board) is inviting public comment on a notice of proposed rulemaking to amend the Board&#39;s rule that identifies and establishes risk-based capital surcharges for U.S. global systemically important bank holding companies (GSIBs). The proposal would also amend the Systemic Risk Report (FR Y-15), which is the source of inputs to the implementation of the GSIB framework under the capital rule. The proposal would make several changes to better alig</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="self-regulatory organizations; 24x national exchange llc; notice of filing and immediate effectiveness of a proposed rule change to amend exchange rule 11.6 to clarify the handling of certain orders and update references to regulation nms"
@@ -999,6 +1012,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/27/2026-05945/self-regulatory-organizations-24x-national-exchange-llc-notice-of-filing-and-immediate-effectiveness" data-title="Self-Regulatory Organizations; 24X National Exchange LLC; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Amend Exchange Rule 11.6 to Clarify the Handling of Certain Orders and Update References to Regulation NMS" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1017,6 +1035,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="self-regulatory organizations; lch sa; notice of filing of proposed rule change relating to the cds clearing rules (amf outsourcing; emir sitg; eu ccprr)"
@@ -1046,6 +1071,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/26/2026-05851/self-regulatory-organizations-lch-sa-notice-of-filing-of-proposed-rule-change-relating-to-the-cds" data-title="Self-Regulatory Organizations; LCH SA; Notice of Filing of Proposed Rule Change Relating to the CDS Clearing Rules (AMF Outsourcing; EMIR SITG; EU CCPRR)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1064,6 +1094,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="self-regulatory organizations; cboe exchange, inc.; notice of filing of proposed rule change to amend certain of its rules regarding complex orders and complex order auctions to accommodate stop-limit complex orders and establish stop complex order auctions (“scoa”) as a new type of auction mechanism"
@@ -1093,6 +1130,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/26/2026-05845/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-of-proposed-rule-change-to-amend" data-title="Self-Regulatory Organizations; Cboe Exchange, Inc.; Notice of Filing of Proposed Rule Change To Amend Certain of Its Rules Regarding Complex Orders and Complex Order Auctions To Accommodate Stop-Limit Complex Orders and Establish Stop Complex Order Auctions (“SCOA”) as a New Type of Auction Mechanism" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1111,6 +1153,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="notice of an application of memx llc for temporary exemptive relief from compliance with certain provisions of rule 610(c) of regulation nms, as amended, pursuant to section 36(a)(1) of the securities exchange act of 1934 and rule 610(f) of regulation nms, and request for comment"
@@ -1140,6 +1189,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05766/notice-of-an-application-of-memx-llc-for-temporary-exemptive-relief-from-compliance-with-certain" data-title="Notice of an Application of MEMX LLC for Temporary Exemptive Relief From Compliance With Certain Provisions of Rule 610(c) of Regulation NMS, as Amended, Pursuant to Section 36(a)(1) of the Securities Exchange Act of 1934 and Rule 610(f) of Regulation NMS, and Request for Comment" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1158,6 +1212,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="self-regulatory organizations; cboe exchange, inc.; suspension of and order instituting proceedings to determine whether to approve or disapprove a proposed rule change to adopt rule 8.23"
@@ -1187,6 +1248,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05762/self-regulatory-organizations-cboe-exchange-inc-suspension-of-and-order-instituting-proceedings-to" data-title="Self-Regulatory Organizations; Cboe Exchange, Inc.; Suspension of and Order Instituting Proceedings To Determine Whether To Approve or Disapprove a Proposed Rule Change To Adopt Rule 8.23" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1205,6 +1271,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="self-regulatory organizations; fixed income clearing corporation; notice of filing and immediate effectiveness of a proposed rule change to establish implementation timeframe for enhancement of correlation calculation for bond haircut models"
@@ -1234,6 +1307,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05758/self-regulatory-organizations-fixed-income-clearing-corporation-notice-of-filing-and-immediate" data-title="Self-Regulatory Organizations; Fixed Income Clearing Corporation; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Establish Implementation Timeframe for Enhancement of Correlation Calculation for Bond Haircut Models" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1252,6 +1330,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="marine mammals; incidental take during specified activities; proposed incidental harassment authorization for southeast alaska stock of northern sea otters in angoon, alaska"
@@ -1281,6 +1366,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/25/2026-05744/marine-mammals-incidental-take-during-specified-activities-proposed-incidental-harassment" data-title="Marine Mammals; Incidental Take During Specified Activities; Proposed Incidental Harassment Authorization for Southeast Alaska Stock of Northern Sea Otters in Angoon, Alaska" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1301,6 +1391,13 @@
         
         <div class="article-snippet">We, the U.S. Fish and Wildlife Service (FWS), in response to a request under the Marine Mammal Protection Act of 1972, as amended, from Alaska Department of Transportation and Public Facilities, propose to authorize nonlethal, incidental take by harassment of small numbers of Southeast Alaska stock northern sea otters (Enhydra lutris kenyoni) from May 1, 2026, to April 30, 2027. The applicant has requested this authorization for take by harassment that may result from activities associated with </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; cboe exchange, inc.; notice of filing and immediate effectiveness of a proposed rule change to amend its fees schedule to amend its floor booth fees"
@@ -1330,6 +1427,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/24/2026-05662/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-and-immediate-effectiveness-of-a" data-title="Self-Regulatory Organizations; Cboe Exchange, Inc.; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Amend Its Fees Schedule To Amend Its Floor Booth Fees" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1348,6 +1450,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="trade and economic security"
@@ -1377,6 +1486,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/topics/trade-and-economic-security" data-title="Trade and Economic Security" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1397,6 +1511,13 @@
         
         <div class="article-snippet">DHS — UFLPA: Trade and Economic Security</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="uflpa entity list"
@@ -1426,6 +1547,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/uflpa-entity-list" data-title="UFLPA Entity List" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1448,6 +1574,13 @@
         
         <div class="article-snippet">DHS continues to maintain and update the UFLPA Entity List, with CBP enforcing the rebuttable presumption that all goods sourced from Xinjiang involve forced labor. Importers must maintain robust documentation to rebut the presumption and avoid detention of shipments. CBP operational guidance for importers remains the controlling reference for detention response procedures.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="public law no. 117-78"
@@ -1477,6 +1610,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.govinfo.gov/app/details/PLAW-117publ78" data-title="Public Law No. 117-78" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1497,6 +1635,13 @@
         
         <div class="article-snippet">DHS — UFLPA: Public Law No. 117-78</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="forced labor enforcement task force"
@@ -1526,6 +1671,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/forcedlabor" data-title="Forced Labor Enforcement Task Force" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1548,6 +1698,13 @@
         
         <div class="article-snippet">The DHS-led Forced Labor Enforcement Task Force (FLETF) oversees UFLPA strategy and Entity List additions on a rolling basis, coordinating across CBP, DOL, and USTR. The task force&#39;s 2025 strategy update remains operative guidance for importers. Strategic sectors including electronics, polysilicon, and aluminum remain primary enforcement targets.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="cbp operational guidance for importers"
@@ -1577,6 +1734,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/document/guidance/uflpa-operational-guidance-importers" data-title="CBP Operational Guidance for Importers" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1599,6 +1761,13 @@
         
         <div class="article-snippet">CBP&#39;s published operational guidance establishes the documentation standard importers must meet to rebut the forced labor presumption for detained shipments. Required documentation includes supply chain mapping, country-of-origin evidence, and proof of labor practices at each production tier. Failure to provide adequate documentation results in exclusion and potential seizure of goods.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="federal register notices"
@@ -1628,6 +1797,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/search?conditions%5Bagencies%5D%5B%5D=homeland-security-department&amp;conditions%5Bterm%5D=%22UFLPA+ENTITY+LIST%22&amp;order=newest" data-title="Federal Register Notices" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1648,6 +1822,13 @@
         
         <div class="article-snippet">DHS — UFLPA: Federal Register Notices</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="regulations.gov"
@@ -1677,6 +1858,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.Regulations.gov" data-title="Regulations.gov" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1697,6 +1883,13 @@
         
         <div class="article-snippet">DHS — UFLPA: Regulations.gov</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="public comments"
@@ -1726,6 +1919,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.regulations.gov/docket/DHS-2022-0001/comments" data-title="Public Comments" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1746,6 +1944,13 @@
         
         <div class="article-snippet">DHS — UFLPA: Public Comments</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="hearing transcript"
@@ -1775,6 +1980,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.regulations.gov/comment/DHS-2022-0001-0192" data-title="Hearing Transcript" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1795,6 +2005,13 @@
         
         <div class="article-snippet">DHS — UFLPA: Hearing Transcript</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="the united nations guiding principles on business and human rights"
@@ -1824,6 +2041,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.business-humanrights.org/en/big-issues/un-guiding-principles-on-business-human-rights/" data-title="The United Nations Guiding Principles on Business and Human Rights" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1844,6 +2066,13 @@
         
         <div class="article-snippet">DHS — UFLPA: The United Nations Guiding Principles on Business and Human Rights</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="the organization for economic co-operation and development guidelines for multinational enterprises (including sector-specific guidance)"
@@ -1873,6 +2102,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.oecd.org/corporate/mne/" data-title="The Organization for Economic Co-operation and Development Guidelines for Multinational Enterprises (including sector-specific guidance)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1893,6 +2127,13 @@
         
         <div class="article-snippet">DHS — UFLPA: The Organization for Economic Co-operation and Development Guidelines for Multinational Enterprises (including sector-specific guidance)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="the international labour organization tripartite declaration of principles concerning multinational enterprises and social policy"
@@ -1922,6 +2163,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.ilo.org/empent/areas/mne-declaration/lang--en/index.htm" data-title="The International Labour Organization Tripartite Declaration of Principles concerning Multinational Enterprises and Social Policy" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1942,6 +2188,13 @@
         
         <div class="article-snippet">DHS — UFLPA: The International Labour Organization Tripartite Declaration of Principles concerning Multinational Enterprises and Social Policy</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="the international labour organization publication, combating forced labour: a handbook for employers and business"
@@ -1971,6 +2224,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.ilo.org/wcmsp5/groups/public/---ed_norm/---declaration/documents/publication/wcms_101171.pdf" data-title="The International Labour Organization publication, Combating Forced Labour: A Handbook for Employers and Business" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1991,6 +2249,13 @@
         
         <div class="article-snippet">DHS — UFLPA: The International Labour Organization publication, Combating Forced Labour: A Handbook for Employers and Business</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="international labour organization guidelines concerning the measurement of forced labor"
@@ -2020,6 +2285,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.ilo.org/wcmsp5/groups/public/---dgreports/---stat/documents/meetingdocument/wcms_648619.pdf" data-title="International Labour Organization Guidelines Concerning the Measurement of Forced Labor" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2040,6 +2310,13 @@
         
         <div class="article-snippet">DHS — UFLPA: International Labour Organization Guidelines Concerning the Measurement of Forced Labor</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="international labour organization general principles and operational guidelines for fair recruitment"
@@ -2069,6 +2346,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.ilo.org/wcmsp5/groups/public/---ed_protect/---protrav/---migrant/documents/publication/wcms_536755.pdf" data-title="International Labour Organization General Principles and Operational Guidelines for Fair Recruitment" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2089,6 +2371,13 @@
         
         <div class="article-snippet">DHS — UFLPA: International Labour Organization General Principles and Operational Guidelines for Fair Recruitment</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="international organization for migration’s ethical recruitment standards"
@@ -2118,6 +2407,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://iris.iom.int/sites/g/files/tmzbdl201/files/documents/IRIS%20Standard%20Report%20.pdf" data-title="International Organization for Migration’s ethical recruitment standards" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2138,6 +2432,13 @@
         
         <div class="article-snippet">DHS — UFLPA: International Organization for Migration’s ethical recruitment standards</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="the office of the high commissioner for human rights guide on the corporate responsibility to respect human rights (ohchr guide)"
@@ -2167,6 +2468,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.ohchr.org/sites/default/files/Documents/Publications/HR.PUB.12.2_En.pdf" data-title="The Office of the High Commissioner for Human Rights guide on The Corporate Responsibility to Respect Human Rights (OHCHR guide)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2187,6 +2493,13 @@
         
         <div class="article-snippet">DHS — UFLPA: The Office of the High Commissioner for Human Rights guide on The Corporate Responsibility to Respect Human Rights (OHCHR guide)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="enforce and protect act (eapa)"
@@ -2216,6 +2529,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/eapa" data-title="Enforce and Protect Act (EAPA)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2238,6 +2556,13 @@
         
         <div class="article-snippet">CBP continues to treat forced labor as a Priority Trade Issue, actively enforcing the Enforce and Protect Act (EAPA) alongside UFLPA. Any credible allegation of forced labor in an importer&#39;s supply chain can trigger an EAPA investigation and suspension of liquidation. Importers of aluminum, electronics, glass, and textiles sourced from China face the highest scrutiny.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="leveling the playing field"
@@ -2267,6 +2592,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/forced-labor/leveling-playing-field" data-title="Leveling the Playing Field" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2287,6 +2617,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Leveling the Playing Field</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="laws and authorities"
@@ -2316,6 +2653,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/forced-labor/laws-and-authorities" data-title="Laws and Authorities" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2336,6 +2678,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Laws and Authorities</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item article-action"
            data-headline="uyghur forced labor prevention act (uflpa)"
@@ -2365,6 +2714,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/forced-labor/UFLPA" data-title="Uyghur Forced Labor Prevention Act (UFLPA)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2387,6 +2741,13 @@
         
         <div class="article-snippet">CBP&#39;s Forced Labor enforcement program operates under both the UFLPA rebuttable presumption and the Enforce and Protect Act (EAPA), with active detention authority for goods with Xinjiang nexus. CBP&#39;s Operational Guidance for Importers specifies that importers must provide complete supply chain traceability, transaction records, and evidence of no Xinjiang labor to successfully rebut presumption. Failure to maintain this documentation results in exclusion or seizure of detained goods.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="forced labor faqs"
@@ -2416,6 +2777,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/forced-labor/frequently-asked-questions" data-title="Forced Labor FAQs" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2436,6 +2802,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Forced Labor FAQs</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="basic importing and exporting"
@@ -2465,6 +2838,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/basic-import-export" data-title="Basic Importing and Exporting" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2485,6 +2863,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Basic Importing and Exporting</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ace: the import and export processing system"
@@ -2514,6 +2899,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/automated" data-title="ACE: The Import and Export Processing System" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2534,6 +2924,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: ACE: The Import and Export Processing System</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ecbp broker instruction and training resources"
@@ -2563,6 +2960,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/eCBP" data-title="eCBP Broker Instruction and Training Resources" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2583,6 +2985,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: eCBP Broker Instruction and Training Resources</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="priority trade issues"
@@ -2612,6 +3021,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/priority-issues" data-title="Priority Trade Issues" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2632,6 +3046,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Priority Trade Issues</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="programs and administration"
@@ -2661,6 +3082,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/programs-administration" data-title="Programs and Administration" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2681,6 +3107,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Programs and Administration</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="rulings and legal decisions"
@@ -2710,6 +3143,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/rulings" data-title="Rulings and Legal Decisions" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2730,6 +3168,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Rulings and Legal Decisions</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="stakeholder engagement"
@@ -2759,6 +3204,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/stakeholder-engagement" data-title="Stakeholder Engagement" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2779,6 +3229,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Stakeholder Engagement</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="trade facilitation and trade enforcement act"
@@ -2808,6 +3265,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/trade-enforcement/tftea" data-title="Trade Facilitation and Trade Enforcement Act" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2828,6 +3290,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Trade Facilitation and Trade Enforcement Act</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="centers of excellence and expertise"
@@ -2857,6 +3326,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/centers-excellence-and-expertise-information" data-title="Centers of Excellence and Expertise" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2877,6 +3351,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Centers of Excellence and Expertise</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ams air features"
@@ -2906,6 +3387,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/acs/ams/air-features" data-title="AMS Air Features" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2926,6 +3412,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: AMS Air Features</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="cbp facilitates broker licensing though the global enrollment system"
@@ -2955,6 +3448,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/trade-community/cbp-facilitates-broker-licensing-though-global-enrollment-system" data-title="CBP Facilitates Broker Licensing Though the Global Enrollment System" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2975,6 +3473,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: CBP Facilitates Broker Licensing Though the Global Enrollment System</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="cybersecurity resiliency"
@@ -3004,6 +3509,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/cybersecurity-resiliency" data-title="Cybersecurity Resiliency" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3024,6 +3534,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Cybersecurity Resiliency</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="frontline articles"
@@ -3053,6 +3570,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/office-trade-frontline-articles" data-title="Frontline Articles" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3073,6 +3595,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Frontline Articles</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="the truth behind counterfeits"
@@ -3102,6 +3631,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/fakegoodsrealdangers" data-title="The Truth Behind Counterfeits" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3122,6 +3656,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: The Truth Behind Counterfeits</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="automated clearinghouse"
@@ -3151,6 +3692,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.cbp.gov/trade/automated/ach" data-title="Automated Clearinghouse" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3171,6 +3717,13 @@
         
         <div class="article-snippet">CBP — Forced Labor: Automated Clearinghouse</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="disrupt terrorist financing"
@@ -3200,6 +3753,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/topic/disrupt-terrorist-financing" data-title="Disrupt Terrorist Financing" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3220,6 +3778,13 @@
         
         <div class="article-snippet">DHS — UFLPA Entity List: Disrupt Terrorist Financing</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="fraud and counterfeiting"
@@ -3249,6 +3814,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/fraud-and-counterfeit" data-title="Fraud and Counterfeiting" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3269,6 +3839,13 @@
         
         <div class="article-snippet">DHS — UFLPA Entity List: Fraud and Counterfeiting</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="intellectual property rights"
@@ -3298,6 +3875,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/intellectual-property-rights" data-title="Intellectual Property Rights" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3318,6 +3900,13 @@
         
         <div class="article-snippet">DHS — UFLPA Entity List: Intellectual Property Rights</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="trade transparency"
@@ -3347,6 +3936,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/trade-transparency" data-title="Trade Transparency" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3367,6 +3961,13 @@
         
         <div class="article-snippet">DHS — UFLPA Entity List: Trade Transparency</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="supply chain resilience center"
@@ -3396,6 +3997,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/scrc" data-title="Supply Chain Resilience Center" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3416,6 +4022,13 @@
         
         <div class="article-snippet">DHS — UFLPA Entity List: Supply Chain Resilience Center</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="uflpa fact sheet"
@@ -3445,6 +4058,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.dhs.gov/2025-updates-strategy-prevent-importation-goods-mined-produced-or-manufactured-forced-labor-peoples" data-title="UFLPA Fact Sheet" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3465,6 +4083,13 @@
         
         <div class="article-snippet">DHS — UFLPA Entity List: UFLPA Fact Sheet</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="application of the federal securities laws to certain types of crypto assets and certain transactions involving crypto assets"
@@ -3494,6 +4119,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05635/application-of-the-federal-securities-laws-to-certain-types-of-crypto-assets-and-certain" data-title="Application of the Federal Securities Laws to Certain Types of Crypto Assets and Certain Transactions Involving Crypto Assets" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3514,6 +4144,13 @@
         
         <div class="article-snippet">The Securities and Exchange Commission (&#34;Commission&#34; or &#34;SEC&#34;) issues herein an interpretation regarding the application of the Federal securities laws to certain types of crypto assets and certain transactions involving crypto assets. The references in this release to &#34;we&#34; and &#34;our&#34; are to the Commission. The Commodity Futures Trading Commission (&#34;CFTC&#34;) provides herein guidance relating to that interpretation.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; cboe exchange, inc.; notice of filing of amendment nos. 1 and 2 and order granting accelerated approval of a proposed rule change, as modified and superseded by amendment no. 2, to amend rule 5.4 to change the minimum increment for options on the cboe magnificent 10 index"
@@ -3543,6 +4180,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05561/self-regulatory-organizations-cboe-exchange-inc-notice-of-filing-of-amendment-nos-1-and-2-and-order" data-title="Self-Regulatory Organizations; Cboe Exchange, Inc.; Notice of Filing of Amendment Nos. 1 and 2 and Order Granting Accelerated Approval of a Proposed Rule Change, as Modified and Superseded by Amendment No. 2, To Amend Rule 5.4 To Change the Minimum Increment for Options on the Cboe Magnificent 10 Index" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3561,6 +4203,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; the nasdaq stock market llc; notice of filing and immediate effectiveness of proposed rule change to amend the designated liquidity provider and market quality supporter programs in equity 7, section 114"
@@ -3590,6 +4239,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05560/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-and-immediate" data-title="Self-Regulatory Organizations; The Nasdaq Stock Market LLC; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Amend the Designated Liquidity Provider and Market Quality Supporter Programs in Equity 7, Section 114" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3608,6 +4262,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; fixed income clearing corporation; order instituting proceedings to determine whether to approve or disapprove a proposed rule change to amend and restate the second amended and restated cross-margining agreement between ficc and cme and amend related gsd rules"
@@ -3637,6 +4298,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05558/self-regulatory-organizations-fixed-income-clearing-corporation-order-instituting-proceedings-to" data-title="Self-Regulatory Organizations; Fixed Income Clearing Corporation; Order Instituting Proceedings To Determine Whether To Approve or Disapprove a Proposed Rule Change To Amend and Restate the Second Amended and Restated Cross-Margining Agreement Between FICC and CME and Amend Related GSD Rules" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3655,6 +4321,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; nyse arca, inc.; notice of filing and immediate effectiveness of proposed rule change to amend exchange rules 5.32-o, 5.35-o, and 6.8-o regarding options on certain crypto assets"
@@ -3684,6 +4357,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05557/self-regulatory-organizations-nyse-arca-inc-notice-of-filing-and-immediate-effectiveness-of-proposed" data-title="Self-Regulatory Organizations; NYSE Arca, Inc.; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Amend Exchange Rules 5.32-O, 5.35-O, and 6.8-O Regarding Options on Certain Crypto Assets" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3702,6 +4380,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; cboe byx exchange, inc.; notice of filing and immediate effectiveness of a proposed rule change to adopt rules 11.28 and 11.29 relating the regulatory and operations trading halts, integrate several definitions and concepts from the amended cta/cq plan, reorganize existing rule 11.18, and to make conforming changes to related rules"
@@ -3731,6 +4416,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05556/self-regulatory-organizations-cboe-byx-exchange-inc-notice-of-filing-and-immediate-effectiveness-of" data-title="Self-Regulatory Organizations; Cboe BYX Exchange, Inc.; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Adopt Rules 11.28 and 11.29 Relating the Regulatory and Operations Trading Halts, Integrate Several Definitions and Concepts From the Amended CTA/CQ Plan, Reorganize Existing Rule 11.18, and To Make Conforming Changes to Related Rules" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3749,6 +4439,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; nyse american llc; notice of filing and immediate effectiveness of proposed change to amend exchange rules 904, 903g, and 906g regarding options on certain crypto assets"
@@ -3778,6 +4475,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/23/2026-05554/self-regulatory-organizations-nyse-american-llc-notice-of-filing-and-immediate-effectiveness-of" data-title="Self-Regulatory Organizations; NYSE American LLC; Notice of Filing and Immediate Effectiveness of Proposed Change To Amend Exchange Rules 904, 903G, and 906G Regarding Options on Certain Crypto Assets" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3796,6 +4498,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; nyse american llc; notice of filing of proposed change to amend section 1003 of the nyse american company guide"
@@ -3825,6 +4534,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/20/2026-05481/self-regulatory-organizations-nyse-american-llc-notice-of-filing-of-proposed-change-to-amend-section" data-title="Self-Regulatory Organizations; NYSE American LLC; Notice of Filing of Proposed Change To Amend Section 1003 of the NYSE American Company Guide" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3843,6 +4557,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; new york stock exchange llc; notice of filing of amendment no. 1 and order instituting proceedings to determine whether to approve or disapprove a proposed rule change, as modified by amendment no. 1, to amend section 802.01c of the nyse listed company manual"
@@ -3872,6 +4593,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/20/2026-05480/self-regulatory-organizations-new-york-stock-exchange-llc-notice-of-filing-of-amendment-no-1-and" data-title="Self-Regulatory Organizations; New York Stock Exchange LLC; Notice of Filing of Amendment No. 1 and Order Instituting Proceedings To Determine Whether To Approve or Disapprove a Proposed Rule Change, as Modified by Amendment No. 1, To Amend Section 802.01C of the NYSE Listed Company Manual" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3890,6 +4616,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; nyse american llc; notice of filing of amendment nos. 1, 2 and 3 and order instituting proceedings to determine whether to approve or disapprove a proposed rule change, as modified by amendment nos. 1, 2, and 3, to amend sections 1003 and 1009 of the nyse american company guide"
@@ -3919,6 +4652,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/20/2026-05479/self-regulatory-organizations-nyse-american-llc-notice-of-filing-of-amendment-nos-1-2-and-3-and" data-title="Self-Regulatory Organizations; NYSE American LLC; Notice of Filing of Amendment Nos. 1, 2 and 3 and Order Instituting Proceedings To Determine Whether To Approve or Disapprove a Proposed Rule Change, as Modified by Amendment Nos. 1, 2, and 3, To Amend Sections 1003 and 1009 of the NYSE American Company Guide" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3937,6 +4675,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; miax pearl, llc; notice of filing and immediate effectiveness of a proposed rule change to amend exchange rule 2613(a), usage of data feeds"
@@ -3966,6 +4711,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/20/2026-05477/self-regulatory-organizations-miax-pearl-llc-notice-of-filing-and-immediate-effectiveness-of-a" data-title="Self-Regulatory Organizations; MIAX PEARL, LLC; Notice of Filing and Immediate Effectiveness of a Proposed Rule Change To Amend Exchange Rule 2613(a), Usage of Data Feeds" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -3984,6 +4734,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; nyse arca, inc.; notice of filing and immediate effectiveness of proposed rule change to amend the nyse arca equities fees and charges"
@@ -4013,6 +4770,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/20/2026-05476/self-regulatory-organizations-nyse-arca-inc-notice-of-filing-and-immediate-effectiveness-of-proposed" data-title="Self-Regulatory Organizations; NYSE Arca, Inc.; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Amend the NYSE Arca Equities Fees and Charges" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4031,6 +4793,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; the nasdaq stock market llc; notice of filing of proposed rule change to list and trade shares of the vaneck jitosol etf under nasdaq rule 5711(d) (commodity-based trust shares)"
@@ -4060,6 +4829,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/20/2026-05475/self-regulatory-organizations-the-nasdaq-stock-market-llc-notice-of-filing-of-proposed-rule-change" data-title="Self-Regulatory Organizations; The Nasdaq Stock Market LLC; Notice of Filing of Proposed Rule Change To List and Trade Shares of the VanEck JitoSOL ETF Under Nasdaq Rule 5711(d) (Commodity-Based Trust Shares)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4078,6 +4852,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="self-regulatory organizations; nasdaq phlx llc; notice of filing and immediate effectiveness of proposed rule change to expand the exchange&#39;s co-location services"
@@ -4107,6 +4888,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/20/2026-05474/self-regulatory-organizations-nasdaq-phlx-llc-notice-of-filing-and-immediate-effectiveness-of" data-title="Self-Regulatory Organizations; Nasdaq PHLX LLC; Notice of Filing and Immediate Effectiveness of Proposed Rule Change To Expand the Exchange&#39;s Co-Location Services" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4125,6 +4911,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="initiation of section 301 investigations of acts, policies, and practices of various economies related to the failure to impose and effectively enforce a prohibition on the importation of goods produced with forced labor"
@@ -4154,6 +4947,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/17/2026-05151/initiation-of-section-301-investigations-of-acts-policies-and-practices-of-various-economies-related" data-title="Initiation of Section 301 Investigations of Acts, Policies, and Practices of Various Economies Related to the Failure To Impose and Effectively Enforce a Prohibition on the Importation of Goods Produced With Forced Labor" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4176,6 +4974,13 @@
         
         <div class="article-snippet">USTR launched Section 301 investigations against multiple economies for failing to prohibit importation of goods produced with forced labor. Public comments are being solicited and hearings will be held. This signals potential new trade restrictions, tariffs, or retaliatory measures targeting countries that enable forced labor supply chains — including China.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="combating cybercrime, fraud, and predatory schemes against american citizens"
@@ -4205,6 +5010,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/11/2026-04826/combating-cybercrime-fraud-and-predatory-schemes-against-american-citizens" data-title="Combating Cybercrime, Fraud, and Predatory Schemes Against American Citizens" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4223,6 +5033,13 @@
           
         </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="reduction in force"
@@ -4252,6 +5069,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/05/2026-04377/reduction-in-force" data-title="Reduction in Force" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4272,6 +5094,13 @@
         
         <div class="article-snippet">The Office of Personnel Management (OPM) is issuing a proposed rule to revise its reduction-in-force (RIF) regulations. The proposed rule would make the RIF regulations more streamlined, efficient, and merit-based by prioritizing performance over tenure and length of service when determining which employees will be retained in a RIF and modifying the types of employees who are excluded from RIF competition. OPM also proposes to revise its regulations regarding the reemployment priority list (RPL</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="airworthiness directives; airbus canada limited partnership (type certificate previously held by c series aircraft limited partnership (csalp); bombardier, inc.) airplanes"
@@ -4301,6 +5130,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/03/04/2026-04278/airworthiness-directives-airbus-canada-limited-partnership-type-certificate-previously-held-by-c" data-title="Airworthiness Directives; Airbus Canada Limited Partnership (Type Certificate Previously Held by C Series Aircraft Limited Partnership (CSALP); Bombardier, Inc.) Airplanes" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4321,6 +5155,13 @@
         
         <div class="article-snippet">The FAA is adopting a new airworthiness directive (AD) for certain Airbus Canada Limited Partnership Model BD-500-1A10 and BD-500- 1A11 airplanes. This AD was prompted by reports of certain fuel transfer float valves failing in the closed position, preventing normal fuel transfer between the center and wing fuel tanks. This AD requires replacing the existing fuel transfer float valves on airplanes approved for extended-range twin-engine operation performance standards (ETOPS). The FAA is issuing</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="month-divider" data-month-divider>2026-02</div><div class="article-item"
            data-headline="regulatory guidance relating to the criteria and process for initial recognition of an accrediting agency"
@@ -4350,6 +5191,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/27/2026-03953/regulatory-guidance-relating-to-the-criteria-and-process-for-initial-recognition-of-an-accrediting" data-title="Regulatory Guidance Relating to the Criteria and Process for Initial Recognition of an Accrediting Agency" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4370,6 +5216,13 @@
         
         <div class="article-snippet">This interpretive rule sets forth the Department&#39;s interpretation of certain regulations at the Criteria for Recognition, and the Recognition Process, governing an accrediting agency&#39;s submission of a written application seeking initial recognition. In general, the provisions in this interpretive rule are designed to reduce unnecessary barriers to the recognition of accrediting agencies to promote competition in the market for assessing the quality of education or training offered by postseconda</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="proposed exemption from certain prohibited transaction restrictions for certain asset managers related to ubs ag (ubs) located in zurich, switzerland"
@@ -4399,6 +5252,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/26/2026-03825/proposed-exemption-from-certain-prohibited-transaction-restrictions-for-certain-asset-managers" data-title="Proposed Exemption From Certain Prohibited Transaction Restrictions for Certain Asset Managers Related to UBS AG (UBS) Located in Zurich, Switzerland" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4419,6 +5277,13 @@
         
         <div class="article-snippet">If granted, this proposed exemption would allow certain current and future UBS-related asset managers to rely on Prohibited Transaction Exemption (PTE) 84-14 until May 4, 2031, if certain conditions are met, notwithstanding four judgments of conviction and one non-prosecution agreement involving entities within UBS&#39; corporate umbrella.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="performance appraisal for general schedule, prevailing rate, and certain other employees"
@@ -4448,6 +5313,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03619/performance-appraisal-for-general-schedule-prevailing-rate-and-certain-other-employees" data-title="Performance Appraisal for General Schedule, Prevailing Rate, and Certain Other Employees" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4468,6 +5338,13 @@
         
         <div class="article-snippet">The Office of Personnel Management (OPM) is issuing a proposed rule to increase the efficiency of performance management for non- Senior Executive Service (SES) employees, including General Schedule (GS) and prevailing rate employees. The proposed rule amends the approved patterns of summary levels by removing a &#34;Level 2&#34;; requires agencies to undergo biennial appraisal system certifications with OPM; requires a supervisory critical element for all supervisors covered under this subpart; removes</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="managing senior professional performance"
@@ -4497,6 +5374,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/24/2026-03610/managing-senior-professional-performance" data-title="Managing Senior Professional Performance" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4517,6 +5399,13 @@
         
         <div class="article-snippet">The Office of Personnel Management (OPM) and the Office of Management and Budget (OMB) are proposing to revise the rules governing the performance appraisal of senior-level (SL) and scientific or professional (ST) employees, collectively referred to as &#34;senior professionals.&#34; This rulemaking would establish a new subpart specifically dedicated to senior professional performance appraisal. The new subpart would align more closely with the SES performance appraisal regulations, eliminate senior pr</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="employment authorization reform for asylum applicants"
@@ -4546,6 +5435,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/23/2026-03595/employment-authorization-reform-for-asylum-applicants" data-title="Employment Authorization Reform for Asylum Applicants" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4566,6 +5460,13 @@
         
         <div class="article-snippet">The U.S. Department of Homeland Security (DHS) proposes to modify regulations governing applications for asylum and withholding of removal (asylum applications) and employment authorization based on a pending asylum application. The proposed rule would change filing and eligibility requirements for aliens requesting employment authorization and an employment authorization document (EAD) based on a pending asylum application. The changes include pausing acceptance of EAD applications from asylum </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="maximum line speed under the new swine slaughter inspection system (nsis)"
@@ -4595,6 +5496,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/19/2026-03228/maximum-line-speed-under-the-new-swine-slaughter-inspection-system-nsis" data-title="Maximum Line Speed Under the New Swine Slaughter Inspection System (NSIS)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4615,6 +5521,13 @@
         
         <div class="article-snippet">FSIS is proposing to amend the Federal meat inspection regulations to allow establishments operating under the NSIS to determine their own line speeds based on their ability to maintain process control. FSIS is also proposing to clarify that the FSIS inspector may reduce the rate of establishment operations at any point in the slaughter process when, in their judgement, there is a loss of process control, or a carcass-by-carcass inspection cannot be adequately performed within the time available</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="restoring integrity to the issuance of non-domiciled commercial drivers licenses (cdl)"
@@ -4644,6 +5557,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://www.federalregister.gov/documents/2026/02/13/2026-02965/restoring-integrity-to-the-issuance-of-non-domiciled-commercial-drivers-licenses-cdl" data-title="Restoring Integrity to the Issuance of Non-Domiciled Commercial Drivers Licenses (CDL)" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -4664,6 +5582,13 @@
         
         <div class="article-snippet">FMCSA amends the Federal regulations for State Driver&#39;s Licensing Agencies (SDLAs) issuing commercial driving credentials to non-domiciled individuals. This final rule reaffirms, with minor changes, the provisions of the interim final rule (IFR) published on September 29, 2025. Specifically, this final rule limits eligibility for non-domiciled Commercial Learner&#39;s Permits (CLPs) and Commercial Driver&#39;s Licenses (CDLs) for foreign-domiciled individuals to those who hold specific, verifiable emplo</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       
     </div>

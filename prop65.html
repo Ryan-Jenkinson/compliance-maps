@@ -31,6 +31,7 @@
   populateTopbar();
   document.getElementById('auth-overlay').style.display = 'none';
   initFavorites();
+  initComments(_client, _currentUser);
 })();
 </script>
 
@@ -491,6 +492,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01370" data-title="AG Number 2026-01370 (View Details) Notice PDF: 2026-01370.pdf Date Filed: 03/26/2026 Noticing Party: Mothers Oversight" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -515,6 +521,13 @@
         
         <div class="article-snippet">60-day notice filed March 26, 2026 targets Machrus Inc. dba Swingan and Dick&#39;s Sporting Goods for DEHP in vinyl-coated chains. This is a direct enforcement signal that vinyl-coated product components are under active plaintiff scrutiny. DEHP safe harbor NSRL is 5 µg/day for oral exposure.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01367 (view details) notice pdf: 2026-01367.pdf date filed: 03/26/2026 noticing party: environmental rese"
@@ -544,6 +557,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01367" data-title="AG Number 2026-01367 (View Details) Notice PDF: 2026-01367.pdf Date Filed: 03/26/2026 Noticing Party: Environmental Rese" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -568,6 +586,13 @@
         
         <div class="article-snippet">60-day notice filed March 26, 2026 alleges both PFOA and lead in Urban Remedy organic meal shake and beverage products. The dual-chemical notice strategy signals plaintiffs are actively targeting PFOA alongside legacy metals in consumer-facing products. PFOA is listed as a carcinogen with an NSRL of 0.5 µg/day.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01365 (view details) notice pdf: 2026-01365.pdf date filed: 03/25/2026 noticing party: ca citizen protect"
@@ -597,6 +622,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01365" data-title="AG Number 2026-01365 (View Details) Notice PDF: 2026-01365.pdf Date Filed: 03/25/2026 Noticing Party: CA Citizen Protect" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -618,6 +648,13 @@
         
         <div class="article-snippet">CA Citizen Protection Group filed a March 25, 2026 notice against Bloom Nu LLC and Ross Stores for lead in a children&#39;s greens and multivitamin product. Ross Stores is named as a retail co-defendant, consistent with the enforcement trend of holding distributors jointly liable. Products with lead at levels exceeding the 0.5 µg/day NSRL without a warning are the primary target.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01363 (view details) notice pdf: 2026-01363.pdf date filed: 03/18/2026 noticing party: consumer advocacy"
@@ -647,6 +684,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01363" data-title="AG Number 2026-01363 (View Details) Notice PDF: 2026-01363.pdf Date Filed: 03/18/2026 Noticing Party: Consumer Advocacy" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -668,6 +710,13 @@
         
         <div class="article-snippet">Consumer Advocacy Group filed multiple cadmium notices on March 18, 2026, targeting Rhee Bros. for seasoned seaweed and Herbal Vineyards for sea moss, consistent with the ongoing cadmium enforcement campaign against marine-derived and natural products. These notices confirm cadmium as an active enforcement priority in Q1 2026.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01395 (view details) notice pdf: 2026-01395.pdf date filed: 03/27/2026 noticing party: ema bell plaintiff"
@@ -697,6 +746,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01395" data-title="AG Number 2026-01395 (View Details) Notice PDF: 2026-01395.pdf Date Filed: 03/27/2026 Noticing Party: Ema Bell Plaintiff" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -717,6 +771,13 @@
         
         <div class="article-snippet">AG Number 2026-01395 (View Details) Notice PDF: 2026-01395.pdf Date Filed: 03/27/2026 Noticing Party: Ema Bell Plaintiff Attorney: Evan Smith Alleged Violators: Pure Simple Foods, LLC; Pure Simple Foods, LLC dba Purely Sprouted; Lark Ellen Farms; Sprouts Farmers Market, Inc.; SFM, LLC; Sprouts Farmers Markets Holdings, LLC; SF Markets, LLC Chemical: Lead Source: Purely Sprouted Orange Ginger Snack</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01388 (view details) notice pdf: 2026-01388.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -746,6 +807,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01388" data-title="AG Number 2026-01388 (View Details) Notice PDF: 2026-01388.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -766,6 +832,13 @@
         
         <div class="article-snippet">AG Number 2026-01388 (View Details) Notice PDF: 2026-01388.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Blue Elephant Bangkok Co., Ltd.; Sequoia Southeast, LLC; Walmart Inc. Chemical: Lead Source: Blue Elephant – Thai Green Curry Sauce, Blue Elephant – Thai Red Curry Sauce Complaint (0)   Settlement (0)   Ju</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01383 (view details) notice pdf: 2026-01383.pdf date filed: 03/27/2026 noticing party: gabriel espinoza p"
@@ -795,6 +868,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01383" data-title="AG Number 2026-01383 (View Details) Notice PDF: 2026-01383.pdf Date Filed: 03/27/2026 Noticing Party: Gabriel Espinoza P" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -815,6 +893,13 @@
         
         <div class="article-snippet">AG Number 2026-01383 (View Details) Notice PDF: 2026-01383.pdf Date Filed: 03/27/2026 Noticing Party: Gabriel Espinoza Plaintiff Attorney: Evan Smith Alleged Violators: Elements Truffles LLC; The TJX Companies, Inc.; The TJX Companies, Inc. dba HomeGoods; HomeGoods, LLC Chemical: Lead Source: Elements Truffles Vanilla Protein Powder Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01402 (view details) notice pdf: 2026-01402.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -844,6 +929,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01402" data-title="AG Number 2026-01402 (View Details) Notice PDF: 2026-01402.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -865,6 +955,13 @@
         
         <div class="article-snippet">On March 27, 2026, Environmental Health Advocates, Inc. (via Entorno Law, LLP) filed 20+ Prop 65 60-day notices targeting major retailers (Kroger, Costco, Target, Walmart, Sprouts) and food manufacturers for lead and cadmium in packaged foods including spinach, salad kits, dumplings, curry sauces, and snack foods. A separate notice by Ema Bell targets lead in a sprouted snack product sold at Sprouts. These notices initiate the 60-day clock before plaintiffs may file civil enforcement actions, and all named defendants must now evaluate warning compliance or reformulation.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01401 (view details) notice pdf: 2026-01401.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -894,6 +991,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01401" data-title="AG Number 2026-01401 (View Details) Notice PDF: 2026-01401.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -914,6 +1016,13 @@
         
         <div class="article-snippet">AG Number 2026-01401 (View Details) Notice PDF: 2026-01401.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Rich Products Corporation; Food 4 Less of California, Inc. Chemical: Cadmium Source: Sea Pak Crispy Calamari Rings Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01400 (view details) notice pdf: 2026-01400.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -943,6 +1052,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01400" data-title="AG Number 2026-01400 (View Details) Notice PDF: 2026-01400.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -963,6 +1077,13 @@
         
         <div class="article-snippet">AG Number 2026-01400 (View Details) Notice PDF: 2026-01400.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Soofer Co., Inc.; Vine Mesa, Inc. Chemical: Lead Source: Sadaf Sabzi Kookoo Herb Mix Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01399 (view details) notice pdf: 2026-01399.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -992,6 +1113,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01399" data-title="AG Number 2026-01399 (View Details) Notice PDF: 2026-01399.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1012,6 +1138,13 @@
         
         <div class="article-snippet">AG Number 2026-01399 (View Details) Notice PDF: 2026-01399.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: The Kroger Co.; Food 4 Less of California, Inc. Chemical: Lead Source: Kroger Yellow Cling Sliced Peaches in Heavy Syrup Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01398 (view details) notice pdf: 2026-01398.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1041,6 +1174,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01398" data-title="AG Number 2026-01398 (View Details) Notice PDF: 2026-01398.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1061,6 +1199,13 @@
         
         <div class="article-snippet">AG Number 2026-01398 (View Details) Notice PDF: 2026-01398.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: The Kroger Co.; Food 4 Less of California, Inc. Chemical: Lead Source: Kroger Veggie Blend Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01397 (view details) notice pdf: 2026-01397.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1090,6 +1235,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01397" data-title="AG Number 2026-01397 (View Details) Notice PDF: 2026-01397.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1110,6 +1260,13 @@
         
         <div class="article-snippet">AG Number 2026-01397 (View Details) Notice PDF: 2026-01397.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: The Kroger Co.; Food 4 Less of California, Inc. Chemical: Cadmium Source: Kroger Shredded Green Leaf Lettuce Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01396 (view details) notice pdf: 2026-01396.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1139,6 +1296,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01396" data-title="AG Number 2026-01396 (View Details) Notice PDF: 2026-01396.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1159,6 +1321,13 @@
         
         <div class="article-snippet">AG Number 2026-01396 (View Details) Notice PDF: 2026-01396.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: The Kroger Co.; Food 4 Less of California, Inc. Chemical: Cadmium Source: Kroger Classic Garden Salad Mix Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01394 (view details) notice pdf: 2026-01394.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1188,6 +1357,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01394" data-title="AG Number 2026-01394 (View Details) Notice PDF: 2026-01394.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1208,6 +1382,13 @@
         
         <div class="article-snippet">AG Number 2026-01394 (View Details) Notice PDF: 2026-01394.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Costco Wholesale Corporation Chemical: Cadmium Source: Kirkland Spinach &amp; Cheese Ravioli Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01393 (view details) notice pdf: 2026-01393.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1237,6 +1418,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01393" data-title="AG Number 2026-01393 (View Details) Notice PDF: 2026-01393.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1257,6 +1443,13 @@
         
         <div class="article-snippet">AG Number 2026-01393 (View Details) Notice PDF: 2026-01393.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Goya Foods of California, Inc.; The Kroger Co. Chemical: Lead Source: Goya Sides - Tostones Fried Plantains Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01392 (view details) notice pdf: 2026-01392.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1286,6 +1479,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01392" data-title="AG Number 2026-01392 (View Details) Notice PDF: 2026-01392.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1306,6 +1504,13 @@
         
         <div class="article-snippet">AG Number 2026-01392 (View Details) Notice PDF: 2026-01392.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Target Corporation Chemical: Lead Source: Good &amp; Gather Ann Kim Pickle Pie Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01391 (view details) notice pdf: 2026-01391.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1335,6 +1540,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01391" data-title="AG Number 2026-01391 (View Details) Notice PDF: 2026-01391.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1355,6 +1565,13 @@
         
         <div class="article-snippet">AG Number 2026-01391 (View Details) Notice PDF: 2026-01391.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Fresh Express Incorporated; CD Marketplace, Inc. Chemical: Cadmium Source: Fresh Express Spring Mix Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01390 (view details) notice pdf: 2026-01390.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1384,6 +1601,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01390" data-title="AG Number 2026-01390 (View Details) Notice PDF: 2026-01390.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1404,6 +1626,13 @@
         
         <div class="article-snippet">AG Number 2026-01390 (View Details) Notice PDF: 2026-01390.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Deep Foods Inc.; Bristol Farms Chemical: Lead Source: Deep Samosas Potato &amp; Pea Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01389 (view details) notice pdf: 2026-01389.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1433,6 +1662,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01389" data-title="AG Number 2026-01389 (View Details) Notice PDF: 2026-01389.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1453,6 +1687,13 @@
         
         <div class="article-snippet">AG Number 2026-01389 (View Details) Notice PDF: 2026-01389.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Ready Pac Produce, Inc.; Ready Pac Foods, Inc.; Costco Wholesale Corporation Chemical: Cadmium Source: Bonduelle Spinach Cranberry Pecan Crunch Salad Kit Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01387 (view details) notice pdf: 2026-01387.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1482,6 +1723,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01387" data-title="AG Number 2026-01387 (View Details) Notice PDF: 2026-01387.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1502,6 +1748,13 @@
         
         <div class="article-snippet">AG Number 2026-01387 (View Details) Notice PDF: 2026-01387.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Bimbo Bakeries USA, Inc.; The Kroger Co. Chemical: Lead Source: Mini Mantecadas Mini Muffins Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01386 (view details) notice pdf: 2026-01386.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1531,6 +1784,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01386" data-title="AG Number 2026-01386 (View Details) Notice PDF: 2026-01386.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1551,6 +1809,13 @@
         
         <div class="article-snippet">AG Number 2026-01386 (View Details) Notice PDF: 2026-01386.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Schwan’s Company; Costco Wholesale Corporation Chemical: Lead Source: Bibigo Mandu Whole Shrimp Dumplings Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01385 (view details) notice pdf: 2026-01385.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1580,6 +1845,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01385" data-title="AG Number 2026-01385 (View Details) Notice PDF: 2026-01385.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1600,6 +1870,13 @@
         
         <div class="article-snippet">AG Number 2026-01385 (View Details) Notice PDF: 2026-01385.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Fresh Express Incorporated; CD Marketplace, Inc. Chemical: Cadmium, Lead Source: Fresh Express Baby Spinach Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01384 (view details) notice pdf: 2026-01384.pdf date filed: 03/27/2026 noticing party: environmental heal"
@@ -1629,6 +1906,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01384" data-title="AG Number 2026-01384 (View Details) Notice PDF: 2026-01384.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Heal" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1649,6 +1931,13 @@
         
         <div class="article-snippet">AG Number 2026-01384 (View Details) Notice PDF: 2026-01384.pdf Date Filed: 03/27/2026 Noticing Party: Environmental Health Advocates, Inc. Plaintiff Attorney: Entorno Law, LLP Alleged Violators: Marquez Brothers International, Inc.; Food 4 Less of California, Inc. Chemical: Cadmium, Lead Source: El Mexicano Cacahuate Japones Chile Peanuts Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01357 (view details) notice pdf: 2026-01357.pdf date filed: 03/25/2026 noticing party: susan davia plaint"
@@ -1678,6 +1967,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01357" data-title="AG Number 2026-01357 (View Details) Notice PDF: 2026-01357.pdf Date Filed: 03/25/2026 Noticing Party: Susan Davia Plaint" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1700,6 +1994,13 @@
         
         <div class="article-snippet">Seven 60-day notices filed March 25, 2026 by plaintiff Susan Davia target brass tops, gear cubes, dice, and keychains sold via Amazon for lead content. All named products are brass-based small hardware or novelty items, confirming that plaintiffs are systematically testing brass components for lead leachability. Lead NSRL is 0.5 µg/day.</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01348 (view details) notice pdf: 2026-01348.pdf date filed: 03/24/2026 noticing party: gabriel espinoza p"
@@ -1729,6 +2030,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01348" data-title="AG Number 2026-01348 (View Details) Notice PDF: 2026-01348.pdf Date Filed: 03/24/2026 Noticing Party: Gabriel Espinoza P" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1749,6 +2055,13 @@
         
         <div class="article-snippet">AG Number 2026-01348 (View Details) Notice PDF: 2026-01348.pdf Date Filed: 03/24/2026 Noticing Party: Gabriel Espinoza Plaintiff Attorney: Evan Smith Alleged Violators: BestBuy.com, LLC; Best Buy Co., Inc.; Best Buy Stores, L.P.; BBY Solutions, Inc.; Best Buy Enterprise Services, Inc.; Dapper Styles, Inc. Chemical: Di(2-ethylhexyl)phthalate (DEHP) Source: Dapper Styles 5 Pack Cases Comments: This </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01350 (view details) notice pdf: 2026-01350.pdf date filed: 03/25/2026 noticing party: ema bell plaintiff"
@@ -1778,6 +2091,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01350" data-title="AG Number 2026-01350 (View Details) Notice PDF: 2026-01350.pdf Date Filed: 03/25/2026 Noticing Party: Ema Bell Plaintiff" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1798,6 +2116,13 @@
         
         <div class="article-snippet">AG Number 2026-01350 (View Details) Notice PDF: 2026-01350.pdf Date Filed: 03/25/2026 Noticing Party: Ema Bell Plaintiff Attorney: Evan Smith Alleged Violators: Nutrient Foods, LLC; Nutrient Foods Management, LLC; Sierra Trading Post, Inc.; The TJX Companies, Inc. Chemical: Lead Source: Brain Care Apple Almond Crisp Omega 3 Bar Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item is-new"
            data-headline="ag number 2026-01349 (view details) notice pdf: 2026-01349.pdf date filed: 03/24/2026 noticing party: clean product advo"
@@ -1827,6 +2152,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01349" data-title="AG Number 2026-01349 (View Details) Notice PDF: 2026-01349.pdf Date Filed: 03/24/2026 Noticing Party: Clean Product Advo" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             <span class="badge badge-new">New</span>
@@ -1847,6 +2177,13 @@
         
         <div class="article-snippet">AG Number 2026-01349 (View Details) Notice PDF: 2026-01349.pdf Date Filed: 03/24/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Abbot&#39;s Butcher, Inc.; Sprouts Farmers Market, LLC Chemical: Lead Source: Abbot&#39;s Protein Veggie Burger Classic Smokehouse Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01347 (view details) notice pdf: 2026-01347.pdf date filed: 03/24/2026 noticing party: calsafe research c"
@@ -1876,6 +2213,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01347" data-title="AG Number 2026-01347 (View Details) Notice PDF: 2026-01347.pdf Date Filed: 03/24/2026 Noticing Party: Calsafe Research C" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1896,6 +2238,13 @@
         
         <div class="article-snippet">AG Number 2026-01347 (View Details) Notice PDF: 2026-01347.pdf Date Filed: 03/24/2026 Noticing Party: Calsafe Research Center, Inc. Plaintiff Attorney: Manning Law, APC. Alleged Violators: NutraSky, LLC Chemical: Lead and lead compounds Source: Ninja Supplements, Guardian (Reds and Greens) - Mango Crush, UPC#748515976464, Ninja Supplements, Zen (Sleep Aid) - Mango Ginger Tea, UPC#748515976570, Nin</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01342 (view details) notice pdf: 2026-01342.pdf date filed: 03/16/2026 noticing party: consumer advocacy"
@@ -1925,6 +2274,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01342" data-title="AG Number 2026-01342 (View Details) Notice PDF: 2026-01342.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1945,6 +2299,13 @@
         
         <div class="article-snippet">AG Number 2026-01342 (View Details) Notice PDF: 2026-01342.pdf Date Filed: 03/16/2026 Noticing Party: Consumer Advocacy Group, Inc. Plaintiff Attorney: Reuben Yeroushalmi Alleged Violators: Seapoint Farms, LLC; Seaside Farms, Inc.; iHerb Holdings, LLC; iHerb, LLC Chemical: Cadmium and cadmium compounds, Lead and lead compounds Source: Seaweed Crisps Pumpkin Sesame Complaint (0)   Settlement (0)   </div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01336 (view details) notice pdf: 2026-01336.pdf date filed: 03/23/2026 noticing party: clean product advo"
@@ -1974,6 +2335,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01336" data-title="AG Number 2026-01336 (View Details) Notice PDF: 2026-01336.pdf Date Filed: 03/23/2026 Noticing Party: Clean Product Advo" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -1994,6 +2360,13 @@
         
         <div class="article-snippet">AG Number 2026-01336 (View Details) Notice PDF: 2026-01336.pdf Date Filed: 03/23/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Cucina and Amore Inc.; Marshalls of CA, LLC; The TJX Companies, Inc. dba Marshalls Chemical: Lead Source: Cucina &amp; Amore Bruschetta Tapenade Comments: This first amendment amends NOV 2026-01221, filed on 03/</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01330 (view details) notice pdf: 2026-01330.pdf date filed: 03/22/2026 noticing party: clean product advo"
@@ -2023,6 +2396,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01330" data-title="AG Number 2026-01330 (View Details) Notice PDF: 2026-01330.pdf Date Filed: 03/22/2026 Noticing Party: Clean Product Advo" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2043,6 +2421,13 @@
         
         <div class="article-snippet">AG Number 2026-01330 (View Details) Notice PDF: 2026-01330.pdf Date Filed: 03/22/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Michael Angelo’s Gourmet Foods; Bottom Line Food Processors, Inc.; Smart &amp; Final Stores LLC Chemical: Cadmium, Lead Source: Michael Angelo&#39;s Eggplant Parmigiana Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       <div class="article-item"
            data-headline="ag number 2026-01328 (view details) notice pdf: 2026-01328.pdf date filed: 03/21/2026 noticing party: clean product advo"
@@ -2072,6 +2457,11 @@
                     title="Send to colleague" aria-label="Send">
               <i data-lucide="send" style="width:14px;height:14px;"></i>
             </button>
+            <button class="comment-btn" data-url="https://oag.ca.gov/prop65/60-Day-Notice-2026-01328" data-title="AG Number 2026-01328 (View Details) Notice PDF: 2026-01328.pdf Date Filed: 03/21/2026 Noticing Party: Clean Product Advo" data-type="article"
+                    title="Comments" aria-label="Comments">
+              <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+              <span class="ct-count" style="display:none"></span>
+            </button>
           </div>
           <div class="article-badges">
             
@@ -2092,6 +2482,13 @@
         
         <div class="article-snippet">AG Number 2026-01328 (View Details) Notice PDF: 2026-01328.pdf Date Filed: 03/21/2026 Noticing Party: Clean Product Advocates, LLC Plaintiff Attorney: Cliffwood Law Firm, PC Alleged Violators: Salad Savoy Corporation; Smart &amp; Final Stores LLC Chemical: Cadmium, Lead Source: Tasty Tuscany Lacinato green Kale Complaint (0)   Settlement (0)   Judgment (0)</div>
         
+        <div class="comment-thread" style="display:none">
+          <div class="ct-list"></div>
+          <div class="ct-compose">
+            <textarea class="ct-input" placeholder="Add a comment… (Ctrl+Enter to post)" rows="2"></textarea>
+            <button class="ct-post">Post</button>
+          </div>
+        </div>
       </div>
       
     </div>
