@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages — Tunvara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.SUPABASE_URL = "https://oramnktatlppjjzhtiat.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_-HbSii9IjY1ZqDM5eIvZjQ_WNUzVaoI";
+  </script>
+  <script src="static/js/auth.js"></script>
+  <style>
+    :root {
+      --bg:#0f1117;--surface:#161b26;--border:#232b3a;
+      --text-primary:#e2e8f0;--text-secondary:#8b95a7;--text-muted:#4a5568;
+      --accent:#d64045;--hover:rgba(255,255,255,0.04);
+      --mono:'IBM Plex Mono',monospace;--sans:'Instrument Sans',sans-serif;
+      --green:#38a169;--red:#d64045;--amber:#F59E0B;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text-primary);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;}
+    .page-header{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 24px;display:flex;align-items:center;gap:16px;flex-shrink:0;}
+    .page-header a{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:1px;}
+    .page-header a:hover{color:var(--text-secondary);}
+    .page-title{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text-primary);letter-spacing:2px;}
+    .layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 49px);}
+
+    /* Conversation list */
+    .conv-list{width:280px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
+    .conv-list-header{padding:16px 16px 10px;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1.5px;border-bottom:1px solid var(--border);flex-shrink:0;}
+    .conv-item{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;}
+    .conv-item:hover{background:var(--hover);}
+    .conv-item.active{background:rgba(214,64,69,0.08);border-left:2px solid var(--accent);}
+    .conv-item.unread .conv-name{font-weight:700;color:var(--text-primary);}
+    .conv-item.unread .conv-preview{color:var(--text-secondary);}
+    .conv-name{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;}
+    .conv-time{font-size:11px;color:var(--text-muted);font-family:var(--mono);}
+    .conv-preview{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+    .conv-unread-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+    .conv-empty{padding:24px 16px;font-size:12px;color:var(--text-muted);text-align:center;line-height:1.6;}
+    .new-conv-btn{margin:12px 16px;padding:8px 12px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);}
+    .new-conv-btn:hover{opacity:0.9;}
+
+    /* Thread panel */
+    .thread-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .thread-empty{display:flex;align-items:center;justify-content:center;flex:1;color:var(--text-muted);font-size:13px;}
+    .thread-header{padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:10px;}
+    .thread-header-name{font-size:15px;font-weight:600;}
+    .thread-messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+    .msg{display:flex;flex-direction:column;max-width:72%;}
+    .msg.mine{align-self:flex-end;align-items:flex-end;}
+    .msg.theirs{align-self:flex-start;align-items:flex-start;}
+    .msg-bubble{padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.5;}
+    .msg.mine .msg-bubble{background:var(--accent);color:#fff;border-bottom-right-radius:3px;}
+    .msg.theirs .msg-bubble{background:var(--surface);border:1px solid var(--border);color:var(--text-primary);border-bottom-left-radius:3px;}
+    .msg-meta{font-size:11px;color:var(--text-muted);margin-top:3px;font-family:var(--mono);}
+    .msg-article{margin-top:6px;padding:8px 10px;background:rgba(255,255,255,0.05);border-radius:6px;border:1px solid var(--border);font-size:12px;}
+    .msg-article a{color:var(--accent);text-decoration:none;}
+    .msg-article a:hover{text-decoration:underline;}
+    .msg-article-label{font-size:10px;font-family:var(--mono);color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+
+    /* Compose */
+    .compose{border-top:1px solid var(--border);padding:14px 20px;flex-shrink:0;}
+    .compose-attach{font-size:11px;color:var(--text-muted);padding:4px 0 8px;display:flex;align-items:center;gap:8px;}
+    .compose-attach-btn{background:none;border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--text-secondary);cursor:pointer;}
+    .compose-attach-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .attached-article{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:12px;flex:1;overflow:hidden;}
+    .attached-article span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;color:var(--text-secondary);}
+    .attached-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;flex-shrink:0;}
+    .compose-row{display:flex;gap:8px;align-items:flex-end;}
+    .compose-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text-primary);resize:none;font-family:var(--sans);max-height:120px;}
+    .compose-input:focus{outline:none;border-color:var(--accent);}
+    .compose-send{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:var(--sans);}
+    .compose-send:hover{opacity:0.9;}
+    .compose-send:disabled{opacity:0.4;cursor:not-allowed;}
+
+    /* New conversation modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:100;}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;width:380px;max-width:90vw;}
+    .modal h3{font-size:15px;font-weight:600;margin-bottom:16px;}
+    .modal select,.modal input{width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-size:13px;font-family:var(--sans);margin-bottom:12px;}
+    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px;}
+    .modal-actions button{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;}
+    .btn-cancel{background:var(--hover);color:var(--text-secondary);}
+    .btn-primary{background:var(--accent);color:#fff;}
+  </style>
+</head>
+<body>
+<div id="auth-overlay" style="position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="text-align:center;color:var(--text-muted);font-family:var(--mono);font-size:13px;">Checking access…</div>
+</div>
+
+<div class="page-header">
+  <a href="dashboard.html">← Dashboard</a>
+  <span class="page-title">MESSAGES</span>
+</div>
+
+<div class="layout">
+  <!-- Conversation list -->
+  <div class="conv-list">
+    <div class="conv-list-header">CONVERSATIONS</div>
+    <button class="new-conv-btn" onclick="openNewConv()">+ New message</button>
+    <div id="conv-list-body"><div class="conv-empty">Loading…</div></div>
+  </div>
+
+  <!-- Thread panel -->
+  <div class="thread-panel" id="thread-panel">
+    <div class="thread-empty" id="thread-empty">Select a conversation</div>
+    <div id="thread-view" style="display:none;flex:1;flex-direction:column;overflow:hidden;display:none;">
+      <div class="thread-header">
+        <div class="thread-header-name" id="thread-name"></div>
+      </div>
+      <div class="thread-messages" id="thread-messages"></div>
+      <div class="compose">
+        <div class="compose-attach" id="compose-attach-row" style="display:none">
+          <div class="attached-article" id="attached-article-preview">
+            <span id="attached-title"></span>
+            <button class="attached-remove" onclick="clearAttachedArticle()">×</button>
+          </div>
+        </div>
+        <div class="compose-row">
+          <textarea class="compose-input" id="compose-input" rows="1" placeholder="Write a message… (Enter to send, Shift+Enter for newline)"></textarea>
+          <button class="compose-send" id="compose-send" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New conversation modal -->
+<div class="modal-overlay" id="new-conv-modal" style="display:none">
+  <div class="modal">
+    <h3>New message</h3>
+    <select id="new-conv-recipient">
+      <option value="">Select recipient…</option>
+    </select>
+    <textarea id="new-conv-body" rows="3" placeholder="Write your first message…" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);font-size:13px;font-family:var(--sans);resize:vertical;"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeNewConv()">Cancel</button>
+      <button class="btn-primary" onclick="submitNewConv()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(async () => {
+  await checkAuth();
+  document.getElementById('auth-overlay').style.display = 'none';
+  await initMessages();
+})();
+
+const _sb = window._client;
+let _me = window._currentUser;
+let _activeConvId = null;
+let _realtimeSub = null;
+let _attachedArticle = null;
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+async function initMessages() {
+  await loadConversations();
+  // Check URL params for pre-filled recipient/article (from "send to colleague")
+  const params = new URLSearchParams(location.search);
+  if (params.get('to')) {
+    await openNewConvWith(params.get('to'), params.get('article_url'), params.get('article_title'));
+  }
+}
+
+// ── Conversations ──────────────────────────────────────────────────────────────
+
+async function loadConversations() {
+  const { data, error } = await _sb
+    .from('messages')
+    .select('conversation_id, sender_id, recipient_id, body, sent_at, is_read, profiles!sender_id(first_name, last_name), profiles!recipient_id(first_name, last_name)')
+    .or(`sender_id.eq.${_me.id},recipient_id.eq.${_me.id}`)
+    .order('sent_at', { ascending: false });
+
+  if (error || !data) { document.getElementById('conv-list-body').innerHTML = '<div class="conv-empty">Could not load messages.</div>'; return; }
+
+  // Build conversation map: convId → { otherId, otherName, lastMsg, unread }
+  const convs = {};
+  for (const msg of data) {
+    if (!convs[msg.conversation_id]) {
+      const isMine = msg.sender_id === _me.id;
+      const otherProfile = isMine ? msg['profiles!recipient_id'] : msg['profiles!sender_id'];
+      const otherId = isMine ? msg.recipient_id : msg.sender_id;
+      const otherName = otherProfile ? `${otherProfile.first_name || ''} ${otherProfile.last_name || ''}`.trim() : 'Unknown';
+      convs[msg.conversation_id] = { convId: msg.conversation_id, otherId, otherName, lastMsg: msg, unread: 0 };
+    }
+    if (!msg.is_read && msg.recipient_id === _me.id) convs[msg.conversation_id].unread++;
+  }
+
+  const sorted = Object.values(convs).sort((a, b) => new Date(b.lastMsg.sent_at) - new Date(a.lastMsg.sent_at));
+  const body = document.getElementById('conv-list-body');
+
+  if (!sorted.length) { body.innerHTML = '<div class="conv-empty">No messages yet.<br>Start a conversation with a teammate.</div>'; return; }
+
+  body.innerHTML = sorted.map(c => `
+    <div class="conv-item${c.unread ? ' unread' : ''}${_activeConvId === c.convId ? ' active' : ''}" onclick="openConv('${c.convId}','${escHtml(c.otherName)}','${c.otherId}')">
+      <div class="conv-name">
+        <span>${escHtml(c.otherName)}</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          ${c.unread ? '<span class="conv-unread-dot"></span>' : ''}
+          <span class="conv-time">${timeAgo(c.lastMsg.sent_at)}</span>
+        </div>
+      </div>
+      <div class="conv-preview">${escHtml(c.lastMsg.body.slice(0, 60))}${c.lastMsg.body.length > 60 ? '…' : ''}</div>
+    </div>`).join('');
+}
+
+// ── Thread ──────────────────────────────────────────────────────────────────
+
+async function openConv(convId, otherName, otherId) {
+  _activeConvId = convId;
+  document.getElementById('thread-empty').style.display = 'none';
+  const tv = document.getElementById('thread-view');
+  tv.style.display = 'flex'; tv.style.flexDirection = 'column';
+  document.getElementById('thread-name').textContent = otherName;
+
+  // Mark all as read
+  await _sb.from('messages').update({ is_read: true })
+    .eq('conversation_id', convId).eq('recipient_id', _me.id).eq('is_read', false);
+
+  await loadThread(convId);
+  subscribeRealtime(convId);
+  refreshConvList();
+  document.getElementById('compose-input').focus();
+}
+
+async function loadThread(convId) {
+  const { data, error } = await _sb
+    .from('messages')
+    .select('*')
+    .eq('conversation_id', convId)
+    .order('sent_at', { ascending: true });
+
+  const container = document.getElementById('thread-messages');
+  if (error || !data) { container.innerHTML = '<div style="color:var(--text-muted);font-size:12px;">Failed to load thread.</div>'; return; }
+
+  container.innerHTML = data.map(msg => {
+    const mine = msg.sender_id === _me.id;
+    const articleHtml = msg.article_url
+      ? `<div class="msg-article"><div class="msg-article-label">Article</div><a href="${escHtml(msg.article_url)}" target="_blank">${escHtml(msg.article_title || msg.article_url)}</a></div>` : '';
+    return `<div class="msg ${mine ? 'mine' : 'theirs'}">
+      <div class="msg-bubble">${escHtml(msg.body)}${articleHtml}</div>
+      <div class="msg-meta">${timeAgo(msg.sent_at)}${!mine && !msg.is_read ? ' · unread' : ''}</div>
+    </div>`;
+  }).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+function subscribeRealtime(convId) {
+  if (_realtimeSub) _sb.removeChannel(_realtimeSub);
+  _realtimeSub = _sb.channel(`conv-${convId}`)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `conversation_id=eq.${convId}` },
+      async () => { await loadThread(convId); })
+    .subscribe();
+}
+
+// ── Send ────────────────────────────────────────────────────────────────────
+
+async function sendMessage() {
+  if (!_activeConvId) return;
+  const input = document.getElementById('compose-input');
+  const body = input.value.trim();
+  if (!body) return;
+  const btn = document.getElementById('compose-send');
+  btn.disabled = true;
+
+  // Get recipient from current conversation
+  const { data: sample } = await _sb.from('messages').select('sender_id, recipient_id')
+    .eq('conversation_id', _activeConvId).limit(1).single();
+  const recipientId = sample.sender_id === _me.id ? sample.recipient_id : sample.sender_id;
+
+  const { error } = await _sb.from('messages').insert({
+    conversation_id: _activeConvId,
+    sender_id: _me.id,
+    recipient_id: recipientId,
+    body,
+    article_url: _attachedArticle?.url || null,
+    article_title: _attachedArticle?.title || null,
+  });
+  btn.disabled = false;
+  if (error) { console.error('Send error:', error); return; }
+  input.value = '';
+  clearAttachedArticle();
+  await loadThread(_activeConvId);
+  await refreshConvList();
+}
+
+// ── New conversation ─────────────────────────────────────────────────────────
+
+async function openNewConv() {
+  // Load team members
+  const { data } = await _sb.from('profiles').select('id, first_name, last_name').neq('id', _me.id);
+  const select = document.getElementById('new-conv-recipient');
+  select.innerHTML = '<option value="">Select recipient…</option>' +
+    (data || []).map(p => `<option value="${p.id}">${escHtml(`${p.first_name || ''} ${p.last_name || ''}`.trim())}</option>`).join('');
+  document.getElementById('new-conv-modal').style.display = 'flex';
+  document.getElementById('new-conv-body').value = '';
+}
+
+async function openNewConvWith(userId, articleUrl, articleTitle) {
+  await openNewConv();
+  document.getElementById('new-conv-recipient').value = userId;
+  if (articleUrl) {
+    document.getElementById('new-conv-body').value = articleTitle ? `Re: ${articleTitle}` : '';
+  }
+}
+
+function closeNewConv() { document.getElementById('new-conv-modal').style.display = 'none'; }
+
+async function submitNewConv() {
+  const recipientId = document.getElementById('new-conv-recipient').value;
+  const body = document.getElementById('new-conv-body').value.trim();
+  if (!recipientId || !body) return;
+  const convId = crypto.randomUUID();
+  const { error } = await _sb.from('messages').insert({
+    conversation_id: convId, sender_id: _me.id, recipient_id: recipientId, body,
+    article_url: null, article_title: null,
+  });
+  if (error) { console.error('New conv error:', error); return; }
+  closeNewConv();
+  await loadConversations();
+  const otherEl = document.getElementById('new-conv-recipient');
+  const otherName = otherEl.options[otherEl.selectedIndex]?.text || 'User';
+  await openConv(convId, otherName, recipientId);
+}
+
+async function refreshConvList() { await loadConversations(); }
+
+// ── Article attachment ────────────────────────────────────────────────────────
+
+function attachArticle(url, title) {
+  _attachedArticle = { url, title };
+  document.getElementById('attached-title').textContent = title || url;
+  document.getElementById('compose-attach-row').style.display = 'flex';
+}
+
+function clearAttachedArticle() {
+  _attachedArticle = null;
+  document.getElementById('compose-attach-row').style.display = 'none';
+}
+
+// ── Keyboard shortcut ────────────────────────────────────────────────────────
+
+document.addEventListener('keydown', e => {
+  const input = document.getElementById('compose-input');
+  if (document.activeElement === input) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+  if (e.key === 'Escape') closeNewConv();
+});
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function timeAgo(iso) {
+  const m = Math.floor((Date.now() - new Date(iso)) / 60000);
+  if (m < 1) return 'just now'; if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60); if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+</script>
+</body>
+</html>

@@ -17,6 +17,8 @@
   <script src="static/js/auth.js"></script>
   <script src="static/js/favorites.js"></script>
   <script src="static/js/article_modal.js"></script>
+  <script src="static/js/comments.js"></script>
+  <script src="static/js/messages.js"></script>
 </head>
 <body>
 <!-- Auth overlay — covers page until session confirmed -->
@@ -32,6 +34,7 @@
   document.getElementById('auth-overlay').style.display = 'none';
   initFavorites();
   initComments(_client, _currentUser);
+  initMessagesBadge(_client, _currentUser.id);
 })();
 </script>
 
