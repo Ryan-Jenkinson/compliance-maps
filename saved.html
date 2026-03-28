@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Library — Tunvara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.SUPABASE_URL = "https://oramnktatlppjjzhtiat.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_-HbSii9IjY1ZqDM5eIvZjQ_WNUzVaoI";
+  </script>
+  <script src="static/js/auth.js"></script>
+  <style>
+    :root {
+      --bg:#0f1117;--surface:#161b26;--border:#232b3a;
+      --text-primary:#e2e8f0;--text-secondary:#8b95a7;--text-muted:#4a5568;
+      --accent:#d64045;--hover:rgba(255,255,255,0.04);
+      --mono:'IBM Plex Mono',monospace;--sans:'Instrument Sans',sans-serif;
+      --green:#38a169;--red:#d64045;--amber:#F59E0B;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text-primary);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;}
+    .page-header{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 24px;display:flex;align-items:center;gap:16px;flex-shrink:0;}
+    .page-header a{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:1px;}
+    .page-header a:hover{color:var(--text-secondary);}
+    .page-title{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text-primary);letter-spacing:2px;}
+    .layout{display:flex;flex:1;overflow:hidden;}
+    /* Folder sidebar */
+    .folder-nav{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;}
+    .folder-nav-header{padding:4px 16px 10px;font-family:var(--mono);font-size:10px;color:var(--text-muted);letter-spacing:2px;}
+    .folder-link{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;text-decoration:none;transition:background 0.1s,color 0.1s;}
+    .folder-link:hover,.folder-link.active{background:var(--hover);color:var(--text-primary);}
+    .folder-link.active{border-left:2px solid var(--accent);padding-left:14px;}
+    .folder-count{font-family:var(--mono);font-size:10px;color:var(--text-muted);}
+    .folder-sub{padding-left:16px;}
+    .folder-actions{padding:10px 16px 4px;border-top:1px solid var(--border);margin-top:8px;}
+    .folder-actions button{background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:1px;padding:0;}
+    .folder-actions button:hover{color:var(--text-secondary);}
+    /* Article list */
+    .article-list{flex:1;overflow-y:auto;padding:24px 32px;}
+    .list-header{margin-bottom:20px;}
+    .list-title{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text-secondary);letter-spacing:2px;}
+    .saved-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+    .saved-card-info{flex:1;min-width:0;}
+    .saved-card-title{font-size:14px;font-weight:500;margin-bottom:4px;}
+    .saved-card-title a{color:var(--text-primary);text-decoration:none;}
+    .saved-card-title a:hover{color:var(--accent);}
+    .saved-card-meta{font-family:var(--mono);font-size:11px;color:var(--text-muted);display:flex;gap:10px;}
+    .saved-card-actions{display:flex;gap:6px;flex-shrink:0;}
+    .btn-sm{background:none;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:1px;padding:4px 10px;transition:border-color 0.15s,color 0.15s;}
+    .btn-sm:hover{border-color:var(--text-secondary);color:var(--text-secondary);}
+    .btn-sm.btn-danger:hover{border-color:var(--red);color:var(--red);}
+    .empty-state{padding:60px 0;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-muted);letter-spacing:1px;line-height:1.8;}
+    select.move-select{background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);padding:4px 8px;font-size:12px;cursor:pointer;}
+  </style>
+</head>
+<body>
+<div id="auth-overlay" style="position:fixed;inset:0;background:#0f1117;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <span style="font-family:monospace;font-size:12px;color:#444;letter-spacing:3px;">LOADING</span>
+</div>
+<script>
+(async function(){
+  var result = await checkAuth();
+  if (!result) return;
+  document.getElementById('auth-overlay').style.display = 'none';
+  initLibrary(result.profile);
+})();
+</script>
+
+<div class="page-header">
+  <a href="dashboard.html">&#8592; Dashboard</a>
+  <span class="page-title">MY LIBRARY</span>
+</div>
+
+<div class="layout">
+  <nav class="folder-nav" id="folder-nav">
+    <div class="folder-nav-header">FOLDERS</div>
+    <div id="folder-tree"><div style="padding:8px 16px;font-size:12px;color:var(--text-muted);">Loading…</div></div>
+    <div class="folder-actions">
+      <button onclick="newFolder(null)">+ New folder</button>
+    </div>
+  </nav>
+
+  <main class="article-list">
+    <div class="list-header"><div class="list-title" id="list-title">ALL SAVED</div></div>
+    <div id="article-list-body"><div class="empty-state">LOADING…</div></div>
+  </main>
+</div>
+
+<script>
+var _libFolders = [];
+var _libSaved = [];
+var _activeFolderId = null; // null = All Saved
+
+async function initLibrary(profile) {
+  var sb = getClient();
+  var [fRes, sRes] = await Promise.all([
+    sb.from('article_folders').select('*').eq('user_id', profile.id).order('name'),
+    sb.from('saved_articles').select('*').eq('user_id', profile.id).order('saved_at', { ascending: false }),
+  ]);
+  _libFolders = fRes.data || [];
+  _libSaved = sRes.data || [];
+
+  // Read ?folder= param from URL
+  var params = new URLSearchParams(window.location.search);
+  _activeFolderId = params.get('folder') || null;
+
+  renderFolderTree();
+  renderArticles();
+}
+
+function renderFolderTree() {
+  var tree = document.getElementById('folder-tree');
+  var allCount = _libSaved.length;
+  var html = '<a class="folder-link' + (_activeFolderId === null ? ' active' : '') + '" onclick="selectFolder(null)" href="saved.html">'
+           + '<span>&#128196; All Saved</span>'
+           + (allCount ? '<span class="folder-count">' + allCount + '</span>' : '')
+           + '</a>';
+
+  _libFolders.filter(function(f){return !f.parent_id;}).forEach(function(f) {
+    var subs = _libFolders.filter(function(s){return s.parent_id===f.id;});
+    var count = _libSaved.filter(function(a){return a.folder_id===f.id;}).length;
+    subs.forEach(function(sf){ count += _libSaved.filter(function(a){return a.folder_id===sf.id;}).length; });
+    var active = _activeFolderId === f.id;
+    html += '<div>';
+    html += '<a class="folder-link' + (active?' active':'') + '" onclick="selectFolder(\'' + esc(f.id) + '\')" href="saved.html?folder=' + esc(f.id) + '">'
+          + '<span>&#128193; ' + esc(f.name) + '</span>'
+          + (count?'<span class="folder-count">'+count+'</span>':'')
+          + '</a>';
+    if (subs.length) {
+      html += '<div class="folder-sub">';
+      subs.forEach(function(sf) {
+        var sfCount = _libSaved.filter(function(a){return a.folder_id===sf.id;}).length;
+        var sfActive = _activeFolderId === sf.id;
+        html += '<a class="folder-link' + (sfActive?' active':'') + '" onclick="selectFolder(\'' + esc(sf.id) + '\')" href="saved.html?folder=' + esc(sf.id) + '">'
+              + '<span>&#128193; ' + esc(sf.name) + '</span>'
+              + (sfCount?'<span class="folder-count">'+sfCount+'</span>':'')
+              + '</a>';
+      });
+      html += '</div>';
+    }
+    html += '<div style="padding:2px 16px;"><button onclick="newFolder(\'' + esc(f.id) + '\')" style="background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:10px;color:var(--text-muted);letter-spacing:1px;">+ subfolder</button>'
+          + '<button onclick="deleteFolder(\'' + esc(f.id) + '\')" style="background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-left:8px;letter-spacing:1px;">&#x2715; delete</button></div>';
+    html += '</div>';
+  });
+
+  tree.innerHTML = html;
+}
+
+function selectFolder(id) {
+  _activeFolderId = id;
+  renderFolderTree();
+  renderArticles();
+  // Update URL without reload
+  var url = id ? 'saved.html?folder=' + id : 'saved.html';
+  window.history.replaceState({}, '', url);
+}
+
+function renderArticles() {
+  var body = document.getElementById('article-list-body');
+  var titleEl = document.getElementById('list-title');
+
+  var articles;
+  if (_activeFolderId === null) {
+    articles = _libSaved;
+    titleEl.textContent = 'ALL SAVED — ' + articles.length + ' articles';
+  } else {
+    var folder = _libFolders.find(function(f){return f.id===_activeFolderId;});
+    var subIds = _libFolders.filter(function(f){return f.parent_id===_activeFolderId;}).map(function(f){return f.id;});
+    articles = _libSaved.filter(function(a){ return a.folder_id===_activeFolderId || subIds.indexOf(a.folder_id)!==-1; });
+    titleEl.textContent = (folder ? folder.name.toUpperCase() : 'FOLDER') + ' — ' + articles.length + ' articles';
+  }
+
+  if (!articles.length) {
+    body.innerHTML = '<div class="empty-state">NO ARTICLES HERE YET.<br><br>Use the bookmark icon on article cards to save.</div>';
+    return;
+  }
+
+  // Build folder options for move dropdown
+  var folderOpts = '<option value="">Unfiled</option>';
+  _libFolders.filter(function(f){return !f.parent_id;}).forEach(function(f){
+    folderOpts += '<option value="' + esc(f.id) + '">' + esc(f.name) + '</option>';
+    _libFolders.filter(function(sf){return sf.parent_id===f.id;}).forEach(function(sf){
+      folderOpts += '<option value="' + esc(sf.id) + '">&nbsp;&nbsp;' + esc(sf.name) + '</option>';
+    });
+  });
+
+  var html = '';
+  articles.forEach(function(a) {
+    var date = a.saved_at ? new Date(a.saved_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+    var curFolder = _libFolders.find(function(f){return f.id===a.folder_id;});
+    html += '<div class="saved-card" id="sc-' + esc(a.id) + '">';
+    html += '<div class="saved-card-info">';
+    html += '<div class="saved-card-title"><a href="' + esc(a.article_url) + '" target="_blank" rel="noopener">' + esc(a.article_title) + '</a></div>';
+    html += '<div class="saved-card-meta">';
+    html += '<span>' + esc(a.article_topic) + '</span>';
+    if (date) html += '<span>Saved ' + date + '</span>';
+    if (curFolder) html += '<span>&#128193; ' + esc(curFolder.name) + '</span>';
+    html += '</div></div>';
+    html += '<div class="saved-card-actions">';
+    html += '<select class="move-select" onchange="moveArticle(\'' + esc(a.id) + '\',this.value)" title="Move to folder"><option value="_none_">Move to…</option>' + folderOpts + '</select>';
+    html += '<button class="btn-sm btn-danger" onclick="removeArticle(\'' + esc(a.id) + '\')">REMOVE</button>';
+    html += '</div>';
+    html += '</div>';
+  });
+  body.innerHTML = html;
+}
+
+async function removeArticle(id) {
+  var r = await getClient().from('saved_articles').delete().eq('id', id);
+  if (!r.error) {
+    _libSaved = _libSaved.filter(function(a){return a.id!==id;});
+    var card = document.getElementById('sc-'+id);
+    if (card) card.remove();
+    renderFolderTree();
+    renderArticles();
+  }
+}
+
+async function moveArticle(id, folderId) {
+  var actualFolderId = (folderId === '_none_' || folderId === '') ? null : folderId;
+  var r = await getClient().from('saved_articles').update({ folder_id: actualFolderId }).eq('id', id);
+  if (!r.error) {
+    var a = _libSaved.find(function(a){return a.id===id;});
+    if (a) a.folder_id = actualFolderId;
+    renderFolderTree();
+    renderArticles();
+  }
+}
+
+async function newFolder(parentId) {
+  var name = prompt(parentId ? 'Subfolder name:' : 'Folder name:');
+  if (!name || !name.trim()) return;
+  var profile = getProfile();
+  var r = await getClient().from('article_folders').insert({ user_id: profile.id, name: name.trim(), parent_id: parentId || null }).select().single();
+  if (!r.error && r.data) {
+    _libFolders.push(r.data);
+    _libFolders.sort(function(a,b){return a.name.localeCompare(b.name);});
+    renderFolderTree();
+  }
+}
+
+async function deleteFolder(id) {
+  if (!confirm('Delete this folder? Saved articles will move to Unfiled.')) return;
+  var r = await getClient().from('article_folders').delete().eq('id', id);
+  if (!r.error) {
+    _libFolders = _libFolders.filter(function(f){return f.id!==id && f.parent_id!==id;});
+    _libSaved.forEach(function(a){ if (a.folder_id===id) a.folder_id=null; });
+    if (_activeFolderId === id) _activeFolderId = null;
+    renderFolderTree();
+    renderArticles();
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+</script>
+</body>
+</html>
