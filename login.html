@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tunvara — Compliance Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.SUPABASE_URL = "https://oramnktatlppjjzhtiat.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_-HbSii9IjY1ZqDM5eIvZjQ_WNUzVaoI";
+  </script>
+  <style>
+    :root {
+      --bg:           #0d1017;
+      --bg-panel:     #111620;
+      --bg-card:      #161c27;
+      --red:          #d64045;
+      --text:         #e8ebf0;
+      --text-sec:     #9aa0ad;
+      --text-muted:   #4a5568;
+      --border:       #1e2535;
+      --border-light: #252e40;
+      --mono: 'IBM Plex Mono', monospace;
+      --sans: 'Instrument Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─────────────────────────────────────────
+       LEFT / BRAND PANEL
+    ───────────────────────────────────────── */
+
+    .brand-panel {
+      flex: 0 0 56%;
+      position: relative;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding: 52px 60px 0;
+      overflow: hidden;
+      border-right: 1px solid var(--border);
+    }
+
+    /* Dot grid */
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, #1d2538 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Vignette — fade grid toward center */
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 70% at 30% 50%, transparent 40%, var(--bg) 100%);
+      pointer-events: none;
+    }
+
+    /* Animated scan line */
+    .scan-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(214,64,69,0.0) 10%,
+        rgba(214,64,69,0.5) 50%,
+        rgba(214,64,69,0.0) 90%,
+        transparent 100%
+      );
+      animation: scan 9s linear infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    @keyframes scan {
+      0%   { top: -2px; opacity: 0; }
+      4%   { opacity: 1; }
+      96%  { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* Red accent top bar */
+    .accent-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), #a02830);
+      z-index: 5;
+    }
+
+    /* Content above ticker sits in z:4 to clear the ::after vignette */
+    .brand-content {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding-bottom: 44px; /* space for ticker strip */
+    }
+
+    /* ── Wordmark ── */
+    .brand-eyebrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.1s ease forwards;
+    }
+
+    .brand-wordmark {
+      font-family: var(--mono);
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.15s ease forwards;
+    }
+
+    .brand-rule {
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--red) 48px, var(--border) 48px, var(--border) 100%);
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s ease forwards;
+    }
+
+    .brand-tagline {
+      font-family: var(--sans);
+      font-size: 18px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-sec);
+      line-height: 1.65;
+      max-width: 360px;
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.25s ease forwards;
+    }
+
+    .brand-company {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.3s ease forwards;
+    }
+
+    /* ── Topic ticker ── */
+    .topic-block {
+      margin-top: auto;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s ease forwards;
+    }
+
+    .topic-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .topic-ticker {
+      height: 38px;
+      overflow: hidden;
+    }
+
+    .topic-ticker-inner {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .topic-row {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .topic-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: box-shadow 0.3s;
+    }
+
+    .topic-text {
+      font-family: var(--mono);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Stats ── */
+    .stats-row {
+      display: flex;
+      margin-top: 20px;
+      border: 1px solid var(--border-light);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s ease forwards;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 12px 18px;
+      border-right: 1px solid var(--border-light);
+    }
+    .stat:last-child { border-right: none; }
+
+    .stat-val {
+      display: block;
+      font-family: var(--mono);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      display: block;
+      font-family: var(--mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── Bottom ticker strip ── */
+    .ticker-strip {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 36px;
+      background: rgba(214,64,69,0.05);
+      border-top: 1px solid rgba(214,64,69,0.18);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      z-index: 4;
+    }
+
+    .ticker-track {
+      display: flex;
+      animation: ticker 32s linear infinite;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .t-item {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(214,64,69,0.5);
+      padding: 0 24px;
+    }
+
+    .t-sep {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(214,64,69,0.2);
+      padding: 0 2px;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+
+    /* ─────────────────────────────────────────
+       RIGHT / AUTH PANEL
+    ───────────────────────────────────────── */
+
+    .auth-panel {
+      flex: 1;
+      background: var(--bg-panel);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle warm glow top-right */
+    .auth-panel::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(214,64,69,0.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 340px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s ease forwards;
+    }
+
+    .auth-context {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+    }
+
+    .tab-btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 9px 0;
+      margin-right: 22px;
+      margin-bottom: -1px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.18s, border-color 0.18s;
+    }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--red); }
+    .tab-btn:hover:not(.active) { color: var(--text-sec); }
+
+    /* Form panels */
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    /* Fields */
+    .field { margin-bottom: 18px; }
+
+    .field-label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+    }
+
+    .field-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 11px 13px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      -webkit-appearance: none;
+    }
+    .field-input:focus {
+      border-color: rgba(214,64,69,0.45);
+      box-shadow: 0 0 0 3px rgba(214,64,69,0.07);
+    }
+    .field-input::placeholder { color: var(--text-muted); font-style: italic; }
+
+    textarea.field-input { resize: vertical; min-height: 76px; line-height: 1.6; }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      margin-top: 6px;
+      padding: 13px;
+      background: var(--red);
+      border: none;
+      border-radius: 2px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.18s, transform 0.1s;
+    }
+    .submit-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .submit-btn:hover { background: #bf3940; }
+    .submit-btn:active { transform: translateY(1px); }
+    .submit-btn:disabled {
+      background: #291618;
+      color: #5a3638;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Messages */
+    .msg {
+      margin-top: 13px;
+      padding: 10px 13px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2px;
+      line-height: 1.6;
+      border-radius: 2px;
+      display: none;
+    }
+    .msg.error   { background: rgba(214,64,69,0.09); color: #f08080; border: 1px solid rgba(214,64,69,0.22); }
+    .msg.success { background: rgba(94,184,138,0.07); color: #5eb88a; border: 1px solid rgba(94,184,138,0.18); }
+
+    /* Footer */
+    .auth-footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 860px) {
+      body { flex-direction: column; overflow: auto; height: auto; }
+      .brand-panel {
+        flex: none;
+        padding: 44px 32px 52px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        min-height: 380px;
+      }
+      .brand-wordmark { font-size: 40px; }
+      .auth-panel { padding: 44px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════ LEFT / BRAND PANEL ════ -->
+<div class="brand-panel">
+  <div class="accent-bar"></div>
+  <div class="scan-line"></div>
+
+  <div class="brand-content">
+    <span class="brand-eyebrow">Compliance Intelligence Platform</span>
+    <div class="brand-wordmark">TUNVARA</div>
+    <div class="brand-rule"></div>
+    <p class="brand-tagline">Next-gen regulatory intelligence platform.</p>
+
+    <div class="topic-block">
+      <p class="topic-label">Currently monitoring</p>
+      <div class="topic-ticker">
+        <div class="topic-ticker-inner" id="topic-inner"></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-val">7</span>
+        <span class="stat-lbl">Topics</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">Daily</span>
+        <span class="stat-lbl">Intel</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">6 mo</span>
+        <span class="stat-lbl">Archive</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">AI</span>
+        <span class="stat-lbl">Powered</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker-strip">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+</div>
+
+<!-- ════ RIGHT / AUTH PANEL ════ -->
+<div class="auth-panel">
+  <div class="auth-card">
+    <p class="auth-context">Andersen Compliance Portal</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+      <button class="tab-btn" onclick="switchTab('request')">Request Access</button>
+    </div>
+
+    <!-- Sign In -->
+    <div class="form-panel active" id="panel-signin">
+      <form onsubmit="handleSignIn(event)">
+        <div class="field">
+          <label class="field-label" for="signin-email">Email</label>
+          <input class="field-input" type="email" id="signin-email"
+                 autocomplete="email" placeholder="you@andersencorp.com" required>
+        </div>
+        <div class="field">
+          <label class="field-label" for="signin-password">Password</label>
+          <input class="field-input" type="password" id="signin-password"
+                 autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+          <p style="margin-top:6px;font-size:11px;color:var(--text-muted);line-height:1.5;">
+            &#x26A0; Do not use your Andersen network password. This is a separate account.
+          </p>
+        </div>
+        <button class="submit-btn" type="submit" id="signin-btn">Sign In</button>
+        <div class="msg" id="signin-msg"></div>
+      </form>
+    </div>
+
+    <!-- Request Access -->
+    <div class="form-panel" id="panel-request">
+      <form onsubmit="handleAccessRequest(event)">
+        <div class="field">
+          <label class="field-label" for="req-name">Full Name</label>
+          <input class="field-input" type="text" id="req-name"
+                 placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label class="field-label" for="req-email">Work Email</label>
+          <input class="field-input" type="email" id="req-email"
+                 placeholder="you@andersencorp.com" required>
+        </div>
+        <div class="field">
+          <label class="field-label" for="req-reason">
+            Why do you need access?&nbsp;<span style="opacity:0.45;font-style:italic;">optional</span>
+          </label>
+          <textarea class="field-input" id="req-reason"
+                    placeholder="Your role and how you'd use this tool&hellip;"></textarea>
+        </div>
+        <button class="submit-btn" type="submit" id="request-btn">Request Access</button>
+        <div class="msg" id="request-msg"></div>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      Tunvara &mdash; Internal Use Only<br>Andersen Corporation
+    </div>
+  </div>
+</div>
+
+<script src="static/js/auth.js"></script>
+<script>
+/* ── Topic data ── */
+var TOPICS = [
+  { name: 'PFAS',              color: '#5b9bd5' },
+  { name: 'EPR',               color: '#48bb78' },
+  { name: 'REACH',             color: '#ed8936' },
+  { name: 'TSCA',              color: '#9f7aea' },
+  { name: 'Prop 65',           color: '#f6ad55' },
+  { name: 'Conflict Minerals', color: '#fc8181' },
+  { name: 'Forced Labor',      color: '#68d391' },
+];
+
+/* ── Build topic ticker ── */
+(function() {
+  var inner = document.getElementById('topic-inner');
+  var all = TOPICS.concat(TOPICS); // duplicate for seamless wrap
+  all.forEach(function(t) {
+    var row = document.createElement('div');
+    row.className = 'topic-row';
+    row.innerHTML =
+      '<span class="topic-dot" style="background:' + t.color +
+        ';box-shadow:0 0 8px ' + t.color + '55;"></span>' +
+      '<span class="topic-text">' + t.name + '</span>';
+    inner.appendChild(row);
+  });
+
+  var current = 0;
+  setInterval(function() {
+    current = (current + 1) % TOPICS.length;
+    inner.style.transform = 'translateY(-' + (current * 38) + 'px)';
+  }, 2400);
+})();
+
+/* ── Build bottom ticker ── */
+(function() {
+  var track = document.getElementById('ticker-track');
+  var terms = [
+    'PFAS', 'EPR', 'REACH', 'TSCA', 'Prop 65', 'Conflict Minerals', 'Forced Labor',
+    'EPA', 'ECHA', 'PRISM', "Amara's Law", 'MN PFAS', 'Supply Chain', 'Federal Register',
+    'REACH SVHC', 'Dodd-Frank', 'Uyghur Act', 'CA AB 1200'
+  ];
+  var all = terms.concat(terms); // duplicate for seamless loop
+  all.forEach(function(term, i) {
+    var span = document.createElement('span');
+    span.className = 't-item';
+    span.textContent = term;
+    track.appendChild(span);
+    var sep = document.createElement('span');
+    sep.className = 't-sep t-item';
+    sep.textContent = '\u00b7';
+    track.appendChild(sep);
+  });
+})();
+
+/* ── Redirect if already signed in ── */
+(async function() {
+  var sb = getClient();
+  var res = await sb.auth.getSession();
+  if (res.data && res.data.session) {
+    window.location.replace('dashboard.html');
+  }
+})();
+
+/* ── Tab switching ── */
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(function(btn, i) {
+    btn.classList.toggle('active',
+      (i === 0 && name === 'signin') || (i === 1 && name === 'request'));
+  });
+  document.getElementById('panel-signin').classList.toggle('active', name === 'signin');
+  document.getElementById('panel-request').classList.toggle('active', name === 'request');
+}
+
+/* ── Sign in ── */
+async function handleSignIn(e) {
+  e.preventDefault();
+  var btn = document.getElementById('signin-btn');
+  var msg = document.getElementById('signin-msg');
+  btn.disabled = true;
+  btn.textContent = 'Signing in\u2026';
+  msg.style.display = 'none';
+
+  var result = await signIn(
+    document.getElementById('signin-email').value.trim(),
+    document.getElementById('signin-password').value
+  );
+
+  if (result.error) {
+    msg.textContent = result.error.message;
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+    return;
+  }
+  window.location.replace('dashboard.html');
+}
+
+/* ── Access request ── */
+async function handleAccessRequest(e) {
+  e.preventDefault();
+  var btn = document.getElementById('request-btn');
+  var msg = document.getElementById('request-msg');
+  btn.disabled = true;
+  btn.textContent = 'Submitting\u2026';
+  msg.style.display = 'none';
+
+  var sb = getClient();
+  var result = await sb.from('access_requests').insert({
+    full_name: document.getElementById('req-name').value.trim(),
+    email: document.getElementById('req-email').value.trim(),
+    reason: document.getElementById('req-reason').value.trim() || null,
+  });
+
+  if (result.error) {
+    msg.textContent = 'Failed: ' + result.error.message;
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Request Access';
+    return;
+  }
+
+  msg.textContent = "Request received \u2014 you'll get an email when your account is ready.";
+  msg.className = 'msg success';
+  msg.style.display = 'block';
+  e.target.reset();
+  btn.disabled = false;
+  btn.textContent = 'Request Access';
+}
+</script>
+</body>
+</html>
