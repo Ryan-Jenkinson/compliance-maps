@@ -145,6 +145,7 @@ function _artBuildInitial(data) {
   s += '<div style="position:relative;">';
   s += '<textarea id="ad-ct-input" class="ct-input" placeholder="Add a comment\u2026 (@ to mention, Enter to post)" rows="2" style="box-sizing:border-box;padding-right:42px;width:100%;"></textarea>';
   s += '<button id="ad-ct-post" title="Post comment" style="position:absolute;right:7px;bottom:7px;background:var(--blue,#1565c0);color:#fff;border:none;border-radius:5px;width:28px;height:26px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;">&#8593;</button>';
+  s += '<div id="ad-ct-error" style="display:none;margin-top:6px;font-size:11px;color:#d64045;font-family:var(--mono);"></div>';
   s += '</div>';
   s += '</div></div></div></div>';
   return s;
@@ -388,13 +389,17 @@ function _artLoadThread(url, title) {
 }
 
 async function _artPostComment(threadEl) {
-  if (!_cClient || !_cUser) return; // from comments.js globals
   var input = document.getElementById('ad-ct-input');
-  var body = input.value.trim();
+  var errEl = document.getElementById('ad-ct-error');
+  function _showErr(msg) {
+    if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; setTimeout(function() { errEl.style.display = 'none'; }, 4000); }
+  }
+  if (!_cClient || !_cUser) { _showErr('Not signed in — please refresh and log in again.'); return; }
+  var body = input ? input.value.trim() : '';
   if (!body) return;
   var list = document.getElementById('ad-ct-list');
   var btn = document.getElementById('ad-ct-post');
-  btn.disabled = true;
+  if (btn) btn.disabled = true;
   var { error } = await _cClient.from('comments').insert({
     author_id: _cUser.id,
     target_type: 'article',
@@ -403,11 +408,11 @@ async function _artPostComment(threadEl) {
     parent_id: null,
     body: body,
   });
-  btn.disabled = false;
-  if (error) { console.error('Comment error:', error); return; }
+  if (btn) btn.disabled = false;
+  if (error) { console.error('Comment error:', error); _showErr('Could not post: ' + (error.message || error.code || 'unknown error')); return; }
   if (typeof _checkMentionInvites === 'function') _checkMentionInvites(body, list.dataset.title, list.dataset.url);
   if (typeof _notifyMentionedUsers === 'function') _notifyMentionedUsers(body, list.dataset.title, list.dataset.url);
-  input.value = '';
+  if (input) input.value = '';
   list.dataset.loaded = '';
   _renderThread(list.dataset.url, list.dataset.title, 'article', threadEl);
   _bumpCount(list.dataset.url); // update badge on card

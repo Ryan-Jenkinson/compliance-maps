@@ -2005,6 +2005,19 @@
       flex-shrink: 0;
     }
     .bd-header-left { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+    /* Modal header action buttons: gray to match article card style */
+    .bd-header .fav-btn,
+    .bd-header .send-btn,
+    .bd-header .comment-btn {
+      background: var(--surface-sunken); border: 1px solid var(--border);
+      color: var(--text-secondary); border-radius: 5px; cursor: pointer;
+      padding: 4px 10px; font-size: 11px; display: inline-flex; align-items: center; gap: 3px;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .bd-header .fav-btn:hover, .bd-header .send-btn:hover, .bd-header .comment-btn:hover {
+      border-color: var(--text-muted); color: var(--text-primary); background: var(--bg);
+    }
+    .bd-header .fav-btn.fav-saved { color: var(--amber); border-color: var(--amber); background: var(--amber-bg, #fef6e8); }
     .bd-bill-label {
       font-size: 14px; font-weight: 700; font-family: var(--mono);
       color: var(--text-primary); letter-spacing: -.01em;
