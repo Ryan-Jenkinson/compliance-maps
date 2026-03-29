@@ -210,17 +210,29 @@ function _artFetchAI(data) {
       messages: [{ role: 'user', content: prompt }],
     }),
   })
-  .then(function(r) { return r.json(); })
+  .then(function(r) {
+    if (!r.ok) {
+      return r.text().then(function(txt) {
+        throw new Error('HTTP ' + r.status + ': ' + txt.slice(0, 200));
+      });
+    }
+    return r.json();
+  })
   .then(function(resp) {
     if (_artCurrentUrl !== _fetchUrl) return; // user opened a different article before fetch completed
-    if (!resp.content || !resp.content[0]) { _artAIError(); return; }
+    if (!resp.content || !resp.content[0]) {
+      console.error('[AI] unexpected response:', JSON.stringify(resp).slice(0, 400));
+      _artAIError('Unexpected response from AI service — see console for details.');
+      return;
+    }
     var text = resp.content[0].text.trim()
       .replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'');
-    try { _artRenderAI(data, JSON.parse(text)); } catch(e) { _artAIError(); }
+    try { _artRenderAI(data, JSON.parse(text)); } catch(e) { _artAIError('Could not parse AI response.'); }
   })
-  .catch(function() {
+  .catch(function(err) {
     if (_artCurrentUrl !== _fetchUrl) return;
-    _artAIError();
+    console.error('[AI] fetch error:', err && err.message);
+    _artAIError(err && err.message ? err.message : 'Network error reaching AI service.');
   });
 }
 
@@ -418,9 +430,9 @@ async function _artPostComment(threadEl) {
   _bumpCount(list.dataset.url); // update badge on card
 }
 
-function _artAIError() {
+function _artAIError(msg) {
   var el = document.getElementById('ad-ai-section');
-  if (el) el.innerHTML = '<div class="bd-section"><div class="bd-section-body" style="color:var(--text-muted);font-size:12px;font-family:var(--mono);">AI enrichment unavailable — check Worker status.</div></div>';
+  if (el) el.innerHTML = '<div class="bd-section"><div class="bd-section-body" style="color:var(--text-muted);font-size:12px;font-family:var(--mono);">AI enrichment unavailable' + (msg ? ': ' + msg : ' — check Worker status.') + '</div></div>';
 }
 
 // Close on Escape
