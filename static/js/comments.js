@@ -13,7 +13,7 @@ function initComments(supabaseClient, user) {
 
 async function _loadAllCommentCounts() {
   if (!_cClient) return;
-  const { data, error } = await _cClient.from('comments').select('target_url').limit(2000);
+  const { data, error } = await _cClient.from('comments').select('target_url').neq('is_deleted', true).limit(2000);
   if (error || !data) return;
   const counts = {};
   for (const row of data) counts[row.target_url] = (counts[row.target_url] || 0) + 1;
@@ -71,12 +71,17 @@ async function toggleCommentThread(btn) {
   await _renderThread(btn.dataset.url, btn.dataset.title, btn.dataset.type || 'article', thread);
 }
 
+function _isAdmin() {
+  return typeof _profile !== 'undefined' && _profile && (_profile.role === 'admin' || _profile.role === 'super_admin');
+}
+
 async function _renderThread(url, title, type, threadEl) {
   const list = threadEl.querySelector('.ct-list');
   const { data: comments, error } = await _cClient
     .from('comments')
-    .select('id, body, created_at, edited_at, author_id, parent_id, profiles(full_name)')
+    .select('id, body, created_at, edited_at, author_id, parent_id, is_flagged, profiles(full_name)')
     .eq('target_url', url)
+    .neq('is_deleted', true)
     .order('created_at', { ascending: true })
     .limit(500);
   if (error) { list.innerHTML = '<div class="ct-msg ct-error">Failed to load.</div>'; return; }
@@ -94,26 +99,27 @@ async function _renderThread(url, title, type, threadEl) {
 
 function _commentHtml(c, replies) {
   const isOwn = _cUser && c.author_id === _cUser.id;
-  const body = c.body === '[deleted]'
-    ? '<em class="ct-deleted">[deleted]</em>'
-    : `<span>${typeof linkifyTags === 'function' ? linkifyTags(_esc(c.body)) : _esc(c.body)}</span>`;
+  const isAdmin = _isAdmin();
+  const body = `<span>${typeof linkifyTags === 'function' ? linkifyTags(_esc(c.body)) : _esc(c.body)}</span>`;
   const edited = c.edited_at ? ' <em class="ct-edited">(edited)</em>' : '';
-  const acts = isOwn && c.body !== '[deleted]'
-    ? `<button class="ct-act ct-edit-btn" data-id="${c.id}">Edit</button><button class="ct-act ct-del-btn" data-id="${c.id}">Delete</button>` : '';
-  const replyBtn = c.body !== '[deleted]' ? `<button class="ct-act ct-reply-btn" data-parent="${c.id}">Reply</button>` : '';
+  const flagBadge = isAdmin && c.is_flagged ? ' <span class="ct-flag-badge" title="Flagged for review">&#9873; Flagged</span>' : '';
+  const editBtn = isOwn ? `<button class="ct-act ct-edit-btn" data-id="${c.id}">Edit</button>` : '';
+  const delBtn = isAdmin ? `<button class="ct-act ct-del-btn" data-id="${c.id}">Delete</button>` : '';
+  const reportBtn = !isOwn && !isAdmin && !c.is_flagged ? `<button class="ct-act ct-report-btn" data-id="${c.id}">Report</button>` : '';
+  const replyBtn = `<button class="ct-act ct-reply-btn" data-parent="${c.id}">Reply</button>`;
   const repliesHtml = replies.map(r => {
     const rOwn = _cUser && r.author_id === _cUser.id;
-    const rBody = r.body === '[deleted]'
-      ? '<em class="ct-deleted">[deleted]</em>'
-      : `<span>${typeof linkifyTags === 'function' ? linkifyTags(_esc(r.body)) : _esc(r.body)}</span>`;
-    const rActs = rOwn && r.body !== '[deleted]'
-      ? `<button class="ct-act ct-edit-btn" data-id="${r.id}">Edit</button><button class="ct-act ct-del-btn" data-id="${r.id}">Delete</button>` : '';
+    const rBody = `<span>${typeof linkifyTags === 'function' ? linkifyTags(_esc(r.body)) : _esc(r.body)}</span>`;
+    const rFlagBadge = isAdmin && r.is_flagged ? ' <span class="ct-flag-badge" title="Flagged for review">&#9873; Flagged</span>' : '';
+    const rEditBtn = rOwn ? `<button class="ct-act ct-edit-btn" data-id="${r.id}">Edit</button>` : '';
+    const rDelBtn = isAdmin ? `<button class="ct-act ct-del-btn" data-id="${r.id}">Delete</button>` : '';
+    const rReportBtn = !rOwn && !isAdmin && !r.is_flagged ? `<button class="ct-act ct-report-btn" data-id="${r.id}">Report</button>` : '';
     return `<div class="ct-reply" data-id="${r.id}">
-      <div class="ct-meta"><span class="ct-author">${_esc(_authorName(r.profiles))}</span><span class="ct-time">${_ago(r.created_at)}</span>${rActs}</div>
+      <div class="ct-meta"><span class="ct-author">${_esc(_authorName(r.profiles))}</span><span class="ct-time">${_ago(r.created_at)}</span>${rFlagBadge}${rEditBtn}${rDelBtn}${rReportBtn}</div>
       <div class="ct-body" id="ctb-${r.id}">${rBody}</div></div>`;
   }).join('');
   return `<div class="ct-comment" data-id="${c.id}">
-    <div class="ct-meta"><span class="ct-author">${_esc(_authorName(c.profiles))}</span><span class="ct-time">${_ago(c.created_at)}</span>${edited}${acts}${replyBtn}</div>
+    <div class="ct-meta"><span class="ct-author">${_esc(_authorName(c.profiles))}</span><span class="ct-time">${_ago(c.created_at)}</span>${edited}${flagBadge}${editBtn}${delBtn}${reportBtn}${replyBtn}</div>
     <div class="ct-body" id="ctb-${c.id}">${body}</div>
     ${repliesHtml}
     <div class="ct-replybox" id="crb-${c.id}" style="display:none">
@@ -207,12 +213,21 @@ function _cancelEdit(id, orig) {
 }
 
 async function _deleteComment(id) {
-  if (!confirm('Delete this comment?')) return;
-  const { error } = await _cClient.from('comments').update({ body: '[deleted]' }).eq('id', id);
+  if (!_isAdmin()) return;
+  if (!confirm('Delete this comment? It will be hidden from all users.')) return;
+  const { error } = await _cClient.from('comments').update({ is_deleted: true }).eq('id', id);
   if (!error) {
-    const bodyEl = document.getElementById(`ctb-${id}`);
-    if (bodyEl) bodyEl.innerHTML = '<em class="ct-deleted">[deleted]</em>';
-    bodyEl?.closest('.ct-comment, .ct-reply')?.querySelectorAll('.ct-edit-btn,.ct-del-btn,.ct-reply-btn').forEach(b => b.remove());
+    const row = document.querySelector(`.ct-comment[data-id="${id}"], .ct-reply[data-id="${id}"]`);
+    if (row) row.remove();
+  }
+}
+
+async function _reportComment(id) {
+  if (!_cClient || !_cUser) return;
+  const { error } = await _cClient.from('comments').update({ is_flagged: true }).eq('id', id);
+  if (!error) {
+    const btn = document.querySelector(`.ct-report-btn[data-id="${id}"]`);
+    if (btn) { btn.textContent = 'Reported'; btn.disabled = true; }
   }
 }
 
@@ -246,6 +261,7 @@ function _commentClickHandler(e) {
   if (t.closest('.ct-save-btn')) { _saveEdit(t.closest('.ct-save-btn').dataset.id); return; }
   if (t.closest('.ct-cancel-btn')) { const b = t.closest('.ct-cancel-btn'); _cancelEdit(b.dataset.id, b.dataset.orig); return; }
   if (t.closest('.ct-del-btn')) { _deleteComment(t.closest('.ct-del-btn').dataset.id); return; }
+  if (t.closest('.ct-report-btn')) { _reportComment(t.closest('.ct-report-btn').dataset.id); return; }
 }
 
 // ── @ mention → notify registered users ───────────────────────────────────
