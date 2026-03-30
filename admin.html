@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tunvara — Admin</title>
+  <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -62,7 +63,56 @@
     .action-btn.approve:hover { background: #164d35; }
     .action-btn.reject { background: #2a1018; color: #f08080; }
     .action-btn.reject:hover { background: #3a1520; }
+    .action-btn.delete { background: #1a0d0d; color: #f08080; border: 1px solid #3a1520; }
+    .action-btn.delete:hover { background: #2a1010; color: #ff9999; }
     .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Delete user modal */
+    #delete-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 10000;
+      align-items: center; justify-content: center;
+    }
+    #delete-modal-overlay.visible { display: flex; }
+    #delete-modal {
+      background: #131820; border: 1px solid #2e3542;
+      border-radius: 8px; padding: 28px 32px; width: 420px; max-width: 90vw;
+    }
+    #delete-modal h3 {
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: #f08080; margin-bottom: 12px;
+    }
+    #delete-modal p { font-size: 13px; color: #8b95a7; margin-bottom: 18px; }
+    #delete-modal strong { color: #e2e8f0; }
+    .delete-mode-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .delete-mode-option {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px; border: 1px solid #2e3542; border-radius: 6px;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .delete-mode-option:hover { border-color: #4a5568; }
+    .delete-mode-option.selected { border-color: #f08080; background: rgba(240,128,128,0.05); }
+    .delete-mode-option input[type=radio] { margin-top: 2px; accent-color: #f08080; flex-shrink: 0; }
+    .delete-mode-label { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+    .delete-mode-desc { font-size: 11px; color: #5a6270; margin-top: 2px; }
+    .delete-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .delete-confirm-btn {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      padding: 7px 16px; border-radius: 4px; cursor: pointer;
+      background: #3a0f0f; border: 1px solid #f08080; color: #f08080;
+      transition: background 0.15s;
+    }
+    .delete-confirm-btn:hover { background: #4a1515; }
+    .delete-confirm-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .delete-cancel-btn {
+      font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      padding: 7px 16px; border-radius: 4px; cursor: pointer;
+      background: none; border: 1px solid #252b38; color: #5a6270;
+    }
+    .delete-cancel-btn:hover { border-color: #3a4252; color: #8b95a7; }
     #invite-panel {
       display: none; margin-top: 24px; padding: 20px 24px;
       background: #0e1a12; border: 1px solid #1a3a22; border-radius: 6px;
@@ -74,13 +124,6 @@
       color: #5eb88a; margin-bottom: 12px;
     }
     #invite-panel p { margin-bottom: 10px; color: #a0b0a8; font-size: 13px; }
-    #invite-cmd {
-      display: block; font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px; background: #0a110c;
-      border: 1px solid #1a3a22; border-radius: 4px;
-      padding: 10px 14px; color: #5eb88a;
-      word-break: break-all; margin-top: 8px;
-    }
     .signout-btn {
       font-family: monospace; font-size: 11px;
       background: none; border: 1px solid #252b38;
@@ -116,34 +159,98 @@
 </table>
 
 <div id="invite-panel">
-  <h3>&#10003; Request Approved &mdash; Send Invite</h3>
-  <p>Status saved. Run this in your terminal to send the invite email:</p>
-  <code id="invite-cmd"></code>
-  <p style="margin-top:10px;font-size:12px;color:#5a6270;">
-    <strong id="invite-name"></strong> (<span id="invite-email"></span>) will receive a Supabase password setup email.
-  </p>
+  <h3>&#10003; Request Approved</h3>
+  <p><strong id="invite-name"></strong> (<span id="invite-email"></span>)</p>
+  <p id="invite-status" style="margin-top:8px;font-size:13px;"></p>
 </div>
 
 <h2>All Users</h2>
 <table>
   <thead>
-    <tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr>
+    <tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr>
   </thead>
   <tbody id="users-tbody">
-    <tr><td colspan="4" style="color:#5a6270;padding:12px;">Loading&hellip;</td></tr>
+    <tr><td colspan="5" style="color:#5a6270;padding:12px;">Loading&hellip;</td></tr>
   </tbody>
 </table>
 
-<h2 style="margin-top:32px;">Submitted Intelligence</h2>
-<p style="font-size:13px;color:#5a6270;margin-bottom:14px;">Articles and documents submitted by team members for review. Import anything useful into the pipeline manually.</p>
+<h2 style="margin-top:32px;">Guest Access</h2>
+<p style="font-size:13px;color:#5a6270;margin-bottom:14px;">
+  Enable or disable the shared demo account (<code style="font-size:12px;">guest@tunvara.com</code>).
+  When disabled, login attempts redirect to the inactive screen. No code deploy needed.
+</p>
+<div id="guest-access-panel" style="display:flex;align-items:center;gap:16px;padding:14px 18px;background:#131820;border:1px solid #2e3542;border-radius:6px;max-width:480px;">
+  <div>
+    <span style="font-size:12px;color:#5a6270;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px;">Status</span><br>
+    <span id="guest-status-badge" style="font-size:13px;font-weight:600;">Loading&hellip;</span>
+  </div>
+  <button id="guest-toggle-btn" onclick="toggleGuestAccess()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 18px;border-radius:4px;cursor:pointer;border:1px solid #2e3542;background:#1a1f2a;color:#c8ccd4;">
+    Loading&hellip;
+  </button>
+</div>
+
+<h2 style="margin-top:32px;">Submitted Intelligence <span id="submissions-pending-badge" style="display:none;background:#d64045;color:#fff;font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px;vertical-align:middle;margin-left:8px;letter-spacing:1px;"></span></h2>
+<p style="font-size:13px;color:#5a6270;margin-bottom:14px;">
+  Articles and documents submitted by team members.
+  <span id="submissions-filter-row" style="margin-left:12px;">
+    <label style="font-size:12px;color:#7a8290;cursor:pointer;">
+      <input type="checkbox" id="show-all-submissions" onchange="loadSubmissions()" style="accent-color:#d64045;margin-right:4px;">
+      Show approved &amp; rejected
+    </label>
+  </span>
+</p>
 <table>
   <thead>
-    <tr><th>Type</th><th>Topic</th><th>Title / URL</th><th>Submitted by</th><th>Note</th><th>Date</th></tr>
+    <tr><th>Status</th><th>Type</th><th>Topic</th><th>Title / URL</th><th>Submitted by</th><th>Note</th><th>Date</th><th>Actions</th></tr>
   </thead>
   <tbody id="submissions-tbody">
-    <tr><td colspan="6" style="color:#5a6270;padding:12px;">Loading&hellip;</td></tr>
+    <tr><td colspan="8" style="color:#5a6270;padding:12px;">Loading&hellip;</td></tr>
   </tbody>
 </table>
+
+<!-- ── Delete User Modal ── -->
+<div id="delete-modal-overlay" onclick="if(event.target===this)_closeDeleteModal()">
+  <div id="delete-modal">
+    <h3>&#9888; Delete User</h3>
+    <p>Delete <strong id="delete-modal-name"></strong> (<span id="delete-modal-email"></span>)?</p>
+    <div class="delete-mode-group">
+      <label class="delete-mode-option selected" id="delete-opt-anonymize">
+        <input type="radio" name="delete-mode" value="anonymize" checked onchange="_onDeleteModeChange()">
+        <div>
+          <div class="delete-mode-label">Anonymize</div>
+          <div class="delete-mode-desc">Keeps comments and messages but removes the user's name. Deletes bookmarks, tags, documents, and personal data.</div>
+        </div>
+      </label>
+      <label class="delete-mode-option" id="delete-opt-hard">
+        <input type="radio" name="delete-mode" value="hard" onchange="_onDeleteModeChange()">
+        <div>
+          <div class="delete-mode-label">Hard Delete</div>
+          <div class="delete-mode-desc">Removes everything — comments, messages, all content. Cannot be undone.</div>
+        </div>
+      </label>
+    </div>
+    <div id="delete-modal-status" style="font-size:12px;min-height:16px;margin-bottom:12px;color:#f08080;"></div>
+    <div class="delete-modal-actions">
+      <button class="delete-cancel-btn" onclick="_closeDeleteModal()">Cancel</button>
+      <button class="delete-confirm-btn" id="delete-confirm-btn" onclick="_confirmDeleteUser()">Delete User</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Deny Submission Modal ── -->
+<div id="deny-sub-modal-overlay" onclick="if(event.target===this)_closeDenySubModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;align-items:center;justify-content:center;">
+  <div id="deny-sub-modal" style="background:#131820;border:1px solid #2e3542;border-radius:8px;padding:28px 32px;width:440px;max-width:90vw;">
+    <h3 style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#f08080;margin-bottom:12px;">Deny Submission</h3>
+    <p style="font-size:13px;color:#8b95a7;margin-bottom:16px;">Denying: <strong id="deny-sub-title" style="color:#e2e8f0;"></strong></p>
+    <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#5a6270;margin-bottom:6px;">Reason <span style="font-weight:400;text-transform:none;">(optional — sent to submitter)</span></label>
+    <textarea id="deny-sub-reason" rows="3" placeholder="e.g. Off-topic, duplicate, low relevance…" style="width:100%;background:#161b26;border:1px solid #2e3542;border-radius:5px;color:#e2e8f0;font-size:13px;padding:8px 10px;font-family:'Instrument Sans',sans-serif;resize:vertical;box-sizing:border-box;"></textarea>
+    <div id="deny-sub-status" style="font-size:12px;min-height:16px;margin:10px 0 4px;color:#f08080;"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;">
+      <button onclick="_closeDenySubModal()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 16px;border-radius:4px;cursor:pointer;background:none;border:1px solid #252b38;color:#5a6270;">Cancel</button>
+      <button id="deny-sub-confirm-btn" onclick="_confirmDenySub()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 16px;border-radius:4px;cursor:pointer;background:#3a0f0f;border:1px solid #f08080;color:#f08080;">Deny &amp; Notify</button>
+    </div>
+  </div>
+</div>
 
 <script src="static/js/auth.js"></script>
 <script src="static/js/admin.js"></script>
@@ -155,6 +262,122 @@
   loadAccessRequests();
   loadUsers();
   loadSubmissions();
+  loadGuestStatus();
+})();
+</script>
+
+<!-- ── Account Switcher (admin dev tool) ── -->
+<div id="acct-switcher" style="
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  background:#0f1117;border:1px solid #2d4a8a;border-radius:10px;
+  padding:14px 16px;width:260px;box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:#e2e8f0;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+    <span style="font-weight:700;color:#7eb3ff;letter-spacing:1px;">ACCOUNT SWITCHER</span>
+    <button onclick="document.getElementById('acct-switcher').style.display='none'"
+      style="background:none;border:none;color:#4a5568;cursor:pointer;font-size:14px;">✕</button>
+  </div>
+  <div id="acct-current" style="padding:6px 8px;background:#161b26;border-radius:5px;margin-bottom:10px;color:#8b95a7;font-size:11px;">
+    Signed in as: <span id="acct-current-email" style="color:#e2e8f0;">…</span>
+  </div>
+  <div style="margin-bottom:8px;color:#4a5568;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;">Saved Accounts</div>
+  <div id="acct-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"></div>
+  <details style="margin-top:8px;">
+    <summary style="cursor:pointer;color:#4a5568;font-size:10px;list-style:none;user-select:none;">+ Add account</summary>
+    <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+      <input id="acct-new-email" placeholder="email" type="email" style="width:100%;padding:5px 8px;background:#161b26;border:1px solid #232b3a;border-radius:4px;color:#e2e8f0;font-size:11px;font-family:inherit;">
+      <input id="acct-new-pass" placeholder="password" type="password" style="width:100%;padding:5px 8px;background:#161b26;border:1px solid #232b3a;border-radius:4px;color:#e2e8f0;font-size:11px;font-family:inherit;">
+      <input id="acct-new-label" placeholder="label (e.g. Test Colleague)" style="width:100%;padding:5px 8px;background:#161b26;border:1px solid #232b3a;border-radius:4px;color:#e2e8f0;font-size:11px;font-family:inherit;">
+      <button onclick="_acctAdd()" style="padding:5px 8px;background:#1e3a8a;border:1px solid #3b82f6;border-radius:4px;color:#7eb3ff;cursor:pointer;font-family:inherit;font-size:11px;">Save account</button>
+    </div>
+  </details>
+</div>
+
+<!-- Toggle button when switcher is hidden -->
+<button id="acct-switcher-toggle" onclick="document.getElementById('acct-switcher').style.display='block';this.style.display='none';"
+  style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;
+  background:#1a2744;border:1px solid #2d4a8a;border-radius:8px;
+  padding:8px 12px;color:#7eb3ff;cursor:pointer;font-size:11px;
+  font-family:'IBM Plex Mono',monospace;box-shadow:0 2px 8px rgba(0,0,0,0.4);">
+  ⇄ Switch Account
+</button>
+
+<script>
+(function() {
+  var SB_STORAGE = 'tunvara_saved_accounts';
+
+  function _getAccounts() {
+    try { return JSON.parse(localStorage.getItem(SB_STORAGE) || '[]'); } catch(e) { return []; }
+  }
+  function _saveAccounts(arr) {
+    try { localStorage.setItem(SB_STORAGE, JSON.stringify(arr)); } catch(e) {}
+  }
+
+  function _renderList() {
+    var list = document.getElementById('acct-list');
+    var accounts = _getAccounts();
+    if (!accounts.length) {
+      list.innerHTML = '<div style="color:#4a5568;font-size:11px;">None saved yet. Add one below.</div>';
+      return;
+    }
+    list.innerHTML = accounts.map(function(a, i) {
+      return '<div style="display:flex;align-items:center;gap:6px;">'
+        + '<button onclick="_acctSwitch(' + i + ')" style="flex:1;padding:6px 8px;background:#161b26;border:1px solid #232b3a;border-radius:5px;color:#e2e8f0;cursor:pointer;font-family:\'IBM Plex Mono\',monospace;font-size:11px;text-align:left;">'
+        + '⇄ ' + (a.label || a.email) + '</button>'
+        + '<button onclick="_acctRemove(' + i + ')" style="padding:4px 6px;background:none;border:1px solid #232b3a;border-radius:4px;color:#4a5568;cursor:pointer;font-size:10px;" title="Remove">✕</button>'
+        + '</div>';
+    }).join('');
+  }
+
+  window._acctAdd = function() {
+    var email = document.getElementById('acct-new-email').value.trim();
+    var pass  = document.getElementById('acct-new-pass').value;
+    var label = document.getElementById('acct-new-label').value.trim();
+    if (!email || !pass) return;
+    var accounts = _getAccounts();
+    accounts.push({ email: email, password: pass, label: label || email });
+    _saveAccounts(accounts);
+    document.getElementById('acct-new-email').value = '';
+    document.getElementById('acct-new-pass').value = '';
+    document.getElementById('acct-new-label').value = '';
+    _renderList();
+  };
+
+  window._acctRemove = function(i) {
+    var accounts = _getAccounts();
+    accounts.splice(i, 1);
+    _saveAccounts(accounts);
+    _renderList();
+  };
+
+  window._acctSwitch = async function(i) {
+    var a = _getAccounts()[i];
+    if (!a) return;
+    var sb = window._client || (window.supabase && window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY));
+    if (!sb) { alert('Supabase not ready'); return; }
+    await sb.auth.signOut();
+    var { error } = await sb.auth.signInWithPassword({ email: a.email, password: a.password });
+    if (error) { alert('Sign-in failed: ' + error.message); return; }
+    window.location.href = 'dashboard.html';
+  };
+
+  // Show current user
+  setTimeout(function() {
+    var emailEl = document.getElementById('acct-current-email');
+    if (emailEl && window._client) {
+      window._client.auth.getUser().then(function(r) {
+        if (r.data && r.data.user) emailEl.textContent = r.data.user.email;
+      });
+    }
+    _renderList();
+  }, 800);
+
+  // Close → show toggle button
+  var switcher = document.getElementById('acct-switcher');
+  var orig = switcher.querySelector('button');
+  orig.addEventListener('click', function() {
+    document.getElementById('acct-switcher-toggle').style.display = 'block';
+  });
 })();
 </script>
 </body>

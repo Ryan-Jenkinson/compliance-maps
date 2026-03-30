@@ -94,8 +94,8 @@ async function approveRequest(requestId, email, fullName) {
     return;
   }
 
-  showInviteInstructions(email, fullName);
   await loadAccessRequests();
+  sendSignupInvite(email, fullName);
 }
 
 async function rejectRequest(requestId) {
@@ -118,14 +118,33 @@ async function changeRole(userId, newRole) {
   if (result.error) { alert('Error updating role: ' + result.error.message); await loadUsers(); }
 }
 
-function showInviteInstructions(email, fullName) {
+async function sendSignupInvite(email, fullName) {
   var panel = document.getElementById('invite-panel');
-  document.getElementById('invite-email').textContent = email;
-  document.getElementById('invite-name').textContent = fullName;
-  document.getElementById('invite-cmd').textContent =
-    'python3 subscribers/cli.py invite-user --email "' + email + '" --name "' + fullName + '"';
+  var statusEl = document.getElementById('invite-status');
+  var nameEl = document.getElementById('invite-name');
+  var emailEl = document.getElementById('invite-email');
+
+  nameEl.textContent = fullName;
+  emailEl.textContent = email;
+  statusEl.innerHTML = '<span style="color:#d97706;">Sending invite\u2026</span>';
   panel.style.display = 'block';
   panel.scrollIntoView({ behavior: 'smooth' });
+
+  try {
+    var resp = await fetch('https://api.tunvara.com/signup-invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, full_name: fullName }),
+    });
+    var data = await resp.json();
+    if (!resp.ok || data.error) {
+      statusEl.innerHTML = '<span style="color:#f08080;">Error: ' + escHtml(data.error || 'Unknown error') + '</span>';
+      return;
+    }
+    statusEl.innerHTML = '<span style="color:#5eb88a;">\u2713 Invite sent! ' + escHtml(fullName) + ' will receive a branded welcome email with a link to set their password.</span>';
+  } catch (err) {
+    statusEl.innerHTML = '<span style="color:#f08080;">Network error: ' + escHtml(err.message) + '</span>';
+  }
 }
 
 function escHtml(str) {
